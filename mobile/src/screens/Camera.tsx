@@ -3,6 +3,7 @@ import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {RNCamera} from 'react-native-camera';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Axios from 'axios';
+import * as qs from 'qs';
 
 interface Props {}
 
@@ -23,14 +24,13 @@ const Camera: React.FC<Props> = ({navigation}) => {
     const options = {quality: 0.5, base64: true};
     try {
       const data = await camera.takePictureAsync(options);
-      console.log(data);
       // send image to backend
-      const endpoint = 'http://c24984a5.ngrok.io/';
+      const endpoint = 'https://94a627c2.ngrok.io';
       const config = {
-        headers: {'content-type': 'multipart/form-data'},
+        headers: {'content-type': 'application/x-www-form-urlencoded'},
       };
-      await Axios.post(endpoint, data.base64, config);
-      console.log('Image uploaded');
+      console.log(data);
+      await Axios.post(endpoint, qs.stringify(data), config);
     } catch (err) {
       console.log('One error');
       console.log(err);
