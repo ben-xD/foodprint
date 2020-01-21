@@ -1,3 +1,5 @@
+const fs = require('fs');
+
 import { Controller, Get, Post, Body } from '@nestjs/common';
 import { AppService } from './app.service';
 import { PictureDto } from './dtos/pictures/picture.dto';
@@ -12,9 +14,21 @@ export class AppController {
   }
 
   @Post()
-  uploadPicture(@Body() image): string {
-    // store received image on Filesystem
-    console.log(image);
-    return 'Good bye';
+  uploadPicture(@Body() picture): void {
+    const filename = `/Users/Ben/Desktop/${Date.now()}.jpg`;
+    console.log(picture);
+    fs.writeFile(
+      filename,
+      picture.base64,
+      {
+        encoding: 'base64',
+      },
+      err => {
+        if (err) {
+          console.log(err);
+        }
+      },
+    );
+    return;
   }
 }
