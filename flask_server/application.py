@@ -1,10 +1,13 @@
 from flask import Flask, request, make_response
 from vision_script import get_carbon
 
+# TODO need pandas, google-cloud-vision
+
 application = Flask(__name__)
 
 text = """<html> Upload your image! </html>"""
 application.add_url_rule('/', 'index', (lambda: text))
+
 
 @application.route("/upload/", methods=["POST"])
 def post_file():
@@ -12,6 +15,7 @@ def post_file():
     image = request.files['image'].read()
     carbon = get_carbon(image)
     return """received"""
+
 
 if __name__ == "__main__":
     # Setting debug to True enables debug output. This line should be
