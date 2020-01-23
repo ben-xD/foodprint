@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {
   Text,
-  Button,
   SafeAreaView,
   Platform,
   PermissionsAndroid,
@@ -9,6 +8,7 @@ import {
   View,
 } from 'react-native';
 import ImagePicker from 'react-native-image-picker';
+import {Button} from 'react-native-elements';
 
 interface Props {}
 
@@ -77,9 +77,8 @@ const FoodOverview: React.FC<Props> = ({navigation}) => {
   };
 
   return (
-    <SafeAreaView>
-      <Text>Food overview</Text>
-      <Button onPress={takePicture} title="Open camera" />
+    <SafeAreaView style={{width: '100%', height: '100%'}}>
+      <Text>Your food history</Text>
       {food.map((meal, i) => {
         console.log({meal});
         return (
@@ -89,6 +88,11 @@ const FoodOverview: React.FC<Props> = ({navigation}) => {
           </View>
         );
       })}
+      <Button
+        onPress={takePicture}
+        containerStyle={{position: 'absolute', bottom: 0}}
+        title="Open camera"
+      />
     </SafeAreaView>
   );
 };
