@@ -1,10 +1,12 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   Text,
   Button,
   SafeAreaView,
   Platform,
   PermissionsAndroid,
+  Image,
+  View,
 } from 'react-native';
 import ImagePicker from 'react-native-image-picker';
 
@@ -18,6 +20,8 @@ const options = {
 };
 
 const FoodOverview: React.FC<Props> = ({navigation}) => {
+  const [food, setFood] = useState([]);
+
   const takePicture = () => {
     // ask for file perms
     if (Platform.OS === 'android') {
@@ -56,11 +60,18 @@ const FoodOverview: React.FC<Props> = ({navigation}) => {
             // headers: {'content-type': 'multipart/form-data'},
             body: data,
           };
-          await fetch(endpoint, config);
+          const carbonFootprintResponse = await fetch(endpoint, config);
+          console.log({carbonFootprintResponse});
+          // and update state on response
+          console.log({response});
+          const meal = {
+            name: 'One meal',
+            uri: 'data:image/jpeg;base64,' + response.data,
+          };
+          setFood([...food, meal]);
         } catch (err) {
           console.log(err);
         }
-        // and update state on response
       }
     });
   };
@@ -69,6 +80,15 @@ const FoodOverview: React.FC<Props> = ({navigation}) => {
     <SafeAreaView>
       <Text>Food overview</Text>
       <Button onPress={takePicture} title="Open camera" />
+      {food.map((meal, i) => {
+        console.log({meal});
+        return (
+          <View key={i}>
+            <Image style={{width: 150, height: 58}} source={{uri: meal.uri}} />
+            <Text>{meal.name}</Text>
+          </View>
+        );
+      })}
     </SafeAreaView>
   );
 };
