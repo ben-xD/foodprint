@@ -18,26 +18,21 @@ const options = {
 };
 
 const FoodOverview: React.FC<Props> = ({navigation}) => {
-  const takePicture = () =>
+  const takePicture = () => {
     // ask for file perms
+    if (Platform.OS === 'android') {
+      PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+        {
+          title: 'App needs file permissions to save your photos',
+          message: 'App needs file permissions to save your food photos',
+          buttonNegative: 'Cancel',
+          buttonPositive: 'OK',
+        },
+      );
+    }
+
     ImagePicker.launchCamera(options, async response => {
-      console.log({response});
-
-      if (Platform.OS === 'android') {
-        PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-          {
-            title: 'Cool Photo App Camera Permission',
-            message:
-              'Cool Photo App needs access to your camera ' +
-              'so you can take awesome pictures.',
-            buttonNeutral: 'Ask Me Later',
-            buttonNegative: 'Cancel',
-            buttonPositive: 'OK',
-          },
-        );
-      }
-
       if (response.didCancel) {
         console.log('User cancelled image picker');
       } else if (response.error) {
@@ -68,6 +63,7 @@ const FoodOverview: React.FC<Props> = ({navigation}) => {
         // and update state on response
       }
     });
+  };
 
   return (
     <SafeAreaView>

@@ -1,7 +1,7 @@
 from flask import Flask, request, make_response
 from vision_script import get_carbon
 
-# TODO need pandas, google-cloud-vision
+# TODO need pandas, google-cloud-vision in requirements.txt to successfully run, please add it with correct versions you need
 
 application = Flask(__name__)
 
