@@ -1,7 +1,6 @@
 import React from 'react';
 import {NavigationNativeContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import Camera from './src/screens/Camera';
 import Tabs from './src/containers/Tabs';
 
 const Stack = createStackNavigator();
@@ -15,7 +14,7 @@ const App = () => {
           component={Tabs}
           options={{headerShown: false}}
         />
-        <Stack.Screen name="Camera" component={Camera} />
+        {/* <Stack.Screen name="Camera" component={Camera} /> */}
       </Stack.Navigator>
     </NavigationNativeContainer>
   );
