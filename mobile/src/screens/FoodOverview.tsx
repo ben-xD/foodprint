@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
   Text,
   SafeAreaView,
@@ -9,6 +10,7 @@ import {
 } from 'react-native';
 import ImagePicker from 'react-native-image-picker';
 import {Button} from 'react-native-elements';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 interface Props {}
 
@@ -78,21 +80,30 @@ const FoodOverview: React.FC<Props> = ({navigation}) => {
 
   return (
     <SafeAreaView style={{width: '100%', height: '100%'}}>
-      <Text>Your food history</Text>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          padding: 8,
+        }}>
+        <Text style={{fontSize: 24}}>Your food history</Text>
+        <TouchableOpacity
+          // style={{position: 'absolute', right: 0}}
+          onPress={takePicture}>
+          <MaterialCommunityIcons name="plus" color={'black'} size={50} />
+          {/* <Image style={styles.button} source={require('./myButton.png')} /> */}
+        </TouchableOpacity>
+      </View>
       {food.map((meal, i) => {
         console.log({meal});
         return (
           <View key={i}>
-            <Image style={{width: 150, height: 58}} source={{uri: meal.uri}} />
+            <Image style={{width: 200, height: 400}} source={{uri: meal.uri}} />
             <Text>{meal.name}</Text>
           </View>
         );
       })}
-      <Button
-        onPress={takePicture}
-        containerStyle={{position: 'absolute', bottom: 0}}
-        title="Open camera"
-      />
     </SafeAreaView>
   );
 };
