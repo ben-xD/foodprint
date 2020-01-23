@@ -1,20 +1,42 @@
 import React from 'react';
-import {Text, Button, SafeAreaView} from 'react-native';
+import {
+  Text,
+  Button,
+  SafeAreaView,
+  Platform,
+  PermissionsAndroid,
+} from 'react-native';
 import ImagePicker from 'react-native-image-picker';
 
 interface Props {}
 
 const options = {
   storageOptions: {
-    skipBackup: true,
-    path: 'images',
+    // skipBackup: true,
+    // path: 'images',
   },
 };
 
 const FoodOverview: React.FC<Props> = ({navigation}) => {
   const takePicture = () =>
+    // ask for file perms
     ImagePicker.launchCamera(options, async response => {
       console.log({response});
+
+      if (Platform.OS === 'android') {
+        PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+          {
+            title: 'Cool Photo App Camera Permission',
+            message:
+              'Cool Photo App needs access to your camera ' +
+              'so you can take awesome pictures.',
+            buttonNeutral: 'Ask Me Later',
+            buttonNegative: 'Cancel',
+            buttonPositive: 'OK',
+          },
+        );
+      }
 
       if (response.didCancel) {
         console.log('User cancelled image picker');
