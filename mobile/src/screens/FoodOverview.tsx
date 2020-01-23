@@ -36,7 +36,7 @@ const FoodOverview: React.FC<Props> = ({navigation}) => {
           });
           const config = {
             method: 'post',
-            headers: {'content-type': 'multipart/form-data'},
+            // headers: {'content-type': 'multipart/form-data'},
             body: data,
           };
           await fetch(endpoint, config);
