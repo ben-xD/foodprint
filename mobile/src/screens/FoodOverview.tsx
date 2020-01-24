@@ -7,7 +7,6 @@ import {
   PermissionsAndroid,
   Image,
   View,
-  Button,
   ScrollView,
 } from 'react-native';
 import ImagePicker from 'react-native-image-picker';
@@ -17,8 +16,8 @@ import Axios from 'axios';
 interface Props {}
 
 // TODO add a localhost/ environment variables?
-const postPictureUri = 'http://10.0.2.2:8080/picture';
-// const postPictureUri = 'https://helloworld-5i6gsvkjla-ew.a.run.app';
+// const postPictureUri = 'http://10.0.2.2:8080/picture';
+const postPictureUri = 'https://helloworld-5i6gsvkjla-ew.a.run.app/picture';
 
 const options = {
   storageOptions: {
@@ -91,7 +90,7 @@ const FoodOverview: React.FC<Props> = ({navigation}) => {
         };
         setFood([...food, meal]);
       } catch (err) {
-        console.error({err});
+        console.warn({err});
       }
     });
   };

@@ -6,6 +6,7 @@
   "scripts": {
     "debug": "nodemon --inspect index.js",
     "start": "node index.js",
+    "a:release": "react-native run-android --variant=release",
     "docker:local": "PROJECT_ID=carbon-footprint-2020 && PORT=8080 && docker run -p 9090:${PORT} -e PORT=${PORT}",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
