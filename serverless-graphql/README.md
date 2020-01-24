@@ -3,6 +3,7 @@
 ## Contributing and deploying
 
 - Install node/ npm. For advanced users, [NVM](https://github.com/nvm-sh/nvm#installation-and-update) is a good node version manager
+- Make sure you are in `node-serverless-graphql` folder
 - Install dependencies with `npm i`
 - Run server in debug mode: `npm run debug`
   - You can inspect the traffic with chrome debugger: visit `chrome://inspect`, and click NodeJS
