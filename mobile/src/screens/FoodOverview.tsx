@@ -7,11 +7,16 @@ import {
   PermissionsAndroid,
   Image,
   View,
+  Button,
+  ScrollView,
 } from 'react-native';
 import ImagePicker from 'react-native-image-picker';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
 interface Props {}
+
+// TODO add a localhost/ environment variables?
+const endpoint = 'http://10.0.2.2:8080/picture';
 
 const options = {
   storageOptions: {
@@ -51,7 +56,6 @@ const FoodOverview: React.FC<Props> = ({navigation}) => {
         );
       }
       try {
-        const endpoint = 'http://8aacbaaa.ngrok.io/';
         const data = new FormData();
         data.append('picture', {
           uri: response.uri,
@@ -78,6 +82,20 @@ const FoodOverview: React.FC<Props> = ({navigation}) => {
     });
   };
 
+  const sendRequest = async () => {
+    const body = new FormData();
+    body.append('name', 'ben');
+    try {
+      await fetch(endpoint, {
+        method: 'POST',
+        headers: {'content-type': 'multipart/form-data'},
+        body,
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <SafeAreaView style={{width: '100%', height: '100%'}}>
       <View
@@ -88,6 +106,7 @@ const FoodOverview: React.FC<Props> = ({navigation}) => {
           padding: 8,
         }}>
         <Text style={{fontSize: 24}}>Your food history</Text>
+        <Button title="Send post request" onPress={sendRequest}></Button>
         <TouchableOpacity
           // style={{position: 'absolute', right: 0}}
           onPress={takePicture}>
@@ -95,15 +114,20 @@ const FoodOverview: React.FC<Props> = ({navigation}) => {
           {/* <Image style={styles.button} source={require('./myButton.png')} /> */}
         </TouchableOpacity>
       </View>
-      {food.map((meal, i) => {
-        console.log({meal});
-        return (
-          <View key={i}>
-            <Image style={{width: 200, height: 400}} source={{uri: meal.uri}} />
-            <Text>{meal.name}</Text>
-          </View>
-        );
-      })}
+      <ScrollView>
+        {food.map((meal, i) => {
+          console.log({meal});
+          return (
+            <View key={i}>
+              <Image
+                style={{width: 200, height: 400}}
+                source={{uri: meal.uri}}
+              />
+              <Text>{meal.name}</Text>
+            </View>
+          );
+        })}
+      </ScrollView>
     </SafeAreaView>
   );
 };
