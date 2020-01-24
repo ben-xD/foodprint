@@ -4,3 +4,6 @@ venv
 
 # JetBrains
 .idea
+
+# Vscode
+.vscode
