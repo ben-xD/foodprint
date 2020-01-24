@@ -9,7 +9,6 @@ import {
   View,
 } from 'react-native';
 import ImagePicker from 'react-native-image-picker';
-import {Button} from 'react-native-elements';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
 interface Props {}
@@ -40,40 +39,41 @@ const FoodOverview: React.FC<Props> = ({navigation}) => {
 
     ImagePicker.launchCamera(options, async response => {
       if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      } else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton);
-      } else {
-        // You can also display the image using data:
-        // const source = { uri: 'data:image/jpeg;base64,' + response.data };
-
-        try {
-          const endpoint = 'http://8aacbaaa.ngrok.io/';
-          const data = new FormData();
-          data.append('picture', {
-            uri: response.uri,
-            type: 'image/jpeg',
-            name: 'pic.jpg',
-          });
-          const config = {
-            method: 'post',
-            // headers: {'content-type': 'multipart/form-data'},
-            body: data,
-          };
-          const carbonFootprintResponse = await fetch(endpoint, config);
-          console.log({carbonFootprintResponse});
-          // and update state on response
-          console.log({response});
-          const meal = {
-            name: 'One meal',
-            uri: 'data:image/jpeg;base64,' + response.data,
-          };
-          setFood([...food, meal]);
-        } catch (err) {
-          console.log(err);
-        }
+        return console.log('User cancelled image picker');
+      }
+      if (response.error) {
+        return console.log('ImagePicker Error: ', response.error);
+      }
+      if (response.customButton) {
+        return console.log(
+          'User tapped custom button: ',
+          response.customButton,
+        );
+      }
+      try {
+        const endpoint = 'http://8aacbaaa.ngrok.io/';
+        const data = new FormData();
+        data.append('picture', {
+          uri: response.uri,
+          type: 'image/jpeg',
+          name: 'pic.jpg',
+        });
+        const config = {
+          method: 'post',
+          headers: {'content-type': 'multipart/form-data'},
+          body: data,
+        };
+        const carbonFootprintResponse = await fetch(endpoint, config);
+        console.log({carbonFootprintResponse});
+        // and update state on response
+        console.log({response});
+        const meal = {
+          name: 'One meal',
+          uri: 'data:image/jpeg;base64,' + response.data,
+        };
+        setFood([...food, meal]);
+      } catch (err) {
+        console.log(err);
       }
     });
   };

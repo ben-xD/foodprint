@@ -1,0 +1,19 @@
+{
+  "name": "serverless-graphql",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "watch": "nodemon index.js",
+    "docker:local": "PROJECT_ID=carbon-footprint-2020 && PORT=8080 && docker run -p 9090:${PORT} -e PORT=${PORT}",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  }
+}

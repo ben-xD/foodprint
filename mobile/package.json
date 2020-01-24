@@ -10,7 +10,8 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "a:devmenu": "adb shell input keyevent 82"
   },
   "dependencies": {
     "@react-native-community/masked-view": "^0.1.6",

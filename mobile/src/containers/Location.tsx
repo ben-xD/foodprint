@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { View, Linking, FlatList, StyleSheet } from 'react-native';
-import { Button, ListItem } from 'react-native-elements';
-import { LocationType } from '../types/LocationType';
+import React, {useEffect, useState} from 'react';
+import {View, Linking, FlatList, StyleSheet} from 'react-native';
+import {Button, ListItem} from 'react-native-elements';
+import {LocationType} from '../types/LocationType';
 import getLocation from '../logic/location/location';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
-interface Props { }
+interface Props {}
 
 let timerID: number;
 
@@ -44,7 +44,7 @@ const Location: React.FC<Props> = () => {
 
   useEffect(() => {
     const logLocation = async () => {
-      console.log({ timerID });
+      console.log({timerID});
       if (!locationLogging) {
         if (timerID) {
           clearInterval(timerID);
@@ -100,21 +100,19 @@ const Location: React.FC<Props> = () => {
             title="Open map"
             onPress={() =>
               openBrowser(
-                `https://www.google.com/maps/@${location.latitude},${
-                location.longitude
-                },15z`,
+                `https://www.google.com/maps/@${location.latitude},${location.longitude},15z`,
               )
             }
           />
         </>
       ) : (
-          <></>
-        )}
+        <></>
+      )}
       <FlatList
         nestedScrollEnabled={true}
         keyExtractor={(item, index) => index.toString()}
         data={locations}
-        renderItem={({ item }) => (
+        renderItem={({item}) => (
           <ListItem
             bottomDivider
             topDivider
