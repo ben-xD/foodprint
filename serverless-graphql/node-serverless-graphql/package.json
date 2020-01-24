@@ -5,7 +5,6 @@
   "main": "index.js",
   "scripts": {
     "debug": "nodemon --inspect index.js",
-    "watch": "nodemon index.js",
     "start": "node index.js",
     "docker:local": "PROJECT_ID=carbon-footprint-2020 && PORT=8080 && docker run -p 9090:${PORT} -e PORT=${PORT}",
     "test": "echo \"Error: no test specified\" && exit 1"
