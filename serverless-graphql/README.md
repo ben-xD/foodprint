@@ -7,7 +7,7 @@
 - Install dependencies with `npm i`
 - Run server in debug mode: `npm run debug`
   - You can inspect the traffic with chrome debugger: visit `chrome://inspect`, and click NodeJS
-- Make changes to server, refresh browser (no need to refresh server)
+- **Development happens here:** Make changes to server, refresh browser (no need to refresh server)
 - Once you are satisfied with changes:
   - Run all tests locally (after test coverage increases, may need to be selective)
   - Submit merge request, pull in the latest changes from master _if_ there are **merge conflicts**.
