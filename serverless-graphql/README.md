@@ -40,3 +40,5 @@ Steps were simplified and extended from [docs](https://cloud.google.com/run/docs
     - gcloud build will run tests remotely
     - Ensure docker is running **and ready**, and test container locally with docker using [guide](https://cloud.google.com/run/docs/testing/local) or `npm run docker:local`
     - Deploy container to production with `gcloud run deploy --image gcr.io/carbon-footprint-2020/CONTAINER_NAME_VERSION --platform managed`
+      - Use default service name
+      - Allow unauthenticated invocations
