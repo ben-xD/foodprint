@@ -8,7 +8,6 @@ const vision = require('@google-cloud/vision');
 const MAX_TRY = 4
 
 app.get('/', (req, res) => {
-  console.log({ mockFootprints })
   res.send("API for CarbonFootprint is now accessible.");
 });
 
@@ -32,27 +31,21 @@ app.post('/picture', upload.any(), async (req, res) => {
   }
 
   const carbonFootprint = getCarbonFootprint(labels)
-  console.log({ carbonFootprint })
   if (!carbonFootprint) {
-    return res.sendStatus(400)
+    return res.sendStatus(404)
   }
-
   return res.send(carbonFootprint.toString())
-
 })
 
 const port = process.env.PORT || 8080;
 app.listen(port, () => {
-  console.log('Hello world listening on port', port);
+  console.log('Server is listening on port', port);
 });
 
-console.log(process.env.GOOGLE_APPLICATION_CREDENTIALS)
-
 const getCarbonFootprint = (labels) => {
-  console.log(labels)
+  console.log({ labels })
   for (let i = 0; i < MAX_TRY; i++) {
     const name = labels[i].description.toLowerCase()
-    console.log(labels[i].description)
     if (mockFootprints[name] !== undefined) {
       return mockFootprints[name]
     }
