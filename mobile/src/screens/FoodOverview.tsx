@@ -12,11 +12,13 @@ import {
 } from 'react-native';
 import ImagePicker from 'react-native-image-picker';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import Axios from 'axios';
 
 interface Props {}
 
 // TODO add a localhost/ environment variables?
-const endpoint = 'http://10.0.2.2:8080/picture';
+const postPictureUri = 'http://10.0.2.2:8080/picture';
+// const postPictureUri = 'https://helloworld-5i6gsvkjla-ew.a.run.app';
 
 const options = {
   storageOptions: {
@@ -63,37 +65,35 @@ const FoodOverview: React.FC<Props> = ({navigation}) => {
           name: 'pic.jpg',
         });
         const config = {
-          method: 'post',
           headers: {'content-type': 'multipart/form-data'},
-          body: data,
+          accept: 'application/json',
         };
-        const carbonFootprintResponse = await fetch(endpoint, config);
+        console.log({postPictureUri});
+        const carbonFootprintResponse = await Axios.post(
+          postPictureUri,
+          data,
+          config,
+        );
         console.log({carbonFootprintResponse});
-        // and update state on response
-        console.log({response});
+
+        // if (carbonFootprintResponse.status === 404) {
+        //   // TODO implement a warning screen
+        //   console.warn(
+        //     'Unsuccessful result. TODO: implement a error warning for user',
+        //   );
+        //   // return;
+        // }
+
         const meal = {
-          name: 'One meal',
+          description: carbonFootprintResponse.data.description,
+          score: carbonFootprintResponse.data.score,
           uri: 'data:image/jpeg;base64,' + response.data,
         };
         setFood([...food, meal]);
       } catch (err) {
-        console.log(err);
+        console.error({err});
       }
     });
-  };
-
-  const sendRequest = async () => {
-    const body = new FormData();
-    body.append('name', 'ben');
-    try {
-      await fetch(endpoint, {
-        method: 'POST',
-        headers: {'content-type': 'multipart/form-data'},
-        body,
-      });
-    } catch (err) {
-      console.log(err);
-    }
   };
 
   return (
@@ -106,7 +106,6 @@ const FoodOverview: React.FC<Props> = ({navigation}) => {
           padding: 8,
         }}>
         <Text style={{fontSize: 24}}>Your food history</Text>
-        <Button title="Send post request" onPress={sendRequest}></Button>
         <TouchableOpacity
           // style={{position: 'absolute', right: 0}}
           onPress={takePicture}>
@@ -123,7 +122,8 @@ const FoodOverview: React.FC<Props> = ({navigation}) => {
                 style={{width: 200, height: 400}}
                 source={{uri: meal.uri}}
               />
-              <Text>{meal.name}</Text>
+              <Text>{meal.description}</Text>
+              <Text>{meal.score}</Text>
             </View>
           );
         })}
