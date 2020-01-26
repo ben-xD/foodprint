@@ -8,11 +8,9 @@ export default class MainScreen extends React.Component {
     return (
       <View>
         <View style={styles.buttonView}>
-          <Button
-            title="Solid Button"
-          />
+          <Button title="Solid Button" />
         </View>
       </View>
-    )
+    );
   }
 }
