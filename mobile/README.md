@@ -14,7 +14,7 @@ The code is typescript (a superset of javascript), which means you **can** just 
 
 ## Getting setup
 - You need [node](http://nodejs.org/)
-- You need either XCode and iOS simulator **or** Android Studio and Android Emulator. 
+- You need either XCode and iOS simulator **or** Android Studio and Android Emulator set up following this [guide](https://facebook.github.io/react-native/docs/next/getting-started) **React native CLI Quickstart**, not **Expo CLI**.
 - go into the `/mobile` and install dependencies `npm install` (this is needed because dependencies are not uploaded to gitlab)
 - Run on android: npm run android
 - Run on iOS: npm run ios
