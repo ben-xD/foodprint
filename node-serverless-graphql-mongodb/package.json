@@ -1,9 +1,9 @@
 {
   "name": "node-serverless-graphql-mongodb",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "index_remote.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "node index_local.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
