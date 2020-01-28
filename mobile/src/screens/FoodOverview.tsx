@@ -12,12 +12,13 @@ import {
 import ImagePicker from 'react-native-image-picker';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import Axios from 'axios';
+import Config from 'react-native-config';
 
 interface Props {}
 
 // TODO add a localhost/ environment variables?
-// const postPictureUri = 'http://10.0.2.2:8080/picture';
-const postPictureUri = 'https://helloworld-5i6gsvkjla-ew.a.run.app/picture';
+// const postPictureUri = 'picture';
+const postPictureUri = Config.SERVER_URL + 'picture';
 
 const options = {
   storageOptions: {
