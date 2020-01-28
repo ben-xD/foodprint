@@ -33,11 +33,6 @@ app.post('/picture', upload.any(), async (req, res) => {
 
   const carbonFootprint = getCarbonFootprint(labels)
   console.log({ carbonFootprint })
-  if (!carbonFootprint) {
-    // TODO change this from 
-    return res.sendStatus(404)
-  }
-
   res.setHeader('Content-Type', 'application/json')
   return res.send(JSON.stringify(carbonFootprint))
 })
@@ -60,5 +55,8 @@ const getCarbonFootprint = (labels) => {
       return carbonFootprint
     }
   }
-  return null
+  return {
+    error: "Could not find food in CarbonFootprint database",
+    description: labels[0]
+  }
 }
