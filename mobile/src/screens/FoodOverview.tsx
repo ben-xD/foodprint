@@ -16,8 +16,6 @@ import Config from 'react-native-config';
 
 interface Props {}
 
-// TODO add a localhost/ environment variables?
-// const postPictureUri = 'picture';
 const postPictureUri = Config.SERVER_URL + 'picture';
 
 const options = {
@@ -30,19 +28,32 @@ const options = {
 const FoodOverview: React.FC<Props> = ({navigation}) => {
   const [food, setFood] = useState([]);
 
-  const takePicture = () => {
-    // ask for file perms
-    if (Platform.OS === 'android') {
-      PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-        {
-          title: 'App needs file permissions to save your photos',
-          message: 'App needs file permissions to save your food photos',
-          buttonNegative: 'Cancel',
-          buttonPositive: 'OK',
-        },
-      );
+  const getFilePermissions = async () => {
+    console.log('Ensuring file permissions.');
+    try {
+      if (Platform.OS === 'android') {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+          {
+            title: 'App needs file permissions to save your photos',
+            message: 'App needs file permissions to save your food photos',
+            buttonNegative: 'Cancel',
+            buttonPositive: 'OK',
+          },
+        );
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          console.log('File permissions allowed');
+        } else {
+          console.log('File permissions denied');
+        }
+      }
+    } catch (err) {
+      console.warn(err);
     }
+  };
+
+  const takePicture = async () => {
+    await getFilePermissions();
 
     ImagePicker.launchCamera(options, async response => {
       if (response.didCancel) {
@@ -76,20 +87,16 @@ const FoodOverview: React.FC<Props> = ({navigation}) => {
         );
         console.log({carbonFootprintResponse});
 
-        // if (carbonFootprintResponse.status === 404) {
-        //   // TODO implement a warning screen
-        //   console.warn(
-        //     'Unsuccessful result. TODO: implement a error warning for user',
-        //   );
-        //   // return;
-        // }
-
-        const meal = {
-          description: carbonFootprintResponse.data.description,
-          score: carbonFootprintResponse.data.score,
-          uri: 'data:image/jpeg;base64,' + response.data,
-        };
-        setFood([...food, meal]);
+        if (!carbonFootprintResponse.data.error) {
+          const meal = {
+            description: carbonFootprintResponse.data.description,
+            score: carbonFootprintResponse.data.score,
+            uri: 'data:image/jpeg;base64,' + response.data,
+          };
+          setFood([...food, meal]);
+        } else {
+          console.warn('No meal found, handle this case for user.');
+        }
       } catch (err) {
         console.warn({err});
       }
@@ -106,11 +113,8 @@ const FoodOverview: React.FC<Props> = ({navigation}) => {
           padding: 8,
         }}>
         <Text style={{fontSize: 24}}>Your food history</Text>
-        <TouchableOpacity
-          // style={{position: 'absolute', right: 0}}
-          onPress={takePicture}>
+        <TouchableOpacity onPress={takePicture}>
           <MaterialCommunityIcons name="plus" color={'black'} size={50} />
-          {/* <Image style={styles.button} source={require('./myButton.png')} /> */}
         </TouchableOpacity>
       </View>
       <ScrollView>
