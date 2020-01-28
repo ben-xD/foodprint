@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
   Text,
@@ -10,11 +10,9 @@ import {
   ScrollView,
 } from 'react-native';
 import ImagePicker from 'react-native-image-picker';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import Axios from 'axios';
 import Config from 'react-native-config';
-
-interface Props {}
 
 const postPictureUri = Config.SERVER_URL + 'picture';
 
@@ -25,7 +23,7 @@ const options = {
   },
 };
 
-const FoodOverview: React.FC<Props> = ({navigation}) => {
+const FoodOverview = ({ navigation }) => {
   const [food, setFood] = useState([]);
 
   const getFilePermissions = async () => {
@@ -76,16 +74,16 @@ const FoodOverview: React.FC<Props> = ({navigation}) => {
           name: 'pic.jpg',
         });
         const config = {
-          headers: {'content-type': 'multipart/form-data'},
+          headers: { 'content-type': 'multipart/form-data' },
           accept: 'application/json',
         };
-        console.log({postPictureUri});
+        console.log({ postPictureUri });
         const carbonFootprintResponse = await Axios.post(
           postPictureUri,
           data,
           config,
         );
-        console.log({carbonFootprintResponse});
+        console.log({ carbonFootprintResponse });
 
         if (!carbonFootprintResponse.data.error) {
           const meal = {
@@ -98,13 +96,13 @@ const FoodOverview: React.FC<Props> = ({navigation}) => {
           console.warn('No meal found, handle this case for user.');
         }
       } catch (err) {
-        console.warn({err});
+        console.warn({ err });
       }
     });
   };
 
   return (
-    <SafeAreaView style={{width: '100%', height: '100%'}}>
+    <SafeAreaView style={{ width: '100%', height: '100%' }}>
       <View
         style={{
           flexDirection: 'row',
@@ -112,19 +110,19 @@ const FoodOverview: React.FC<Props> = ({navigation}) => {
           alignItems: 'center',
           padding: 8,
         }}>
-        <Text style={{fontSize: 24}}>Your food history</Text>
+        <Text style={{ fontSize: 24 }}>Your food history</Text>
         <TouchableOpacity onPress={takePicture}>
           <MaterialCommunityIcons name="plus" color={'black'} size={50} />
         </TouchableOpacity>
       </View>
       <ScrollView>
         {food.map((meal, i) => {
-          console.log({meal});
+          console.log({ meal });
           return (
             <View key={i}>
               <Image
-                style={{width: 200, height: 400}}
-                source={{uri: meal.uri}}
+                style={{ width: 200, height: 400 }}
+                source={{ uri: meal.uri }}
               />
               <Text>{meal.description}</Text>
               <Text>{meal.score}</Text>
