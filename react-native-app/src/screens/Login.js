@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import { Button, Input, Text } from 'react-native-elements';
 
-export default Login = () => {
+export default Login = ({ navigation }) => {
   return (
     <View style={{ flex: 1 }}>
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -25,11 +25,11 @@ export default Login = () => {
             buttonStyle={{ backgroundColor: 'green' }}
             titleStyle={{ fontSize: 24 }}
             title="Confirm"
-            onPress={() => alert('You clicked on Confirm!')}
+            onPress={() => navigation.navigate('Tabs')}
           />
         </View>
         <View style={{ flex: 1 }} />
       </View>
     </View>
   );
-}
+};
