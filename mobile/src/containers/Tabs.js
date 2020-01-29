@@ -1,21 +1,20 @@
 import React from 'react';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Food from './Food';
 import Settings from './Settings';
-
-interface Props {}
+import { createStackNavigator } from '@react-navigation/stack';
 
 const Tab = createBottomTabNavigator();
 
-const Tabs: React.FC<Props> = () => {
+const Tabs = () => {
   return (
     <Tab.Navigator>
       <Tab.Screen
         name="Food"
         component={Food}
         options={{
-          tabBarIcon: ({color, size}) => (
+          tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons
               name="food-apple"
               color={color}
@@ -24,20 +23,11 @@ const Tabs: React.FC<Props> = () => {
           ),
         }}
       />
-      {/* <Tab.Screen
-        name="Location"
-        component={Location}
-        options={{
-          tabBarIcon: ({ color, size }) => (
-            <MaterialIcons name="location-on" color={color} size={size} />
-          ),
-        }}
-      /> */}
       <Tab.Screen
         name="Settings"
         component={Settings}
         options={{
-          tabBarIcon: ({color, size}) => (
+          tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="settings" color={color} size={size} />
           ),
         }}

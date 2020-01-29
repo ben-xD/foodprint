@@ -1,21 +1,19 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import FoodOverview from '../screens/FoodOverview';
-
-interface Props { }
+import Camera from '../screens/Camera';
 
 const Stack = createStackNavigator();
 
-const Food: React.FC<Props> = () => {
+const Food = () => {
   return (
-    <Stack.Navigator
-      initialRouteName="Overview"
-    >
+    <Stack.Navigator initialRouteName="Overview">
       <Stack.Screen
         name="Overview"
         component={FoodOverview}
         options={{ headerShown: false }}
       />
+      <Stack.Screen name="Camera" component={Camera}></Stack.Screen>
     </Stack.Navigator>
   );
 };
