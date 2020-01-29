@@ -18,3 +18,5 @@ The code is typescript (a superset of javascript), which means you **can** just 
 - go into the `/mobile` and install dependencies `npm install` (this is needed because dependencies are not uploaded to gitlab)
 - Run on android: npm run android
 - Run on iOS: npm run ios
+
+- TODO add steps for running on a physical Android or Apple device

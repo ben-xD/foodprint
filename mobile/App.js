@@ -2,19 +2,20 @@ import React from 'react';
 import { NavigationNativeContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Tabs from './src/containers/Tabs';
+import Main from './src/screens/Main';
 
 const Stack = createStackNavigator();
 
 const App = () => {
   return (
     <NavigationNativeContainer>
-      <Stack.Navigator>
+      <Stack.Navigator initialRouteName="Tabs">
         <Stack.Screen
-          name="Back"
+          name="Tabs"
           component={Tabs}
           options={{ headerShown: false }}
         />
-        {/* <Stack.Screen name="Camera" component={Camera} /> */}
+        <Stack.Screen name="Main" component={Main} />
       </Stack.Navigator>
     </NavigationNativeContainer>
   );
