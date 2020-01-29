@@ -12,8 +12,9 @@ app.get('/', (req, res) => {
 });
 
 app.post('/picture', upload.any(), async (req, res) => {
-  // TODO check to see if buffer exists. if not res.sendStatus(400) immediately
+  console.log({ req })
   if (!req.files || !req.files[0]) {
+    console.log("No files found")
     return res.sendStatus(400)
   }
   const file = req.files[0].buffer

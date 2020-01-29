@@ -3,101 +3,60 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import {
   Text,
   SafeAreaView,
-  Platform,
-  PermissionsAndroid,
   Image,
   View,
   ScrollView,
 } from 'react-native';
-import ImagePicker from 'react-native-image-picker';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Axios from 'axios';
 import Config from 'react-native-config';
 
 const postPictureUri = Config.SERVER_URL + 'picture';
 
-const options = {
-  storageOptions: {
-    // skipBackup: true,
-    // path: 'images',
-  },
-};
-
 const FoodOverview = ({ navigation }) => {
   const [food, setFood] = useState([]);
 
-  const getFilePermissions = async () => {
-    console.log('Ensuring file permissions.');
+  const classifyPicture = async (image) => {
+    console.log({ image });
     try {
-      if (Platform.OS === 'android') {
-        const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-          {
-            title: 'App needs file permissions to save your photos',
-            message: 'App needs file permissions to save your food photos',
-            buttonNegative: 'Cancel',
-            buttonPositive: 'OK',
-          },
-        );
-        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-          console.log('File permissions allowed');
-        } else {
-          console.log('File permissions denied');
-        }
+      const data = new FormData();
+      data.append('picture', {
+        uri: image.uri,
+        type: 'image/jpeg',
+        name: 'pic.jpg',
+      });
+      const config = {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Accept': 'application/json',
+        },
+      };
+      console.log({ postPictureUri });
+      const carbonFootprintResponse = await Axios.post(
+        postPictureUri,
+        data,
+        config,
+      );
+      console.log({ carbonFootprintResponse });
+
+      if (!carbonFootprintResponse.data.error) {
+        const meal = {
+          description: carbonFootprintResponse.data.description,
+          score: carbonFootprintResponse.data.score,
+          uri: 'data:image/jpeg;base64,' + image.base64,
+        };
+        setFood([...food, meal]);
+      } else {
+        console.warn('No meal found, handle this case for user.');
       }
     } catch (err) {
-      console.warn(err);
+      console.warn({ err });
     }
   };
 
   const takePicture = async () => {
-    await getFilePermissions();
-
-    ImagePicker.launchCamera(options, async response => {
-      if (response.didCancel) {
-        return console.log('User cancelled image picker');
-      }
-      if (response.error) {
-        return console.log('ImagePicker Error: ', response.error);
-      }
-      if (response.customButton) {
-        return console.log(
-          'User tapped custom button: ',
-          response.customButton,
-        );
-      }
-      try {
-        const data = new FormData();
-        data.append('picture', {
-          uri: response.uri,
-          type: 'image/jpeg',
-          name: 'pic.jpg',
-        });
-        const config = {
-          headers: { 'content-type': 'multipart/form-data' },
-          accept: 'application/json',
-        };
-        console.log({ postPictureUri });
-        const carbonFootprintResponse = await Axios.post(
-          postPictureUri,
-          data,
-          config,
-        );
-        console.log({ carbonFootprintResponse });
-
-        if (!carbonFootprintResponse.data.error) {
-          const meal = {
-            description: carbonFootprintResponse.data.description,
-            score: carbonFootprintResponse.data.score,
-            uri: 'data:image/jpeg;base64,' + response.data,
-          };
-          setFood([...food, meal]);
-        } else {
-          console.warn('No meal found, handle this case for user.');
-        }
-      } catch (err) {
-        console.warn({ err });
-      }
+    navigation.navigate('Camera', {
+      classifyPicture,
     });
   };
 
