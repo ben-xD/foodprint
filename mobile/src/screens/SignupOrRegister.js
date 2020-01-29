@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import { Text, Button } from 'react-native-elements';
 
-export default Main = ({ navigation }) => {
+export default SignupOrRegister = ({ navigation }) => {
   return (
     <View style={{ flex: 1 }}>
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
