@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import { Button, Input, Text } from 'react-native-elements';
 
-export default class SignUp extends React.Component {
+export default class Signup extends React.Component {
   render() {
     return (
       <View style={{ flex: 1 }}>
