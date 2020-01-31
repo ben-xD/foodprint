@@ -5,13 +5,17 @@ import Tabs from './src/containers/Tabs';
 import Login from './src/screens/Login';
 import Signup from './src/screens/Signup';
 import SignupOrRegister from './src/screens/SignupOrRegister';
+import FoodOverview from './src/screens/FoodOverview';
+import Camera from './src/screens/Camera';
+import Settings from './src/containers/Settings';
+
 
 const Stack = createStackNavigator();
 
 const App = () => {
   return (
     <NavigationNativeContainer>
-      <Stack.Navigator initialRouteName="Back" >
+      <Stack.Navigator initialRouteName="FoodOverview" >
         <Stack.Screen
           name="Tabs"
           component={Tabs}
@@ -20,6 +24,9 @@ const App = () => {
         <Stack.Screen name="Back" component={SignupOrRegister} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Signup" component={Signup} />
+        <Stack.Screen name="FoodOverview" component={FoodOverview} />
+        <Stack.Screen name="Camera" component={Camera} />
+        <Stack.Screen name="Settings" component={Settings} />
       </Stack.Navigator>
     </NavigationNativeContainer>
   );

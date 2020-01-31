@@ -60,6 +60,10 @@ const FoodOverview = ({ navigation }) => {
     });
   };
 
+  const goToSettings = async () => {
+    navigation.navigate('Settings');
+  };
+
   return (
     <SafeAreaView style={{ width: '100%', height: '100%' }}>
       <View
@@ -69,9 +73,11 @@ const FoodOverview = ({ navigation }) => {
           alignItems: 'center',
           padding: 8,
         }}>
-        <Text style={{ fontSize: 24 }}>Your food history</Text>
         <TouchableOpacity onPress={takePicture}>
-          <MaterialCommunityIcons name="plus" color={'black'} size={50} />
+          <MaterialCommunityIcons name="plus" color={'grey'} size={50} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={goToSettings}>
+          <MaterialCommunityIcons name="settings-outline" color={'grey'} size={50} />
         </TouchableOpacity>
       </View>
       <ScrollView>
