@@ -19,6 +19,7 @@ The code is typescript (a superset of javascript), which means you **can** just 
 - Run on android: npm run android
 - Run on iOS:
     - execute `cd ios; pod install; cd..`
+    - **Note:** After these dependencies change to because of further development, you might get dependency errors. First port of call is to run the above command.
     - npm run ios
 
 - TODO add steps for running on a physical Android or Apple device

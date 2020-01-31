@@ -3,11 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>NSCameraUsageDescription</key>
-	<string>Your own description of the purpose</string>
+	<string>$(PRODUCT_NAME) would like to use your camera</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>mobile</string>
+	<string>Foodprint</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -40,7 +40,7 @@
 		</dict>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>location</string>
@@ -61,29 +61,28 @@
 	<false/>
 	<key>UIAppFonts</key>
 	<array>
-	<string>AntDesign.ttf</string>
-	<string>Entypo.ttf</string>
-	<string>EvilIcons.ttf</string>
-	<string>Feather.ttf</string>
-	<string>FontAwesome.ttf</string>
-	<string>FontAwesome5_Brands.ttf</string>
-	<string>FontAwesome5_Regular.ttf</string>
-	<string>FontAwesome5_Solid.ttf</string>
-	<string>Foundation.ttf</string>
-	<string>Ionicons.ttf</string>
-	<string>MaterialIcons.ttf</string>
-	<string>MaterialCommunityIcons.ttf</string>
-	<string>SimpleLineIcons.ttf</string>
-	<string>Octicons.ttf</string>
-	<string>Zocial.ttf</string>
+		<string>AntDesign.ttf</string>
+		<string>Entypo.ttf</string>
+		<string>EvilIcons.ttf</string>
+		<string>Feather.ttf</string>
+		<string>FontAwesome.ttf</string>
+		<string>FontAwesome5_Brands.ttf</string>
+		<string>FontAwesome5_Regular.ttf</string>
+		<string>FontAwesome5_Solid.ttf</string>
+		<string>Foundation.ttf</string>
+		<string>Ionicons.ttf</string>
+		<string>MaterialIcons.ttf</string>
+		<string>MaterialCommunityIcons.ttf</string>
+		<string>SimpleLineIcons.ttf</string>
+		<string>Octicons.ttf</string>
+		<string>Zocial.ttf</string>
+		<string>Fontisto.ttf</string>
 	</array>
-    <key>NSPhotoLibraryUsageDescription</key>
-    <string>$(PRODUCT_NAME) would like access to your photo gallery</string>
-    <key>NSCameraUsageDescription</key>
-    <string>$(PRODUCT_NAME) would like to use your camera</string>
-    <key>NSPhotoLibraryAddUsageDescription</key>
-    <string>$(PRODUCT_NAME) would like to save photos to your photo gallery</string>
-    <key>NSMicrophoneUsageDescription</key>
-    <string>$(PRODUCT_NAME) would like to use your microphone (for videos)</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>$(PRODUCT_NAME) would like access to your photo gallery</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>$(PRODUCT_NAME) would like to save photos to your photo gallery</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>$(PRODUCT_NAME) would like to use your microphone (for videos)</string>
 </dict>
 </plist>
