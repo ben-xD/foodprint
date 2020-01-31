@@ -773,7 +773,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = co.fresla.carbon;
-				PRODUCT_NAME = foodprint;
+				PRODUCT_NAME = mobile;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -793,7 +793,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = co.fresla.carbon;
-				PRODUCT_NAME = foodprint;
+				PRODUCT_NAME = mobile;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
