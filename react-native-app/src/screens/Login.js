@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { View } from 'react-native';
 import { Button, Input, Text } from 'react-native-elements';
 import { ScrollView } from 'react-native-gesture-handler';
 import auth from '@react-native-firebase/auth';
+import Password from '../components/Password';
+import Email from '../components/Email';
 
 export default Login = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const passwordRef = useRef(null);
 
   const loginHandler = async () => {
     try {
@@ -38,8 +41,8 @@ export default Login = ({ navigation }) => {
       </View>
       <View style={{ width: '80%' }}>
         <View>
-          <Input label={'Your Email Address'} autoCapitalize={'none'} placeholder="banana@foodprint.co" value={email} onChangeText={value => setEmail(value)} />
-          <Input label={'Password'} autoCapitalize={'none'} placeholder="Password" value={password} onChangeText={value => setPassword(value)} secureTextEntry={true} />
+          <Email nextFieldRef={passwordRef} setEmail={setEmail} email={email} />
+          <Password ref={passwordRef} submitHandler={loginHandler} setPassword={setPassword} password={password} />
         </View>
       </View>
       <View style={{ width: '80%' }}>

@@ -3,6 +3,9 @@ import { View } from 'react-native';
 import { Button, Input, Text } from 'react-native-elements';
 import { ScrollView } from 'react-native-gesture-handler';
 import auth from '@react-native-firebase/auth';
+import Password from '../components/Password';
+import Email from '../components/Email';
+import { useRef } from 'react';
 
 // const SIGN_UP = qgl`
 //   mutation signUp($email: String!, $password: String!) {
@@ -13,6 +16,7 @@ import auth from '@react-native-firebase/auth';
 export default Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const passwordRef = useRef(null);
 
   const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -35,7 +39,7 @@ export default Signup = () => {
     console.log({ userDetails });
     try {
       const userCredentials = await auth().createUserWithEmailAndPassword(email, password);
-      console.log({ res });
+      console.log({ userCredentials });
     } catch (e) {
       if (e.code === 'auth/email-already-in-use') {
         return console.warn('tell user email is already used');
@@ -59,15 +63,15 @@ export default Signup = () => {
       </View>
       <View style={{ width: '80%' }}>
         <View>
-          <Input label={'Your Email Address'} autoCapitalize={'none'} placeholder="banana@foodprint.co" value={email} onChangeText={value => setEmail(value)} />
-          <Input label={'Password'} autoCapitalize={'none'} placeholder="Password" value={password} onChangeText={value => setPassword(value)} secureTextEntry={true} />
+          <Email nextFieldRef={passwordRef} setEmail={setEmail} email={email} />
+          <Password ref={passwordRef} submitHandler={signUpHandler} setPassword={setPassword} password={password} />
         </View>
       </View>
       <View style={{ width: '80%' }}>
         <Button
           buttonStyle={{ backgroundColor: 'green', marginVertical: 100 }}
           titleStyle={{ fontSize: 24 }}
-          title="Register"
+          title="Join"
           onPress={signUpHandler}
         />
       </View>
