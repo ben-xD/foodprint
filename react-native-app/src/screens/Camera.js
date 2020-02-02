@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, TouchableOpacity, View, Text } from 'react-native';
 import { RNCamera } from 'react-native-camera';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const Camera = ({ route, navigation }) => {
   const [liveClass, setLiveClass] = useState(null);
@@ -40,7 +41,7 @@ const Camera = ({ route, navigation }) => {
           return (
             <View style={{ flex: 0, flexDirection: 'row', justifyContent: 'center' }}>
               <TouchableOpacity onPress={() => takePictureHandler(camera)} style={styles.capture}>
-                <Text style={{ fontSize: 14 }}>{liveClass ? liveClass : 'SNAP'}</Text>
+                <MaterialCommunityIcons name="food-apple" color={'rgba(255,255,255,1)'} size={65} />
               </TouchableOpacity>
             </View>
           );
@@ -65,7 +66,7 @@ const styles = StyleSheet.create({
   },
   capture: {
     flex: 0,
-    backgroundColor: '#fff',
+    // backgroundColor: '#fff',
     borderRadius: 5,
     padding: 15,
     paddingHorizontal: 20,

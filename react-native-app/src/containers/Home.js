@@ -3,11 +3,10 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Food from './Food';
 import Settings from './Settings';
-import { createStackNavigator } from '@react-navigation/stack';
 
 const Tab = createBottomTabNavigator();
 
-const Tabs = () => {
+const Home = () => {
   return (
     <Tab.Navigator>
       <Tab.Screen
@@ -36,4 +35,4 @@ const Tabs = () => {
   );
 };
 
-export default Tabs;
+export default Home;

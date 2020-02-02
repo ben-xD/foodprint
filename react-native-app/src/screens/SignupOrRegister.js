@@ -3,6 +3,7 @@ import { View } from 'react-native';
 import { Text, Button } from 'react-native-elements';
 import Config from 'react-native-config';
 
+
 export default SignupOrRegister = ({ navigation }) => {
   return (
     <View style={{ flex: 1 }}>
@@ -27,12 +28,6 @@ export default SignupOrRegister = ({ navigation }) => {
             onPress={() => navigation.navigate('Login')}
             type="clear"
           />
-          {Config.DEVELOPMENT === 'true' ? <Button
-            title="DEV: Skip login screen"
-            titleStyle={{ color: 'red', fontSize: 24 }}
-            onPress={() => navigation.navigate('Tabs')}
-            type="clear"
-          /> : <></>}
         </View>
         <View style={{ flex: 1 }} />
       </View>

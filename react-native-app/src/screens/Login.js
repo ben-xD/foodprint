@@ -2,33 +2,19 @@ import React, { useState, useRef } from 'react';
 import { View } from 'react-native';
 import { Button, Input, Text } from 'react-native-elements';
 import { ScrollView } from 'react-native-gesture-handler';
-import auth from '@react-native-firebase/auth';
 import Password from '../components/Password';
 import Email from '../components/Email';
+import { AuthContext } from '../store/Auth';
 
 export default Login = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const passwordRef = useRef(null);
 
-  const loginHandler = async () => {
-    try {
-      const userCredential = await auth().signInWithEmailAndPassword(email, password);
-      console.log({ userCredential });
-      // TODO store login details in AsyncStorage
+  const { signIn } = React.useContext(AuthContext);
 
-    } catch (e) {
-      if (e.code === 'auth/invalid-email') {
-        return console.warn('tell user email invalid');
-      } else if (e.code === 'auth/user-disabled') {
-        return console.warn('tell user disabled');
-      } else if (e.code === 'auth/user-not-found') {
-        return console.warn('tell user does not exist');
-      } else if (e.code === 'auth/wrong-password') {
-        return console.warn('tell user wrong pw');
-      }
-      else { console.error(e); }
-    }
+  const loginHandler = async () => {
+    signIn({ email, password });
   };
 
   return (
