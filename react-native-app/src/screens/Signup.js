@@ -19,6 +19,7 @@ export default Signup = () => {
     }
 
     // TODO add more password security checks
+    // TODO change view to move button up when keyboard is shown
 
     const userDetails = {
       email,
