@@ -40,7 +40,7 @@ const Camera = ({ route, navigation }) => {
           return (
             <View style={{ flex: 0, flexDirection: 'row', justifyContent: 'center' }}>
               <TouchableOpacity onPress={() => takePictureHandler(camera)} style={styles.capture}>
-                <Text style={{ fontSize: 14 }}>{liveClass ? liveClass : 'thinking...'}</Text>
+                <Text style={{ fontSize: 14 }}>{liveClass ? liveClass : 'SNAP'}</Text>
               </TouchableOpacity>
             </View>
           );

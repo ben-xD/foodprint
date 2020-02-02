@@ -22,14 +22,9 @@ const App = () => {
   return (
     <UserContext.Provider>
       <NavigationNativeContainer>
-        <Stack.Navigator initialRouteName="Back" >
-          <Stack.Screen
-            name="Tabs"
-            component={Tabs}
-            screenOptions={{ headerShown: false }}
-          />
-          <Stack.Screen name="Back" component={SignupOrRegister}
-            options={{ headerShown: false }} />
+        <Stack.Navigator initialRouteName="Back" screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="Tabs" component={Tabs} />
+          <Stack.Screen name="Back" component={SignupOrRegister} />
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="Signup" component={Signup} />
         </Stack.Navigator>
