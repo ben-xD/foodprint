@@ -3,6 +3,12 @@ import { View } from 'react-native';
 import { Button, Input, Text } from 'react-native-elements';
 import { ScrollView } from 'react-native-gesture-handler';
 
+// const SIGN_UP = qgl`
+//   mutation signUp($email: String!, $password: String!) {
+
+//   }
+// `
+
 export default Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

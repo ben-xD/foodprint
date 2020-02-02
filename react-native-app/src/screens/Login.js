@@ -8,7 +8,7 @@ export default Login = ({ navigation }) => {
 
   const loginHandler = () => {
     console.warn('Not implemented');
-    // should store login details in AsyncStorage
+    // TODO store login details in AsyncStorage
   };
 
 
