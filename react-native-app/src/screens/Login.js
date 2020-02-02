@@ -1,8 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View } from 'react-native';
 import { Button, Input, Text } from 'react-native-elements';
 
 export default Login = ({ navigation }) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const loginHandler = () => {
+    console.warn('Not implemented');
+    // should store login details in AsyncStorage
+  };
+
+
   return (
     <View style={{ flex: 1 }}>
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -13,8 +22,8 @@ export default Login = ({ navigation }) => {
       <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
         <View style={{ flex: 1 }} />
         <View style={{ flex: 5 }}>
-          <Input placeholder="Username" />
-          <Input placeholder="Password" />
+          <Input placeholder="Email" onChangeText={(value) => setEmail(value)} value={email} />
+          <Input placeholder="Password" onChangeText={(value) => setPassword(value)} value={password} />
         </View>
         <View style={{ flex: 1 }} />
       </View>
@@ -25,7 +34,7 @@ export default Login = ({ navigation }) => {
             buttonStyle={{ backgroundColor: 'green' }}
             titleStyle={{ fontSize: 24 }}
             title="Confirm"
-            onPress={() => navigation.navigate('Tabs')}
+            onPress={loginHandler}
           />
         </View>
         <View style={{ flex: 1 }} />
