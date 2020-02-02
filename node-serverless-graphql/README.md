@@ -10,7 +10,7 @@
 
 ### Local Testing
 1. Run `npm install` to assert modules installed
-2. Run `npm start` to run local Apollo server
+2. Run `npm run dev` to run local Apollo server
 3. Go to url specified in your browser to play around
 - [Apollo GraphQL Tutorial](https://www.apollographql.com/docs/tutorial/schema/)
 
