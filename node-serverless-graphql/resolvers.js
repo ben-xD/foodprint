@@ -1,20 +1,9 @@
-class Picture {
-    constructor({title, image}) {
-        this.title = title;
-        this.image = image;
-    }
-}
-
 const resolvers = {
     Query: {
-        getPicture: (_, {title}) => {
-            return new Picture({title: title, image: "Test-image"});
-        }
+        uploads: () => "To do..."
     },
     Mutation: {
-        postPicture: (_, {title}) => {
-            return new Picture({title: title, image: "Test-image"});
-        }
+        singleUpload: (parent, {file}, {storeUpload}) => storeUpload(file)
     }
 };
 
