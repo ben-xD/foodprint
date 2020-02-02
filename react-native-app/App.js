@@ -17,7 +17,8 @@ const App = () => {
           component={Tabs}
           screenOptions={{ headerShown: false }}
         />
-        <Stack.Screen name="Back" component={SignupOrRegister} />
+        <Stack.Screen name="Back" component={SignupOrRegister}
+          options={{ headerShown: false }} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Signup" component={Signup} />
       </Stack.Navigator>
