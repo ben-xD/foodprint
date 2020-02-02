@@ -31,7 +31,6 @@ export default Login = ({ navigation }) => {
     }
   };
 
-
   return (
     <ScrollView contentContainerStyle={{ alignItems: 'center' }} style={{ width: '100%', height: '100%' }}>
       <View style={{ alignItems: 'center', justifyContent: 'center', marginVertical: 50 }}>
