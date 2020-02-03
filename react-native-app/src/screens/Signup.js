@@ -9,7 +9,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 //   }
 // `
 
-export default Signup = () => {
+export default Signup = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -19,7 +19,6 @@ export default Signup = () => {
     if (!EMAIL_REGEX.test(email)) {
       return console.warn('alert user, email invalid.');
     }
-
     if (password.length < 8) {
       return console.warn('alert user, password too short ');
     }
@@ -32,6 +31,8 @@ export default Signup = () => {
       password,
     };
     console.log({ userDetails });
+
+    navigation.navigate('FoodOverview')
   };
 
   return (

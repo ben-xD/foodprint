@@ -39,7 +39,11 @@ const Camera = ({ route, navigation }) => {
           if (status !== 'READY') { return <Text>Not ready</Text>; }
           return (
             <View style={{ flex: 0, flexDirection: 'row', justifyContent: 'center' }}>
-              <TouchableOpacity onPress={() => takePictureHandler(camera)} style={styles.capture}>
+              <TouchableOpacity
+                  // onPress={() => takePictureHandler(camera)}
+                  // following line for development purposes
+                  onPress={() => navigation.navigate('Feedback')}
+                  style={styles.capture}>
                 <Text style={{ fontSize: 14 }}>{liveClass ? liveClass : 'thinking...'}</Text>
               </TouchableOpacity>
             </View>

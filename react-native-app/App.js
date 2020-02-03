@@ -9,6 +9,7 @@ import FoodOverview from './src/screens/FoodOverview';
 import Camera from './src/screens/Camera';
 import Settings from './src/containers/Settings';
 import Feedback from './src/screens/Feedback';
+import Error from './src/screens/Error';
 
 
 const Stack = createStackNavigator();
@@ -16,7 +17,7 @@ const Stack = createStackNavigator();
 const App = () => {
   return (
     <NavigationNativeContainer>
-      <Stack.Navigator initialRouteName="FoodOverview" >
+      <Stack.Navigator initialRouteName="Back" >
         <Stack.Screen
           name="Tabs"
           component={Tabs}
@@ -30,6 +31,7 @@ const App = () => {
         <Stack.Screen name="Camera" component={Camera} />
         <Stack.Screen name="Settings" component={Settings} />
         <Stack.Screen name="Feedback" component={Feedback} />
+        <Stack.Screen name="Error" component={Error} />
       </Stack.Navigator>
     </NavigationNativeContainer>
   );

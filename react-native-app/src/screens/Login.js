@@ -23,7 +23,7 @@ export default Login = ({ navigation }) => {
         <View style={{ flex: 1 }} />
         <View style={{ flex: 5 }}>
           <Input placeholder="Email" onChangeText={(value) => setEmail(value)} value={email} />
-          <Input placeholder="Password" onChangeText={(value) => setPassword(value)} value={password} />
+          <Input placeholder="Password" onChangeText={(value) => setPassword(value)} value={password} secureTextEntry={true} />
         </View>
         <View style={{ flex: 1 }} />
       </View>
