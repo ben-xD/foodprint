@@ -11,23 +11,23 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import Axios from 'axios';
 import Config from 'react-native-config';
 
+import { useQuery } from '@apollo/react-hooks';
+import {gql} from 'apollo-boost';
+
 const postPictureUri = Config.SERVER_URL + 'picture';
 
-import {ApolloClient, HttpLink, InMemoryCache, gql} from 'apollo-boost';
-
-const client = new ApolloClient({
-  link: new HttpLink({
-    uri: 'http://5da1c59b.ngrok.io', // Replace with your ngrok or GCF url
-  }),
-  cache: new InMemoryCache(),
-});
-
-client.query({query: gql`{
+const UPLOADS = gql`
+  {
     uploads
-  }`}).then(result => console.log({result}));
+  }
+`;
+
 
 const FoodOverview = ({ navigation }) => {
   const [food, setFood] = useState([]);
+
+  const { loading, error, data } = useQuery(UPLOADS);
+  console.log(data);
 
   const classifyPicture = async (image) => {
     console.log({ image });
