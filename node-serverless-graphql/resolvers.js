@@ -1,10 +1,13 @@
 const resolvers = {
     Query: {
-        uploads: () => "To do..."
+        uploads: () => {
+            console.log('Sending response to query...');
+            return "To do...";
+        }
     },
-    Mutation: {
-        singleUpload: (parent, {file}, {storeUpload}) => storeUpload(file)
-    }
+    // Mutation: {
+    //     singleUpload: (parent, {file}, {storeUpload}) => storeUpload(file)
+    // }
 };
 
 module.exports = resolvers;

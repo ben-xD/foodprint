@@ -13,6 +13,19 @@ import Config from 'react-native-config';
 
 const postPictureUri = Config.SERVER_URL + 'picture';
 
+import {ApolloClient, HttpLink, InMemoryCache, gql} from 'apollo-boost';
+
+const client = new ApolloClient({
+  link: new HttpLink({
+    uri: 'http://5da1c59b.ngrok.io', // Replace with your ngrok or GCF url
+  }),
+  cache: new InMemoryCache(),
+});
+
+client.query({query: gql`{
+    uploads
+  }`}).then(result => console.log({result}));
+
 const FoodOverview = ({ navigation }) => {
   const [food, setFood] = useState([]);
 
