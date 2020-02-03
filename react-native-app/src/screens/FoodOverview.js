@@ -22,6 +22,8 @@ const FoodOverview = ({ navigation }) => {
       const data = new FormData();
       data.append('picture', {
         uri: image.uri,
+        //Added the following to work with placeholder:
+        // uri: 'http://sunonefruits.com/wp-content/uploads/2018/07/apple.jpg',
         type: 'image/jpeg',
         name: 'pic.jpg',
       });

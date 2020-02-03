@@ -8,6 +8,7 @@ import SignupOrRegister from './src/screens/SignupOrRegister';
 import FoodOverview from './src/screens/FoodOverview';
 import Camera from './src/screens/Camera';
 import Settings from './src/containers/Settings';
+import Feedback from './src/screens/Feedback';
 
 
 const Stack = createStackNavigator();
@@ -27,6 +28,7 @@ const App = () => {
         <Stack.Screen name="FoodOverview" component={FoodOverview} />
         <Stack.Screen name="Camera" component={Camera} />
         <Stack.Screen name="Settings" component={Settings} />
+        <Stack.Screen name="Feedback" component={Feedback} />
       </Stack.Navigator>
     </NavigationNativeContainer>
   );
