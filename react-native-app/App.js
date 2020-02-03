@@ -84,7 +84,7 @@ const App = () => {
           }
           else { return console.error(e); }
         }
-        const token = 'dummy-auth-token';
+        const token = await auth().currentUser.getIdToken();
         await AsyncStorage.setItem('userToken', token);
         dispatch({ type: 'SIGN_IN', token });
       },
@@ -92,12 +92,24 @@ const App = () => {
         AsyncStorage.removeItem('userToken');
         dispatch({ type: 'SIGN_OUT' });
       },
-      signUp: async data => {
-        // In a production app, we need to send user data to server and get a token
-        // We will also need to handle errors if sign up failed
-        // After getting token, we need to persist the token using `AsyncStorage`
-        // In the example, we'll use a dummy token
-        const token = 'dummy-auth-token';
+      signUp: async (email, password) => {
+        try {
+          const userCredentials = await auth().createUserWithEmailAndPassword(email, password);
+          console.log({ userCredentials });
+        } catch (e) {
+          if (e.code === 'auth/email-already-in-use') {
+            return console.warn('tell user email is already used');
+          } else if (e.code === 'auth/invalid-email') {
+            return console.warn('tell user invalid email');
+          } else if (e.code === 'auth/operation-not-allowed') {
+            return console.warn('tell user server has problems');
+          } else if (e.code === 'auth/weak-password') {
+            return console.warn('tell user password too weak');
+          }
+          else { console.error(e); }
+        }
+        const token = await auth().currentUser.getIdToken();
+        console.log({ token });
         await AsyncStorage.setItem('userToken', token);
         dispatch({ type: 'SIGN_IN', token });
       },
