@@ -9,7 +9,7 @@ import FoodOverview from './src/screens/FoodOverview';
 import Camera from './src/screens/Camera';
 import Settings from './src/containers/Settings';
 import Feedback from './src/screens/Feedback';
-import Error from './src/screens/Error';
+import ErrorScreen from './src/screens/Error';
 
 
 const Stack = createStackNavigator();
@@ -24,14 +24,14 @@ const App = () => {
           screenOptions={{ headerShown: false }}
         />
         <Stack.Screen name="Back" component={SignupOrRegister}
-          options={{ headerShown: false }} />
+          options={{ headerShown: true }} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Signup" component={Signup} />
         <Stack.Screen name="FoodOverview" component={FoodOverview} />
         <Stack.Screen name="Camera" component={Camera} />
         <Stack.Screen name="Settings" component={Settings} />
         <Stack.Screen name="Feedback" component={Feedback} />
-        <Stack.Screen name="Error" component={Error} />
+        <Stack.Screen name="ErrorScreen" component={ErrorScreen} />
       </Stack.Navigator>
     </NavigationNativeContainer>
   );

@@ -7,6 +7,7 @@ import {
   View,
   ScrollView,
 } from 'react-native';
+// import { Overlay } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Axios from 'axios';
 import Config from 'react-native-config';
@@ -22,8 +23,6 @@ const FoodOverview = ({ navigation }) => {
       const data = new FormData();
       data.append('picture', {
         uri: image.uri,
-        //Added the following to work with placeholder:
-        // uri: 'http://sunonefruits.com/wp-content/uploads/2018/07/apple.jpg',
         type: 'image/jpeg',
         name: 'pic.jpg',
       });
@@ -99,6 +98,10 @@ const FoodOverview = ({ navigation }) => {
       </ScrollView>
     </SafeAreaView>
   );
+};
+
+const Feedback = {
+
 };
 
 export default FoodOverview;

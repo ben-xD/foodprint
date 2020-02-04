@@ -18,7 +18,7 @@ export default SignupOrRegister = ({ navigation }) => {
           <Button
             buttonStyle={{ backgroundColor: 'green' }}
             titleStyle={{ fontSize: 24 }}
-            title="Sign up"
+            title="Register"
             onPress={() => navigation.navigate('Signup')}
           />
           <Button

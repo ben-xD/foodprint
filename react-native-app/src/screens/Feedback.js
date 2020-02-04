@@ -7,11 +7,7 @@ import {TouchableOpacity} from "react-native-gesture-handler";
 export default Feedback = ({ navigation }) => {
   return (
       <View style={{ flex: 1 }}>
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-          {/*<TouchableOpacity onPress={() => navigation.navigate('FoodOverview')}*/}
-          {/*  <MaterialCommunityIcons name="arrow-left" color={'grey'} size={50} />*/}
-          {/*</TouchableOpacity>*/}
-        </View>
+        <View style={{ flex: 1}}/>
         <View style={{ flex: 4, alignItems: 'center', justifyContent: 'center'  }}>
           <Image
               style={{height: 200, width:200}}
@@ -31,7 +27,7 @@ export default Feedback = ({ navigation }) => {
                 buttonStyle={{ backgroundColor: 'darkred' }}
                 titleStyle={{ fontSize: 24 }}
                 title="Not my item..."
-                onPress={() => navigation.navigate('Error')}
+                onPress={() => navigation.navigate('ErrorScreen')}
             />
           </View>
           <View style={{ flex: 1 }} />

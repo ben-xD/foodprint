@@ -36,26 +36,33 @@ export default Signup = ({ navigation }) => {
   };
 
   return (
-    <ScrollView contentContainerStyle={{ alignItems: 'center' }} style={{ width: '100%', height: '100%' }}>
-      <View style={{ alignItems: 'center', justifyContent: 'center', marginVertical: 50 }}>
+    <View style={{ flex: 1 }}>
+      <View style={{ flex:1, alignItems: 'center', justifyContent: 'center' }}>
         <Text h1>
           FoodPrint
           </Text>
       </View>
-      <View style={{ width: '80%' }}>
-        <View>
-          <Input label={'Your Email Address'} placeholder="banana@foodprint.co" value={email} onChangeText={value => setEmail(value)} />
+      <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
+        <View style={{ flex: 1 }} />
+        <View style={{ flex:5 }}>
+          <Input label={'Email Address'} placeholder="banana@foodprint.co" value={email} onChangeText={value => setEmail(value)} />
+          <View style={{height:20}}/>
           <Input label={'Password'} placeholder="Password" value={password} onChangeText={value => setPassword(value)} secureTextEntry={true} />
         </View>
+        <View style={{ flex: 1 }} />
       </View>
-      <View style={{ width: '80%' }}>
-        <Button
-          buttonStyle={{ backgroundColor: 'green', marginVertical: 100 }}
-          titleStyle={{ fontSize: 24 }}
-          title="Register"
-          onPress={signUpHandler}
-        />
+      <View style={{ flex:1, flexDirection:'row' }}>
+        <View style={{ flex: 1 }} />
+        <View style={{ flex: 4, flexDirection: 'column' }}>
+          <Button
+            buttonStyle={{ backgroundColor: 'green' }}
+            titleStyle={{ fontSize: 24 }}
+            title="Register"
+            onPress={signUpHandler}
+          />
+        </View>
+        <View style={{ flex: 1 }} />
       </View>
-    </ScrollView>
+    </View>
   );
 };
