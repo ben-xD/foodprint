@@ -13,9 +13,10 @@ const typeDefs = gql`
     uploads: String
   }
   
+  type Mutation {
+    test(input: String!): String
+    singleUpload(file: Upload!): File!
+  }
 `;
-  // type Mutation {
-  //   singleUpload(file: Upload!): File!
-  // }
 
 module.exports = typeDefs;

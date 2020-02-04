@@ -5,9 +5,14 @@ const resolvers = {
             return "To do...";
         }
     },
-    // Mutation: {
-    //     singleUpload: (parent, {file}, {storeUpload}) => storeUpload(file)
-    // }
+    Mutation: {
+        test: (_, {input}) => {
+            console.log('Sending response to mutation...');
+            console.log(input);
+            return "Hello"
+        },
+        singleUpload: (parent, {file}, {storeUpload}) => storeUpload(file)
+    },
 };
 
 module.exports = resolvers;
