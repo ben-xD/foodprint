@@ -3,7 +3,7 @@ const {gql} = require('apollo-server');
 // Construct a schema, using GraphQL schema language
 const typeDefs = gql` 
   type File {
-    id: ID!
+    id: Int!
     path: String!
     filename: String!
     mimetype: String!
@@ -15,7 +15,7 @@ const typeDefs = gql`
   
   type Mutation {
     test(input: String!): String
-    singleUpload(file: Upload!): File!
+    singleUpload(file: Upload!): String
   }
 `;
 
