@@ -22,8 +22,9 @@ export default Login = ({ navigation }) => {
       <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
         <View style={{ flex: 1 }} />
         <View style={{ flex: 5 }}>
-          <Input placeholder="Email" onChangeText={(value) => setEmail(value)} value={email} />
-          <Input placeholder="Password" onChangeText={(value) => setPassword(value)} value={password} secureTextEntry={true} />
+          <Input label={'Email Address'} placeholder="banana@foodprint.co" onChangeText={(value) => setEmail(value)} value={email} />
+          <View style={{height:20}}/>
+          <Input label={'Password'} placeholder="Password" onChangeText={(value) => setPassword(value)} value={password} secureTextEntry={true} />
         </View>
         <View style={{ flex: 1 }} />
       </View>
@@ -35,6 +36,12 @@ export default Login = ({ navigation }) => {
             titleStyle={{ fontSize: 24 }}
             title="Confirm"
             onPress={loginHandler}
+          />
+          <Button
+              title="Forgotten password"
+              titleStyle={{ color: 'green', fontSize: 18 }}
+              onPress={() => alert('Need to implement')}
+              type="clear"
           />
         </View>
         <View style={{ flex: 1 }} />

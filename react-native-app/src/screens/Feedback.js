@@ -1,10 +1,12 @@
-import React, { Component } from 'react';
+import React, {useState} from 'react';
 import { View, Image } from 'react-native';
-import { Text, Button, Rating, Overlay } from 'react-native-elements';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {TouchableOpacity} from "react-native-gesture-handler";
+import {Text, Button, Rating, Overlay, Input} from 'react-native-elements';
+
+
 
 export default Feedback = ({ navigation }) => {
+
+  const [isVisible, setVisibility] = useState(false);
 
   function calculateRating(carbonFootprint) {
     if (carbonFootprint < 4) {
@@ -25,45 +27,79 @@ export default Feedback = ({ navigation }) => {
 
   return (
       <View style={{ flex: 1 }}>
+
+
+        <Overlay
+            isVisible={isVisible}
+            onBackdropPress={() => setVisibility(false)}
+        >
+          <View style={{ flex: 1 }}>
+            <View style={{ flexDirection:'row', flex: 2, alignItems: 'center', justifyContent: 'center' }}>
+              <View style={{flex:1}}/>
+              <Text h3 style={{flex:5, textAlign:'center'}}>We're sorry we couldn't find your item...</Text>
+              <View style={{flex:1}}/>
+            </View>
+            <View style={{ flex: 2, alignItems: 'center', justifyContent: 'center'  }}>
+              <Image
+                  style={{height: 200, width:200}}
+                  source={{uri: 'https://mir-s3-cdn-cf.behance.net/project_modules/disp/fc4a1059120725.5a15c9fa08f78.gif'}}
+              />
+            </View>
+            <View style={{ flexDirection:'row', flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+              <View style={{flex:1}}/>
+              <Text style={{ fontSize: 18, flex:4, textAlign:'center'}}>Let us know what it was, so we can improve our app:</Text>
+              <View style={{flex:1}}/>
+            </View>
+            <View style={{ flex: 1.5, flexDirection: 'row' }}>
+              <View style={{ flex: 1 }} />
+              <View style={{ flex: 4, flexDirection: 'column', justifyContent:'center' }}>
+                <Input
+                    placeholder="e.g. Cucumber"
+                />
+                <View style={{height:20}}/>
+                <Button
+                    buttonStyle={{ backgroundColor: 'green' }}
+                    titleStyle={{ fontSize: 24 }}
+                    title="Submit"
+                    onPress={() => alert('Implement')}
+                />
+                <View style={{height:50}}/>
+              </View>
+              <View style={{ flex: 1 }} />
+            </View>
+          </View>
+        </Overlay>
+
+
         <View style={{ flex: 1}}/>
-        <View style={{ flex: 4, alignItems: 'center', justifyContent: 'center'  }}>
+        <View style={{ flex: 3.5, alignItems: 'center', justifyContent: 'center', backgroundColor: "white"  }}>
           <Image
               style={{height: 200, width:200}}
-              source={{uri: 'http://sunonefruits.com/wp-content/uploads/2018/07/apple.jpg'}}
+              source={{uri: 'https://www.fifteenspatulas.com/wp-content/uploads/2018/07/How-to-Cut-Cabbage-Fifteen-Spatulas-1-640x427.jpg'}}
           />
+          <View style={{height: 10}}/>
           <Text h2>Name</Text>
+          <View style={{height: 10}}/>
           <Rating
               readonly
-              ratingBackgroundColor='green'
-              startingValue= {calculateRating(26)}
+              startingValue= {calculateRating(13)}
           />
-          <Text h4>3 kg of CO2 eq/kg</Text>
+          <View style={{height: 10}}/>
+          <Text style={{fontSize: 18}}>13 kg of CO2 eq/kg</Text>
         </View>
+        <View style={{ flex: 0.5}}/>
         <View style={{ flex: 2, flexDirection: 'row'  }}>
           <View style={{ flex: 1 }} />
           <View style={{ flex: 4, flexDirection: 'column' }}>
             <Button
                 buttonStyle={{ backgroundColor: 'darkred' }}
                 titleStyle={{ fontSize: 24 }}
-                title="Not my item..."
-                onPress={() => navigation.navigate('ErrorScreen')}
+                title="This isn't my item..."
+                onPress={() => setVisibility(true)}
             />
           </View>
           <View style={{ flex: 1 }} />
         </View>
       </View>
   );
-}
-
-
-
-class UserFeedback extends Component {
-
-  state = { isVisible: false };
-
-  render () {
-    <Overlay isVisible={this.state.isVisible}>
-      <Text>Hello</Text>
-    </Overlay>
-  }
 }

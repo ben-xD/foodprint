@@ -3,7 +3,6 @@ import { StyleSheet, TouchableOpacity, View, Text } from 'react-native';
 import { RNCamera } from 'react-native-camera';
 
 const Camera = ({ route, navigation }) => {
-  const [liveClass, setLiveClass] = useState(null);
 
   const { classifyPicture } = route.params;
 
@@ -13,7 +12,7 @@ const Camera = ({ route, navigation }) => {
     classifyPicture(data);
     // navigation.goBack();
     // Following section is new
-    navigation.navigate("Feedback");
+    navigation.navigate('Feedback');
     // End of changes
   };
 
@@ -45,7 +44,6 @@ const Camera = ({ route, navigation }) => {
               <TouchableOpacity
                   onPress={() => takePictureHandler(camera)}
                   style={styles.capture}>
-                {/*<Text style={{ fontSize: 14 }}>{liveClass ? liveClass : 'thinking...'}</Text>*/}
               </TouchableOpacity>
               <View style={{height: 75}}/>
             </View>
@@ -70,13 +68,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   capture: {
-    // flex: 0,
-    // backgroundColor: '#fff',
-    // borderRadius: 5,
-    // padding: 15,
-    // paddingHorizontal: 20,
-    // alignSelf: 'center',
-    // margin: 20,
     borderWidth:4,
     borderColor:'lightgrey',
     alignItems:'center',
