@@ -11,7 +11,10 @@ const Camera = ({ route, navigation }) => {
     const options = { quality: 0.5, base64: true };
     const data = await camera.takePictureAsync(options);
     classifyPicture(data);
-    navigation.goBack();
+    // navigation.goBack();
+    // Following section is new
+    navigation.navigate("Feedback");
+    // End of changes
   };
 
   const barCodeHandler = ({ data, rawData, type, bounds }) => {
@@ -38,14 +41,13 @@ const Camera = ({ route, navigation }) => {
         {({ camera, status, recordAudioPermissionStatus }) => {
           if (status !== 'READY') { return <Text>Not ready</Text>; }
           return (
-            <View style={{ flex: 0, flexDirection: 'row', justifyContent: 'center' }}>
+            <View style={{ flex: 1, justifyContent: 'flex-end', alignItems:'center' }}>
               <TouchableOpacity
-                  // onPress={() => takePictureHandler(camera)}
-                  // following line for development purposes
-                  onPress={() => navigation.navigate('Feedback')}
+                  onPress={() => takePictureHandler(camera)}
                   style={styles.capture}>
-                <Text style={{ fontSize: 14 }}>{liveClass ? liveClass : 'thinking...'}</Text>
+                {/*<Text style={{ fontSize: 14 }}>{liveClass ? liveClass : 'thinking...'}</Text>*/}
               </TouchableOpacity>
+              <View style={{height: 75}}/>
             </View>
           );
         }}
@@ -68,12 +70,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   capture: {
-    flex: 0,
-    backgroundColor: '#fff',
-    borderRadius: 5,
-    padding: 15,
-    paddingHorizontal: 20,
-    alignSelf: 'center',
-    margin: 20,
+    // flex: 0,
+    // backgroundColor: '#fff',
+    // borderRadius: 5,
+    // padding: 15,
+    // paddingHorizontal: 20,
+    // alignSelf: 'center',
+    // margin: 20,
+    borderWidth:4,
+    borderColor:'lightgrey',
+    alignItems:'center',
+    justifyContent:'center',
+    width:80,
+    height:80,
+    backgroundColor:'red',
+    borderRadius:50,
   },
 });

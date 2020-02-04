@@ -7,7 +7,6 @@ import {
   View,
   ScrollView,
 } from 'react-native';
-// import { Overlay } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Axios from 'axios';
 import Config from 'react-native-config';
@@ -100,8 +99,5 @@ const FoodOverview = ({ navigation }) => {
   );
 };
 
-const Feedback = {
-
-};
 
 export default FoodOverview;
