@@ -34,7 +34,7 @@ app.post('/picture', upload.any(), async (req, res) => {
   }  
 
   let ProcessedGoogleResult = [];
-  for (let i = 0; i < ProcessedGoogleResult.length; i++){
+  for (let i = 0; i < GoogleResult.length; i++){
     ProcessedGoogleResult.push(GoogleResult[i].description.toLowerCase());
   }
 
