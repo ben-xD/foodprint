@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
   Text,
@@ -8,56 +8,20 @@ import {
   ScrollView,
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import Axios from 'axios';
-import Config from 'react-native-config';
 
-const postPictureUri = Config.SERVER_URL + 'picture';
+
 
 const FoodOverview = ({ navigation }) => {
   const [food, setFood] = useState([]);
 
-  const classifyPicture = async (image) => {
-    console.log({ image });
-    try {
-      const data = new FormData();
-      data.append('picture', {
-        uri: image.uri,
-        type: 'image/jpeg',
-        name: 'pic.jpg',
-      });
-      const config = {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          'Accept': 'application/json',
-        },
-      };
-      console.log({ postPictureUri });
-      const carbonFootprintResponse = await Axios.post(
-        postPictureUri,
-        data,
-        config,
-      );
-      console.log({ carbonFootprintResponse });
+  useEffect(() => {
+    navigation.navigate('Camera')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-      if (!carbonFootprintResponse.data.error) {
-        const meal = {
-          description: carbonFootprintResponse.data.description,
-          score: carbonFootprintResponse.data.score,
-          uri: 'data:image/jpeg;base64,' + image.base64,
-        };
-        setFood([...food, meal]);
-      } else {
-        console.warn('No meal found, handle this case for user.');
-      }
-    } catch (err) {
-      console.warn({ err });
-    }
-  };
 
   const takePicture = async () => {
-    navigation.navigate('Camera', {
-      classifyPicture,
-    });
+    navigation.navigate('Camera');
   };
 
   const goToSettings = async () => {

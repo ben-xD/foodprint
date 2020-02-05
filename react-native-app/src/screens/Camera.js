@@ -1,23 +1,19 @@
 import React, { useState } from 'react';
 import { StyleSheet, TouchableOpacity, View, Text } from 'react-native';
 import { RNCamera } from 'react-native-camera';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const Camera = ({ route, navigation }) => {
-
-  const { classifyPicture } = route.params;
 
   const takePictureHandler = async (camera) => {
     const options = { quality: 0.5, base64: true };
     const data = await camera.takePictureAsync(options);
-    classifyPicture(data);
-    navigation.goBack();
+    navigation.navigate('Feedback', {data});
   };
 
   const barCodeHandler = ({ data, rawData, type, bounds }) => {
     console.log({ data, rawData, type, bounds });
     // save the barcode info into a different components state
-    navigation.goBack();
+    navigation.navigate('Feedback', {data});
   };
 
   return (

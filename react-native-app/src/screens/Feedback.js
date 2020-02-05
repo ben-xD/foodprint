@@ -1,12 +1,17 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { View, Image } from 'react-native';
 import {Text, Button, Rating, Overlay, Input} from 'react-native-elements';
+import Axios from "axios";
+import Config from "react-native-config";
 
 
+const postPictureUri = Config.SERVER_URL + 'picture';
 
-export default Feedback = ({ navigation }) => {
+const Feedback = ({route, navigation}) => {
 
   const [isVisible, setVisibility] = useState(false);
+  const [meal, setMeal] = useState({});
+  const {data} = route.params;
 
   function calculateRating(carbonFootprint) {
     if (carbonFootprint < 4) {
@@ -24,82 +29,127 @@ export default Feedback = ({ navigation }) => {
     }
   };
 
+  useEffect(() => {
+
+  const classifyPicture = async () => {
+    console.log({data});
+    try {
+      const formData = new FormData();
+      formData.append('picture', {
+        uri: data.uri,
+        type: 'image/jpeg',
+        name: 'pic.jpg',
+      });
+      const config = {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Accept': 'application/json',
+        },
+      };
+      // console.log({ postPictureUri });
+      const carbonFootprintResponse = await Axios.post(
+          postPictureUri,
+          formData,
+          config,
+      );
+      // console.log({ carbonFootprintResponse });
+
+      if (!carbonFootprintResponse.data.error) {
+        const meal = {
+          description: carbonFootprintResponse.data.description,
+          score: carbonFootprintResponse.data.score,
+          uri: 'data:image/jpeg;base64,' + data.base64,
+        };
+        setMeal(meal);
+      } else {
+        console.warn('No meal found, handle his case for user.');
+      }
+    } catch (err) {
+      console.warn({err});
+    }
+  };
+
+  classifyPicture()
+  }, [data])
 
   return (
-      <View style={{ flex: 1 }}>
+      <View style={{flex: 1}}>
 
 
         <Overlay
             isVisible={isVisible}
             onBackdropPress={() => setVisibility(false)}
         >
-          <View style={{ flex: 1 }}>
-            <View style={{ flexDirection:'row', flex: 2, alignItems: 'center', justifyContent: 'center' }}>
-              <View style={{flex:1}}/>
-              <Text h3 style={{flex:5, textAlign:'center'}}>We're sorry we couldn't find your item...</Text>
-              <View style={{flex:1}}/>
+          <View style={{flex: 1}}>
+            <View style={{flexDirection: 'row', flex: 2, alignItems: 'center', justifyContent: 'center'}}>
+              <View style={{flex: 1}}/>
+              <Text h3 style={{flex: 5, textAlign: 'center'}}>We're sorry we couldn't find your item...</Text>
+              <View style={{flex: 1}}/>
             </View>
-            <View style={{ flex: 2, alignItems: 'center', justifyContent: 'center'  }}>
+            <View style={{flex: 2, alignItems: 'center', justifyContent: 'center'}}>
               <Image
-                  style={{height: 200, width:200}}
+                  style={{height: 200, width: 200}}
                   source={{uri: 'https://mir-s3-cdn-cf.behance.net/project_modules/disp/fc4a1059120725.5a15c9fa08f78.gif'}}
               />
             </View>
-            <View style={{ flexDirection:'row', flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-              <View style={{flex:1}}/>
-              <Text style={{ fontSize: 18, flex:4, textAlign:'center'}}>Let us know what it was, so we can improve our app:</Text>
-              <View style={{flex:1}}/>
+            <View style={{flexDirection: 'row', flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+              <View style={{flex: 1}}/>
+              <Text style={{fontSize: 18, flex: 4, textAlign: 'center'}}>Let us know what it was, so we can improve our
+                app:</Text>
+              <View style={{flex: 1}}/>
             </View>
-            <View style={{ flex: 1.5, flexDirection: 'row' }}>
-              <View style={{ flex: 1 }} />
-              <View style={{ flex: 4, flexDirection: 'column', justifyContent:'center' }}>
+            <View style={{flex: 1.5, flexDirection: 'row'}}>
+              <View style={{flex: 1}}/>
+              <View style={{flex: 4, flexDirection: 'column', justifyContent: 'center'}}>
                 <Input
                     placeholder="e.g. Cucumber"
                 />
-                <View style={{height:20}}/>
+                <View style={{height: 20}}/>
                 <Button
-                    buttonStyle={{ backgroundColor: 'green' }}
-                    titleStyle={{ fontSize: 24 }}
+                    buttonStyle={{backgroundColor: 'green'}}
+                    titleStyle={{fontSize: 24}}
                     title="Submit"
                     onPress={() => alert('Implement')}
                 />
-                <View style={{height:50}}/>
+                <View style={{height: 50}}/>
               </View>
-              <View style={{ flex: 1 }} />
+              <View style={{flex: 1}}/>
             </View>
           </View>
         </Overlay>
 
 
-        <View style={{ flex: 1}}/>
-        <View style={{ flex: 3.5, alignItems: 'center', justifyContent: 'center', backgroundColor: "white"  }}>
+        <View style={{flex: 1}}/>
+        <View style={{flex: 3.5, alignItems: 'center', justifyContent: 'center', backgroundColor: "white"}}>
           <Image
-              style={{height: 200, width:200}}
-              source={{uri: 'https://www.fifteenspatulas.com/wp-content/uploads/2018/07/How-to-Cut-Cabbage-Fifteen-Spatulas-1-640x427.jpg'}}
+              style={{height: 200, width: 200}}
+              source={{uri: meal.uri}}
           />
           <View style={{height: 10}}/>
-          <Text h2>Name</Text>
+          <Text h2>{meal.description}</Text>
           <View style={{height: 10}}/>
           <Rating
               readonly
-              startingValue= {calculateRating(13)}
+              startingValue={calculateRating(meal.score)}
           />
           <View style={{height: 10}}/>
-          <Text style={{fontSize: 18}}>13 kg of CO2 eq/kg</Text>
+          <Text style={{fontSize: 18}}>{meal.score}kg of CO2 eq/kg</Text>
         </View>
-        <View style={{ flex: 0.5}}/>
-        <View style={{ flex: 2, flexDirection: 'row'  }}>
-          <View style={{ flex: 1 }} />
-          <View style={{ flex: 4, flexDirection: 'column' }}>
+        <View style={{flex: 0.5}}/>
+        <View style={{flex: 2, flexDirection: 'row'}}>
+          <View style={{flex: 1}}/>
+          <View style={{flex: 4, flexDirection: 'column'}}>
             <Button
-                buttonStyle={{ backgroundColor: 'darkred' }}
-                titleStyle={{ fontSize: 24 }}
+                buttonStyle={{backgroundColor: 'darkred'}}
+                titleStyle={{fontSize: 24}}
                 title="This isn't my item..."
                 onPress={() => setVisibility(true)}
             />
           </View>
-          <View style={{ flex: 1 }} />
+          <View style={{flex: 1}}/>
         </View>
       </View>
   );
-}
+};
+
+export default Feedback;

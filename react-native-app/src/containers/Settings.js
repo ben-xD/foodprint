@@ -1,14 +1,16 @@
 import React from 'react';
-import { Text, Button } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AuthContext } from '../store/Auth';
 import { useContext } from 'react';
 import { Avatar, Button } from "react-native-elements";
+import {View} from "react-native";
 
-const Settings = () => {
+
+
+const Settings = ({ navigation }) => {
+
   const { signOut } = useContext(AuthContext);
 
-export default Settings = ({ navigation }) => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={{ flex: 1, flexDirection: 'row' }}/>
@@ -49,7 +51,7 @@ export default Settings = ({ navigation }) => {
               titleStyle={{color: 'black', fontSize: 18}}
               title="Log out"
               type="clear"
-              onPress={() => navigation.navigate('Back')}
+              onPress={signOut}
           />
         </View>
         <View style={{ flex: 1 }} />

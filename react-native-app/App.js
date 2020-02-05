@@ -94,7 +94,7 @@ const App = () => {
         dispatch({ type: 'SIGN_IN', token });
       },
       signOut: () => {
-        AsyncStorage.removeItem('userToken');
+        // AsyncStorage.removeItem('userToken');
         dispatch({ type: 'SIGN_OUT' });
       },
       signUp: async (email, password) => {
@@ -145,7 +145,10 @@ const App = () => {
               <Stack.Screen name="Signup" component={Signup} />
             </>
           ) : (
+              <>
                 <Stack.Screen name="Home" component={Home} />
+                <Stack.Screen name="Feedback" component={Feedback} />
+                </>
               )}
         </Stack.Navigator>
       </NavigationNativeContainer>

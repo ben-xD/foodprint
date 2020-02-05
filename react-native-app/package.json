@@ -6,7 +6,6 @@
     "a": "npm run android",
     "a:dev": "ENVFILE=.env.dev react-native run-android",
     "android": "ENVFILE=.env.local react-native run-android",
-    "a:dev": "ENVFILE=.env.dev react-native run-android",
     "a:release-dev": "ENVFILE=.env.dev react-native run-android --variant=release",
     "a:release-staging": "ENVFILE=.env.staging react-native run-android --variant=release",
     "a:release-production": "ENVFILE=.env.prod react-native run-android --variant=release",
