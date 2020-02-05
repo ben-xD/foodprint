@@ -1,137 +1,88 @@
-const express = require('express');
-const multer = require('multer');
 fs = require('fs');
-const app = express();
-const upload = multer()
-const mockFootprints = require('./mockFootprints.json')
+const mockFootprints = require('./mockFootprints.json');
 const vision = require('@google-cloud/vision');
-const credentials = require('./carbon-7fbf76411514.json')
-var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+const credentials = require('./carbon-7fbf76411514.json');
+const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
-const MAX_LAYER = 4
+const MAX_LAYER = 4;
 
-app.get('/', (req, res) => {
-  res.send("API for CarbonFootprint is now accessible.");
-});
+const searchData = (label) => {
+  // TODO: replace mockFootprints with a db call
+  if (mockFootprints[label] !== undefined) {
+    return {
+      score: mockFootprints[label],
+      description: label,
+    }
+  }
+};
 
-app.post('/picture', upload.any(), async (req, res) => {
-  console.log({ req })
-  if (!req.files || !req.files[0]) {
-    console.log("No files found")
-    return res.sendStatus(400)
-  }  
-  const file = req.files[0].buffer
+const firstLayerSearch = (labels) => {
+  for (let i = 0; i < labels.length; i++) {
+    let carbonFootprint = searchData(labels[i]);
+    if (carbonFootprint !== undefined)
+      return carbonFootprint;
+  }
+};
 
+const nextLayerSearch = (labels) => {
+  let nextConceptResponse = [];
+  for (let i = 0; i < labels.length; i++) {
+    let xmlHttp = new XMLHttpRequest();
+    xmlHttp.open("GET", 'http://api.conceptnet.io/query?start=/c/en/' +
+      labels[i] + '&rel=/r/IsA&limit=1000', false);
+    xmlHttp.send(null);
+    const conceptResponse = xmlHttp.responseText;
+    console.log(conceptResponse);
+
+    for (let j = 0; i < conceptResponse.length; i++) {
+      const concept = conceptResponse['edges'][j]['end']['label'];
+      let carbonFootprint = searchData(concept);
+      nextConceptResponse.push(concept);
+      if (carbonFootprint !== undefined) {
+        return ([[], carbonFootprint])
+      }
+    }
+  }
+  return ([nextConceptResponse, undefined])
+};
+
+
+const getImageLabels = async (image) => {
+  let GoogleResult = [];
   try {
     const client = new vision.ImageAnnotatorClient({
       credentials
     });
-    const [GoogleResult] =  await client.labelDetection(file);
-  } 
-  catch (err) {
-    console.log("Google label detection failed.")
-    console.log(err)
-  }  
-
+    [GoogleResult] = await client.labelDetection(image);
+  } catch (err) {
+    console.log("Google label detection failed.");
+    console.log(err);
+  }
   let ProcessedGoogleResult = [];
-  for (let i = 0; i < GoogleResult.length; i++){
+  for (let i = 0; i < GoogleResult.length; i++) {
     ProcessedGoogleResult.push(GoogleResult[i].description.toLowerCase());
   }
+  return ProcessedGoogleResult; // list of labels
+};
 
-  const carbonFootprint = undefined;
-  if (ProcessedGoogleResult.length > 0)
-    carbonFootprint = getCarbonFootprintImage(ProcessedGoogleResult)
-  console.log({ carbonFootprint })
-  if (!carbonFootprint) {
-    return res.sendStatus(404)
-  }
-
-  res.setHeader('Content-Type', 'application/json')
-  return res.send(JSON.stringify(carbonFootprint))
-})
-
-const port = process.env.PORT || 8080;
-app.listen(port, () => {
-  console.log('Server is listening on port', port);
-});
-
-/*const getGoogleVisionResponse = (imageFile) => {
-  const client = new vision.ImageAnnotatorClient();
-
-  try {
-    const client = new vision.ImageAnnotatorClient();
-    const [GoogleResult] =  client.labelDetection(imageFile);
-    let ProcessedGoogleResult = [];
-    for (let i = 0; i < result.length; i++){
-      ProcessedGoogleResult.push(GoogleResult[i].description.toLowerCase());
-    }
-    return ProcessedGoogleResult;
-  } 
-  catch (err) {
-    console.log("Google label detection failed.")
-    console.log(err)
-  }  
-}*/
-
-const searchData = (label) => {
-  if (mockFootprints[label] !== undefined) {
-    console.log({ name })
-    const carbonFootprint = {
-      score: mockFootprints[name],
-      description: labels[i].description
-    }
-    return carbonFootprint
-  }
-} 
-
-const firstLayerSearch = (labels) => {
-  for (let i = 0; i < labels.length; i++){
-    if (carbonFootprint = searchData(labels[i]) != undefined)
-      return carbonFootprint
-  }
-}
-
-const nextLayerSearch = (labels) => {
-  let nextConceptResponse = []
-  for (let i = 0; i < labels.length; i++){
-    let xmlHttp = new XMLHttpRequest();
-    xmlHttp.open( "GET", 'http://api.conceptnet.io/query?start=/c/en/' +
-    labels[i] + '&rel=/r/IsA&limit=1000', false );
-    xmlHttp.send( null );
-    const conceptResponse = xmlHttp.responseText;
-    console.log(conceptResponse)
-
-    for (let j = 0; i < conceptResponse.length; i++){
-      const concept = conceptResponse['edges'][j]['end']['label']
-      carbonFootprint = searchData(concept)
-      nextConceptResponse.push(concept)
-      if (carbonFootprint != undefined){
-        return ([], carbonFootprint)
-      }
-    }
-  }
-  return (nextConceptResponse, undefined)  
-}
-
-
-const getCarbonFootprintImage = (labels) => {
-  //let labels = getGoogleVisionResponse(image);
-  console.log({ labels })
-  let carbonFootprint = firstLayerSearch(labels);
-  let layer = 0
-  while(carbonFootprint == undefined && layer < MAX_LAYER){
-    let newLabels = nextLayerSearch(labels);
+// Main
+const getCarbonFootprintFromImage = async (image) => {
+  // Get image labels from Google Vision API
+  let imageLabels = await getImageLabels(image);
+  console.log({imageLabels});
+  // Attempt to find the labels in the database
+  let carbonFootprint = firstLayerSearch(imageLabels);
+  let layer = 0;
+  while (carbonFootprint === undefined && layer < MAX_LAYER) {
+    // Call ConceptNet
+    let newLabels = nextLayerSearch(imageLabels);
     carbonFootprint = newLabels[1];
-    labels = newLabels[0];
+    imageLabels = newLabels[0];
     layer++;
   }
   return carbonFootprint
-}
+};
 
-/*
-imageFile = fs.readFile('apple.jpeg', function(err, data) {
-  if (err) throw err;
-});
-getCarbonFootprintImage(imageFile)
-*/
+module.exports = getCarbonFootprintFromImage;
+
 
