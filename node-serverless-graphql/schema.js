@@ -1,7 +1,6 @@
 const {gql} = require('apollo-server');
 
-// Construct a schema, using GraphQL schema language
-const typeDefs = gql`
+let schema = `
   type Product {
     name: String
   }
@@ -13,12 +12,19 @@ const typeDefs = gql`
   }
   
   type Query {
-    _: Boolean
+    _: String
   }
   
   type Mutation {
     postPicture(file: Upload!): CarbonFootprintReport
   }
 `;
+
+if (process.env.gcf !== undefined) {
+  schema = `scalar Upload\n\n` + schema
+}
+
+// Construct a schema, using GraphQL schema language
+const typeDefs = gql(schema);
 
 module.exports = typeDefs;

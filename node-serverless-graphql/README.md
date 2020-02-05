@@ -4,10 +4,11 @@
 - [GraphQL Tutorial](https://www.howtographql.com/graphql-js/1-getting-started/)
 
 ### Deploy
-1. Run `gcloud functions deploy NAME --entry-point handler --runtime nodejs8 --trigger-http`
-    - Might need slight change to schema (`scalar Upload` must be defined)
+1. From the `node-serverless-graphql` directory, run
+    `gcloud functions deploy NAME --update-env-vars gcf=true --entry-point handler --runtime nodejs8 --trigger-http`
+    # - Might need slight change to schema (`scalar Upload` must be defined)
 2. POST HTTP-requests to url returned from (1.)
-3.   Run `gcloud functions delete NAME` to delete the GCF
+3. Run `gcloud functions delete NAME` to delete the GCF
 
 ### Local Testing
 1. Run `npm install` to assert modules installed

@@ -4,7 +4,6 @@ const resolvers = {
     },
     Mutation: {
         postPicture: (parent, {file}) => {
-            console.log(file);
             return {
                 product: {
                     name: 'apple',
