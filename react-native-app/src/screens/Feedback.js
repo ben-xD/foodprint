@@ -1,17 +1,27 @@
 import React, {useEffect, useState} from 'react';
 import { View, Image } from 'react-native';
 import {Text, Button, Rating, Overlay, Input} from 'react-native-elements';
-import Axios from "axios";
 import Config from "react-native-config";
+import {gql} from 'apollo-boost'
+import {/*useQuery, */useMutation} from '@apollo/react-hooks';
 
+const POST_PICTURE_MUTATION = gql`
+  mutation PostPictureMutation($file: Upload!) {
+    postPicture(file: $file) {
+      product {
+        name
+      }
+    }
+  }
+`;
 
-const postPictureUri = Config.SERVER_URL + 'picture';
 
 const Feedback = ({route, navigation}) => {
 
   const [isVisible, setVisibility] = useState(false);
   const [meal, setMeal] = useState({});
-  const {data} = route.params;
+  const {image} = route.params;
+  const [postPictureMutation, {loading, error, data}] = useMutation(POST_PICTURE_MUTATION);
 
   function calculateRating(carbonFootprint) {
     if (carbonFootprint < 4) {
@@ -30,47 +40,18 @@ const Feedback = ({route, navigation}) => {
   };
 
   useEffect(() => {
-
-  const classifyPicture = async () => {
-    console.log({data});
-    try {
-      const formData = new FormData();
-      formData.append('picture', {
-        uri: data.uri,
-        type: 'image/jpeg',
-        name: 'pic.jpg',
-      });
-      const config = {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          'Accept': 'application/json',
-        },
-      };
-      // console.log({ postPictureUri });
-      const carbonFootprintResponse = await Axios.post(
-          postPictureUri,
-          formData,
-          config,
-      );
-      // console.log({ carbonFootprintResponse });
-
-      if (!carbonFootprintResponse.data.error) {
-        const meal = {
-          description: carbonFootprintResponse.data.description,
-          score: carbonFootprintResponse.data.score,
-          uri: 'data:image/jpeg;base64,' + data.base64,
-        };
-        setMeal(meal);
-      } else {
-        console.warn('No meal found, handle his case for user.');
+    const classifyPicture = async () => {
+      try {
+        await postPictureMutation({variables: {file: image}});
+      } catch (err) {
+        console.warn({err});
+        console.warn({error})
       }
-    } catch (err) {
-      console.warn({err});
+    };
+    if (image) {
+      classifyPicture()
     }
-  };
-
-  classifyPicture()
-  }, [data])
+  }, [image])
 
   return (
       <View style={{flex: 1}}>

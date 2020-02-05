@@ -8,22 +8,6 @@ import {
   ScrollView,
 } from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import Config from 'react-native-config';
-
-import {/*useQuery, */useMutation} from '@apollo/react-hooks';
-import {gql} from 'apollo-boost';
-
-const postPictureUri = Config.SERVER_URL + 'picture';
-
-const POST_PICTURE_MUTATION = gql`
-  mutation PostPictureMutation($file: Upload!) {
-    postPicture(file: $file) {
-      product {
-        name
-      }
-    }
-  }
-`;
 
 const FoodOverview = ({navigation}) => {
   const [food, setFood] = useState([]);
@@ -32,25 +16,6 @@ const FoodOverview = ({navigation}) => {
     navigation.navigate('Camera')
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const [postPictureMutation, {loading, error, data}] = useMutation(POST_PICTURE_MUTATION);
-
-  const upload = async (image) => {
-    await postPictureMutation({variables: {file: image}});
-    console.log('Sent file...');
-  };
-
-  useEffect(() => {
-    console.log({useEffectData: data});
-  }, [data]);
-
-  const classifyPicture = async (image) => {
-    try {
-      upload(image);
-    } catch (err) {
-      console.warn({err});
-    }
-  };
 
   const takePicture = async () => {
     navigation.navigate('Camera');

@@ -7,13 +7,13 @@ const Camera = ({ route, navigation }) => {
   const takePictureHandler = async (camera) => {
     const options = { quality: 0.5, base64: true };
     const data = await camera.takePictureAsync(options);
-    navigation.navigate('Feedback', {data});
+    navigation.navigate('Feedback', {image: data});
   };
 
   const barCodeHandler = ({ data, rawData, type, bounds }) => {
     console.log({ data, rawData, type, bounds });
     // save the barcode info into a different components state
-    navigation.navigate('Feedback', {data});
+    navigation.navigate('Feedback', {image: data});
   };
 
   return (
