@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "apollo-server-cloud-functions": "^2.9.16",
-    "apollo-server": "^2.9.16"
+    "apollo-server": "^2.9.16",
+    "shortid": "^2.2.15"
   }
 }

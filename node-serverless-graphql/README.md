@@ -10,7 +10,11 @@
 
 ### Local Testing
 1. Run `npm install` to assert modules installed
-2. Run `npm start` to run local Apollo server
-3. Go to url specified in your browser to play around
+2. Run `npm run dev` to run local Apollo server
+3. Use *ngrok* or similar to expose localhost to external device (e.g.
+Android emulator)
+    - For *ngrok*, run `ngrok http 4000` (or other port if used)
+4. In your browser, go to url specified (localhost or ngrok) to play around
+
 - [Apollo GraphQL Tutorial](https://www.apollographql.com/docs/tutorial/schema/)
 

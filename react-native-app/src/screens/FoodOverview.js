@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
   Text,
@@ -7,50 +7,43 @@ import {
   View,
   ScrollView,
 } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import Axios from 'axios';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 import Config from 'react-native-config';
+
+import {/*useQuery, */useMutation} from '@apollo/react-hooks';
+import {gql} from 'apollo-boost';
 
 const postPictureUri = Config.SERVER_URL + 'picture';
 
-const FoodOverview = ({ navigation }) => {
+const POST_PICTURE_MUTATION = gql`
+  mutation PostPictureMutation($file: Upload!) {
+    postPicture(file: $file) {
+      product {
+        name
+      }
+    }
+  }
+`;
+
+const FoodOverview = ({navigation}) => {
   const [food, setFood] = useState([]);
 
-  const classifyPicture = async (image) => {
-    console.log({ image });
-    try {
-      const data = new FormData();
-      data.append('picture', {
-        uri: image.uri,
-        type: 'image/jpeg',
-        name: 'pic.jpg',
-      });
-      const config = {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          'Accept': 'application/json',
-        },
-      };
-      console.log({ postPictureUri });
-      const carbonFootprintResponse = await Axios.post(
-        postPictureUri,
-        data,
-        config,
-      );
-      console.log({ carbonFootprintResponse });
+  const [postPictureMutation, {loading, error, data}] = useMutation(POST_PICTURE_MUTATION);
 
-      if (!carbonFootprintResponse.data.error) {
-        const meal = {
-          description: carbonFootprintResponse.data.description,
-          score: carbonFootprintResponse.data.score,
-          uri: 'data:image/jpeg;base64,' + image.base64,
-        };
-        setFood([...food, meal]);
-      } else {
-        console.warn('No meal found, handle this case for user.');
-      }
+  const upload = async (image) => {
+    await postPictureMutation({variables: {file: image}});
+    console.log('Sent file...');
+  };
+
+  useEffect(() => {
+    console.log({useEffectData: data});
+  }, [data]);
+
+  const classifyPicture = async (image) => {
+    try {
+      upload(image);
     } catch (err) {
-      console.warn({ err });
+      console.warn({err});
     }
   };
 
@@ -61,7 +54,7 @@ const FoodOverview = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={{ width: '100%', height: '100%' }}>
+    <SafeAreaView style={{width: '100%', height: '100%'}}>
       <View
         style={{
           flexDirection: 'row',
@@ -69,19 +62,19 @@ const FoodOverview = ({ navigation }) => {
           alignItems: 'center',
           padding: 8,
         }}>
-        <Text style={{ fontSize: 24 }}>Your food history</Text>
+        <Text style={{fontSize: 24}}>Your food history</Text>
         <TouchableOpacity onPress={takePicture}>
-          <MaterialCommunityIcons name="plus" color={'black'} size={50} />
+          <MaterialCommunityIcons name="plus" color={'black'} size={50}/>
         </TouchableOpacity>
       </View>
       <ScrollView>
         {food.map((meal, i) => {
-          console.log({ meal });
+          console.log({meal});
           return (
             <View key={i}>
               <Image
-                style={{ width: 200, height: 400 }}
-                source={{ uri: meal.uri }}
+                style={{width: 200, height: 400}}
+                source={{uri: meal.uri}}
               />
               <Text>{meal.description}</Text>
               <Text>{meal.score}</Text>

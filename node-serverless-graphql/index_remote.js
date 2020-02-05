@@ -1,5 +1,5 @@
 const { ApolloServer } = require('apollo-server-cloud-functions');
-const typeDefs = require('./typedefs.js');
+const typeDefs = require('./schema.js');
 const resolvers = require('./resolvers.js');
 
 const server = new ApolloServer({
