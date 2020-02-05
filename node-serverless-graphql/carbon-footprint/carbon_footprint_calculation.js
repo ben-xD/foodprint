@@ -3,17 +3,16 @@ const mockFootprints = require('./mockFootprints.json');
 const vision = require('@google-cloud/vision');
 const credentials = require('./carbon-7fbf76411514.json');
 const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+const config = require('./config');
+const CarbonModel = require('./mongoose_queries');
 
-const MAX_LAYER = 4;
-
-const searchData = (label) => {
-  // TODO: replace mockFootprints with a db call
-  if (mockFootprints[label] !== undefined) {
-    return {
-      score: mockFootprints[label],
-      description: label,
-    }
-  }
+const searchData = async (label) => {
+  let itemList;
+  await CarbonModel.findOne({item: label}, (err, items) => {
+    itemList = items;
+    console.log({itemList});
+  }).exec();
+  return itemList.carbonpkilo;
 };
 
 const firstLayerSearch = (labels) => {
@@ -73,7 +72,7 @@ const getCarbonFootprintFromImage = async (image) => {
   // Attempt to find the labels in the database
   let carbonFootprint = firstLayerSearch(imageLabels);
   let layer = 0;
-  while (carbonFootprint === undefined && layer < MAX_LAYER) {
+  while (carbonFootprint === undefined && layer < config.MAX_LAYER) {
     // Call ConceptNet
     let newLabels = nextLayerSearch(imageLabels);
     carbonFootprint = newLabels[1];
