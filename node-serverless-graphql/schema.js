@@ -1,21 +1,23 @@
 const {gql} = require('apollo-server');
 
 // Construct a schema, using GraphQL schema language
-const typeDefs = gql` 
-  type File {
-    id: Int!
-    path: String!
-    filename: String!
-    mimetype: String!
+const typeDefs = gql`
+  type Product {
+    name: String
+  }
+ 
+  type CarbonFootprintReport {
+    product: Product
+    carbonFootprint: Float
+    carbonFootprintPerKg: Float
   }
   
   type Query {
-    uploads: String
+    _: Boolean
   }
   
   type Mutation {
-    test(input: String!): String
-    singleUpload(file: Upload!): String
+    postPicture(file: Upload!): CarbonFootprintReport
   }
 `;
 

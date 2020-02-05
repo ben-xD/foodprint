@@ -12,7 +12,7 @@ const Stack = createStackNavigator();
 
 const client = new ApolloClient({
   link: new HttpLink({
-    uri: 'http://2d66d2b9.ngrok.io', // Replace with your ngrok or GCF url
+    uri: 'http://df7aaaa5.ngrok.io', // Replace with your ngrok or GCF url
   }),
   cache: new InMemoryCache(),
 });
