@@ -5,10 +5,7 @@ import Login from './src/screens/Login';
 import Signup from './src/screens/Signup';
 import SignupOrRegister from './src/screens/SignupOrRegister';
 import { ApolloProvider } from '@apollo/react-hooks';
-import {ApolloClient, HttpLink, InMemoryCache} from 'apollo-boost';
-import FoodOverview from './src/screens/FoodOverview';
-import Camera from './src/screens/Camera';
-import Settings from './src/containers/Settings';
+import { ApolloClient, HttpLink, InMemoryCache } from 'apollo-boost';
 import Feedback from './src/screens/Feedback';
 
 import SplashScreen from 'react-native-splash-screen';
@@ -17,12 +14,13 @@ import Loading from './src/screens/Loading';
 import Home from './src/containers/Home';
 import { AuthContext } from './src/store/Auth';
 import auth from '@react-native-firebase/auth';
+import Config from 'react-native-config';
 
 const Stack = createStackNavigator();
 
 const client = new ApolloClient({
   link: new HttpLink({
-    uri: 'http://df7aaaa5.ngrok.io', // Replace with your ngrok or GCF url
+    uri: Config.SERVER_URL,
   }),
   cache: new InMemoryCache(),
 });
@@ -155,10 +153,10 @@ const App = () => {
                 <Stack.Screen name="Signup" component={Signup} />
               </>
             ) : (
-                <>
-                  <Stack.Screen name="Home" component={Home} />
-                  <Stack.Screen name="Feedback" component={Feedback} />
-                </>
+                  <>
+                    <Stack.Screen name="Home" component={Home} />
+                    <Stack.Screen name="Feedback" component={Feedback} />
+                  </>
                 )}
           </Stack.Navigator>
         </NavigationNativeContainer>
