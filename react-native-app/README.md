@@ -34,3 +34,7 @@ The code is typescript (a superset of javascript), which means you **can** just 
   - npm run ios
 
 - TODO add steps for running on a physical Android or Apple device
+
+## Apollo Client
+Setup [here](https://www.apollographql.com/docs/react/get-started/) and
+[here](https://github.com/jaydenseric/apollo-upload-examples)

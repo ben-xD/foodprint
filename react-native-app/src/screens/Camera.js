@@ -39,7 +39,6 @@ const Camera = ({ route, navigation }) => {
                   onPress={() => takePictureHandler(camera)}
                   style={styles.capture}>
               </TouchableOpacity>
-              <View style={{height: 75}}/>
             </View>
           );
         }}

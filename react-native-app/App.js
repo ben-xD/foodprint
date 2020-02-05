@@ -4,6 +4,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Login from './src/screens/Login';
 import Signup from './src/screens/Signup';
 import SignupOrRegister from './src/screens/SignupOrRegister';
+import { ApolloProvider } from '@apollo/react-hooks';
+import {ApolloClient, HttpLink, InMemoryCache} from 'apollo-boost';
 import FoodOverview from './src/screens/FoodOverview';
 import Camera from './src/screens/Camera';
 import Settings from './src/containers/Settings';
@@ -17,6 +19,13 @@ import { AuthContext } from './src/store/Auth';
 import auth from '@react-native-firebase/auth';
 
 const Stack = createStackNavigator();
+
+const client = new ApolloClient({
+  link: new HttpLink({
+    uri: 'http://df7aaaa5.ngrok.io', // Replace with your ngrok or GCF url
+  }),
+  cache: new InMemoryCache(),
+});
 
 const App = () => {
   const [state, dispatch] = React.useReducer(
@@ -94,7 +103,7 @@ const App = () => {
         dispatch({ type: 'SIGN_IN', token });
       },
       signOut: () => {
-        // AsyncStorage.removeItem('userToken');
+        AsyncStorage.removeItem('userToken');
         dispatch({ type: 'SIGN_OUT' });
       },
       signUp: async (email, password) => {
@@ -123,36 +132,38 @@ const App = () => {
   );
 
   return (
-    <AuthContext.Provider value={authContext}>
-      <NavigationNativeContainer>
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-          {state.isLoading ? (
-            // We haven't finished checking for the token yet
-            <Stack.Screen name="Loading" component={Loading} />
-          ) : state.userToken === null ? (
-            // No token found, user isn't signed in
-            <>
-              <Stack.Screen
-                name="SignupOrRegister"
-                component={SignupOrRegister}
-                options={{
-                  title: 'Sign Up or Register',
-                  // When logging out, a pop animation feels intuitive
-                  animationTypeForReplace: state.isSignout ? 'pop' : 'push',
-                }}
-              />
-              <Stack.Screen name="Login" component={Login} />
-              <Stack.Screen name="Signup" component={Signup} />
-            </>
-          ) : (
+    <ApolloProvider client={client}>
+      <AuthContext.Provider value={authContext}>
+        <NavigationNativeContainer>
+          <Stack.Navigator screenOptions={{ headerShown: false }}>
+            {state.isLoading ? (
+              // We haven't finished checking for the token yet
+              <Stack.Screen name="Loading" component={Loading} />
+            ) : state.userToken === null ? (
+              // No token found, user isn't signed in
               <>
-                <Stack.Screen name="Home" component={Home} />
-                <Stack.Screen name="Feedback" component={Feedback} />
+                <Stack.Screen
+                  name="SignupOrRegister"
+                  component={SignupOrRegister}
+                  options={{
+                    title: 'Sign Up or Register',
+                    // When logging out, a pop animation feels intuitive
+                    animationTypeForReplace: state.isSignout ? 'pop' : 'push',
+                  }}
+                />
+                <Stack.Screen name="Login" component={Login} />
+                <Stack.Screen name="Signup" component={Signup} />
+              </>
+            ) : (
+                <>
+                  <Stack.Screen name="Home" component={Home} />
+                  <Stack.Screen name="Feedback" component={Feedback} />
                 </>
-              )}
-        </Stack.Navigator>
-      </NavigationNativeContainer>
-    </AuthContext.Provider>
+                )}
+          </Stack.Navigator>
+        </NavigationNativeContainer>
+      </AuthContext.Provider>
+    </ApolloProvider>
   );
 };
 

@@ -1,11 +1,11 @@
 // Use module apollo-server for local testing
 const { ApolloServer } = require('apollo-server');
-const typeDefs = require('./typedefs.js');
-const resolvers = require('./resolvers.js');
+const typeDefs = require('./schema');
+const resolvers = require('./resolvers');
 
 const server = new ApolloServer({
   typeDefs,
-  resolvers,
+  resolvers
 });
 
 server.listen().then(({ url }) => {
