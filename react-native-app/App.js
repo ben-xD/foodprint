@@ -12,12 +12,13 @@ import Loading from './src/screens/Loading';
 import Home from './src/containers/Home';
 import { AuthContext } from './src/store/Auth';
 import auth from '@react-native-firebase/auth';
+import Config from 'react-native-config';
 
 const Stack = createStackNavigator();
 
 const client = new ApolloClient({
   link: new HttpLink({
-    uri: 'http://df7aaaa5.ngrok.io', // Replace with your ngrok or GCF url
+    uri: Config.SERVER_URL,
   }),
   cache: new InMemoryCache(),
 });

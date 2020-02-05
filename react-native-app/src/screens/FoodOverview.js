@@ -8,12 +8,9 @@ import {
   ScrollView,
 } from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import Config from 'react-native-config';
 
 import {/*useQuery, */useMutation} from '@apollo/react-hooks';
 import {gql} from 'apollo-boost';
-
-const postPictureUri = Config.SERVER_URL + 'picture';
 
 const POST_PICTURE_MUTATION = gql`
   mutation PostPictureMutation($file: Upload!) {
@@ -36,7 +33,9 @@ const FoodOverview = ({navigation}) => {
   };
 
   useEffect(() => {
-    console.log({useEffectData: data});
+    if (data !== undefined) {
+      console.log({data});
+    }
   }, [data]);
 
   const classifyPicture = async (image) => {
