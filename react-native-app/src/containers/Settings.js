@@ -1,7 +1,12 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { Text, Button } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { AuthContext } from '../store/Auth';
+import { useContext } from 'react';
 import { Avatar, Button } from "react-native-elements";
+
+const Settings = () => {
+  const { signOut } = useContext(AuthContext);
 
 export default Settings = ({ navigation }) => {
   return (
@@ -54,3 +59,4 @@ export default Settings = ({ navigation }) => {
   );
 };
 
+export default Settings;

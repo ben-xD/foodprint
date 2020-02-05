@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, TouchableOpacity, View, Text } from 'react-native';
 import { RNCamera } from 'react-native-camera';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const Camera = ({ route, navigation }) => {
 
@@ -10,10 +11,7 @@ const Camera = ({ route, navigation }) => {
     const options = { quality: 0.5, base64: true };
     const data = await camera.takePictureAsync(options);
     classifyPicture(data);
-    // navigation.goBack();
-    // Following section is new
-    navigation.navigate('Feedback');
-    // End of changes
+    navigation.goBack();
   };
 
   const barCodeHandler = ({ data, rawData, type, bounds }) => {
