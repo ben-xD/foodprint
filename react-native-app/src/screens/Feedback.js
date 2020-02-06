@@ -44,8 +44,7 @@ const Feedback = ({ route, navigation }) => {
       console.log({ data });
       setMeal({
         ...meal,
-        score: 9000,
-        // score: data.postPicture.product
+        score: data.postPicture.carbonFootprintPerKg,
         description: data.postPicture.product.name,
       });
     }

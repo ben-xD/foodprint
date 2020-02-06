@@ -11,7 +11,7 @@ const searchData = async (label) => {
     itemList = items;
   }).exec();
   if (itemList === null) {
-    return undefined;
+    return -1;
   }
   return itemList.carbonpkilo;
 };
