@@ -1,25 +1,19 @@
 import React, { useState } from 'react';
 import { StyleSheet, TouchableOpacity, View, Text } from 'react-native';
 import { RNCamera } from 'react-native-camera';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const Camera = ({ route, navigation }) => {
-  const [liveClass, setLiveClass] = useState(null);
-
-  const { classifyPicture } = route.params;
 
   const takePictureHandler = async (camera) => {
     const options = { quality: 0.5, base64: true };
     const data = await camera.takePictureAsync(options);
-    console.log({data});
-    classifyPicture(data);
-    navigation.goBack();
+    navigation.navigate('Feedback', {image: data});
   };
 
   const barCodeHandler = ({ data, rawData, type, bounds }) => {
     console.log({ data, rawData, type, bounds });
     // save the barcode info into a different components state
-    navigation.goBack();
+    navigation.navigate('Feedback', {image: data});
   };
 
   return (
@@ -40,9 +34,10 @@ const Camera = ({ route, navigation }) => {
         {({ camera, status, recordAudioPermissionStatus }) => {
           if (status !== 'READY') { return <Text>Not ready</Text>; }
           return (
-            <View style={{ flex: 0, flexDirection: 'row', justifyContent: 'center' }}>
-              <TouchableOpacity onPress={() => takePictureHandler(camera)} style={styles.capture}>
-                <MaterialCommunityIcons name="food-apple" color={'rgba(255,255,255,1)'} size={65} />
+            <View style={{ flex: 1, justifyContent: 'flex-end', alignItems:'center' }}>
+              <TouchableOpacity
+                  onPress={() => takePictureHandler(camera)}
+                  style={styles.capture}>
               </TouchableOpacity>
             </View>
           );
@@ -66,12 +61,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   capture: {
-    flex: 0,
-    // backgroundColor: '#fff',
-    borderRadius: 5,
-    padding: 15,
-    paddingHorizontal: 20,
-    alignSelf: 'center',
-    margin: 20,
+    borderWidth:4,
+    borderColor:'lightgrey',
+    alignItems:'center',
+    justifyContent:'center',
+    width:80,
+    height:80,
+    backgroundColor:'red',
+    borderRadius:50,
   },
 });

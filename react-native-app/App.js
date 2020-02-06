@@ -5,7 +5,9 @@ import Login from './src/screens/Login';
 import Signup from './src/screens/Signup';
 import SignupOrRegister from './src/screens/SignupOrRegister';
 import { ApolloProvider } from '@apollo/react-hooks';
-import {ApolloClient, HttpLink, InMemoryCache} from 'apollo-boost';
+import { ApolloClient, HttpLink, InMemoryCache } from 'apollo-boost';
+import Feedback from './src/screens/Feedback';
+
 import SplashScreen from 'react-native-splash-screen';
 import AsyncStorage from '@react-native-community/async-storage';
 import Loading from './src/screens/Loading';
@@ -151,7 +153,10 @@ const App = () => {
                 <Stack.Screen name="Signup" component={Signup} />
               </>
             ) : (
-                  <Stack.Screen name="Home" component={Home} />
+                  <>
+                    <Stack.Screen name="Home" component={Home} />
+                    <Stack.Screen name="Feedback" component={Feedback} />
+                  </>
                 )}
           </Stack.Navigator>
         </NavigationNativeContainer>

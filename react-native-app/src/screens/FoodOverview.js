@@ -9,48 +9,20 @@ import {
 } from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
-import {/*useQuery, */useMutation} from '@apollo/react-hooks';
-import {gql} from 'apollo-boost';
-
-const POST_PICTURE_MUTATION = gql`
-  mutation PostPictureMutation($file: Upload!) {
-    postPicture(file: $file) {
-      product {
-        name
-      }
-      carbonFootprintPerKg
-    }
-  }
-`;
-
 const FoodOverview = ({navigation}) => {
   const [food, setFood] = useState([]);
 
-  const [postPictureMutation, {loading, error, data}] = useMutation(POST_PICTURE_MUTATION);
-
-  const upload = async (image) => {
-    await postPictureMutation({variables: {file: image}});
-    console.log('Sent file...');
-  };
-
   useEffect(() => {
-    if (data !== undefined) {
-      console.log({data});
-    }
-  }, [data]);
-
-  const classifyPicture = async (image) => {
-    try {
-      upload(image);
-    } catch (err) {
-      console.warn({err});
-    }
-  };
+    navigation.navigate('Camera');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const takePicture = async () => {
-    navigation.navigate('Camera', {
-      classifyPicture,
-    });
+    navigation.navigate('Camera');
+  };
+
+  const goToSettings = async () => {
+    navigation.navigate('Settings');
   };
 
   return (
@@ -62,19 +34,21 @@ const FoodOverview = ({navigation}) => {
           alignItems: 'center',
           padding: 8,
         }}>
-        <Text style={{fontSize: 24}}>Your food history</Text>
         <TouchableOpacity onPress={takePicture}>
-          <MaterialCommunityIcons name="plus" color={'black'} size={50}/>
+          <MaterialCommunityIcons name="plus" color={'grey'} size={50} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={goToSettings}>
+          <MaterialCommunityIcons name="settings-outline" color={'grey'} size={50} />
         </TouchableOpacity>
       </View>
       <ScrollView>
         {food.map((meal, i) => {
-          console.log({meal});
+          console.log({ meal });
           return (
             <View key={i}>
               <Image
-                style={{width: 200, height: 400}}
-                source={{uri: meal.uri}}
+                style={{ width: 200, height: 400 }}
+                source={{ uri: meal.uri }}
               />
               <Text>{meal.description}</Text>
               <Text>{meal.score}</Text>
@@ -85,5 +59,6 @@ const FoodOverview = ({navigation}) => {
     </SafeAreaView>
   );
 };
+
 
 export default FoodOverview;
