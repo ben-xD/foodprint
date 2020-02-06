@@ -1,5 +1,4 @@
 fs = require('fs');
-const mockFootprints = require('./mockFootprints.json');
 const vision = require('@google-cloud/vision');
 const credentials = require('./carbon-7fbf76411514.json');
 const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
@@ -10,16 +9,19 @@ const searchData = async (label) => {
   let itemList;
   await CarbonModel.findOne({item: label}, (err, items) => {
     itemList = items;
-    console.log({itemList});
   }).exec();
+  if (itemList === null) {
+    return undefined;
+  }
   return itemList.carbonpkilo;
 };
 
-const firstLayerSearch = (labels) => {
+const firstLayerSearch = async (labels) => {
   for (let i = 0; i < labels.length; i++) {
-    let carbonFootprint = searchData(labels[i]);
-    if (carbonFootprint !== undefined)
-      return carbonFootprint;
+    labels[i] = 'rice'; // TODO Demo only -- Remove hard-coding
+    let carbonFootprintPerKg = await searchData(labels[i]);
+    if (carbonFootprintPerKg !== undefined)
+      return [labels[i], carbonFootprintPerKg];
   }
 };
 
@@ -42,7 +44,7 @@ const nextLayerSearch = (labels) => {
       }
     }
   }
-  return ([nextConceptResponse, undefined])
+  return [nextConceptResponse, undefined]
 };
 
 
@@ -57,29 +59,30 @@ const getImageLabels = async (image) => {
     console.log("Google label detection failed.");
     console.log(err);
   }
-  let ProcessedGoogleResult = [];
-  for (let i = 0; i < GoogleResult.length; i++) {
-    ProcessedGoogleResult.push(GoogleResult[i].description.toLowerCase());
+  const labelAnnotations = GoogleResult['labelAnnotations']; // Array of annotations
+  let processedAnnotations = [];
+  for (let i = 0; i < labelAnnotations.length; i++) {
+    processedAnnotations.push(labelAnnotations[i].description.toLowerCase());
   }
-  return ProcessedGoogleResult; // list of labels
+  return processedAnnotations; // List of label descriptions (e.g. "coffee")
 };
 
 // Main
 const getCarbonFootprintFromImage = async (image) => {
   // Get image labels from Google Vision API
   let imageLabels = await getImageLabels(image);
-  console.log({imageLabels});
   // Attempt to find the labels in the database
-  let carbonFootprint = firstLayerSearch(imageLabels);
+  let [item, carbonFootprintPerKg] = await firstLayerSearch(imageLabels);
   let layer = 0;
-  while (carbonFootprint === undefined && layer < config.MAX_LAYER) {
-    // Call ConceptNet
-    let newLabels = nextLayerSearch(imageLabels);
-    carbonFootprint = newLabels[1];
-    imageLabels = newLabels[0];
-    layer++;
-  }
-  return carbonFootprint
+  // TODO -- Debugging of below needed
+  // while (carbonFootprint === undefined && layer < config.MAX_LAYER) {
+  //   // Call ConceptNet
+  //   let newLabels = await nextLayerSearch(imageLabels);
+  //   carbonFootprint = await newLabels[1];
+  //   imageLabels = newLabels[0];
+  //   layer++;
+  // }
+  return [item, carbonFootprintPerKg]
 };
 
 module.exports = getCarbonFootprintFromImage;

@@ -18,6 +18,7 @@ const POST_PICTURE_MUTATION = gql`
       product {
         name
       }
+      carbonFootprintPerKg
     }
   }
 `;
