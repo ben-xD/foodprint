@@ -5,9 +5,9 @@ import Config from 'react-native-config';
 
 
 export default SignupOrRegister = ({ navigation }) => {
-  const signInWithGoogle = () => {
-    console.log('Google sign in not implemented');
-  };
+  // const signInWithGoogle = () => {
+  //   console.log('Google sign in not implemented');
+  // };
 
   return (
     <View style={{ width: '100%', height: '100%', alignItems: 'center' }}>
@@ -18,13 +18,13 @@ export default SignupOrRegister = ({ navigation }) => {
       </View>
       <View style={{ width: '80%', position: 'absolute', bottom: 48 }}>
         <View>
-          <Button
+          {/* <Button
             containerStyle={{ marginVertical: 8 }}
             buttonStyle={{ backgroundColor: 'grey' }}
             titleStyle={{ fontSize: 24 }}
             title="Login with Google"
             onPress={() => signInWithGoogle()}
-          />
+          /> */}
           <Button
             containerStyle={{ marginVertical: 8 }}
             buttonStyle={{ backgroundColor: 'green' }}
