@@ -1,8 +1,8 @@
 fs = require('fs');
 const vision = require('@google-cloud/vision');
 const credentials = require('./carbon-7fbf76411514.json');
-const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 const config = require('./config');
+const axios = require('axios');
 const CarbonModel = require('./mongoose_queries');
 
 const searchData = async (label) => {
@@ -16,6 +16,7 @@ const searchData = async (label) => {
   return itemList.carbonpkilo;
 };
 
+
 const firstLayerSearch = async (labels) => {
   for (let i = 0; i < labels.length; i++) {
     labels[i] = 'rice'; // TODO Demo only -- Remove hard-coding
@@ -23,28 +24,25 @@ const firstLayerSearch = async (labels) => {
     if (carbonFootprintPerKg !== undefined)
       return [labels[i], carbonFootprintPerKg];
   }
+  return [undefined, undefined]
 };
 
-const nextLayerSearch = (labels) => {
+const nextLayerSearch = async (labels) => {
   let nextConceptResponse = [];
-  for (let i = 0; i < labels.length; i++) {
-    let xmlHttp = new XMLHttpRequest();
-    xmlHttp.open("GET", 'http://api.conceptnet.io/query?start=/c/en/' +
-      labels[i] + '&rel=/r/IsA&limit=1000', false);
-    xmlHttp.send(null);
-    const conceptResponse = xmlHttp.responseText;
-    console.log(conceptResponse);
+  for (let i = 0; i < labels.length; i++){
+    let conceptResponse = await axios.get('http://api.conceptnet.io/query?start=/c/en/' + labels[i] + '&rel=/r/IsA&limit=1000');
+    conceptResponse = conceptResponse.data['edges'];
 
-    for (let j = 0; i < conceptResponse.length; i++) {
-      const concept = conceptResponse['edges'][j]['end']['label'];
-      let carbonFootprint = searchData(concept);
+    for (let j = 0; j < conceptResponse.length; j++) {  
+      const concept = conceptResponse[j]['end']['label'];
+      let carbonFootprint = await searchData(concept);
       nextConceptResponse.push(concept);
       if (carbonFootprint !== undefined) {
-        return ([[], carbonFootprint])
+        return [[], concept, carbonFootprint];
       }
     }
   }
-  return [nextConceptResponse, undefined]
+  return [nextConceptResponse, undefined, undefined];
 };
 
 
@@ -72,19 +70,19 @@ const getCarbonFootprintFromImage = async (image) => {
   // Get image labels from Google Vision API
   let imageLabels = await getImageLabels(image);
   // Attempt to find the labels in the database
-  let [item, carbonFootprintPerKg] = await firstLayerSearch(imageLabels);
+  let [item, carbonFootprintPerKg] = await firstLayerSearch(imageLabels0);
   let layer = 0;
-  // TODO -- Debugging of below needed
-  // while (carbonFootprint === undefined && layer < config.MAX_LAYER) {
-  //   // Call ConceptNet
-  //   let newLabels = await nextLayerSearch(imageLabels);
-  //   carbonFootprint = await newLabels[1];
-  //   imageLabels = newLabels[0];
-  //   layer++;
-  // }
+  let newLabels = [];
+  while (carbonFootprintPerKg === undefined && layer < config.MAX_LAYER) {
+    // Call ConceptNet
+    [newLabels, item, carbonFootprintPerKg] = await nextLayerSearch(imageLabels);
+    layer++;
+  }
   return [item, carbonFootprintPerKg]
 };
 
 module.exports = getCarbonFootprintFromImage;
+
+
 
 
