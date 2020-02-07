@@ -10,16 +10,16 @@ const searchData = async (label) => {
   await CarbonModel.findOne({item: label}, (err, items) => {
     itemList = items;
   }).exec();
-  if (itemList === null) {
-    return -1;
+  try {
+    return itemList.carbonpkilo;
+  } catch (err) {
+    return undefined
   }
-  return itemList.carbonpkilo;
 };
 
 
 const firstLayerSearch = async (labels) => {
   for (let i = 0; i < labels.length; i++) {
-    labels[i] = 'rice'; // TODO Demo only -- Remove hard-coding
     let carbonFootprintPerKg = await searchData(labels[i]);
     if (carbonFootprintPerKg !== undefined)
       return [labels[i], carbonFootprintPerKg];
@@ -33,7 +33,7 @@ const nextLayerSearch = async (labels) => {
     let conceptResponse = await axios.get('http://api.conceptnet.io/query?start=/c/en/' + labels[i] + '&rel=/r/IsA&limit=1000');
     conceptResponse = conceptResponse.data['edges'];
 
-    for (let j = 0; j < conceptResponse.length; j++) {  
+    for (let j = 0; j < conceptResponse.length; j++) {
       const concept = conceptResponse[j]['end']['label'];
       let carbonFootprint = await searchData(concept);
       nextConceptResponse.push(concept);
@@ -70,7 +70,7 @@ const getCarbonFootprintFromImage = async (image) => {
   // Get image labels from Google Vision API
   let imageLabels = await getImageLabels(image);
   // Attempt to find the labels in the database
-  let [item, carbonFootprintPerKg] = await firstLayerSearch(imageLabels0);
+  let [item, carbonFootprintPerKg] = await firstLayerSearch(imageLabels);
   let layer = 0;
   let newLabels = [];
   while (carbonFootprintPerKg === undefined && layer < config.MAX_LAYER) {
