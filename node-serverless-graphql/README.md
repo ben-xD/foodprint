@@ -13,7 +13,10 @@
 ### Local Testing
 1. Run `npm install` to assert modules installed
 2. Run `npm run dev` to run local Apollo server
-4. In your browser, go to url specified to play around
+3. In your browser, go to url specified to play around
+    - Can for example base64-encode and image of your liking and test sending it to the backend (see `schema.js` for details
+    on mutation format)
+    - Alternatively run backend with react-native-app
 
 - [Apollo GraphQL Tutorial](https://www.apollographql.com/docs/tutorial/schema/)
 
