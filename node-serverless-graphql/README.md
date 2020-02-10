@@ -14,6 +14,7 @@
 1. Run `npm install` to assert modules installed
 2. Run `npm run dev` to run local Apollo server
 4. In your browser, go to url specified to play around
+    - Can for example base64-encode an image and send it via a mutation (see `schema.js`)
 
 - [Apollo GraphQL Tutorial](https://www.apollographql.com/docs/tutorial/schema/)
 
