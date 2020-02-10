@@ -5,7 +5,7 @@ import { gql } from 'apollo-boost';
 import {/*useQuery, */useMutation } from '@apollo/react-hooks';
 
 const POST_PICTURE_MUTATION = gql`
-  mutation PostPictureMutation($file: Upload!) {
+  mutation PostPictureMutation($file: PictureFile) {
     postPicture(file: $file) {
       product {
         name
