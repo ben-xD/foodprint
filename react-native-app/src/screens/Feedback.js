@@ -5,12 +5,11 @@ import { gql } from 'apollo-boost';
 import {/*useQuery, */useMutation } from '@apollo/react-hooks';
 
 const POST_PICTURE_MUTATION = gql`
-  mutation PostPictureMutation($file: PictureFile) {
+  mutation PostPictureMutation($file: Upload!) {
     postPicture(file: $file) {
       product {
         name
       }
-      carbonFootprintPerKg
     }
   }
 `;
@@ -44,7 +43,8 @@ const Feedback = ({ route, navigation }) => {
       console.log({ data });
       setMeal({
         ...meal,
-        score: data.postPicture.carbonFootprintPerKg,
+        score: 9000,
+        // score: data.postPicture.product
         description: data.postPicture.product.name,
       });
     }

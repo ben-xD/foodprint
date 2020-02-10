@@ -7,10 +7,8 @@
     "dev": "node index_local.js"
   },
   "dependencies": {
-    "@google-cloud/vision": "^1.8.0",
-    "apollo-server": "^2.9.16",
     "apollo-server-cloud-functions": "^2.9.16",
-    "mongoose": "^5.8.11",
-    "axios": "^0.19.2"
+    "apollo-server": "^2.9.16",
+    "shortid": "^2.2.15"
   }
 }
