@@ -90,7 +90,7 @@ const getCarbonFootprintFromName = async (name) => {
   let newLabels = [];
   while (carbonFootprintPerKg === undefined && layer < config.MAX_LAYER) {
     // Call ConceptNet
-    [newLabels, item, carbonFootprintPerKg] = await nextLayerSearch(imageLabels);
+    [newLabels, item, carbonFootprintPerKg] = await nextLayerSearch(labels);
     layer++;
   }
   return [item, carbonFootprintPerKg]

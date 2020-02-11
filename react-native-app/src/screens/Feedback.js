@@ -4,6 +4,7 @@ import { Text, Button, Rating, Overlay, Input } from 'react-native-elements';
 import { gql } from 'apollo-boost';
 import {/*useQuery, */useMutation } from '@apollo/react-hooks';
 
+// GraphQL schema for picture posting mutation
 const POST_PICTURE_MUTATION = gql`
   mutation PostPictureMutation($file: PictureFile) {
     postPicture(file: $file) {
@@ -15,15 +16,28 @@ const POST_PICTURE_MUTATION = gql`
   }
 `;
 
+// GraphQL schema for correction mutation
+const POST_CORRECTION_MUTATION = gql`
+  mutation PostCorrectionMutation($name: String!) {
+    postCorrection(name: $name) {
+      product {
+        name
+      }
+      carbonFootprintPerKg
+    }
+  }
+`;
 
 const Feedback = ({ route, navigation }) => {
 
   const [isVisible, setVisibility] = useState(false);
   const [meal, setMeal] = useState({});
   const { image } = route.params;
-  const [postPictureMutation, { loading, error, data }] = useMutation(POST_PICTURE_MUTATION);
+  const [correctedName, setCorrectedName] = useState(null);
+  const [postPictureMutation, { loading: pictureLoading, error: pictureError, data: pictureData }] = useMutation(POST_PICTURE_MUTATION);
+  const [postCorrection, { loading: correctionLoading, error: correctionError, data: correctionData }] = useMutation(POST_CORRECTION_MUTATION);
 
-  function calculateRating(carbonFootprint) {
+  const calculateRating = (carbonFootprint) => {
     if (carbonFootprint < 4) {
       return 5;
     } else if (carbonFootprint < 8) {
@@ -39,18 +53,49 @@ const Feedback = ({ route, navigation }) => {
     }
   }
 
+  // Handle correction from input field
+  const handleCorrection = (name) => {
+    console.log({'Corrected name': name});
+    postCorrectionFunction(name);
+  }
+
+  // Post correction mutation to backend
+  const postCorrectionFunction = async (correctedName) => {
+    try {
+      console.log({'Sending': correctedName});
+      await postCorrection({ variables: { name: correctedName} });
+    } catch (err) {
+      console.warn({ err });
+    }
+  }
+
+  // Respond to changes in picture data
   useEffect(() => {
-    if (data) {
-      console.log({ data });
+    if (pictureData) {
+      console.log({'pictureData': pictureData});
       setMeal({
         ...meal,
-        score: data.postPicture.carbonFootprintPerKg,
-        description: data.postPicture.product.name,
+        score: pictureData.postPicture.carbonFootprintPerKg,
+        description: pictureData.postPicture.product.name,
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]);
+  }, [pictureData]);
 
+  // Respond to changes in correction data (following correction)
+  useEffect(() => {
+    if (correctionData) {
+      console.log({'correctionData': correctionData});
+      setMeal({
+        ...meal,
+        score: correctionData.postCorrection.carbonFootprintPerKg,
+        description: correctionData.postCorrection.product.name,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [correctionData]);
+
+  // Respond to changes in the image
   useEffect(() => {
     const classifyPicture = async () => {
       try {
@@ -98,13 +143,11 @@ const Feedback = ({ route, navigation }) => {
             <View style={{ flex: 4, flexDirection: 'column', justifyContent: 'center' }}>
               <Input
                 placeholder="e.g. Cucumber"
-              />
-              <View style={{ height: 20 }} />
-              <Button
-                buttonStyle={{ backgroundColor: 'green' }}
-                titleStyle={{ fontSize: 24 }}
-                title="Submit"
-                onPress={() => alert('Implement')}
+                onChangeText={value => setCorrectedName(value)}
+                onSubmitEditing={() => {
+                  handleCorrection(correctedName)
+                  setVisibility(false);
+                }}
               />
               <View style={{ height: 50 }} />
             </View>
