@@ -77,9 +77,7 @@ const Feedback = ({ route, navigation }) => {
       >
         <View style={{ flex: 1 }}>
           <View style={{ flexDirection: 'row', flex: 2, alignItems: 'center', justifyContent: 'center' }}>
-            <View style={{ flex: 1 }} />
             <Text h3 style={{ flex: 5, textAlign: 'center' }}>We're sorry we couldn't find your item...</Text>
-            <View style={{ flex: 1 }} />
           </View>
           <View style={{ flex: 2, alignItems: 'center', justifyContent: 'center' }}>
             <Image
@@ -88,27 +86,22 @@ const Feedback = ({ route, navigation }) => {
             />
           </View>
           <View style={{ flexDirection: 'row', flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <View style={{ flex: 1 }} />
             <Text style={{ fontSize: 18, flex: 4, textAlign: 'center' }}>Let us know what it was, so we can improve our
                 app:</Text>
-            <View style={{ flex: 1 }} />
           </View>
-          <View style={{ flex: 1.5, flexDirection: 'row' }}>
-            <View style={{ flex: 1 }} />
-            <View style={{ flex: 4, flexDirection: 'column', justifyContent: 'center' }}>
+          <View style={{ flex: 1.5, flexDirection: 'row', justifyContent:'center' }}>
+            <View style={{ flex: 0.8, flexDirection: 'column', justifyContent: 'center' }}>
               <Input
                 placeholder="e.g. Cucumber"
               />
-              <View style={{ height: 20 }} />
               <Button
-                buttonStyle={{ backgroundColor: 'green' }}
+                buttonStyle={{ backgroundColor: 'green', marginTop:20 }}
                 titleStyle={{ fontSize: 24 }}
                 title="Submit"
                 onPress={() => alert('Implement')}
               />
-              <View style={{ height: 50 }} />
+              {/*<View style={{ height: 50 }} />*/}
             </View>
-            <View style={{ flex: 1 }} />
           </View>
         </View>
       </Overlay>
