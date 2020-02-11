@@ -127,7 +127,15 @@ const Feedback = ({ route, navigation }) => {
 
   return (
     <View style={{ flex: 1 }}>
-      <ErrorMessage isVisible={isVisible} onBackdropPress={() => setVisibility(false)}/>
+      <ErrorMessage
+          isVisible={isVisible}
+          onBackdropPress={() => setVisibility(false)}
+          onChangeText={value => setCorrectedName(value)}
+          onSubmitEditing={() => {
+            handleCorrection(correctedName)
+            setVisibility(false);
+          }}
+      />
 
       <View style={{flex:1, justifyContent:'center'}}>
         <View style={{ flex: 4, alignItems: 'center', justifyContent: 'center', backgroundColor: 'white', margin:10, marginTop:100, marginBottom:30 }}>

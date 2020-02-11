@@ -3,7 +3,7 @@ import {Button, Input, Overlay, Text} from "react-native-elements";
 import React, {useState} from "react";
 
 
-const ErrorMessage = ({ isVisible, onBackdropPress }) => {
+const ErrorMessage = ({ isVisible, onBackdropPress, onChangeText, onSubmitEditing }) => {
   return (
     <Overlay
       isVisible={isVisible}
@@ -25,7 +25,11 @@ const ErrorMessage = ({ isVisible, onBackdropPress }) => {
       </View>
       <View style={{flex:1.5 }}>
         <View style={{margin:20}}>
-          <Input placeholder="e.g. Cucumber"/>
+          <Input
+              placeholder="e.g. Cucumber"
+              onChangeText={onChangeText}
+              onSubmitEditing={onSubmitEditing}
+          />
           <Button
               buttonStyle={{ backgroundColor: 'green', marginTop:20 }}
               titleStyle={{ fontSize: 24 }}

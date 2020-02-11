@@ -34,7 +34,7 @@ const Camera = ({ route, navigation }) => {
         {({ camera, status, recordAudioPermissionStatus }) => {
           if (status !== 'READY') { return <Text>Not ready</Text>; }
           return (
-            <View style={{ flex: 1, justifyContent: 'flex-end', alignItems:'center', marginBottom:50 }}>
+            <View style={{ flex:1, justifyContent:'flex-end', alignItems:'center', marginBottom:50 }}>
               <TouchableOpacity
                   onPress={() => takePictureHandler(camera)}
                   style={styles.capture}>
