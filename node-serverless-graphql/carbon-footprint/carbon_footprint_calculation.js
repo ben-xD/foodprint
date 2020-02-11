@@ -81,7 +81,22 @@ const getCarbonFootprintFromImage = async (image) => {
   return [item, carbonFootprintPerKg]
 };
 
-module.exports = getCarbonFootprintFromImage;
+const getCarbonFootprintFromName = async (name) => {
+  // Set array of name only for labels
+  let labels = [name.toLowerCase()];
+  // Attempt to find the labels in the database
+  let [item, carbonFootprintPerKg] = await firstLayerSearch(labels);
+  let layer = 0;
+  let newLabels = [];
+  while (carbonFootprintPerKg === undefined && layer < config.MAX_LAYER) {
+    // Call ConceptNet
+    [newLabels, item, carbonFootprintPerKg] = await nextLayerSearch(imageLabels);
+    layer++;
+  }
+  return [item, carbonFootprintPerKg]
+};
+
+module.exports = {getCarbonFootprintFromImage, getCarbonFootprintFromName};
 
 
 
