@@ -64,7 +64,7 @@ const Feedback = ({ route, navigation }) => {
       try {
         await postPictureMutation({ variables: { file: image } });
       } catch (err) {
-        console.warn({ err });
+        setVisibility(true);
       }
     };
     if (image) {
@@ -88,7 +88,7 @@ const Feedback = ({ route, navigation }) => {
           </View>
           <View style={{ flex: 2, alignItems: 'center', justifyContent: 'center' }}>
             <Image
-              style={{ height: 200, width: 200 }}
+              style={{ height: 250, width:250 }}
               source={{ uri: 'https://mir-s3-cdn-cf.behance.net/project_modules/disp/fc4a1059120725.5a15c9fa08f78.gif' }}
             />
           </View>
