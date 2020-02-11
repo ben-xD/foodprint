@@ -3,6 +3,7 @@ import { View, Image } from 'react-native';
 import { Text, Button, Rating, Overlay, Input } from 'react-native-elements';
 import { gql } from 'apollo-boost';
 import {/*useQuery, */useMutation } from '@apollo/react-hooks';
+import ErrorMessage from '../components/ErrorMessage';
 
 const POST_PICTURE_MUTATION = gql`
   mutation PostPictureMutation($file: Upload!) {
@@ -78,38 +79,7 @@ const Feedback = ({ route, navigation }) => {
 
   return (
     <View style={{ flex: 1 }}>
-      <Overlay
-        isVisible={isVisible}
-        onBackdropPress={() => setVisibility(false)}
-      >
-        <View style={{ flex: 1, justifyContent: 'center' }}>
-          <View style={{flex:2, justifyContent:'center'}}>
-            <Text h3 style={{ textAlign: 'center' }}>We're sorry we couldn't find your item...</Text>
-          </View>
-          <View style={{ flex: 2, alignItems: 'center', justifyContent: 'center' }}>
-            <Image
-              style={{ height: 250, width:250 }}
-              source={{ uri: 'https://mir-s3-cdn-cf.behance.net/project_modules/disp/fc4a1059120725.5a15c9fa08f78.gif' }}
-            />
-          </View>
-          <View style={{ flex:1, justifyContent:'center'}}>
-            <Text style={{ fontSize: 22, textAlign: 'center', margin:20 }}>Let us know what it was, so we can improve our
-              app:</Text>
-          </View>
-          <View style={{flex:1.5 }}>
-            <View style={{margin:20}}>
-              <Input placeholder="e.g. Cucumber"/>
-              <Button
-                buttonStyle={{ backgroundColor: 'green', marginTop:20 }}
-                titleStyle={{ fontSize: 24 }}
-                title="Submit"
-                onPress={() => alert('Implement')}
-              />
-            </View>
-          </View>
-        </View>
-      </Overlay>
-
+      <ErrorMessage isVisible={isVisible} onBackdropPress={() => setVisibility(false)}/>
 
       <View style={{flex:1, justifyContent:'center'}}>
         <View style={{ flex: 4, alignItems: 'center', justifyContent: 'center', backgroundColor: 'white', margin:10, marginTop:100, marginBottom:30 }}>
