@@ -5,25 +5,40 @@ import { gql } from 'apollo-boost';
 import {/*useQuery, */useMutation } from '@apollo/react-hooks';
 import ErrorMessage from '../components/ErrorMessage';
 
+// GraphQL schema for picture posting mutation
 const POST_PICTURE_MUTATION = gql`
-  mutation PostPictureMutation($file: Upload!) {
+  mutation PostPictureMutation($file: PictureFile) {
     postPicture(file: $file) {
       product {
         name
       }
+      carbonFootprintPerKg
     }
   }
 `;
 
+// GraphQL schema for correction mutation
+const POST_CORRECTION_MUTATION = gql`
+  mutation PostCorrectionMutation($name: String!) {
+    postCorrection(name: $name) {
+      product {
+        name
+      }
+      carbonFootprintPerKg
+    }
+  }
+`;
 
 const Feedback = ({ route, navigation }) => {
 
   const [isVisible, setVisibility] = useState(false);
   const [meal, setMeal] = useState({});
   const { image } = route.params;
-  const [postPictureMutation, { loading, error, data }] = useMutation(POST_PICTURE_MUTATION);
+  const [correctedName, setCorrectedName] = useState(null);
+  const [postPictureMutation, { loading: pictureLoading, error: pictureError, data: pictureData }] = useMutation(POST_PICTURE_MUTATION);
+  const [postCorrection, { loading: correctionLoading, error: correctionError, data: correctionData }] = useMutation(POST_CORRECTION_MUTATION);
 
-  function calculateRating(carbonFootprint) {
+  const calculateRating = (carbonFootprint) => {
     if (carbonFootprint < 2) {
       return 5;
     } else if (carbonFootprint < 4) {
@@ -49,17 +64,49 @@ const Feedback = ({ route, navigation }) => {
     }
   }
 
+  // Handle correction from input field
+  const handleCorrection = (name) => {
+    console.log({'Corrected name': name});
+    postCorrectionFunction(name);
+  }
+
+  // Post correction mutation to backend
+  const postCorrectionFunction = async (correctedName) => {
+    try {
+      console.log({'Sending': correctedName});
+      await postCorrection({ variables: { name: correctedName} });
+    } catch (err) {
+      console.warn({ err });
+    }
+  }
+
+  // Respond to changes in picture data
   useEffect(() => {
-    if (data) {
-      console.log({ data });
+    if (pictureData) {
+      console.log({'pictureData': pictureData});
       setMeal({
         ...meal,
-        score: 9000,
-        description: data.postPicture.product.name,
+        score: pictureData.postPicture.carbonFootprintPerKg,
+        description: pictureData.postPicture.product.name,
       });
     }
-  }, [data]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pictureData]);
 
+  // Respond to changes in correction data (following correction)
+  useEffect(() => {
+    if (correctionData) {
+      console.log({'correctionData': correctionData});
+      setMeal({
+        ...meal,
+        score: correctionData.postCorrection.carbonFootprintPerKg,
+        description: correctionData.postCorrection.product.name,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [correctionData]);
+
+  // Respond to changes in the image
   useEffect(() => {
     const classifyPicture = async () => {
       try {
@@ -75,6 +122,7 @@ const Feedback = ({ route, navigation }) => {
       });
       classifyPicture();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [image]);
 
   return (
