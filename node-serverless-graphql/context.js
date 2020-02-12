@@ -1,29 +1,30 @@
-import * as admin from 'firebase-admin';
-import { AuthenticationError } from 'apollo-server';
+const admin = require('firebase-admin');
 
 // idToken comes from the client app
 const getUser = (idToken) => new Promise((resolve, reject) => {
   admin.auth().verifyIdToken(idToken)
     .then((decodedToken) => {
-      const { uid } = decodedToken;
+      // const { uid } = decodedToken;
       resolve(decodedToken);
     }).catch((error) => {
       // Returning empty user, to signify no user
-      resolve('');
-      // or alternatively reject(error).
+      reject(error);
     });
 });
 
-const context = ({ req }) => {
+const context = async ({ req }) => {
+  console.log({ headers: req.headers });
   const token = req.headers.authorization || '';
-  const user = getUser(token);
-  console.log({ user });
-
+  try {
+    const user = await getUser(token);
+    console.log({ user });
+    return { user };
+  } catch (err) {
+    console.error(err);
+  }
   // optionally block the user
   // we could also check user roles/permissions here
   // if (!user) throw new AuthenticationError('you must be logged in');
-
-  return { user };
 };
 
-export default context;
+module.exports = context;

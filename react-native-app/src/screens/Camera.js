@@ -60,13 +60,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   capture: {
-    borderWidth: 4,
-    borderColor: 'lightgrey',
+    borderWidth: 2,
+    borderColor: 'white',
     alignItems: 'center',
     justifyContent: 'center',
     width: 80,
     height: 80,
-    backgroundColor: 'red',
+    backgroundColor: 'rgba(9,9,9,0.1)',
+    margin: 32,
     borderRadius: 50,
   },
 });

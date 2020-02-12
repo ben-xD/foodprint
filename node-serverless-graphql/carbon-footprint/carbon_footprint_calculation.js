@@ -2,20 +2,18 @@ const vision = require('@google-cloud/vision');
 const axios = require('axios');
 const credentials = require('./carbon-7fbf76411514.json');
 const config = require('./config');
-const CarbonModel = require('./mongoose_queries');
+const mongooseQueries = require('./mongoose_queries');
 
 const searchData = async (label) => {
+  mongooseQueries.connect();
+  const carbonModel = mongooseQueries.getCarbonFootprintModel();
   let itemList;
-  await CarbonModel.findOne({ item: label }, (err, items) => {
+  await carbonModel.findOne({ item: label }, (err, items) => {
     itemList = items;
   }).exec();
-  try {
-    return itemList.carbonpkilo;
-  } catch (err) {
-    return undefined;
-  }
+  console.log({ itemList });
+  return itemList.carbonpkilo;
 };
-
 
 const firstLayerSearch = async (labels) => {
   for (let i = 0; i < labels.length; i++) {

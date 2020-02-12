@@ -6,9 +6,11 @@ const resolvers = {
     },
   },
   Mutation: {
-    postPicture: async (parent, { file }) => {
+    postPicture: async (parent, { file }, context) => {
+      console.log({ file, context, parent });
       const image = new Buffer(file.base64, 'base64'); // Decode base64 of "file" to image
       const [productName, carbonFootprintPerKg] = await getCarbonFootprintFromImage(image);
+      console.log({ productName, carbonFootprintPerKg });
       return {
         product: {
           name: productName,
