@@ -21,8 +21,8 @@ const POST_CORRECTION_MUTATION = gql`
 const Feedback = ({route, navigation}) => {
 
   const [isVisible, setVisibility] = useState(false);
-  const [meal, setMeal] = useState(route.params);
-  // console.log({'feedbackMeal': meal});
+  // const [meal, setMeal] = useState(route.params);
+  const meal = route.params.meal;
   const [correctedName, setCorrectedName] = useState(null);
   const [postCorrection, {loading: correctionLoading, error: correctionError, data: correctionData}] = useMutation(POST_CORRECTION_MUTATION);
 
@@ -52,34 +52,34 @@ const Feedback = ({route, navigation}) => {
     }
   };
 
-  // Handle correction from input field
-  const handleCorrection = (name) => {
-    console.log({'Corrected name': name});
-    postCorrectionFunction(name);
-  };
+  // // Handle correction from input field
+  // const handleCorrection = (name) => {
+  //   console.log({'Corrected name': name});
+  //   postCorrectionFunction(name);
+  // };
 
-  // Post correction mutation to backend
-  const postCorrectionFunction = async (correctedName) => {
-    try {
-      console.log({'Sending': correctedName});
-      await postCorrection({variables: {name: correctedName}});
-    } catch (err) {
-      console.warn({err});
-    }
-  };
+  // // Post correction mutation to backend
+  // const postCorrectionFunction = async (correctedName) => {
+  //   try {
+  //     console.log({'Sending': correctedName});
+  //     await postCorrection({variables: {name: correctedName}});
+  //   } catch (err) {
+  //     console.warn({err});
+  //   }
+  // };
 
-  // Respond to changes in correction data (following correction)
-  useEffect(() => {
-    if (correctionData) {
-      console.log({'correctionData': correctionData});
-      setMeal({
-        ...meal,
-        score: correctionData.postCorrection.carbonFootprintPerKg,
-        description: correctionData.postCorrection.product.name,
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [correctionData]);
+  // // Respond to changes in correction data (following correction)
+  // useEffect(() => {
+  //   if (correctionData) {
+  //     console.log({'correctionData': correctionData});
+  //     setMeal({
+  //       ...meal,
+  //       score: correctionData.postCorrection.carbonFootprintPerKg,
+  //       description: correctionData.postCorrection.product.name,
+  //     });
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [correctionData]);
 
 
   return (
