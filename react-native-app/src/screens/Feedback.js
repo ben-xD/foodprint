@@ -1,30 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import {View, Image} from 'react-native';
 import {Text, Button, Rating, Overlay, Input} from 'react-native-elements';
-import {gql} from 'apollo-boost';
-import {/*useQuery, */useMutation} from '@apollo/react-hooks';
 import ErrorMessage from '../components/ErrorMessage';
 
-
-// GraphQL schema for correction mutation
-const POST_CORRECTION_MUTATION = gql`
-  mutation PostCorrectionMutation($name: String!) {
-    postCorrection(name: $name) {
-      product {
-        name
-      }
-      carbonFootprintPerKg
-    }
-  }
-`;
 
 const Feedback = ({route, navigation}) => {
 
   const [isVisible, setVisibility] = useState(false);
   // const [meal, setMeal] = useState(route.params);
-  const meal = route.params.meal;
-  const [correctedName, setCorrectedName] = useState(null);
-  const [postCorrection, {loading: correctionLoading, error: correctionError, data: correctionData}] = useMutation(POST_CORRECTION_MUTATION);
+  const [meal, setMeal] = useState(route.params.meal);
 
   const calculateRating = (carbonFootprint) => {
     if (carbonFootprint < 2) {
@@ -52,47 +36,14 @@ const Feedback = ({route, navigation}) => {
     }
   };
 
-  // // Handle correction from input field
-  // const handleCorrection = (name) => {
-  //   console.log({'Corrected name': name});
-  //   postCorrectionFunction(name);
-  // };
-
-  // // Post correction mutation to backend
-  // const postCorrectionFunction = async (correctedName) => {
-  //   try {
-  //     console.log({'Sending': correctedName});
-  //     await postCorrection({variables: {name: correctedName}});
-  //   } catch (err) {
-  //     console.warn({err});
-  //   }
-  // };
-
-  // // Respond to changes in correction data (following correction)
-  // useEffect(() => {
-  //   if (correctionData) {
-  //     console.log({'correctionData': correctionData});
-  //     setMeal({
-  //       ...meal,
-  //       score: correctionData.postCorrection.carbonFootprintPerKg,
-  //       description: correctionData.postCorrection.product.name,
-  //     });
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [correctionData]);
-
-
   return (
       <View style={{flex: 1}}>
-        {/*<ErrorMessage*/}
-        {/*    isVisible={isVisible}*/}
-        {/*    onBackdropPress={() => setVisibility(false)}*/}
-        {/*    onChangeText={value => setCorrectedName(value)}*/}
-        {/*    onSubmitEditing={() => {*/}
-        {/*      handleCorrection(correctedName);*/}
-        {/*      setVisibility(false);*/}
-        {/*    }}*/}
-        {/*/>*/}
+        <ErrorMessage
+          isVisible={isVisible}
+          setVisibility={setVisibility}
+          meal={meal}
+          setMeal={setMeal}
+        />
         <View style={{flex: 1, justifyContent: 'center'}}>
           <View style={{
             flex: 4,
