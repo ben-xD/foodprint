@@ -1,13 +1,68 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { StyleSheet, TouchableOpacity, View, Text } from 'react-native';
 import { RNCamera } from 'react-native-camera';
+import {gql} from "apollo-boost";
+import {useMutation} from "@apollo/react-hooks";
+import ErrorMessage from "../components/ErrorMessage";
+
+
+// GraphQL schema for picture posting mutation
+const POST_PICTURE_MUTATION = gql`
+  mutation PostPictureMutation($file: PictureFile) {
+    postPicture(file: $file) {
+      product {
+        name
+      }
+      carbonFootprintPerKg
+    }
+  }
+`;
 
 const Camera = ({ route, navigation }) => {
 
+  const [isVisible, setVisibility] = useState(false);
+  const meal = {};
+  const [postPictureMutation, { loading: pictureLoading,
+                                error: pictureError,
+                                data: pictureData }] = useMutation(POST_PICTURE_MUTATION)
+
+  // Respond to changes in picture data
+  // useEffect(() => {
+  //   if (pictureData) {
+  //     console.log({'pictureData': pictureData});
+  //     meal.score = pictureData.postPicture.carbonFootprintPerKg;
+  //     meal.description = pictureData.postPicture.product.name;
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [pictureData]);
+
+  const classifyPicture = async (image) => {
+    try {
+      await postPictureMutation({ variables: { file: image } });
+      // Wait for picture data
+      // while (!pictureData) {
+      //   console.log('Waiting for one second...');
+      //   await new Promise(r => setTimeout(r, 1000));
+      // }
+      // Get picture data
+      console.log({'pictureData': pictureData});
+      meal.score = pictureData.postPicture.carbonFootprintPerKg;
+      meal.description = pictureData.postPicture.product.name;
+      console.log({meal});
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+
   const takePictureHandler = async (camera) => {
     const options = { quality: 0.5, base64: true };
-    const data = await camera.takePictureAsync(options);
-    navigation.navigate('Feedback', {image: data});
+    const image = await camera.takePictureAsync(options);
+    meal.uri = image.uri;
+    await classifyPicture(image);
+    await new Promise(r => setTimeout(r, 5000));
+    console.log({'cameraMeal': meal});
+    navigation.navigate('Feedback', {meal: meal});
   };
 
   const barCodeHandler = ({ data, rawData, type, bounds }) => {
@@ -34,6 +89,17 @@ const Camera = ({ route, navigation }) => {
         {({ camera, status, recordAudioPermissionStatus }) => {
           if (status !== 'READY') { return <Text>Not ready</Text>; }
           return (
+              // <View>
+              // <ErrorMessage
+              //     isVisible={isVisible}
+              //     onBackdropPress={() => setVisibility(false)}
+              //     onChangeText={value => setCorrectedName(value)}
+              //     onSubmitEditing={() => {
+              //       handleCorrection(correctedName);
+              //       setVisibility(false);
+              //     }}
+              // />
+              // </View>
             <View style={{ flex:1, justifyContent:'flex-end', alignItems:'center', marginBottom:50 }}>
               <TouchableOpacity
                   onPress={() => takePictureHandler(camera)}
