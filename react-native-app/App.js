@@ -20,8 +20,7 @@ const Stack = createStackNavigator();
 
 const client = new ApolloClient({
   link: new HttpLink({
-    uri: 'http://ce371dec.ngrok.io',
-    // uri: Config.SERVER_URL,
+    uri: Config.SERVER_URL,
   }),
   cache: new InMemoryCache(),
 });
