@@ -23,6 +23,15 @@ const client = new ApolloClient({
     uri: Config.SERVER_URL,
   }),
   cache: new InMemoryCache(),
+  request: (operation) => {
+    const userToken = AsyncStorage.getItem('userToken');
+
+    operation.setContext({
+      headers: {
+        authorization: userToken ? `Bearer ${userToken}` : '',
+      },
+    });
+  },
 });
 
 const App = () => {
