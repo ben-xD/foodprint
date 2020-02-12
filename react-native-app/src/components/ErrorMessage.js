@@ -30,12 +30,6 @@ const ErrorMessage = ({ isVisible, onBackdropPress, onChangeText, onSubmitEditin
               onChangeText={onChangeText}
               onSubmitEditing={onSubmitEditing}
           />
-          <Button
-              buttonStyle={{ backgroundColor: 'green', marginTop:20 }}
-              titleStyle={{ fontSize: 24 }}
-              title="Submit"
-              onPress={() => alert('Implement')}
-          />
         </View>
       </View>
     </View>
