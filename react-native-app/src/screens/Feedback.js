@@ -132,7 +132,7 @@ const Feedback = ({ route, navigation }) => {
           onBackdropPress={() => setVisibility(false)}
           onChangeText={value => setCorrectedName(value)}
           onSubmitEditing={() => {
-            handleCorrection(correctedName)
+            handleCorrection(correctedName);
             setVisibility(false);
           }}
       />
