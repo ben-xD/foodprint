@@ -22,35 +22,52 @@ const Camera = ({ route, navigation }) => {
 
   const [isVisible, setVisibility] = useState(false);
   const [uri, setUri] = useState({});
+  const [meal, setMeal] = useState({});
   const [postPictureMutation, { loading: pictureLoading, error: pictureError, data: pictureData }] = useMutation(POST_PICTURE_MUTATION)
 
   // Respond to changes in picture data
   useEffect(() => {
     if (pictureData) {
       console.log({pictureData});
-      const meal = {
-        uri,
-        score: pictureData.postPicture.carbonFootprintPerKg,
-        description: pictureData.postPicture.product.name,
+      // If no carbon footprint was found, show the error correction overlay
+      if (pictureData.postPicture.carbonFootprintPerKg === null) {
+        setVisibility(true);
+      } else {
+        const mealObject = {
+          uri,
+          score: pictureData.postPicture.carbonFootprintPerKg,
+          description: pictureData.postPicture.product.name,
+        }
+        console.log({mealObject});
+        console.log('Navigating to feedback directly...');
+        navigation.navigate('Feedback', {meal: mealObject});
       }
-      navigation.navigate('Feedback', {meal});
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pictureData]);
 
-  const classifyPicture = async (image) => {
-    try {
-      await postPictureMutation({ variables: { file: image } });
-    } catch (err) {
-      console.log(err);
+  // Respond to changes in meal (indicating corrected classification)
+  useEffect(() => {
+    // If score is set, navigate to feedback screen
+    if (meal.score !== undefined) {
+      console.log({meal});
+      const mealObject = {
+        uri,
+        score: meal.score,
+        description: meal.description,
+      }
+      console.log({mealObject});
+      console.log('Navigating to feedback following correction...');
+      navigation.navigate('Feedback', {meal: mealObject});
     }
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [meal]);
 
   const takePictureHandler = async (camera) => {
     const options = { quality: 0.5, base64: true };
     const image = await camera.takePictureAsync(options);
     setUri(image.uri);
-    await classifyPicture(image);
+    await postPictureMutation({ variables: { file: image } });
   };
 
   const barCodeHandler = ({ data, rawData, type, bounds }) => {
@@ -77,22 +94,19 @@ const Camera = ({ route, navigation }) => {
         {({ camera, status, recordAudioPermissionStatus }) => {
           if (status !== 'READY') { return <Text>Not ready</Text>; }
           return (
-              // <View>
-              // <ErrorMessage
-              //     isVisible={isVisible}
-              //     onBackdropPress={() => setVisibility(false)}
-              //     onChangeText={value => setCorrectedName(value)}
-              //     onSubmitEditing={() => {
-              //       handleCorrection(correctedName);
-              //       setVisibility(false);
-              //     }}
-              // />
-              // </View>
-            <View style={{ flex:1, justifyContent:'flex-end', alignItems:'center', marginBottom:50 }}>
-              <TouchableOpacity
-                  onPress={() => takePictureHandler(camera)}
-                  style={styles.capture}>
-              </TouchableOpacity>
+            <View style={{flex: 1}}>
+              <ErrorMessage
+                isVisible={isVisible}
+                setVisibility={setVisibility}
+                meal={meal}
+                setMeal={setMeal}
+              />
+              <View style={{ flex:1, justifyContent:'flex-end', alignItems:'center', marginBottom:50 }}>
+                <TouchableOpacity
+                    onPress={() => takePictureHandler(camera)}
+                    style={styles.capture}>
+                </TouchableOpacity>
+              </View>
             </View>
           );
         }}

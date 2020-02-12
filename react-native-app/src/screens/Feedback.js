@@ -7,7 +7,7 @@ import ErrorMessage from '../components/ErrorMessage';
 const Feedback = ({route, navigation}) => {
 
   const [isVisible, setVisibility] = useState(false);
-  // const [meal, setMeal] = useState(route.params);
+  console.log({'route': route.params})
   const [meal, setMeal] = useState(route.params.meal);
 
   const calculateRating = (carbonFootprint) => {
@@ -35,6 +35,8 @@ const Feedback = ({route, navigation}) => {
       return 0;
     }
   };
+
+  console.log({meal});
 
   return (
       <View style={{flex: 1}}>
