@@ -21,7 +21,6 @@ const context = async ({ req }) => {
     return { user };
   } catch (err) {
     console.error(err);
-    // throw new Error('you must be logged in');
     return {};
   }
 };
