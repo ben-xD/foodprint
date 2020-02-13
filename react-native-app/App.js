@@ -5,9 +5,8 @@ import Login from './src/screens/Login';
 import Signup from './src/screens/Signup';
 import SignupOrRegister from './src/screens/SignupOrRegister';
 import { ApolloProvider } from '@apollo/react-hooks';
-import { ApolloClient, HttpLink, InMemoryCache } from 'apollo-boost';
+import ApolloClient from 'apollo-boost';
 import Feedback from './src/screens/Feedback';
-
 import SplashScreen from 'react-native-splash-screen';
 import AsyncStorage from '@react-native-community/async-storage';
 import Loading from './src/screens/Loading';
@@ -19,18 +18,15 @@ import Config from 'react-native-config';
 const Stack = createStackNavigator();
 
 const client = new ApolloClient({
-  link: new HttpLink({
-    uri: Config.SERVER_URL,
-  }),
-  cache: new InMemoryCache(),
-  request: (operation) => {
-    const userToken = AsyncStorage.getItem('userToken');
-
-    console.log({ userToken });
-
+  uri: Config.SERVER_URL,
+  request: async (operation) => {
+    // TODO remove userToken in AsyncStorage, and just use auth() firebase library
+    // Returns the current token if it has not expired. Otherwise, this will refresh the token and return a new one. This is better than using AsyncStorage and storing a token locally.
+    const token = await auth().currentUser.getIdToken();
+    console.log({ token });
     operation.setContext({
       headers: {
-        authorization: userToken ? `Bearer ${userToken}` : '',
+        authorization: token ? `Bearer ${token}` : '',
       },
     });
   },

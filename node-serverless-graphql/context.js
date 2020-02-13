@@ -14,13 +14,15 @@ const getUser = (idToken) => new Promise((resolve, reject) => {
 
 const context = async ({ req }) => {
   console.log({ headers: req.headers });
-  const token = req.headers.authorization || '';
+  const authorization = req.headers.authorization || '';
+  const token = authorization.replace('Bearer ', '');
   try {
     const user = await getUser(token);
     console.log({ user });
     return { user };
   } catch (err) {
     console.error(err);
+    throw new Error('you must be logged in');
   }
   // optionally block the user
   // we could also check user roles/permissions here
