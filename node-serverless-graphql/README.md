@@ -12,7 +12,7 @@
 
 ### Local Testing
 
-1. Get credentials.json from someone who has it, and place it somewhere on your laptop, e.g. `/Users/ben/.gcloud/Carbon Footprint-e81678c30bf2.json`
+1. Get credentials.json from someone who has it (Ben), and place it somewhere on your laptop, e.g. On my laptop, it is `/Users/ben/.gcloud/Carbon Footprint-e81678c30bf2.json`
 2. Set up \$GOOGLE_APPLICATION_CREDENTIALS to point to that file, using `export GOOGLE_APPLICATION_CREDENTIALS=/Users/ben/.gcloud/Carbon Footprint-e81678c30bf2.json`
 3. Run `npm install` or `npm i` to ensure npm dependencies are installed
 4. Run `npm run dev` to run local Apollo server or use `npm run debug` to run local apollo server with debug mode. You can use chrome debugger, go to `chrome://inspect` to get it
