@@ -5,6 +5,8 @@ import { ScrollView } from 'react-native-gesture-handler';
 import Password from '../components/Password';
 import Email from '../components/Email';
 import { AuthContext } from '../store/Auth';
+import auth from '@react-native-firebase/auth';
+
 
 export default Login = ({ navigation }) => {
   const [email, setEmail] = useState('');

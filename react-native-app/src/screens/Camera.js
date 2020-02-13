@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { StyleSheet, TouchableOpacity, View, Text } from 'react-native';
 import { RNCamera } from 'react-native-camera';
 
@@ -7,13 +7,13 @@ const Camera = ({ route, navigation }) => {
   const takePictureHandler = async (camera) => {
     const options = { quality: 0.5, base64: true };
     const data = await camera.takePictureAsync(options);
-    navigation.navigate('Feedback', {image: data});
+    navigation.navigate('Feedback', { image: data });
   };
 
   const barCodeHandler = ({ data, rawData, type, bounds }) => {
     console.log({ data, rawData, type, bounds });
     // save the barcode info into a different components state
-    navigation.navigate('Feedback', {image: data});
+    navigation.navigate('Feedback', { image: data });
   };
 
   return (
@@ -34,11 +34,10 @@ const Camera = ({ route, navigation }) => {
         {({ camera, status, recordAudioPermissionStatus }) => {
           if (status !== 'READY') { return <Text>Not ready</Text>; }
           return (
-            <View style={{ flex: 1, justifyContent: 'flex-end', alignItems:'center' }}>
+            <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>
               <TouchableOpacity
-                  onPress={() => takePictureHandler(camera)}
-                  style={styles.capture}>
-              </TouchableOpacity>
+                onPress={() => takePictureHandler(camera)}
+                style={styles.capture} />
             </View>
           );
         }}
@@ -61,13 +60,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   capture: {
-    borderWidth:4,
-    borderColor:'lightgrey',
-    alignItems:'center',
-    justifyContent:'center',
-    width:80,
-    height:80,
-    backgroundColor:'red',
-    borderRadius:50,
+    borderWidth: 2,
+    borderColor: 'white',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 80,
+    height: 80,
+    backgroundColor: 'rgba(9,9,9,0.1)',
+    margin: 32,
+    borderRadius: 50,
   },
 });
