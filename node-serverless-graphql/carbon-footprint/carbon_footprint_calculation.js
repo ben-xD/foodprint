@@ -66,6 +66,7 @@ const nextLayerSearch = async (labels) => {
 const getImageLabels = async (image) => {
   let GoogleResult = [];
   try {
+    // Using alba's credentials here
     const client = new vision.ImageAnnotatorClient({
       credentials,
     });
