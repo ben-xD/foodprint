@@ -20,7 +20,6 @@ const Stack = createStackNavigator();
 const client = new ApolloClient({
   uri: Config.SERVER_URL,
   request: async (operation) => {
-    // TODO remove userToken in AsyncStorage, and just use auth() firebase library
     // Returns the current token if it has not expired. Otherwise, this will refresh the token and return a new one. This is better than using AsyncStorage and storing a token locally.
     if (!auth().currentUser) {
       return;
@@ -42,37 +41,37 @@ const App = () => {
         case 'RESTORE_TOKEN':
           return {
             ...prevState,
-            userToken: action.token,
+            userIsLoggedIn: action.userIsLoggedIn,
             isLoading: false,
           };
         case 'SIGN_IN':
           return {
             ...prevState,
             isSignout: false,
-            userToken: action.token,
+            userIsLoggedIn: action.userIsLoggedIn,
           };
         case 'SIGN_OUT':
           return {
             ...prevState,
             isSignout: true,
-            userToken: null,
+            userIsLoggedIn: null,
           };
       }
     },
     {
       isLoading: true,
       isSignout: false,
-      userToken: null,
+      userIsLoggedIn: null,
     }
   );
 
   useEffect(() => {
     // Fetch the token from storage then navigate to our appropriate place
     const bootstrapAsync = async () => {
-      let userToken;
+      let userIsLoggedIn;
 
       try {
-        userToken = await AsyncStorage.getItem('userToken');
+        userIsLoggedIn = await AsyncStorage.getItem('userIsLoggedIn');
       } catch (e) {
         // Restoring token failed
       }
@@ -81,7 +80,7 @@ const App = () => {
 
       // This will switch to the App screen or Auth screen and this loading
       // screen will be unmounted and thrown away.
-      dispatch({ type: 'RESTORE_TOKEN', token: userToken });
+      dispatch({ type: 'RESTORE_TOKEN', userIsLoggedIn });
     };
 
     bootstrapAsync();
@@ -107,11 +106,11 @@ const App = () => {
           else { return console.error(e); }
         }
         const token = await auth().currentUser.getIdToken();
-        await AsyncStorage.setItem('userToken', token);
+        await AsyncStorage.setItem('userIsLoggedIn', token);
         dispatch({ type: 'SIGN_IN', token });
       },
       signOut: () => {
-        AsyncStorage.removeItem('userToken');
+        AsyncStorage.removeItem('userIsLoggedIn');
         auth().signOut();
         dispatch({ type: 'SIGN_OUT' });
       },
@@ -148,7 +147,7 @@ const App = () => {
             {state.isLoading ? (
               // We haven't finished checking for the token yet
               <Stack.Screen name="Loading" component={Loading} />
-            ) : state.userToken === null ? (
+            ) : state.userIsLoggedIn === null ? (
               // No token found, user isn't signed in
               <>
                 <Stack.Screen
