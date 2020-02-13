@@ -22,6 +22,9 @@ const client = new ApolloClient({
   request: async (operation) => {
     // TODO remove userToken in AsyncStorage, and just use auth() firebase library
     // Returns the current token if it has not expired. Otherwise, this will refresh the token and return a new one. This is better than using AsyncStorage and storing a token locally.
+    if (!auth().currentUser) {
+      return;
+    }
     const token = await auth().currentUser.getIdToken();
     console.log({ token });
     operation.setContext({
@@ -109,6 +112,7 @@ const App = () => {
       },
       signOut: () => {
         AsyncStorage.removeItem('userToken');
+        auth().signOut();
         dispatch({ type: 'SIGN_OUT' });
       },
       signUp: async (email, password) => {
