@@ -1,6 +1,9 @@
 const { gql } = require('apollo-server');
 
 let schema = `
+  scalar Upload
+
+
   type Product {
     name: String
   }
@@ -19,8 +22,6 @@ let schema = `
     postPicture(file: Upload!): CarbonFootprintReport
   }
 `;
-
-schema = `scalar Upload\n\n` + schema
 
 // Construct a schema, using GraphQL schema language
 const typeDefs = gql(schema);
