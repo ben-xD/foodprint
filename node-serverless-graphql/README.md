@@ -12,8 +12,8 @@
 
 ### Local Testing
 
-1. Get credentials.json from someone who has it (Ben), and place download it. Change into directory containing file, then move file into the following folder using `mkdir -p /Users/$(whoami)/.gcloud/ && mv gcloud_credentials.json /Users/$(whoami)/.gcloud/gcloud_credentials.json`
-2. Set up \$GOOGLE_APPLICATION_CREDENTIALS to point to that file, using `export GOOGLE_APPLICATION_CREDENTIALS=/Users/$(whoami)/.gcloud/gcloud_credentials.json`
+1. Get credentials.json from someone who has it (Ben), and place download it. Change into directory containing file, then move file into the following folder using `mkdir -p /Users/$(whoami)/.gcloud/ && mv carbonfootprint-serverless.json /Users/$(whoami)/.gcloud/carbonfootprint-serverless.json`
+2. Set up \$GOOGLE_APPLICATION_CREDENTIALS to point to that file, using `export GOOGLE_APPLICATION_CREDENTIALS=/Users/$(whoami)/.gcloud/carbonfootprint-serverless.json`. Add this line to your `.bashrc` or `.zshrc` to avoid running this for a new shell every time.
 3. Run `npm install` or `npm i` to ensure npm dependencies are installed
 4. Run `npm run dev` to run local Apollo server or use `npm run debug` to run local apollo server with debug mode. You can use chrome debugger, go to `chrome://inspect` to get it
 5. In your browser, go to url specified to play around
