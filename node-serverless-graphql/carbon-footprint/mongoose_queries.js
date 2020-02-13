@@ -1,8 +1,6 @@
 const mongoose = require('mongoose');
 const config = require('./config');
 
-let carbonSchema;
-
 const connect = () => {
   mongoose.connect(config.dbServer, { useNewUrlParser: true, useUnifiedTopology: true });
 
@@ -14,12 +12,10 @@ const connect = () => {
 };
 
 const getCarbonFootprintModel = () => {
-  if (!carbonSchema) {
-    carbonSchema = new mongoose.Schema({
-      item: String,
-      carbonpkilo: Number,
-    }, { collection: 'carbon' });
-  }
+  const carbonSchema = new mongoose.Schema({
+    item: String,
+    carbonpkilo: Number,
+  }, { collection: 'carbon' });
 
   return mongoose.model('Carbon', carbonSchema);
 };

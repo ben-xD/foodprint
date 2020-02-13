@@ -1,13 +1,14 @@
 const { ApolloServer } = require('apollo-server-cloud-functions');
-const admin = require('firebase-admin');
+const firebase = require('firebase/app');
 const typeDefs = require('./schema.js');
 const resolvers = require('./resolvers.js');
 const context = require('./context');
 
-admin.initializeApp({
-  credential: admin.credential.applicationDefault(),
-  databaseURL: 'https://carbon-footprint-2020.firebaseio.com',
-});
+const firebaseConfig = {
+  // ... download from firebase mate
+};
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
 
 const server = new ApolloServer({
   typeDefs,

@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Image } from 'react-native';
 import { Text, Button, Rating, Overlay, Input } from 'react-native-elements';
 import { gql } from 'apollo-boost';
-import { useMutation } from '@apollo/react-hooks';
-
+import {/*useQuery, */useMutation } from '@apollo/react-hooks';
 
 const POST_PICTURE_MUTATION = gql`
   mutation PostPictureMutation($file: PictureFile) {
