@@ -20,9 +20,7 @@ let schema = `
   }
 `;
 
-if (process.env.gcf !== undefined) {
-  schema = `scalar Upload\n\n` + schema
-}
+schema = `scalar Upload\n\n` + schema
 
 // Construct a schema, using GraphQL schema language
 const typeDefs = gql(schema);
