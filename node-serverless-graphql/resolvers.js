@@ -1,3 +1,5 @@
+const getCarbonFootprintFromImage = require('./carbon-footprint/carbon_footprint_calculation');
+
 const resolvers = {
   Query: {
     _: () => {

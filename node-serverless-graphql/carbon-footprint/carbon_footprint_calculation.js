@@ -1,6 +1,6 @@
 const vision = require('@google-cloud/vision');
 const axios = require('axios');
-const credentials = require('./carbon-7fbf76411514.json');
+const credentials = require('../credentials/carbon-7fbf76411514.json');
 const mongooseQueries = require('./mongoose_queries');
 
 // TODO modify into generator/ yield
