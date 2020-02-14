@@ -8,6 +8,7 @@ const resolvers = {
   Mutation: {
     postPicture: async (parent, { file }, context) => {
       // if (!context.user) {
+      // Throw a 403 error instead of "ERROR", to provide more meaning to clients
       //   throw new Error('you must be logged in');
       // }
 
