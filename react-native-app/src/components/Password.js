@@ -6,7 +6,7 @@ const Password = React.forwardRef((props, ref) => {
   return (
     <Input
       ref={ref}
-      label={'Password'}
+      // label={'Password'}
       autoCorrect={false}
       autoCapitalize={'none'}
       placeholder="Password"
@@ -15,7 +15,7 @@ const Password = React.forwardRef((props, ref) => {
       secureTextEntry={true}
       returnKeyType={'join'}
       onSubmitEditing={submitHandler}
-      containerStyle={{marginBottom:15}}
+      containerStyle={{ marginBottom: 15 }}
     />
   );
 });

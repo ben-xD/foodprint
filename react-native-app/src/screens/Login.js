@@ -20,21 +20,21 @@ export default Login = ({ navigation }) => {
   };
 
   return (
-    <ScrollView contentContainerStyle={{ alignItems: 'center', flex:1 }} style={{ width: '100%', height: '100%' }}>
-      <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: 150 }}>
+    <ScrollView contentContainerStyle={{ alignItems: 'center' }} style={{ width: '100%', height: '100%' }}>
+      <View style={{ alignItems: 'center', justifyContent: 'center', marginVertical: 50 }}>
         <Text h1>
           FoodPrint
         </Text>
       </View>
-      <View style={{ height:'70%', width: '80%', justifyContent:'center'  }}>
+      <View style={{ width: '80%' }}>
         <View>
           <Email nextFieldRef={passwordRef} setEmail={setEmail} email={email} />
           <Password ref={passwordRef} submitHandler={loginHandler} setPassword={setPassword} password={password} />
         </View>
       </View>
-      <View style={{ position:'absolute', bottom:156, width: '80%' }}>
+      <View style={{ width: '80%' }}>
         <Button
-          buttonStyle={{ backgroundColor: 'green' }}
+          buttonStyle={{ backgroundColor: 'green', marginVertical: 100 }}
           titleStyle={{ fontSize: 24 }}
           title="Login"
           onPress={loginHandler}
