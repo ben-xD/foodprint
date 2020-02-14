@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { TouchableOpacity, View, Text } from 'react-native';
+import { TouchableOpacity, View, Text, ActivityIndicator } from 'react-native';
 import { RNCamera } from 'react-native-camera';
 import { gql } from "apollo-boost";
 import { useMutation } from "@apollo/react-hooks";
 import ErrorMessage from "../components/ErrorMessage";
+import { StyleSheet } from 'react-native';
 
 
 // GraphQL schema for picture posting mutation
@@ -91,8 +92,8 @@ const Camera = ({ route, navigation }) => {
           buttonNegative: 'Cancel',
         }}
       >
-        {({ camera, status, recordAudioPermissionStatus }) => {
-          if (status !== 'READY') { return <Text>Not ready</Text>; }
+        {({ camera, status }) => {
+          if (status !== 'READY') { return <ActivityIndicator />; }
           return (
             <View style={{ flex: 1 }}>
               <ErrorMessage
@@ -101,7 +102,7 @@ const Camera = ({ route, navigation }) => {
                 meal={meal}
                 setMeal={setMeal}
               />
-              <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center', marginBottom: 50 }}>
+              <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>
                 <TouchableOpacity
                   onPress={() => takePictureHandler(camera)}
                   style={styles.capture}>
