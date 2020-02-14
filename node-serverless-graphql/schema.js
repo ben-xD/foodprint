@@ -7,6 +7,15 @@ let schema = `
   type Product {
     name: String
   }
+
+  input PictureFile {
+    base64: String
+    uri: String
+    height: Int
+    width: Int
+    pictureOrientation: Int
+    deviceOrientation: Int
+  }
  
   type CarbonFootprintReport {
     product: Product

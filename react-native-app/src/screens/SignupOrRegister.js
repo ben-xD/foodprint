@@ -10,13 +10,13 @@ export default SignupOrRegister = ({ navigation }) => {
   // };
 
   return (
-    <View style={{ width: '100%', height: '100%', alignItems: 'center' }}>
-      <View style={{ alignItems: 'center', justifyContent: 'center', marginVertical: 50 }}>
+    <View style={{ flex:1, alignItems: 'center' }}>
+      <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: 150 }}>
         <Text h1>
           FoodPrint
         </Text>
       </View>
-      <View style={{ width: '80%', position: 'absolute', bottom: 48 }}>
+      <View style={{ width: '80%', position:'absolute', bottom:100 }}>
         <View>
           {/* <Button
             containerStyle={{ marginVertical: 8 }}

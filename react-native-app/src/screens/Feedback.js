@@ -1,53 +1,36 @@
 import React, { useEffect, useState } from 'react';
 import { View, Image } from 'react-native';
-import { Text, Button, Rating, Overlay, Input } from 'react-native-elements';
-import { gql } from 'apollo-boost';
-import { useMutation } from '@apollo/react-hooks';
+import { Text, Button, Rating } from 'react-native-elements';
+import ErrorMessage from '../components/ErrorMessage';
 
-
-// GraphQL schema for picture posting mutation
-const POST_PICTURE_MUTATION = gql`
-  mutation PostPictureMutation($file: Upload!) {
-    postPicture(file: $file) {
-      product {
-        name
-      }
-    }
-  }
-`;
-
-// GraphQL schema for correction mutation
-const POST_CORRECTION_MUTATION = gql`
-  mutation PostCorrectionMutation($name: String!) {
-    postCorrection(name: $name) {
-      product {
-        name
-      }
-      carbonFootprintPerKg
-    }
-  }
-`;
 
 const Feedback = ({ route, navigation }) => {
 
   const [isVisible, setVisibility] = useState(false);
-  const [meal, setMeal] = useState({});
-  const { image } = route.params;
-  const [correctedName, setCorrectedName] = useState(null);
-  const [postPictureMutation, { loading: pictureLoading, error: pictureError, data: pictureData }] = useMutation(POST_PICTURE_MUTATION);
-  const [postCorrection, { loading: correctionLoading, error: correctionError, data: correctionData }] = useMutation(POST_CORRECTION_MUTATION);
+  console.log({ 'route': route.params })
+  const [meal, setMeal] = useState(route.params.meal);
 
   const calculateRating = (carbonFootprint) => {
-    if (carbonFootprint < 4) {
+    if (carbonFootprint < 2) {
       return 5;
-    } else if (carbonFootprint < 8) {
+    } else if (carbonFootprint < 4) {
+      return 4.5;
+    } else if (carbonFootprint < 6) {
       return 4;
-    } else if (carbonFootprint < 12) {
+    } else if (carbonFootprint < 8) {
+      return 3.5;
+    } else if (carbonFootprint < 10) {
       return 3;
-    } else if (carbonFootprint < 16) {
+    } else if (carbonFootprint < 12) {
+      return 2, 5;
+    } else if (carbonFootprint < 14) {
       return 2;
-    } else if (carbonFootprint < 20) {
+    } else if (carbonFootprint < 16) {
+      return 1.5;
+    } else if (carbonFootprint < 18) {
       return 1;
+    } else if (carbonFootprint < 20) {
+      return 0.5;
     } else {
       return 0;
     }
@@ -95,88 +78,38 @@ const Feedback = ({ route, navigation }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [correctionData]);
 
-  // Respond to changes in the image
-  useEffect(() => {
-    const classifyPicture = async () => {
-      try {
-        await postPictureMutation({ variables: { file: image } });
-      } catch (err) {
-        console.warn({ err });
-      }
-    };
-    if (image) {
-      setMeal({
-        ...meal,
-        uri: image.uri,
-      });
-      classifyPicture();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [image]);
+  console.log({ meal });
 
   return (
     <View style={{ flex: 1 }}>
-      <Overlay
+      <ErrorMessage
         isVisible={isVisible}
-        onBackdropPress={() => setVisibility(false)}
-      >
-        <View style={{ flex: 1 }}>
-          <View style={{ flexDirection: 'row', flex: 2, alignItems: 'center', justifyContent: 'center' }}>
-            <View style={{ flex: 1 }} />
-            <Text h3 style={{ flex: 5, textAlign: 'center' }}>We're sorry we couldn't find your item...</Text>
-            <View style={{ flex: 1 }} />
-          </View>
-          <View style={{ flex: 2, alignItems: 'center', justifyContent: 'center' }}>
-            <Image
-              style={{ height: 200, width: 200 }}
-              source={{ uri: 'https://mir-s3-cdn-cf.behance.net/project_modules/disp/fc4a1059120725.5a15c9fa08f78.gif' }}
-            />
-          </View>
-          <View style={{ flexDirection: 'row', flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <View style={{ flex: 1 }} />
-            <Text style={{ fontSize: 18, flex: 4, textAlign: 'center' }}>Let us know what it was, so we can improve our
-                app:</Text>
-            <View style={{ flex: 1 }} />
-          </View>
-          <View style={{ flex: 1.5, flexDirection: 'row' }}>
-            <View style={{ flex: 1 }} />
-            <View style={{ flex: 4, flexDirection: 'column', justifyContent: 'center' }}>
-              <Input
-                placeholder="e.g. Cucumber"
-                onChangeText={value => setCorrectedName(value)}
-                onSubmitEditing={() => {
-                  handleCorrection(correctedName)
-                  setVisibility(false);
-                }}
-              />
-              <View style={{ height: 50 }} />
-            </View>
-            <View style={{ flex: 1 }} />
-          </View>
+        setVisibility={setVisibility}
+        meal={meal}
+        setMeal={setMeal}
+      />
+      <View style={{ flex: 1, justifyContent: 'center' }}>
+        <View style={{
+          flex: 4,
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: 'white',
+          margin: 10,
+          marginTop: 100,
+          marginBottom: 30
+        }}>
+          <Image
+            style={{ height: 350, width: 350 }}
+            source={{ uri: meal.uri }}
+          />
+          <Text h2 style={{ marginTop: 20, marginBottom: 10 }}>{meal.description}</Text>
+          <Rating
+            readonly
+            startingValue={calculateRating(meal.score)}
+          />
+          <Text style={{ fontSize: 18, margin: 10 }}>{meal.score}kg of CO2 eq/kg</Text>
         </View>
-      </Overlay>
-
-
-      <View style={{ flex: 1 }} />
-      <View style={{ flex: 3.5, alignItems: 'center', justifyContent: 'center', backgroundColor: 'white' }}>
-        <Image
-          style={{ height: 200, width: 200 }}
-          source={{ uri: meal.uri }}
-        />
-        <View style={{ height: 10 }} />
-        <Text h2>{meal.description}</Text>
-        <View style={{ height: 10 }} />
-        <Rating
-          readonly
-          startingValue={calculateRating(meal.score)}
-        />
-        <View style={{ height: 10 }} />
-        <Text style={{ fontSize: 18 }}>{meal.score}kg of CO2 eq/kg</Text>
-      </View>
-      <View style={{ flex: 0.5 }} />
-      <View style={{ flex: 2, flexDirection: 'row' }}>
-        <View style={{ flex: 1 }} />
-        <View style={{ flex: 4, flexDirection: 'column' }}>
+        <View style={{ flex: 1, flexDirection: 'column', marginLeft: 50, marginRight: 50 }}>
           <Button
             buttonStyle={{ backgroundColor: 'darkred' }}
             titleStyle={{ fontSize: 24 }}
@@ -184,7 +117,6 @@ const Feedback = ({ route, navigation }) => {
             onPress={() => setVisibility(true)}
           />
         </View>
-        <View style={{ flex: 1 }} />
       </View>
     </View>
   );

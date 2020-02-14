@@ -1,13 +1,73 @@
-import React from 'react';
-import { StyleSheet, TouchableOpacity, View, Text } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { TouchableOpacity, View, Text } from 'react-native';
 import { RNCamera } from 'react-native-camera';
+import { gql } from "apollo-boost";
+import { useMutation } from "@apollo/react-hooks";
+import ErrorMessage from "../components/ErrorMessage";
+
+
+// GraphQL schema for picture posting mutation
+const POST_PICTURE_MUTATION = gql`
+  mutation PostPictureMutation($file: PictureFile) {
+    postPicture(file: $file) {
+      product {
+        name
+      }
+      carbonFootprintPerKg
+    }
+  }
+`;
 
 const Camera = ({ route, navigation }) => {
 
+  const [isVisible, setVisibility] = useState(false);
+  const [uri, setUri] = useState({});
+  const [meal, setMeal] = useState({});
+  const [postPictureMutation, { loading: pictureLoading, error: pictureError, data: pictureData }] = useMutation(POST_PICTURE_MUTATION)
+
+  // Respond to changes in picture data
+  useEffect(() => {
+    if (pictureData) {
+      console.log({ pictureData });
+      // If no carbon footprint was found, show the error correction overlay
+      if (pictureData.postPicture.carbonFootprintPerKg === null) {
+        setVisibility(true);
+      } else {
+        const mealObject = {
+          uri,
+          score: pictureData.postPicture.carbonFootprintPerKg,
+          description: pictureData.postPicture.product.name,
+        }
+        console.log({ mealObject });
+        console.log('Navigating to feedback directly...');
+        navigation.navigate('Feedback', { meal: mealObject });
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pictureData]);
+
+  // Respond to changes in meal (indicating corrected classification)
+  useEffect(() => {
+    // If score is set, navigate to feedback screen
+    if (meal.score !== undefined) {
+      console.log({ meal });
+      const mealObject = {
+        uri,
+        score: meal.score,
+        description: meal.description,
+      }
+      console.log({ mealObject });
+      console.log('Navigating to feedback following correction...');
+      navigation.navigate('Feedback', { meal: mealObject });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [meal]);
+
   const takePictureHandler = async (camera) => {
     const options = { quality: 0.5, base64: true };
-    const data = await camera.takePictureAsync(options);
-    navigation.navigate('Feedback', { image: data });
+    const image = await camera.takePictureAsync(options);
+    setUri(image.uri);
+    await postPictureMutation({ variables: { file: image } });
   };
 
   const barCodeHandler = ({ data, rawData, type, bounds }) => {
@@ -34,10 +94,19 @@ const Camera = ({ route, navigation }) => {
         {({ camera, status, recordAudioPermissionStatus }) => {
           if (status !== 'READY') { return <Text>Not ready</Text>; }
           return (
-            <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>
-              <TouchableOpacity
-                onPress={() => takePictureHandler(camera)}
-                style={styles.capture} />
+            <View style={{ flex: 1 }}>
+              <ErrorMessage
+                isVisible={isVisible}
+                setVisibility={setVisibility}
+                meal={meal}
+                setMeal={setMeal}
+              />
+              <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center', marginBottom: 50 }}>
+                <TouchableOpacity
+                  onPress={() => takePictureHandler(camera)}
+                  style={styles.capture}>
+                </TouchableOpacity>
+              </View>
             </View>
           );
         }}
