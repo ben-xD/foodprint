@@ -24,7 +24,7 @@ export default Login = ({ navigation }) => {
       <View style={{ alignItems: 'center', justifyContent: 'center', marginVertical: 50 }}>
         <Text h1>
           FoodPrint
-            </Text>
+        </Text>
       </View>
       <View style={{ width: '80%' }}>
         <View>

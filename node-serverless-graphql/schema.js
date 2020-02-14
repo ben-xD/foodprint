@@ -7,6 +7,15 @@ let schema = `
   type Product {
     name: String
   }
+
+  input PictureFile {
+    base64: String
+    uri: String
+    height: Int
+    width: Int
+    pictureOrientation: Int
+    deviceOrientation: Int
+  }
  
   type CarbonFootprintReport {
     product: Product
@@ -19,7 +28,8 @@ let schema = `
   }
   
   type Mutation {
-    postPicture(file: Upload!): CarbonFootprintReport
+    postPicture(file: PictureFile): CarbonFootprintReport
+    postCorrection(name: String!): CarbonFootprintReport
   }
 `;
 

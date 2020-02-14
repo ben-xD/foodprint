@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View } from 'react-native';
+import { View, SafeAreaView } from 'react-native';
 import { Button, Input, Text } from 'react-native-elements';
 import { ScrollView } from 'react-native-gesture-handler';
 import auth from '@react-native-firebase/auth';
@@ -36,26 +36,27 @@ export default Signup = () => {
   };
 
   return (
-    <ScrollView contentContainerStyle={{ alignItems: 'center' }} style={{ width: '100%', height: '100%' }}>
-      <View style={{ alignItems: 'center', justifyContent: 'center', marginVertical: 50 }}>
-        <Text h1>
-          FoodPrint
+    <SafeAreaView>
+
+      <ScrollView contentContainerStyle={{ alignItems: 'center' }} style={{ width: '100%', height: '100%' }}>
+        <View style={{ alignItems: 'center', justifyContent: 'center', marginVertical: 16 }}>
+          <Text h1>
+            FoodPrint
           </Text>
-      </View>
-      <View style={{ width: '80%' }}>
-        <View>
-          <Email nextFieldRef={passwordRef} setEmail={setEmail} email={email} />
-          <Password ref={passwordRef} submitHandler={signUpHandler} setPassword={setPassword} password={password} />
         </View>
-      </View>
-      <View style={{ width: '80%' }}>
-        <Button
-          buttonStyle={{ backgroundColor: 'green', marginVertical: 100 }}
-          titleStyle={{ fontSize: 24 }}
-          title="Join"
-          onPress={signUpHandler}
-        />
-      </View>
-    </ScrollView>
+        <View style={{ width: '80%' }}>
+          <View>
+            <Email nextFieldRef={passwordRef} setEmail={setEmail} email={email} />
+            <Password ref={passwordRef} submitHandler={signUpHandler} setPassword={setPassword} password={password} />
+            <Button
+              buttonStyle={{ backgroundColor: 'green', marginVertical: 16 }}
+              titleStyle={{ fontSize: 24 }}
+              title="Join"
+              onPress={signUpHandler}
+            />
+          </View>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 };

@@ -14,6 +14,8 @@ import Home from './src/containers/Home';
 import { AuthContext } from './src/store/Auth';
 import auth from '@react-native-firebase/auth';
 import Config from 'react-native-config';
+import { GoogleSignin } from '@react-native-community/google-signin';
+import { firebase } from '@react-native-firebase/auth';
 
 const Stack = createStackNavigator();
 
@@ -89,6 +91,18 @@ const App = () => {
 
   const authContext = React.useMemo(
     () => ({
+      signInWithGoogle: async () => {
+        await GoogleSignin.configure({
+          scopes: [],
+          webClientId: '219082342827-8deros51ih3eb4lu64bkk9o6o86tcbff.apps.googleusercontent.com',
+        });
+
+        const { accessToken, idToken } = await GoogleSignin.signIn();
+        const credential = firebase.auth.GoogleAuthProvider.credential(idToken, accessToken);
+        await firebase.auth().signInWithCredential(credential);
+        await AsyncStorage.setItem('userIsLoggedIn', JSON.stringify(true));
+        dispatch({ type: 'SIGN_IN', accessToken });
+      },
       signIn: async ({ email, password }) => {
         try {
           const userCredential = await auth().signInWithEmailAndPassword(email, password);
@@ -106,7 +120,7 @@ const App = () => {
           else { return console.error(e); }
         }
         const token = await auth().currentUser.getIdToken();
-        await AsyncStorage.setItem('userIsLoggedIn', token);
+        await AsyncStorage.setItem('userIsLoggedIn', JSON.stringify(true));
         dispatch({ type: 'SIGN_IN', token });
       },
       signOut: () => {
@@ -132,7 +146,7 @@ const App = () => {
         }
         const token = await auth().currentUser.getIdToken();
         console.log({ token });
-        await AsyncStorage.setItem('userToken', token);
+        await AsyncStorage.setItem('userIsLoggedIn', JSON.stringify(true));
         dispatch({ type: 'SIGN_IN', token });
       },
     }),

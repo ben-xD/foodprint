@@ -1,46 +1,59 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, SafeAreaView } from 'react-native';
 import { Text, Button } from 'react-native-elements';
 import Config from 'react-native-config';
+import AntDesign from 'react-native-vector-icons/AntDesign'
+import { AuthContext } from '../store/Auth';
+import { useState } from 'react';
 
 
 export default SignupOrRegister = ({ navigation }) => {
-  // const signInWithGoogle = () => {
-  //   console.log('Google sign in not implemented');
-  // };
+  const { signInWithGoogle } = React.useContext(AuthContext);
 
   return (
-    <View style={{ width: '100%', height: '100%', alignItems: 'center' }}>
-      <View style={{ alignItems: 'center', justifyContent: 'center', marginVertical: 50 }}>
+    <SafeAreaView style={{ justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+      <View style={{ position: 'absolute', top: 32, alignItems: 'center', marginTop: 32 }}>
         <Text h1>
           FoodPrint
         </Text>
       </View>
-      <View style={{ width: '80%', position: 'absolute', bottom: 48 }}>
+      <View style={{ width: '80%', }}>
         <View>
-          {/* <Button
+          <Button
+            iconContainerStyle={{ marginRight: 24 }}
+            icon={
+              <AntDesign
+                style={{ paddingRight: 5 }}
+                name="google"
+                size={28}
+                color="black"
+              />
+            }
             containerStyle={{ marginVertical: 8 }}
-            buttonStyle={{ backgroundColor: 'grey' }}
-            titleStyle={{ fontSize: 24 }}
-            title="Login with Google"
-            onPress={() => signInWithGoogle()}
-          /> */}
+            buttonStyle={{ backgroundColor: 'white' }}
+            titleStyle={{ fontSize: 24, color: 'black' }}
+            title="Join using Google"
+            onPress={signInWithGoogle}
+          />
           <Button
             containerStyle={{ marginVertical: 8 }}
             buttonStyle={{ backgroundColor: 'green' }}
             titleStyle={{ fontSize: 24 }}
-            title="Register"
+            title="Join using email"
             onPress={() => navigation.navigate('Signup')}
           />
-          <Button
-            title="Log in"
-            titleStyle={{ color: 'green', fontSize: 24 }}
-            onPress={() => navigation.navigate('Login')}
-            type="clear"
-          />
+          <View style={{ marginVertical: 12 }}>
+            <Text style={{ fontSize: 18, textAlign: 'center', color: 'grey' }}>Existing user?</Text>
+            <Button
+              title="LOGIN"
+              titleStyle={{ color: 'green', fontSize: 24 }}
+              onPress={() => navigation.navigate('Login')}
+              type="clear"
+            />
+          </View>
         </View>
       </View>
-    </View >
+    </SafeAreaView >
   );
 }
   ;
