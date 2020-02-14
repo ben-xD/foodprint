@@ -1,17 +1,11 @@
-const {gql} = require('apollo-server');
+const { gql } = require('apollo-server');
 
 let schema = `
+  scalar Upload
+
+
   type Product {
     name: String
-  }
-
-  input PictureFile {
-    base64: String
-    uri: String
-    height: Int
-    width: Int
-    pictureOrientation: Int
-    deviceOrientation: Int
   }
  
   type CarbonFootprintReport {
@@ -29,10 +23,6 @@ let schema = `
     postCorrection(name: String!): CarbonFootprintReport
   }
 `;
-
-// if (process.env.gcf !== undefined) {
-//   schema = `scalar Upload\n\n` + schema
-// }
 
 // Construct a schema, using GraphQL schema language
 const typeDefs = gql(schema);

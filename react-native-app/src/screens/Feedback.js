@@ -2,16 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { View, Image } from 'react-native';
 import { Text, Button, Rating, Overlay, Input } from 'react-native-elements';
 import { gql } from 'apollo-boost';
-import {/*useQuery, */useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/react-hooks';
+
 
 // GraphQL schema for picture posting mutation
 const POST_PICTURE_MUTATION = gql`
-  mutation PostPictureMutation($file: PictureFile) {
+  mutation PostPictureMutation($file: Upload!) {
     postPicture(file: $file) {
       product {
         name
       }
-      carbonFootprintPerKg
     }
   }
 `;
@@ -55,15 +55,15 @@ const Feedback = ({ route, navigation }) => {
 
   // Handle correction from input field
   const handleCorrection = (name) => {
-    console.log({'Corrected name': name});
+    console.log({ 'Corrected name': name });
     postCorrectionFunction(name);
   }
 
   // Post correction mutation to backend
   const postCorrectionFunction = async (correctedName) => {
     try {
-      console.log({'Sending': correctedName});
-      await postCorrection({ variables: { name: correctedName} });
+      console.log({ 'Sending': correctedName });
+      await postCorrection({ variables: { name: correctedName } });
     } catch (err) {
       console.warn({ err });
     }
@@ -72,7 +72,7 @@ const Feedback = ({ route, navigation }) => {
   // Respond to changes in picture data
   useEffect(() => {
     if (pictureData) {
-      console.log({'pictureData': pictureData});
+      console.log({ 'pictureData': pictureData });
       setMeal({
         ...meal,
         score: pictureData.postPicture.carbonFootprintPerKg,
@@ -85,7 +85,7 @@ const Feedback = ({ route, navigation }) => {
   // Respond to changes in correction data (following correction)
   useEffect(() => {
     if (correctionData) {
-      console.log({'correctionData': correctionData});
+      console.log({ 'correctionData': correctionData });
       setMeal({
         ...meal,
         score: correctionData.postCorrection.carbonFootprintPerKg,

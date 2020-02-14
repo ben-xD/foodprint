@@ -1,24 +1,35 @@
+const mongoose = require('mongoose');
 const config = require('./config');
 
-const mongoose = require('mongoose');
-mongoose.connect(config.dbServer, {useNewUrlParser: true, useUnifiedTopology: true});
+let carbonSchema;
 
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function () {
-  // we're connected!
-});
+const connect = () => {
+  mongoose.connect(config.dbServer, { useNewUrlParser: true, useUnifiedTopology: true });
 
-const carbonSchema = new mongoose.Schema({
-  item: String,
-  carbonpkilo: Number
-}, {collection: 'carbon'});
+  const db = mongoose.connection;
+  db.on('error', console.error.bind(console, 'connection error:'));
+  db.once('open', () => {
+    // we're connected!
+  });
+};
 
-const CarbonModel = mongoose.model('Carbon', carbonSchema);
+const getCarbonFootprintModel = () => {
+  if (!carbonSchema) {
+    carbonSchema = new mongoose.Schema({
+      item: String,
+      carbonpkilo: Number,
+    }, { collection: 'carbon' });
+  }
 
-module.exports = CarbonModel;
+  return mongoose.model('Carbon', carbonSchema);
+};
 
-// Example query
-// CarbonModel.findOne({item: /fish/}, (err, items) => {
-//   console.log(items.carbonpkilo)
-// });
+const disconnect = () => {
+  mongoose.disconnect((err) => {
+    if (err) {
+      console.error(err);
+    }
+  });
+};
+
+module.exports = { connect, disconnect, getCarbonFootprintModel };
