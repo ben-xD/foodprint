@@ -6,7 +6,6 @@ const mongooseQueries = require('./mongoose_queries');
 // TODO modify into generator/ yield
 
 const searchData = async (label) => {
-  mongooseQueries.connect();
   const carbonModel = mongooseQueries.getCarbonFootprintModel();
   let itemList;
   try {
@@ -43,7 +42,6 @@ const nextLayerSearch = async (labels) => {
     conceptResponse = conceptResponse.data.edges;
 
     console.log({ conceptResponse });
-
     for (let j = 0; j < conceptResponse.length; j += 1) {
       const concept = conceptResponse[j].end.label;
       const carbonFootprint = await searchData(concept);
@@ -89,6 +87,7 @@ const getCarbonFootprintFromImage = async (image) => {
   const imageLabels = await getImageLabels(image);
 
   // Attempt to find the labels in the database
+  mongooseQueries.connect();
   try {
     const { item, carbonFootprintPerKg } = await firstLayerSearch(imageLabels);
     return { item, carbonFootprintPerKg };
@@ -98,9 +97,11 @@ const getCarbonFootprintFromImage = async (image) => {
     // Call ConceptNet
     const response = await nextLayerSearch(imageLabels);
     if (response.carbonFootprintPerKg) {
+      mongooseQueries.disconnect();
       return response;
     }
   }
+  mongooseQueries.disconnect();
   return {
     item: imageLabels[0],
     carbonFootprintPerKg: undefined,
