@@ -3,6 +3,11 @@
 - [GraphQL with GCF Setup](https://github.com/apollographql/apollo-server/tree/master/packages/apollo-server-cloud-functions)
 - [GraphQL Tutorial](https://www.howtographql.com/graphql-js/1-getting-started/)
 
+### Run scripts
+NPM run scripts are shortcuts for running programs.
+- start: Run this to run without using the chrome debugger.
+- debug: Run this to be able to open the chrome debugger, which is more readable. To open the debugger, open chrome at url `chrome://inspect`, then click `Open dedicated DevTools for Node`. Also,  this will automatically reload the server when you change files.
+
 ### Deploy
 
 1. From the `node-serverless-graphql` directory, run
