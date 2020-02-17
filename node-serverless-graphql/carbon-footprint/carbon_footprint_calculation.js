@@ -3,6 +3,8 @@ const axios = require('axios');
 const credentials = require('../credentials/carbon-7fbf76411514.json');
 const mongooseQueries = require('./mongoose_queries');
 const catergorisedCarbonValues = require("./categorisedCarbonValues.json");
+const MAX_LENGTH_OF_NEXT_LAYER = 5;
+const MAX_NUMBER_OF_CONCEPTS = 10;
 // TODO modify into generator/ yield
 
 // Function that tries to find a label in the DB.
@@ -77,10 +79,10 @@ const oneLayerSearch = async (labels) => {
 const getNextLayer = async (labels) => {
   const nextConceptResponse = [];
   for (let i = 0; i < labels.length; i += 1) {
-    let conceptResponse = await axios.get(`http://api.conceptnet.io/query?start=/c/en/${labels[i]}&rel=/r/IsA&limit=5`);
+    let conceptResponse = await axios.get(`http://api.conceptnet.io/query?start=/c/en/${labels[i]}&rel=/r/IsA&limit=${MAX_NUMBER_OF_CONCEPTS}`);
     conceptResponse = conceptResponse.data.edges;
 
-    for (let j = 0; j < conceptResponse.length; j += 1) {
+    for (let j = 0; j < conceptResponse.length && nextConceptResponse.length < MAX_LENGTH_OF_NEXT_LAYER; j += 1) {
       const concept = conceptResponse[j].end.label;
       if (await isConceptValid(concept)){
         nextConceptResponse.push(concept);
@@ -109,19 +111,19 @@ const isConceptValid = async (concept) => {
     return false;
   }
 
-  let isAResponse = await axios.get(`http://api.conceptnet.io/query?start=/c/en/${concept}&rel=/r/IsA&limit=10`);
+  let isAResponse = await axios.get(`http://api.conceptnet.io/query?start=/c/en/${concept}&rel=/r/IsA&limit=${MAX_NUMBER_OF_CONCEPTS}`);
   isA = getLabelsFromResponse(isAResponse);
-  if (isA.includes("food") || isA.includes("fruit")){
+  if (isA.includes("food") || isA.includes("a food")|| isA.includes("fruit")){
     return true;
   }
 
-  let usedForResponse = await axios.get(`http://api.conceptnet.io/query?start=/c/en/${concept}&rel=/r/UsedFor&limit=10`);
+  let usedForResponse = await axios.get(`http://api.conceptnet.io/query?start=/c/en/${concept}&rel=/r/UsedFor&limit=${MAX_NUMBER_OF_CONCEPTS}`);
   usedFor = getLabelsFromResponse(usedForResponse);
   if (usedFor.includes("eating")){
     return true;
   }
 
-  let RelatedTermsResponse = await axios.get(`http://api.conceptnet.io/query?start=/c/en/${concept}&rel=RelatedTo/r/UsedFor&limit=10`);
+  let RelatedTermsResponse = await axios.get(`http://api.conceptnet.io/query?start=/c/en/${concept}&rel=RelatedTo/r/UsedFor&limit=${MAX_NUMBER_OF_CONCEPTS}`);
   RelatedTerms = getLabelsFromResponse(RelatedTermsResponse);
   if (RelatedTerms.includes("food")){
     return true;
@@ -136,6 +138,8 @@ const isConceptValid = async (concept) => {
  };
 
 // Sends a given image to Google Vision API and returns the labels found.
+// Go to https://docs.google.com/spreadsheets/d/1MQl5HjTbkToTniYZ3w6wwPfPen9yEGbur-11XgVCIT8/edit?usp=sharing
+// to see some examples.  
 // @return List of unique label descriptions (e.g. "coffee")
 const getImageLabels = async (image) => {
   let GoogleResult = [];
@@ -189,7 +193,7 @@ const getCarbonFootprintFromImage = async (image) => {
   console.log("next layer no found");
 
   return {
-    item: labels[0],
+    item: imageLabels[0],
     carbonFootprintPerKg: undefined,
   };
 };
