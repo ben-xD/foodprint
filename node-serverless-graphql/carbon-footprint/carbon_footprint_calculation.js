@@ -5,7 +5,7 @@ const mongooseQueries = require('./mongoose_queries');
 
 // TODO modify into generator/ yield
 
-const searchData = async (label) => {
+const lookupCarbonFootprint = async (label) => {
   mongooseQueries.connect();
   const carbonModel = mongooseQueries.getCarbonFootprintModel();
   let itemList;
@@ -25,7 +25,7 @@ const searchData = async (label) => {
 
 const firstLayerSearch = async (labels) => {
   for (let i = 0; i < labels.length; i += 1) {
-    const carbonFootprintPerKg = await searchData(labels[i]);
+    const carbonFootprintPerKg = await lookupCarbonFootprint(labels[i]);
     if (carbonFootprintPerKg !== undefined) {
       return {
         item: labels[i],
@@ -46,7 +46,7 @@ const nextLayerSearch = async (labels) => {
 
     for (let j = 0; j < conceptResponse.length; j += 1) {
       const concept = conceptResponse[j].end.label;
-      const carbonFootprint = await searchData(concept);
+      const carbonFootprint = await lookupCarbonFootprint(concept);
       nextConceptResponse.push(concept);
       if (carbonFootprint !== undefined) {
         return {
@@ -109,7 +109,7 @@ const getCarbonFootprintFromImage = async (image) => {
 
 const getCarbonFootprintFromName = async (name) => {
   // Set array of name only for labels
-  let labels = [name.toLowerCase()];
+  const labels = [name.toLowerCase()];
 
   try {
     // Attempt to find the labels in the database
@@ -130,7 +130,3 @@ const getCarbonFootprintFromName = async (name) => {
 };
 
 module.exports = { getCarbonFootprintFromImage, getCarbonFootprintFromName };
-
-
-
-
