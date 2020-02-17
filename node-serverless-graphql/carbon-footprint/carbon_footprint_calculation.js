@@ -14,14 +14,12 @@ const searchData = async (label) => {
   const carbonModel = mongooseQueries.getCarbonFootprintModel();
   let itemList;
   try {
-    console.log("DB")
     await carbonModel.findOne({ item: label }, (err, items) => {
       if (err) {
         throw err;
       }
       itemList = items;
     }).exec();
-    //console.log({ itemList });
     
     return itemList.carbonpkilo;
 
@@ -66,7 +64,6 @@ const oneLayerSearch = async (labels) => {
   if (categoryResult != undefined) {
     return categoryResult;
   }
-  console.log({"cat": categoryResult})
   return {
     item: undefined,
     carbonFootprintPerKg: undefined,
@@ -178,19 +175,14 @@ const getCarbonFootprintFromImage = async (image) => {
 
   // Attempt to find the google vision labels in the database:
   const firstResponse= await oneLayerSearch(imageLabels);
-  console.log({"first  layer result": firstResponse});
   if (firstResponse.item) return { firstResponse };
-  console.log("first layer no found");
   
   // Call ConceptNet to create the next layer:
   const nextLabels = await getNextLayer(imageLabels);
-  console.log({"nextlabels": nextLabels});
 
   // Attempt to find the next layer labels in the database:
   const nextResponse = await oneLayerSearch(nextLabels);
-  console.log({"next layer result": item});
   if (nextResponse.item) return { nextResponse };
-  console.log("next layer no found");
 
   return {
     item: imageLabels[0],
@@ -210,23 +202,17 @@ const getCarbonFootprintFromImage = async (image) => {
 const getCarbonFootprintFromName = async (name) => {
   // Set array of name only for labels
   let labels = [name.toLowerCase()];
-  console.log({"labels": labels});
 
   // Attempt to find the google vision labels in the database:
   const firstResponse= await oneLayerSearch(labels);
-  console.log({"first  layer result": firstResponse});
   if (firstResponse.item) return { firstResponse };
-  console.log("first layer no found");
   
   // Call ConceptNet to create the next layer:
   const nextLabels = await getNextLayer(labels);
-  console.log({"nextlabels": nextLabels});
 
   // Attempt to find the next layer labels in the database:
   const nextResponse = await oneLayerSearch(nextLabels);
-  console.log({"next layer result": item});
   if (nextResponse.item) return { nextResponse };
-  console.log("next layer no found");
 
   return {
     item: labels[0],
