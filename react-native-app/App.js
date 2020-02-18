@@ -16,7 +16,7 @@ import auth from '@react-native-firebase/auth';
 import Config from 'react-native-config';
 import { GoogleSignin } from '@react-native-community/google-signin';
 import { firebase } from '@react-native-firebase/auth';
-import NetInfo, { useNetInfo } from "@react-native-community/netinfo";
+import NetInfo, { useNetInfo } from '@react-native-community/netinfo';
 import { useState } from 'react';
 import { Text } from 'react-native';
 import NoInternet from './src/screens/NoInternet';
@@ -90,17 +90,26 @@ const App = () => {
     };
 
     bootstrapAsync();
-    SplashScreen.hide();
+
+    (async () => {
+      await GoogleSignin.configure({
+        scopes: [],
+        webClientId: '219082342827-8deros51ih3eb4lu64bkk9o6o86tcbff.apps.googleusercontent.com',
+      });
+      SplashScreen.hide();
+    })();
   }, []);
 
   const authContext = React.useMemo(
     () => ({
+      signInAnonymously: async () => {
+        await auth().signInAnonymously();
+        const token = await auth().currentUser.getIdToken();
+        console.log({ token });
+        await AsyncStorage.setItem('userIsLoggedIn', JSON.stringify(true));
+        dispatch({ type: 'SIGN_IN', token });
+      },
       signInWithGoogle: async () => {
-        await GoogleSignin.configure({
-          scopes: [],
-          webClientId: '219082342827-8deros51ih3eb4lu64bkk9o6o86tcbff.apps.googleusercontent.com',
-        });
-
         const { accessToken, idToken } = await GoogleSignin.signIn();
         const credential = firebase.auth.GoogleAuthProvider.credential(idToken, accessToken);
         await firebase.auth().signInWithCredential(credential);
