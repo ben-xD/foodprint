@@ -4,7 +4,8 @@
   "main": "index_remote.js",
   "scripts": {
     "start": "functions-framework --target=handler --port=4000",
-    "debug": "nodemon --inspect node_modules/@google-cloud/functions-framework --port=4000 --target=handler"
+    "debug": "nodemon --inspect node_modules/@google-cloud/functions-framework --port=4000 --target=handler",
+    "deploy": "gcloud functions deploy footprint --entry-point handler --runtime nodejs10 --trigger-http"
   },
   "dependencies": {
     "@google-cloud/functions-framework": "^1.4.0",

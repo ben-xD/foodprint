@@ -16,6 +16,10 @@ import auth from '@react-native-firebase/auth';
 import Config from 'react-native-config';
 import { GoogleSignin } from '@react-native-community/google-signin';
 import { firebase } from '@react-native-firebase/auth';
+import NetInfo, { useNetInfo } from '@react-native-community/netinfo';
+import { useState } from 'react';
+import { Text } from 'react-native';
+import NoInternet from './src/screens/NoInternet';
 
 const Stack = createStackNavigator();
 
@@ -86,17 +90,26 @@ const App = () => {
     };
 
     bootstrapAsync();
-    SplashScreen.hide();
+
+    (async () => {
+      await GoogleSignin.configure({
+        scopes: [],
+        webClientId: '219082342827-8deros51ih3eb4lu64bkk9o6o86tcbff.apps.googleusercontent.com',
+      });
+      SplashScreen.hide();
+    })();
   }, []);
 
   const authContext = React.useMemo(
     () => ({
+      signInAnonymously: async () => {
+        await auth().signInAnonymously();
+        const token = await auth().currentUser.getIdToken();
+        console.log({ token });
+        await AsyncStorage.setItem('userIsLoggedIn', JSON.stringify(true));
+        dispatch({ type: 'SIGN_IN', token });
+      },
       signInWithGoogle: async () => {
-        await GoogleSignin.configure({
-          scopes: [],
-          webClientId: '219082342827-8deros51ih3eb4lu64bkk9o6o86tcbff.apps.googleusercontent.com',
-        });
-
         const { accessToken, idToken } = await GoogleSignin.signIn();
         const credential = firebase.auth.GoogleAuthProvider.credential(idToken, accessToken);
         await firebase.auth().signInWithCredential(credential);
@@ -153,6 +166,8 @@ const App = () => {
     []
   );
 
+  const netInfo = useNetInfo();
+
   return (
     <ApolloProvider client={client}>
       <AuthContext.Provider value={authContext}>
@@ -163,19 +178,21 @@ const App = () => {
               <Stack.Screen name="Loading" component={Loading} />
             ) : state.userIsLoggedIn === null ? (
               // No token found, user isn't signed in
-              <>
-                <Stack.Screen
-                  name="SignupOrRegister"
-                  component={SignupOrRegister}
-                  options={{
-                    title: 'Sign Up or Register',
-                    // When logging out, a pop animation feels intuitive
-                    animationTypeForReplace: state.isSignout ? 'pop' : 'push',
-                  }}
-                />
-                <Stack.Screen name="Login" component={Login} />
-                <Stack.Screen name="Signup" component={Signup} />
-              </>
+              !netInfo.isConnected ? <Stack.Screen name="NoInternet" component={NoInternet}></Stack.Screen >
+                :
+                <>
+                  <Stack.Screen
+                    name="SignupOrRegister"
+                    component={SignupOrRegister}
+                    options={{
+                      title: 'Sign Up or Register',
+                      // When logging out, a pop animation feels intuitive
+                      animationTypeForReplace: state.isSignout ? 'pop' : 'push',
+                    }}
+                  />
+                  <Stack.Screen name="Login" component={Login} />
+                  <Stack.Screen name="Signup" component={Signup} />
+                </>
             ) : (
                   <>
                     <Stack.Screen name="Home" component={Home} />

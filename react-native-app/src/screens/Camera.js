@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { TouchableOpacity, View, Text, ActivityIndicator } from 'react-native';
+import { TouchableOpacity, View, ActivityIndicator } from 'react-native';
 import { RNCamera } from 'react-native-camera';
-import { gql } from "apollo-boost";
-import { useMutation } from "@apollo/react-hooks";
-import ErrorMessage from "../components/ErrorMessage";
+import { gql } from 'apollo-boost';
+import { useMutation } from '@apollo/react-hooks';
+import ErrorMessage from '../components/ErrorMessage';
 import { StyleSheet } from 'react-native';
 
 
@@ -24,7 +24,8 @@ const Camera = ({ route, navigation }) => {
   const [isVisible, setVisibility] = useState(false);
   const [uri, setUri] = useState({});
   const [meal, setMeal] = useState({});
-  const [postPictureMutation, { loading: pictureLoading, error: pictureError, data: pictureData }] = useMutation(POST_PICTURE_MUTATION)
+  const [cameraIsReady, setCameraIsReady] = useState(true);
+  const [postPictureMutation, { loading: pictureLoading, error: pictureError, data: pictureData }] = useMutation(POST_PICTURE_MUTATION);
 
   // Respond to changes in picture data
   useEffect(() => {
@@ -38,7 +39,7 @@ const Camera = ({ route, navigation }) => {
           uri,
           score: pictureData.postPicture.carbonFootprintPerKg,
           description: pictureData.postPicture.product.name,
-        }
+        };
         console.log({ mealObject });
         console.log('Navigating to feedback directly...');
         navigation.navigate('Feedback', { meal: mealObject });
@@ -56,7 +57,7 @@ const Camera = ({ route, navigation }) => {
         uri,
         score: meal.score,
         description: meal.description,
-      }
+      };
       console.log({ mealObject });
       console.log('Navigating to feedback following correction...');
       navigation.navigate('Feedback', { meal: mealObject });
@@ -65,10 +66,12 @@ const Camera = ({ route, navigation }) => {
   }, [meal]);
 
   const takePictureHandler = async (camera) => {
+    setCameraIsReady(false);
     const options = { quality: 0.5, base64: true };
     const image = await camera.takePictureAsync(options);
     setUri(image.uri);
     await postPictureMutation({ variables: { file: image } });
+    setCameraIsReady(true);
   };
 
   const barCodeHandler = ({ data, rawData, type, bounds }) => {
@@ -84,7 +87,7 @@ const Camera = ({ route, navigation }) => {
         style={styles.preview}
         captureAudio={false}
         type={RNCamera.Constants.Type.back}
-        flashMode={RNCamera.Constants.FlashMode.on}
+        flashMode={RNCamera.Constants.FlashMode.off}
         androidCameraPermissionOptions={{
           title: 'Permission to use camera',
           message: 'We need your permission to use your camera',
@@ -93,7 +96,12 @@ const Camera = ({ route, navigation }) => {
         }}
       >
         {({ camera, status }) => {
-          if (status !== 'READY') { return <ActivityIndicator />; }
+          if (!cameraIsReady || status !== 'READY') {
+            return <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>
+              <ActivityIndicator
+                style={styles.noCapture} color={'white'} />
+            </View>;
+          }
           return (
             <View style={{ flex: 1 }}>
               <ErrorMessage
@@ -105,8 +113,7 @@ const Camera = ({ route, navigation }) => {
               <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>
                 <TouchableOpacity
                   onPress={() => takePictureHandler(camera)}
-                  style={styles.capture}>
-                </TouchableOpacity>
+                  style={styles.capture} />
               </View>
             </View>
           );
@@ -139,5 +146,12 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(9,9,9,0.1)',
     margin: 32,
     borderRadius: 50,
+  },
+  noCapture: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 80,
+    height: 80,
+    margin: 32,
   },
 });
