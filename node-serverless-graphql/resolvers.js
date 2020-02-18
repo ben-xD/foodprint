@@ -26,11 +26,11 @@ const resolvers = {
     },
     postCorrection: async (parent, { name }) => {
       console.log({ 'Received correction': name });
-      const [productName, carbonFootprintPerKg] = await getCarbonFootprintFromName(name);
-      console.log({ 'Returning': { productName, carbonFootprintPerKg } });
+      const {item, carbonFootprintPerKg} = await getCarbonFootprintFromName(name);
+      console.log({ 'Returning': { item, carbonFootprintPerKg } });
       return {
         product: {
-          name: productName,
+          name: item,
         },
         carbonFootprintPerKg,
       };

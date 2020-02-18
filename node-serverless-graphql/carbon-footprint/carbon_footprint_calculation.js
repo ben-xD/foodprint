@@ -10,7 +10,6 @@ const MAX_NUMBER_OF_CONCEPTS = 10;
 // Function that tries to find a label in the DB.
 // @return cabonpkilo (if found) or undefined (if not found)
 const searchData = async (label) => {
-  mongooseQueries.connect();
   const carbonModel = mongooseQueries.getCarbonFootprintModel();
   let itemList;
   try {
@@ -173,17 +172,26 @@ const getCarbonFootprintFromImage = async (image) => {
   // Get image labels from Google Vision API
   const imageLabels = await getImageLabels(image);
 
+  mongooseQueries.connect();
+  
   // Attempt to find the google vision labels in the database:
   const firstResponse= await oneLayerSearch(imageLabels);
-  if (firstResponse.item) return { firstResponse };
+  if (firstResponse.item) {
+    mongooseQueries.disconnect();
+    return { firstResponse };
+  }
   
   // Call ConceptNet to create the next layer:
   const nextLabels = await getNextLayer(imageLabels);
 
   // Attempt to find the next layer labels in the database:
   const nextResponse = await oneLayerSearch(nextLabels);
-  if (nextResponse.item) return { nextResponse };
-
+  if (nextResponse.item) {
+    mongooseQueries.disconnect();
+    return { nextResponse };
+  }
+  
+  mongooseQueries.disconnect();
   return {
     item: imageLabels[0],
     carbonFootprintPerKg: undefined,
@@ -200,20 +208,28 @@ const getCarbonFootprintFromImage = async (image) => {
 // @return CarbonFootprintReport (carbonFootprintPerKg is undefined if all the searches failed)
 
 const getCarbonFootprintFromName = async (name) => {
+  mongooseQueries.connect();
   // Set array of name only for labels
   let labels = [name.toLowerCase()];
 
   // Attempt to find the google vision labels in the database:
   const firstResponse= await oneLayerSearch(labels);
-  if (firstResponse.item) return { firstResponse };
+  if (firstResponse.item) {
+    mongooseQueries.disconnect();
+    return { firstResponse };
+  }
   
   // Call ConceptNet to create the next layer:
   const nextLabels = await getNextLayer(labels);
 
   // Attempt to find the next layer labels in the database:
   const nextResponse = await oneLayerSearch(nextLabels);
-  if (nextResponse.item) return { nextResponse };
+  if (nextResponse.item) {
+    mongooseQueries.disconnect();
+    return { nextResponse };
+  }
 
+  mongooseQueries.disconnect();
   return {
     item: labels[0],
     carbonFootprintPerKg: undefined,
