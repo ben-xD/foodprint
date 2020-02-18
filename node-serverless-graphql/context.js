@@ -20,7 +20,7 @@ const context = async ({ req }) => {
     console.log({ user });
     return { user };
   } catch (err) {
-    console.error(err);
+    // console.error(err);
     return {};
   }
 };
