@@ -12,6 +12,7 @@
     "apollo-server": "^2.9.16",
     "apollo-server-cloud-functions": "^2.9.16",
     "axios": "^0.19.2",
+    "compromise": "^13.1.0",
     "firebase": "^7.8.1",
     "firebase-admin": "^8.9.2",
     "mongoose": "^5.8.11"

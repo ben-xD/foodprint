@@ -5,6 +5,7 @@ const mongooseQueries = require('./mongoose_queries');
 const catergorisedCarbonValues = require("./categorisedCarbonValues.json");
 const MAX_LENGTH_OF_NEXT_LAYER = 5;
 const MAX_NUMBER_OF_CONCEPTS = 10;
+const nlp = require('compromise');
 // TODO modify into generator/ yield
 
 // Function that tries to find a label in the DB.
@@ -48,11 +49,14 @@ const findCategorisedLabel = (labels) => {
 // @return CarbonFootprintReport (if a label was found in a DB) or undefined (it any label was found)
 const oneLayerSearch = async (labels) => {
   for (let i = 0; i < labels.length; i += 1) {
-    if (await isConceptValid(labels[i])){
-      const carbonFootprintPerKg = await searchData(labels[i]);
+
+    const nounInLabel = getNounInString(labels[i]);
+
+    if (await isConceptValid(nounInLabel)){
+      const carbonFootprintPerKg = await searchData(nounInLabel);
       if (carbonFootprintPerKg !== undefined) {
         return {
-          item: labels[i],
+          item: nounInLabel,
           carbonFootprintPerKg,
         };
       }
@@ -99,6 +103,16 @@ const getLabelsFromResponse = (conceptResponse) => {
   }
   return labels;
 };
+
+//  Deletes the adjetives in a string
+const getNounInString = (label) => {
+  if (label.split(" ").length <= 1){
+    return label;
+  }
+  let nounsArray = nlp(label).nouns().out('array');
+  return nounsArray[0];
+}
+
 
 // Assess if a concept is valid by checking if it is related to food (this is done making use of 
 // ConceptNet relations).
