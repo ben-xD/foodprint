@@ -16,6 +16,10 @@ import auth from '@react-native-firebase/auth';
 import Config from 'react-native-config';
 import { GoogleSignin } from '@react-native-community/google-signin';
 import { firebase } from '@react-native-firebase/auth';
+import NetInfo, { useNetInfo } from "@react-native-community/netinfo";
+import { useState } from 'react';
+import { Text } from 'react-native';
+import NoInternet from './src/screens/NoInternet';
 
 const Stack = createStackNavigator();
 
@@ -153,6 +157,8 @@ const App = () => {
     []
   );
 
+  const netInfo = useNetInfo();
+
   return (
     <ApolloProvider client={client}>
       <AuthContext.Provider value={authContext}>
@@ -163,19 +169,21 @@ const App = () => {
               <Stack.Screen name="Loading" component={Loading} />
             ) : state.userIsLoggedIn === null ? (
               // No token found, user isn't signed in
-              <>
-                <Stack.Screen
-                  name="SignupOrRegister"
-                  component={SignupOrRegister}
-                  options={{
-                    title: 'Sign Up or Register',
-                    // When logging out, a pop animation feels intuitive
-                    animationTypeForReplace: state.isSignout ? 'pop' : 'push',
-                  }}
-                />
-                <Stack.Screen name="Login" component={Login} />
-                <Stack.Screen name="Signup" component={Signup} />
-              </>
+              !netInfo.isConnected ? <Stack.Screen name="NoInternet" component={NoInternet}></Stack.Screen >
+                :
+                <>
+                  <Stack.Screen
+                    name="SignupOrRegister"
+                    component={SignupOrRegister}
+                    options={{
+                      title: 'Sign Up or Register',
+                      // When logging out, a pop animation feels intuitive
+                      animationTypeForReplace: state.isSignout ? 'pop' : 'push',
+                    }}
+                  />
+                  <Stack.Screen name="Login" component={Login} />
+                  <Stack.Screen name="Signup" component={Signup} />
+                </>
             ) : (
                   <>
                     <Stack.Screen name="Home" component={Home} />

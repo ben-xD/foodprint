@@ -12,10 +12,15 @@ NPM run scripts are shortcuts for running programs.
 
 ### Deploy
 
-1. From the `node-serverless-graphql` directory, run
-   `gcloud functions deploy footprint --entry-point handler --runtime nodejs10 --trigger-http`, footprint is the name of the function on google cloud. Handler is the name of the function in code (`index.js`).
+Set-up (You need to be authenticated with a 'service account user' to use gcloud.):
+
+- `cd node-serverless-graphql` if not in the folder already.
+- Run `gcloud auth activate-service-account --key-file credentials/carbonfootprint-serverless.json`
+
+Every time you want to deploy to gcloud, replacing the old instance:
+1. From the `node-serverless-graphql` directory, run `gcloud functions deploy NAME --entry-point handler --runtime nodejs10 --trigger-http`, Replace NAME with 'foodprint', as that is what I have deployed to gcloud, and also set it on react native. NAME is the name of the function on google cloud. Handler is the name of the function in code (`index.js`).
 2. POST HTTP-requests to url returned from (1.)
-3. Run `gcloud functions delete NAME` to delete the GCF
+3. To delete, run `gcloud functions delete NAME`
 
 ### Local Testing
 
