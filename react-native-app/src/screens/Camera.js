@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { TouchableOpacity, View, Text, ActivityIndicator } from 'react-native';
+import { TouchableOpacity, View, ActivityIndicator } from 'react-native';
 import { RNCamera } from 'react-native-camera';
 import { gql } from 'apollo-boost';
 import { useMutation } from '@apollo/react-hooks';
@@ -96,7 +96,12 @@ const Camera = ({ route, navigation }) => {
         }}
       >
         {({ camera, status }) => {
-          if (!cameraIsReady || status !== 'READY') { return <ActivityIndicator />; }
+          if (!cameraIsReady || status !== 'READY') {
+            return <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>
+              <ActivityIndicator
+                style={styles.noCapture} color={'white'} />
+            </View>;
+          }
           return (
             <View style={{ flex: 1 }}>
               <ErrorMessage
@@ -141,5 +146,12 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(9,9,9,0.1)',
     margin: 32,
     borderRadius: 50,
+  },
+  noCapture: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 80,
+    height: 80,
+    margin: 32,
   },
 });
