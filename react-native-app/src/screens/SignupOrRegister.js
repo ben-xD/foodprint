@@ -64,15 +64,17 @@ export default SignupOrRegister = ({ navigation }) => {
               onPress={() => navigation.navigate('Login')}
               type="clear"
             />
-            <Button
-              disabled={isPressed}
-              title="skip"
-              titleStyle={{ color: 'grey', fontSize: 24 }}
-              onPress={handleSignInAnonymously}
-              type="clear"
-            />
           </View>
         </View>
+      </View>
+      <View style={{ position: 'absolute', bottom: 32 }}>
+        <Button
+          disabled={isPressed}
+          title="skip"
+          titleStyle={{ color: 'grey', fontSize: 24 }}
+          onPress={handleSignInAnonymously}
+          type="clear"
+        />
       </View>
     </SafeAreaView >
   );
