@@ -110,11 +110,15 @@ const App = () => {
         dispatch({ type: 'SIGN_IN', token });
       },
       signInWithGoogle: async () => {
-        const { accessToken, idToken } = await GoogleSignin.signIn();
-        const credential = firebase.auth.GoogleAuthProvider.credential(idToken, accessToken);
-        await firebase.auth().signInWithCredential(credential);
-        await AsyncStorage.setItem('userIsLoggedIn', JSON.stringify(true));
-        dispatch({ type: 'SIGN_IN', accessToken });
+        try {
+          const { accessToken, idToken } = await GoogleSignin.signIn();
+          const credential = firebase.auth.GoogleAuthProvider.credential(idToken, accessToken);
+          await firebase.auth().signInWithCredential(credential);
+          await AsyncStorage.setItem('userIsLoggedIn', JSON.stringify(true));
+          dispatch({ type: 'SIGN_IN', accessToken });
+        } catch (err) {
+          console.warn(err);
+        }
       },
       signIn: async ({ email, password }) => {
         try {
