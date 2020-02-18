@@ -84,7 +84,7 @@ const Camera = ({ route, navigation }) => {
         style={styles.preview}
         captureAudio={false}
         type={RNCamera.Constants.Type.back}
-        flashMode={RNCamera.Constants.FlashMode.on}
+        flashMode={RNCamera.Constants.FlashMode.off}
         androidCameraPermissionOptions={{
           title: 'Permission to use camera',
           message: 'We need your permission to use your camera',
