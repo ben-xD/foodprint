@@ -8,7 +8,7 @@
 NPM run scripts are shortcuts for running programs.
 
 - start: Run this to run without using the chrome debugger. This is the script that gets run in production.
-- debug: Run this to be able to open the chrome debugger, which is more readable. To open the debugger, open chrome at url `chrome://inspect`, then click `Open dedicated DevTools for Node`. Also, this will automatically reload the server when you change files.
+- debug: Run this to be able to open the chrome debugger, which is more readable. To open the debugger, open chrome at url `chrome://inspect`, then click `Open dedicated DevTools for Node`. Also, this will automatically reload the server when you change files. Having trouble running locally? You need to expose the localhost:4000 to the app, by using `adb reverse tcp:4000 tcp:4000`
 
 ### Deploy
 
