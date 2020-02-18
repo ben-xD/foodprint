@@ -18,12 +18,15 @@ export default Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const passwordRef = useRef(null);
+  const [isPressed, setIsPressed] = useState(false);
 
   const { signUp } = React.useContext(AuthContext);
 
   const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
   const signUpHandler = async () => {
+    setIsPressed(true);
+
     if (!EMAIL_REGEX.test(email)) {
       return console.warn('alert user, email invalid.');
     }
@@ -32,7 +35,8 @@ export default Signup = () => {
       return console.warn('alert user, password too short ');
     }
 
-    signUp(email, password);
+    await signUp(email, password);
+    setIsPressed(false);
   };
 
   return (
@@ -49,6 +53,7 @@ export default Signup = () => {
             <Email nextFieldRef={passwordRef} setEmail={setEmail} email={email} />
             <Password ref={passwordRef} submitHandler={signUpHandler} setPassword={setPassword} password={password} />
             <Button
+              disabled={isPressed}
               buttonStyle={{ backgroundColor: 'green', marginVertical: 16 }}
               titleStyle={{ fontSize: 24 }}
               title="Join"

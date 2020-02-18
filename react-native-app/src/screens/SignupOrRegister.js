@@ -1,14 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, SafeAreaView } from 'react-native';
 import { Text, Button } from 'react-native-elements';
-import Config from 'react-native-config';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { AuthContext } from '../store/Auth';
-import { useState } from 'react';
 
 
 export default SignupOrRegister = ({ navigation }) => {
   const { signInWithGoogle, signInAnonymously } = React.useContext(AuthContext);
+  const [isPressed, setIsPressed] = useState(false);
+
+  const handleSignInWithGoogle = async () => {
+    setIsPressed(true);
+    await signInWithGoogle();
+    setIsPressed(false);
+  };
+
+  const handleSignInAnonymously = async () => {
+    setIsPressed(true);
+    await signInAnonymously();
+    setIsPressed(false);
+  };
 
   return (
     <SafeAreaView style={{ justifyContent: 'center', alignItems: 'center', height: '100%' }}>
@@ -20,6 +31,7 @@ export default SignupOrRegister = ({ navigation }) => {
       <View style={{ width: '80%' }}>
         <View>
           <Button
+            disabled={isPressed}
             iconContainerStyle={{ marginRight: 24 }}
             icon={
               <AntDesign
@@ -33,9 +45,10 @@ export default SignupOrRegister = ({ navigation }) => {
             buttonStyle={{ backgroundColor: 'white' }}
             titleStyle={{ fontSize: 24, color: 'black' }}
             title="Join using Google"
-            onPress={signInWithGoogle}
+            onPress={handleSignInWithGoogle}
           />
           <Button
+            disabled={isPressed}
             containerStyle={{ marginVertical: 8 }}
             buttonStyle={{ backgroundColor: 'green' }}
             titleStyle={{ fontSize: 24 }}
@@ -46,14 +59,16 @@ export default SignupOrRegister = ({ navigation }) => {
             <Text style={{ fontSize: 18, textAlign: 'center', color: 'grey' }}>Existing user?</Text>
             <Button
               title="LOGIN"
+              disabled={isPressed}
               titleStyle={{ color: 'green', fontSize: 24 }}
               onPress={() => navigation.navigate('Login')}
               type="clear"
             />
             <Button
+              disabled={isPressed}
               title="skip"
               titleStyle={{ color: 'grey', fontSize: 24 }}
-              onPress={signInAnonymously}
+              onPress={handleSignInAnonymously}
               type="clear"
             />
           </View>

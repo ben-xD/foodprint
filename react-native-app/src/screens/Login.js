@@ -12,11 +12,15 @@ export default Login = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const passwordRef = useRef(null);
+  const [isPressed, setIsPressed] = useState(false);
+
 
   const { signIn } = React.useContext(AuthContext);
 
   const loginHandler = async () => {
-    signIn({ email, password });
+    setIsPressed(true);
+    await signIn({ email, password });
+    setIsPressed(false);
   };
 
   return (
@@ -34,6 +38,7 @@ export default Login = ({ navigation }) => {
       </View>
       <View style={{ width: '80%' }}>
         <Button
+          disabled={isPressed}
           buttonStyle={{ backgroundColor: 'green', marginVertical: 100 }}
           titleStyle={{ fontSize: 24 }}
           title="Login"
