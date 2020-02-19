@@ -6,7 +6,8 @@
     "start": "functions-framework --target=handler --port=4000",
     "debug": "nodemon --inspect node_modules/@google-cloud/functions-framework --port=4000 --target=handler",
     "deploy": "gcloud functions deploy footprint --entry-point handler --runtime nodejs10 --trigger-http",
-    "test": "jest"
+    "test": "jest",
+    "test:coverage": "jest  --coverage"
   },
   "dependencies": {
     "@google-cloud/functions-framework": "^1.4.0",
