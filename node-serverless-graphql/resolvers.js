@@ -15,14 +15,15 @@ const resolvers = {
       console.log({ context, parent });
       const image = new Buffer(file.base64, 'base64'); // Decode base64 of "file" to image
       console.log('Received picture');
-      const { productName, carbonFootprintPerKg } = await getCarbonFootprintFromImage(image);
-      console.log({ 'Returning': { productName, carbonFootprintPerKg } });
-      return {
+      const { item, carbonFootprintPerKg } = await getCarbonFootprintFromImage(image);
+      const response = {
         product: {
-          name: productName,
+          name: item,
         },
-        carbonFootprintPerKg: carbonFootprintPerKg,
+        carbonFootprintPerKg,
       };
+      console.log({ 'Returning': response });
+      return response;
     },
     postCorrection: async (parent, { name }) => {
       console.log({ 'Received correction': name });
