@@ -123,7 +123,7 @@ const isConceptValid = async (concept) => {
 
   let isAResponse = await axios.get(`http://api.conceptnet.io/query?start=/c/en/${concept}&rel=/r/IsA&limit=${MAX_NUMBER_OF_CONCEPTS}`);
   isA = getLabelsFromResponse(isAResponse);
-  if (isA.includes("food") || isA.includes("a food")|| isA.includes("fruit")){
+  if (isA.includes("food") || isA.includes("a food")|| isA.includes("fruit") || isA.includes("edible fruit") ){
     return true;
   }
 
@@ -230,7 +230,7 @@ const getCarbonFootprintFromName = async (name) => {
   const firstResponse= await oneLayerSearch(labels);
   if (firstResponse.item) {
     mongooseQueries.disconnect();
-    return { firstResponse };
+    return firstResponse;
   }
 
   // Call ConceptNet to create the next layer:
@@ -240,7 +240,7 @@ const getCarbonFootprintFromName = async (name) => {
   const nextResponse = await oneLayerSearch(nextLabels);
   if (nextResponse.item) {
     mongooseQueries.disconnect();
-    return { nextResponse };
+    return nextResponse;
   }
 
   mongooseQueries.disconnect();
