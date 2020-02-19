@@ -22,7 +22,7 @@ Every time you want to deploy to gcloud, replacing the old instance:
 2. POST HTTP-requests to url returned from (1.)
 3. To delete, run `gcloud functions delete NAME`
 
-### Local Testing
+### Running Locally
 
 1. Set up \$GOOGLE_APPLICATION_CREDENTIALS to point to that file
    1. Get node-serverless-graphql directory using `cd node-serverless-graphql; pwd`. Replace PROJECT_DIRECTORY in the next step with the result.
@@ -33,5 +33,10 @@ Every time you want to deploy to gcloud, replacing the old instance:
 4. In your browser, go to url specified to play around
    - Can for example base64-encode an image and send it via a mutation (see `schema.js`)
 5. Hit the serverless urls from the react native app, by running `npm run ios:local` or `npm run android:local` inside react native app.
+
+### Testing Jesting
+* Run `yarn test` run all the test or press the run button in your IDE next the test you want to run
+* Run `yarn test:coverage` to get the coverage report. It'll be saved in the coverage folder. Then open the index.html in that folder to get a nice interface.
+* More resources [Jest](https://jestjs.io/docs/en/getting-started)
 
 - [Apollo GraphQL Tutorial](https://www.apollographql.com/docs/tutorial/schema/)
