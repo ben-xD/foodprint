@@ -140,11 +140,7 @@ const App = () => {
       },
       signOut: () => {
         AsyncStorage.removeItem('userIsLoggedIn');
-        try {
-          auth().signOut();
-        } catch (err) {
-          console.log({ err });
-        }
+        auth().signOut();
         dispatch({ type: 'SIGN_OUT' });
       },
       signUp: async (email, password) => {
