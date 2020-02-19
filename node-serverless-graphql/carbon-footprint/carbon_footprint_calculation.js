@@ -192,7 +192,7 @@ const getCarbonFootprintFromImage = async (image) => {
   const firstResponse= await oneLayerSearch(imageLabels);
   if (firstResponse.item) {
     mongooseQueries.disconnect();
-    return { firstResponse };
+    return firstResponse;
   }
 
   // Call ConceptNet to create the next layer:
@@ -202,7 +202,7 @@ const getCarbonFootprintFromImage = async (image) => {
   const nextResponse = await oneLayerSearch(nextLabels);
   if (nextResponse.item) {
     mongooseQueries.disconnect();
-    return { nextResponse };
+    return nextResponse;
   }
 
   mongooseQueries.disconnect();
