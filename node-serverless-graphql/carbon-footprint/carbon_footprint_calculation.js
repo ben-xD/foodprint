@@ -3,9 +3,9 @@ const axios = require('axios');
 const credentials = require('../credentials/carbon-7fbf76411514.json');
 const mongooseQueries = require('./mongoose_queries');
 const catergorisedCarbonValues = require("./categorisedCarbonValues.json");
+const nlp = require('compromise');
 const MAX_LENGTH_OF_NEXT_LAYER = 5;
 const MAX_NUMBER_OF_CONCEPTS = 10;
-const nlp = require('compromise');
 // TODO modify into generator/ yield
 
 // Function that tries to find a label in the DB.
