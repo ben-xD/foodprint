@@ -133,7 +133,7 @@ const isConceptValid = async (concept) => {
     return true;
   }
 
-  let RelatedTermsResponse = await axios.get(`http://api.conceptnet.io/query?start=/c/en/${concept}&rel=RelatedTo/r/UsedFor&limit=${MAX_NUMBER_OF_CONCEPTS}`);
+  let RelatedTermsResponse = await axios.get(`http://api.conceptnet.io/query?start=/c/en/${concept}&rel=/r/RelatedTo&limit=${MAX_NUMBER_OF_CONCEPTS}`);
   RelatedTerms = getLabelsFromResponse(RelatedTermsResponse);
   if (RelatedTerms.includes("food")){
     return true;
