@@ -13,18 +13,14 @@ const Settings = ({ navigation }) => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <View style={{ flex: 1, flexDirection: 'row' }} />
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <View style={{ flex: 1.5, alignItems: 'center', justifyContent: 'center' }}>
         <Avatar
           size={'xlarge'}
           rounded icon={{ name: 'home' }}
           onPress={() => alert('Implement "Change avatar"')}
         />
       </View>
-      <View style={{ flex: 1, flexDirection: 'row' }} />
-      <View style={{ flex: 1, flexDirection: 'row', justify: 'flex-start', alignItems: 'center' }}>
-        <View style={{ flex: 1 }} />
-        <View style={{ flex: 5 }}>
+      <View style={{ flex: 1, justify: 'flex-start', alignItems: 'flex-start', marginHorizontal: 50 }}>
           <Button
             buttonStyle={{ flexDirection: 'row', justifyContent: 'flex-start' }}
             titleStyle={{ color: 'black', fontSize: 18 }}
@@ -53,7 +49,6 @@ const Settings = ({ navigation }) => {
             type="clear"
             onPress={signOut}
           />
-        </View>
       </View>
     </SafeAreaView>
   );
