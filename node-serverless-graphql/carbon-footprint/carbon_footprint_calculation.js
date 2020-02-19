@@ -3,9 +3,10 @@ const axios = require('axios');
 const credentials = require('../credentials/carbon-7fbf76411514.json');
 const mongooseQueries = require('./mongoose_queries');
 const catergorisedCarbonValues = require("./categorisedCarbonValues.json");
+const nlp = require('compromise');
 const MAX_LENGTH_OF_NEXT_LAYER = 5;
 const MAX_NUMBER_OF_CONCEPTS = 10;
-// TODO modify into generator/ yield
+// TODO modify into generator/yield
 
 // Function that tries to find a label in the DB.
 // @return cabonpkilo (if found) or undefined (if not found)
@@ -19,7 +20,7 @@ const searchData = async (label) => {
       }
       itemList = items;
     }).exec();
-    
+
     return itemList.carbonpkilo;
 
   } catch (err) {
@@ -48,11 +49,14 @@ const findCategorisedLabel = (labels) => {
 // @return CarbonFootprintReport (if a label was found in a DB) or undefined (it any label was found)
 const oneLayerSearch = async (labels) => {
   for (let i = 0; i < labels.length; i += 1) {
-    if (await isConceptValid(labels[i])){
-      const carbonFootprintPerKg = await searchData(labels[i]);
+
+    const nounInLabel = getNounInString(labels[i]);
+
+    if (await isConceptValid(nounInLabel)){
+      const carbonFootprintPerKg = await searchData(nounInLabel);
       if (carbonFootprintPerKg !== undefined) {
         return {
-          item: labels[i],
+          item: nounInLabel,
           carbonFootprintPerKg,
         };
       }
@@ -85,12 +89,12 @@ const getNextLayer = async (labels) => {
       }
     }
   }
-  
+
   removeDuplicates(nextConceptResponse);
   return nextConceptResponse;
 };
 
-// Parses a ConceptNet response to a list of labels. 
+// Parses a ConceptNet response to a list of labels.
 const getLabelsFromResponse = (conceptResponse) => {
   conceptResponse = conceptResponse.data.edges
   const labels = [];
@@ -100,7 +104,17 @@ const getLabelsFromResponse = (conceptResponse) => {
   return labels;
 };
 
-// Assess if a concept is valid by checking if it is related to food (this is done making use of 
+//  Deletes the adjetives in a string
+const getNounInString = (label) => {
+  if (label.split(" ").length <= 1){
+    return label;
+  }
+  let nounsArray = nlp(label).nouns().out('array');
+  return nounsArray[0];
+}
+
+
+// Assess if a concept is valid by checking if it is related to food (this is done making use of
 // ConceptNet relations).
 const isConceptValid = async (concept) => {
   if (concept.split(" ").length > 1){
@@ -128,14 +142,14 @@ const isConceptValid = async (concept) => {
   return false;
 };
 
-// Removes the duplicate labels in a list 
+// Removes the duplicate labels in a list
  const removeDuplicates = (labels) => {
   return labels.filter((a, b) => labels.indexOf(a) === b);
  };
 
 // Sends a given image to Google Vision API and returns the labels found.
 // Go to https://docs.google.com/spreadsheets/d/1MQl5HjTbkToTniYZ3w6wwPfPen9yEGbur-11XgVCIT8/edit?usp=sharing
-// to see some examples.  
+// to see some examples.
 // @return List of unique label descriptions (e.g. "coffee")
 const getImageLabels = async (image) => {
   let GoogleResult = [];
@@ -155,13 +169,13 @@ const getImageLabels = async (image) => {
     processedAnnotations.push(labelAnnotations[i].description.toLowerCase());
   }
   removeDuplicates(processedAnnotations);
-  return processedAnnotations; 
+  return processedAnnotations;
 };
 
 // ****************************************************************
 //             MAIN FUNCTION FOR POSTPICTURE REQUESTS
 // ****************************************************************
-// Given an image, 
+// Given an image,
 // 1. Calls the Google Vision API to get the labels in the image (getImageLabels)
 // 2. Tries to find a label in the DB or in the categories DB (oneLayerSearch)
 // 3. Finds the related concepts to the name (getNextLayer)
@@ -173,14 +187,14 @@ const getCarbonFootprintFromImage = async (image) => {
   const imageLabels = await getImageLabels(image);
 
   mongooseQueries.connect();
-  
+
   // Attempt to find the google vision labels in the database:
   const firstResponse= await oneLayerSearch(imageLabels);
   if (firstResponse.item) {
     mongooseQueries.disconnect();
     return { firstResponse };
   }
-  
+
   // Call ConceptNet to create the next layer:
   const nextLabels = await getNextLayer(imageLabels);
 
@@ -190,7 +204,7 @@ const getCarbonFootprintFromImage = async (image) => {
     mongooseQueries.disconnect();
     return { nextResponse };
   }
-  
+
   mongooseQueries.disconnect();
   return {
     item: imageLabels[0],
@@ -201,7 +215,7 @@ const getCarbonFootprintFromImage = async (image) => {
 // ****************************************************************
 //         MAIN FUNCTION FOR POSTCORRECTION REQUESTS
 // ****************************************************************
-// Given a name of a product, 
+// Given a name of a product,
 // 1. Tries to find the name in the DB or in the categories DB (oneLayerSearch)
 // 2. Finds the related concepts to the name (getNextLayer)
 // 3. Tries to find a related concept in the DB or in the categories DB (oneLayerSearch)
@@ -218,7 +232,7 @@ const getCarbonFootprintFromName = async (name) => {
     mongooseQueries.disconnect();
     return { firstResponse };
   }
-  
+
   // Call ConceptNet to create the next layer:
   const nextLabels = await getNextLayer(labels);
 
