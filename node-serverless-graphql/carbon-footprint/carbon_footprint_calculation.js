@@ -55,7 +55,6 @@ const oneLayerSearch = async (labels) => {
     if (await isConceptValid(nounInLabel)){
       const carbonFootprintPerKg = await searchData(nounInLabel);
       if (carbonFootprintPerKg !== undefined) {
-        console.log({nounInLabel, carbonFootprintPerKg})
         return {
           item: nounInLabel,
           carbonFootprintPerKg,
@@ -203,7 +202,6 @@ const getCarbonFootprintFromImage = async (image) => {
   const nextResponse = await oneLayerSearch(nextLabels);
   if (nextResponse.item) {
     mongooseQueries.disconnect();
-    console.log({'second': firstResponse});
     return nextResponse;
   }
 
