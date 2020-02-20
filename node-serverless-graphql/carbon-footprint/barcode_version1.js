@@ -1,23 +1,56 @@
 const axios = require('axios');
-const { getCarbonFootprintFromName } = require('./carbon_footprint_calculation');
+const { getCarbonFootprintFromName} = require('./carbon_footprint_calculation');
+const mongooseQueries = require('./mongoose_queries');
 
 //contains the key to query the Tesco API
 const options = {
     headers: {'Ocp-Apim-Subscription-Key': '6b9983f7c22d42e1a242b91c7b0cfe37'}
 };
 
-//Returns the carbon footprint of the product from its barcode
 const getCarbonFootprintFromBarcode = async (barcode) => {
-
     //get data from the barcode
     let data = await getData(barcode);
+    let product_name = data.products[0].description;
 
-    //if the product does not have ingredients listed (i.e. is not a ready made meal)
-    //pass its name directly to the getCarbonFootprintFromName function and return the result
-    let product_name;
+    //run getCarbonFootprintFromName (that might be very costly no?). if it returns a value that means the product
+    //is in the db and thus return the value.
+    let fromNameResult = await getCarbonFootprintFromName(product_name);
+    if(fromNameResult.carbonFootprintPerKg !== undefined)
+        return fromNameResult;
+
+    //if getCarbonFootprintFromName returns an undefined carbonFootprintPerKg, the product is not in the db yet, so sum
+    //up the ingredients to get the carbon footprint.
+    let result = calcCarbonFromIngredients(data);
+
+    //store the new product in the db, unless the carbonfootprintperkg is undefined
+    //mongooseQueries.connect();
+    //TODO: ADD TO MONGODB
+    //mongooseQueries.disconnect();
+
+    return result;
+
+};
+
+//Extracts data from the barcode
+//tpnb in the url can be replaced by other barcode types such as gtin, tpnb or tpnc
+const getData = async (barcode) => {
+    let url = 'https://dev.tescolabs.com/product/?tpnb='.concat(barcode);
+    let tescoResponse = await axios.get(url, options);
+    return tescoResponse.data;
+};
+
+
+//Passes the data stored in the barcode. Extracts ingredients of the product and from those calculates
+//the carbon footprint. If there are no ingredients, return undefined. (In the case of no ingredients, we have
+//already run getCarbonFootprintFromName in etCarbonFootprintFromBarcode, therefore we know this product
+//isnt in the database either.
+const calcCarbonFromIngredients = async (data) => {
+    //check whether the product has ingredients at all
     if(data.products[0].ingredients === undefined){
-        product_name = data.products[0].description; //NEED TO SOLVE THIS AS THE DESCRIPTION IS LIKE 'TESCO CHICKEN & PRAWN PAELLA'
-        return getCarbonFootprintFromName(product_name);
+        return {
+            item: data.products[0].description,
+            carbonFootprintPerKg: undefined,
+        }
     }
 
     let ingredients_raw = getIngredientList(data);
@@ -33,14 +66,6 @@ const getCarbonFootprintFromBarcode = async (barcode) => {
         carbonFootprintPerKg: carbon,
     };
 
-};
-
-//Extracts data from the barcode
-//tpnb in the url can be replaced by other barcode types such as gtin, tpnb or tpnc
-const getData = async (barcode) => {
-    let url = 'https://dev.tescolabs.com/product/?tpnb='.concat(barcode);
-    let tescoResponse = await axios.get(url, options);
-    return tescoResponse.data;
 };
 
 //Returns the ingredients (unformatted) stored in the barcode data
@@ -68,7 +93,7 @@ const delete_junk = (ingredients_raw) => {
     ingredients_raw = ingredients_raw.replace('INGREDIENTS: ', ''); //for some reason this will work on tiramisu, but not on paella
     //the string ends with '.,' delete it so that doesnt create an ingredient '.'
     ingredients_raw = ingredients_raw.replace('.,', '');
-    //replace all whitespaces after a comma so that we don't end up with an ingredient "squid   "*/
+    //replace all whitespaces after a comma so that we don't end up with an ingredient "squid   "
     ingredients_raw = ingredients_raw.replace(/\s*,\s*/g, ",");
 
     //split the string into array of ingredients
@@ -106,3 +131,4 @@ const test_function = async () => {
 };
 
 test_function();
+
