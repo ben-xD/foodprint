@@ -42,8 +42,8 @@ const FoodOverview = ({navigation}) => {
         </TouchableOpacity>
       </View>
       <ScrollView>
-        <View style={{justifyContent:'center', alignItems:'center', margin:40}}>
-          <Text style={{ fontSize: 36, marginVertical: 30, textAlign:"center"}}>Welcome to FoodPrint!</Text>
+        <View style={{justifyContent:'center', alignItems:'center', marginHorizontal:40}}>
+          <Text style={{ fontSize: 36, marginVertical: 20, textAlign:"center"}}>Welcome to FoodPrint!</Text>
           <Text style={{fontSize:20, textAlign:'center', marginTop:20}}>
             You can now know the carbon footprint of the food you buy simply by scanning its barcode or taking a picture
             of it!
