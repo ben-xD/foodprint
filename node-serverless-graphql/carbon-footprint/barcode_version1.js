@@ -24,12 +24,19 @@ const getCarbonFootprintFromBarcode = async (barcode) => {
     let ingredients = delete_junk(ingredients_raw);
     let carbon = await calculate_total_carbon(ingredients);
 
-    return carbon;
+    if (carbon === 0){
+        carbon = undefined;
+    }
+
+    return {
+        item: data.products[0].description,
+        carbonFootprintPerKg: carbon,
+    };
 
 };
 
 //Extracts data from the barcode
-//tpnb in the url can be replaced by other barcode types such as gtin or tpnc
+//tpnb in the url can be replaced by other barcode types such as gtin, tpnb or tpnc
 const getData = async (barcode) => {
     let url = 'https://dev.tescolabs.com/product/?tpnb='.concat(barcode);
     let tescoResponse = await axios.get(url, options);
@@ -57,7 +64,8 @@ const delete_junk = (ingredients_raw) => {
     //deletes everything between <>
     ingredients_raw = ingredients_raw.replace(/\<.*?\>/g, '' );
     //deletes INGREDIENTS:
-    ingredients_raw = ingredients_raw.replace('INGREDIENTS: ', '');
+    ingredients_raw = ingredients_raw.replace('INGREDIENTS: ', ''); //for some reason this wont work on tiramisu
+    ingredients_raw = ingredients_raw.replace('INGREDIENTS: ', ''); //for some reason this will work on tiramisu, but not on paella
     //the string ends with '.,' delete it so that doesnt create an ingredient '.'
     ingredients_raw = ingredients_raw.replace('.,', '');
     //replace all whitespaces after a comma so that we don't end up with an ingredient "squid   "*/
@@ -73,7 +81,7 @@ const delete_junk = (ingredients_raw) => {
 const calculate_total_carbon = async (ingredients) => {
     let total_carbon = 0;
     for(let i = 0; i < ingredients.length; i++){
-        let carbon = await getCarbonFootprintFromName(ingredients[i]).carbonFootprintPerKg; //how do i correctly access carbonfootpirngperkd???
+        let carbon = (await getCarbonFootprintFromName(ingredients[i])).carbonFootprintPerKg; //how do i correctly access carbonfootpirngperkd???
         if(carbon != undefined)
             total_carbon += carbon;
     }
@@ -85,5 +93,16 @@ const calculate_total_carbon = async (ingredients) => {
 //Sample barcodes of foods
 let pickle = '61051936';
 let paella = '84597752';
-let res = getCarbonFootprintFromBarcode(paella);
-//console.log(res);
+let orange = '50501316';
+let orange_gtin = '02130270000000';
+let tiramisu = '85053274';
+//let res = getCarbonFootprintFromBarcode(orange_gtin);
+
+const test_function = async () => {
+
+    let res = await getCarbonFootprintFromBarcode(tiramisu);
+    console.log(res);
+
+};
+
+test_function();
