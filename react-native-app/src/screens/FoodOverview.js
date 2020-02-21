@@ -9,11 +9,88 @@ import {
 } from 'react-native';
 import { Overlay } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { VictoryBar } from 'victory-native';
+import {VictoryBar, VictoryChart, VictoryAxis, VictoryStack, VictoryLine } from 'victory-native';
 
 const FoodOverview = ({ navigation }) => {
   const [food, setFood] = useState([]);
   const [isVisible, setVisibility] = useState(true);
+
+  const plantBasedData = [
+    { month: 'Mar', footprint: 13.00 },
+    { month: 'Apr', footprint: 16.50 },
+    { month: 'May', footprint: 14.25 },
+    { month: 'Jun', footprint: 19.00 },
+    { month: 'Jul', footprint: 16.50 },
+    { month: 'Aug', footprint: 13.00 },
+    { month: 'Sep', footprint: 19.00 },
+    { month: 'Oct', footprint: 19.00 },
+    { month: 'Nov', footprint: 16.50 },
+    { month: 'Dec', footprint: 13.50 },
+    { month: 'Jan', footprint: 16.50 },
+    { month: 'Feb', footprint: 14.25 },
+  ];
+
+  const eggAndDairyData = [
+    { month: 'Mar', footprint: 13.00 },
+    { month: 'Apr', footprint: 16.50 },
+    { month: 'May', footprint: 14.25 },
+    { month: 'Jun', footprint: 19.00 },
+    { month: 'Jul', footprint: 16.50 },
+    { month: 'Aug', footprint: 13.00 },
+    { month: 'Sep', footprint: 19.00 },
+    { month: 'Oct', footprint: 19.00 },
+    { month: 'Nov', footprint: 16.50 },
+    { month: 'Dec', footprint: 13.50 },
+    { month: 'Jan', footprint: 16.50 },
+    { month: 'Feb', footprint: 14.25 },
+  ];
+
+  const fishData = [
+    { month: 'Mar', footprint: 13.00 },
+    { month: 'Apr', footprint: 16.50 },
+    { month: 'May', footprint: 14.25 },
+    { month: 'Jun', footprint: 19.00 },
+    { month: 'Jul', footprint: 16.50 },
+    { month: 'Aug', footprint: 13.00 },
+    { month: 'Sep', footprint: 19.00 },
+    { month: 'Oct', footprint: 19.00 },
+    { month: 'Nov', footprint: 16.50 },
+    { month: 'Dec', footprint: 13.50 },
+    { month: 'Jan', footprint: 16.50 },
+    { month: 'Feb', footprint: 14.25 },
+  ];
+
+  const meatData = [
+    { month: 'Mar', footprint: 13.00 },
+    { month: 'Apr', footprint: 16.50 },
+    { month: 'May', footprint: 14.25 },
+    { month: 'Jun', footprint: 19.00 },
+    { month: 'Jul', footprint: 16.50 },
+    { month: 'Aug', footprint: 13.00 },
+    { month: 'Sep', footprint: 19.00 },
+    { month: 'Oct', footprint: 19.00 },
+    { month: 'Nov', footprint: 16.50 },
+    { month: 'Dec', footprint: 13.50 },
+    { month: 'Jan', footprint: 16.50 },
+    { month: 'Feb', footprint: 14.25 },
+  ];
+
+  const average = 63.67;
+
+  const userAverage = [
+    { month: 'Mar', footprint: 63.67 },
+    { month: 'Apr', footprint: 63.67 },
+    { month: 'May', footprint: 63.67 },
+    { month: 'Jun', footprint: 63.67 },
+    { month: 'Jul', footprint: 63.67 },
+    { month: 'Aug', footprint: 63.67 },
+    { month: 'Sep', footprint: 63.67 },
+    { month: 'Oct', footprint: 63.67 },
+    { month: 'Nov', footprint: 63.67 },
+    { month: 'Dec', footprint: 63.67 },
+    { month: 'Jan', footprint: 63.67 },
+    { month: 'Feb', footprint: 63.67 }
+  ];
 
   // useEffect(() => {
   //   navigation.navigate('Camera');
@@ -44,7 +121,27 @@ const FoodOverview = ({ navigation }) => {
           <MaterialCommunityIcons name="settings-outline" color={'grey'} size={50} style={{ margin:10}} />
         </TouchableOpacity>
       </View>
-      <View><VictoryBar /></View>
+      <View>
+        <VictoryChart
+          domainPadding={20}
+        >
+          <VictoryAxis
+            dependentAxis
+            label="Carbon footprint"
+          />
+          <VictoryAxis
+            label="Month"
+          />
+          <VictoryAxis/>
+          <VictoryStack colorScale={['olivedrab', 'gold', 'skyblue', 'firebrick']}>
+            <VictoryBar data={plantBasedData} x="month" y="footprint" label="Vegatables"/>
+            <VictoryBar data={eggAndDairyData} x="month" y="footprint" label="Eggs & Dairy"/>
+            <VictoryBar data={fishData} x="month" y="footprint" label="Fish"/>
+            <VictoryBar data={meatData} x="month" y="footprint" label="Meat"/>
+          </VictoryStack>
+          <VictoryLine data={userAverage} x="month" y="footprint"/>
+        </VictoryChart>
+      </View>
       <Overlay isVisible = { isVisible } onBackdropPress = {() => setVisibility(false)}>
         <ScrollView>
           <View style={{justifyContent:'center', alignItems:'center', marginHorizontal:40}}>

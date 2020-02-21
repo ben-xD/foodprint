@@ -34,7 +34,7 @@ const Feedback = ({ route, navigation }) => {
     } else {
       return 0;
     }
-  }
+  };
 
   console.log({ meal });
 
