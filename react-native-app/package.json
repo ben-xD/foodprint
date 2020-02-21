@@ -14,6 +14,7 @@
     "ios:release": "react-native run-ios --variant=release",
     "start": "react-native start",
     "test": "jest",
+    "test:debug": "jest --watch",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "a:devmenu": "adb shell input keyevent 82"
   },
@@ -52,17 +53,22 @@
   },
   "devDependencies": {
     "@babel/core": "^7.6.2",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
     "@babel/runtime": "^7.6.2",
     "@react-native-community/eslint-config": "0.0.5",
     "babel-jest": "^24.9.0",
+    "babel-preset-react-native": "^4.0.1",
     "eslint": "^6.8.0",
     "eslint-plugin-jest": "^23.7.0",
     "eslint-plugin-prettier": "^3.1.2",
+    "husky": "^4.2.3",
     "jest": "^24.9.0",
-    "metro-react-native-babel-preset": "^0.56.0"
+    "jest-react-native": "^18.0.0",
+    "metro-react-native-babel-preset": "^0.56.0",
+    "react-test-renderer": "^16.12.0"
   },
   "jest": {
-    "preset": "react-native",
+    "preset": "jest-react-native",
     "moduleFileExtensions": [
       "ts",
       "tsx",
@@ -70,6 +76,15 @@
       "jsx",
       "json",
       "node"
+    ],
+    "transformIgnorePatterns": [
+      "node_modules/(?!(jest-)?react-native|react-navigation)"
     ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn typescript && yarn lint && yarn test",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
   }
 }

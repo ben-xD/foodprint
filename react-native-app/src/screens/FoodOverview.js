@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
   Text,
@@ -6,8 +6,8 @@ import {
   Image,
   View,
   ScrollView,
+  TouchableOpacity,
 } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const FoodOverview = ({ navigation }) => {
   const [food, setFood] = useState([]);

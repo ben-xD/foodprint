@@ -1,7 +1,6 @@
 import React, { useState, useRef } from 'react';
-import { View } from 'react-native';
+import { View, ScrollView } from 'react-native';
 import { Button, Input, Text } from 'react-native-elements';
-import { ScrollView } from 'react-native-gesture-handler';
 import Password from '../components/Password';
 import Email from '../components/Email';
 import { AuthContext } from '../store/Auth';

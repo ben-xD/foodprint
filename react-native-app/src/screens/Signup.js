@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { View, SafeAreaView } from 'react-native';
+import { View, SafeAreaView, ScrollView } from 'react-native';
 import { Button, Input, Text } from 'react-native-elements';
-import { ScrollView } from 'react-native-gesture-handler';
 import auth from '@react-native-firebase/auth';
 import Password from '../components/Password';
 import Email from '../components/Email';
