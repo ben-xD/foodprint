@@ -7,11 +7,13 @@ import {
   View,
   ScrollView,
 } from 'react-native';
+import { Overlay } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { VictoryBar } from 'victory-native';
 
 const FoodOverview = ({ navigation }) => {
   const [food, setFood] = useState([]);
+  const [isVisible, setVisibility] = useState(true);
 
   // useEffect(() => {
   //   navigation.navigate('Camera');
