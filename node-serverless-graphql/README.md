@@ -18,9 +18,11 @@ Set-up (You need to be authenticated with a 'service account user' to use gcloud
 - Run `gcloud auth activate-service-account --key-file credentials/carbonfootprint-serverless.json`
 
 Every time you want to deploy to gcloud, replacing the old instance:
+
+1. Configure gcloud to deploy to London, with `gcloud config set functions/region europe-west2`
 1. From the `node-serverless-graphql` directory, run `gcloud functions deploy NAME --entry-point handler --runtime nodejs10 --trigger-http`, Replace NAME with 'foodprint', as that is what I have deployed to gcloud, and also set it on react native. NAME is the name of the function on google cloud. Handler is the name of the function in code (`index.js`).
-2. POST HTTP-requests to url returned from (1.)
-3. To delete, run `gcloud functions delete NAME`
+1. POST HTTP-requests to url returned from (1.)
+1. To delete, run `gcloud functions delete NAME`
 
 ### Running Locally
 
@@ -35,8 +37,9 @@ Every time you want to deploy to gcloud, replacing the old instance:
 5. Hit the serverless urls from the react native app, by running `npm run ios:local` or `npm run android:local` inside react native app.
 
 ### Testing Jesting
-* Run `yarn test` run all the test or press the run button in your IDE next the test you want to run
-* Run `yarn test:coverage` to get the coverage report. It'll be saved in the coverage folder. Then open the index.html in that folder to get a nice interface.
-* More resources [Jest](https://jestjs.io/docs/en/getting-started)
 
-- [Apollo GraphQL Tutorial](https://www.apollographql.com/docs/tutorial/schema/)
+- Run `yarn test` run all the test or press the run button in your IDE next the test you want to run
+- Run `yarn test:coverage` to get the coverage report. It'll be saved in the coverage folder. Then open the index.html in that folder to get a nice interface.
+- More resources [Jest](https://jestjs.io/docs/en/getting-started)
+
+* [Apollo GraphQL Tutorial](https://www.apollographql.com/docs/tutorial/schema/)
