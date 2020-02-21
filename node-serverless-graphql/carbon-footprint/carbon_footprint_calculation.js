@@ -32,15 +32,16 @@ const searchData = async (label) => {
 // @return CarbonFootprintReport (if found) or undefined (if not found)
 const findCategorisedLabel = (labels) => {
   for (let i = 0; i < labels.length; i += 1) {
-    let categoryCarbonFootprintPerKg = catergorisedCarbonValues[labels[i]]
-    if(categoryCarbonFootprintPerKg){
+    let categoryCarbonFootprintPerKg = catergorisedCarbonValues[labels[i]];
+    if(categoryCarbonFootprintPerKg !== undefined){
+      console.log(categoryCarbonFootprintPerKg);
       return {
         item: labels[i],
         categoryCarbonFootprintPerKg,
       };
     }
-    return undefined;
   }
+  return undefined;
 };
 
 // For each valid label in a list of labels (aka layer), this function tries to find it in the DB. If none of the labels
@@ -63,8 +64,8 @@ const oneLayerSearch = async (labels) => {
     }
   }
 
-  categoryResult = findCategorisedLabel(labels)
-  if (categoryResult != undefined) {
+  categoryResult = findCategorisedLabel(labels);
+  if (categoryResult !== undefined) {
     return categoryResult;
   }
   return {
@@ -84,9 +85,7 @@ const getNextLayer = async (labels) => {
 
     for (let j = 0; j < conceptResponse.length && nextConceptResponse.length < MAX_LENGTH_OF_NEXT_LAYER; j += 1) {
       const concept = conceptResponse[j].end.label;
-      if (await isConceptValid(concept)){
-        nextConceptResponse.push(concept);
-      }
+      nextConceptResponse.push(concept);
     }
   }
 
@@ -123,7 +122,7 @@ const isConceptValid = async (concept) => {
 
   let isAResponse = await axios.get(`http://api.conceptnet.io/query?start=/c/en/${concept}&rel=/r/IsA&limit=${MAX_NUMBER_OF_CONCEPTS}`);
   isA = getLabelsFromResponse(isAResponse);
-  if (isA.includes("food") || isA.includes("a food")|| isA.includes("fruit") || isA.includes("edible fruit") ){
+  if (isA.includes("food") || isA.includes("a food")|| isA.includes("fruit") || isA.includes("edible fruit") || isA.includes("friut")){
     return true;
   }
 
@@ -238,6 +237,9 @@ const getCarbonFootprintFromName = async (name) => {
 
   // Attempt to find the next layer labels in the database:
   const nextResponse = await oneLayerSearch(nextLabels);
+  console.log(nextResponse);
+  console.log("nextResponse");
+
   if (nextResponse.item) {
     mongooseQueries.disconnect();
     return nextResponse;
