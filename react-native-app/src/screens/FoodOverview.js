@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
   Text,
@@ -7,12 +7,11 @@ import {
   View,
   ScrollView,
 } from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-import { Overlay } from 'react-native-elements';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { VictoryBar } from 'victory-native';
 
-const FoodOverview = ({navigation}) => {
+const FoodOverview = ({ navigation }) => {
   const [food, setFood] = useState([]);
-  const [isVisible, setVisibility] = useState(true);
 
   // useEffect(() => {
   //   navigation.navigate('Camera');
@@ -43,6 +42,7 @@ const FoodOverview = ({navigation}) => {
           <MaterialCommunityIcons name="settings-outline" color={'grey'} size={50} style={{ margin:10}} />
         </TouchableOpacity>
       </View>
+      <View><VictoryBar /></View>
       <Overlay isVisible = { isVisible } onBackdropPress = {() => setVisibility(false)}>
         <ScrollView>
           <View style={{justifyContent:'center', alignItems:'center', marginHorizontal:40}}>
