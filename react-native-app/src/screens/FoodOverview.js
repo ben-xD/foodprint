@@ -8,7 +8,6 @@ import {
   ScrollView,
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { VictoryBar } from 'victory-native';
 
 const FoodOverview = ({ navigation }) => {
   const [food, setFood] = useState([]);
@@ -56,7 +55,6 @@ const FoodOverview = ({ navigation }) => {
           <Text style={{ fontSize: 20, textAlign: 'center', marginTop: 20 }}>
             To get started, simply click on the Camera icon in the top left corner!
           </Text>
-          <VictoryBar />
         </View>
       </ScrollView>
     </SafeAreaView>
