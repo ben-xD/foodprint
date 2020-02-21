@@ -36,48 +36,6 @@ const Feedback = ({ route, navigation }) => {
     }
   }
 
-  // Handle correction from input field
-  const handleCorrection = (name) => {
-    console.log({ 'Corrected name': name });
-    postCorrectionFunction(name);
-  }
-
-  // Post correction mutation to backend
-  const postCorrectionFunction = async (correctedName) => {
-    try {
-      console.log({ 'Sending': correctedName });
-      await postCorrection({ variables: { name: correctedName } });
-    } catch (err) {
-      console.warn({ err });
-    }
-  }
-
-  // Respond to changes in picture data
-  useEffect(() => {
-    if (pictureData) {
-      console.log({ 'pictureData': pictureData });
-      setMeal({
-        ...meal,
-        score: pictureData.postPicture.carbonFootprintPerKg,
-        description: pictureData.postPicture.product.name,
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pictureData]);
-
-  // Respond to changes in correction data (following correction)
-  useEffect(() => {
-    if (correctionData) {
-      console.log({ 'correctionData': correctionData });
-      setMeal({
-        ...meal,
-        score: correctionData.postCorrection.carbonFootprintPerKg,
-        description: correctionData.postCorrection.product.name,
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [correctionData]);
-
   console.log({ meal });
 
   return (
