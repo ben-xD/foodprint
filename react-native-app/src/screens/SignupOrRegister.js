@@ -71,7 +71,7 @@ export default SignupOrRegister = ({ navigation }) => {
         <Button
           disabled={isPressed}
           title="skip"
-          titleStyle={{ color: 'grey', fontSize: 24 }}
+          titleStyle={{ color: 'grey', fontSize: 18 }}
           onPress={handleSignInAnonymously}
           type="clear"
         />
