@@ -21,9 +21,9 @@ Set-up (You need to be authenticated with a 'service account user' to deploy to 
 Every time you want to deploy to gcloud, replacing the old instance:
 
 1. Configure gcloud to deploy to London, with `gcloud config set functions/region europe-west2`
-1. From the `node-serverless-graphql` directory, run `gcloud functions deploy NAME --entry-point handler --runtime nodejs10 --trigger-http`, Replace NAME with 'foodprint', as that is what I have deployed to gcloud, and also set it on react native. NAME is the name of the function on google cloud. Handler is the name of the function in code (`index.js`).
-1. POST HTTP-requests to url returned from (1.)
-1. To delete, run `gcloud functions delete NAME`
+2. From the `node-serverless-graphql` directory, run `gcloud functions deploy NAME --entry-point handler --runtime nodejs10 --trigger-http`, Replace NAME with 'foodprint', as that is what I have deployed to gcloud, and also set it on react native. NAME is the name of the function on google cloud. Handler is the name of the function in code (`index.js`).
+3. POST HTTP-requests to url returned from (1.)
+4. To delete, run `gcloud functions delete NAME`
 
 ### Running Locally
 
