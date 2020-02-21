@@ -134,7 +134,7 @@ def getPassword(String currentUser, String keyChain) {
 }
 
 // Taken from macOS keychain, for security purposes.
-def keychain_password = getPassword("Ben Butterworth", "foodprint_fresla_keystore")
+def keychain_password = getPassword("Ben Butterworth", "foodprint_keystore")
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -170,8 +170,8 @@ android {
             keyPassword 'android'
         }
         release {
-          if (project.hasProperty('FRESLA_UPLOAD_KEYSTORE_PATH')) {
-            storeFile file(FRESLA_UPLOAD_KEYSTORE_PATH)
+          if (project.hasProperty('FOODPRINT_UPLOAD_KEYSTORE_PATH')) {
+            storeFile file(FOODPRINT_UPLOAD_KEYSTORE_PATH)
             storePassword keychain_password
             keyAlias MYAPP_UPLOAD_KEY_ALIAS
             keyPassword keychain_password
