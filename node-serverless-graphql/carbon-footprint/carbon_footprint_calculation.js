@@ -36,7 +36,7 @@ const findCategorisedLabel = (labels) => {
     if(categoryCarbonFootprintPerKg){
       return {
         item: labels[i],
-        categoryCarbonFootprintPerKg,
+        carbonFootprintPerKg: categoryCarbonFootprintPerKg,
       };
     }
     return undefined;
