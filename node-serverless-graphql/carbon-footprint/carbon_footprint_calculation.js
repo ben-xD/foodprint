@@ -50,7 +50,11 @@ const findCategorisedLabel = (labels) => {
 const oneLayerSearch = async (labels) => {
   for (let i = 0; i < labels.length; i += 1) {
 
+    console.log(labels[i]);
+
     const nounInLabel = getNounInString(labels[i]);
+
+    console.log(nounInLabel);
 
     if (await isConceptValid(nounInLabel)){
       const carbonFootprintPerKg = await searchData(nounInLabel);
