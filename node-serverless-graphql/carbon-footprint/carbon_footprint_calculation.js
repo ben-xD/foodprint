@@ -16,6 +16,7 @@ const searchData = async (label) => {
   try {
     await carbonModel.findOne({ item: label }, (err, items) => {
       if (err) {
+        console.log(err);
         throw err;
       }
       itemList = items;
@@ -221,14 +222,14 @@ const getCarbonFootprintFromImage = async (image) => {
 // @return CarbonFootprintReport (carbonFootprintPerKg is undefined if all the searches failed)
 
 const getCarbonFootprintFromName = async (name) => {
-  mongooseQueries.connect();
+  await mongooseQueries.connect();
   // Set array of name only for labels
   const labels = [name.toLowerCase()];
 
   // Attempt to find the google vision labels in the database:
   const firstResponse= await oneLayerSearch(labels);
   if (firstResponse.item) {
-    mongooseQueries.disconnect();
+    await mongooseQueries.disconnect();
     return firstResponse;
   }
 
@@ -237,15 +238,13 @@ const getCarbonFootprintFromName = async (name) => {
 
   // Attempt to find the next layer labels in the database:
   const nextResponse = await oneLayerSearch(nextLabels);
-  console.log(nextResponse);
-  console.log("nextResponse");
 
   if (nextResponse.item) {
-    mongooseQueries.disconnect();
+    await mongooseQueries.disconnect();
     return nextResponse;
   }
 
-  mongooseQueries.disconnect();
+  await mongooseQueries.disconnect();
   return {
     item: labels[0],
     carbonFootprintPerKg: undefined,

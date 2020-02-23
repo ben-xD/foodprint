@@ -3,14 +3,12 @@ const config = require('./config');
 
 let carbonSchema;
 
-const connect = () => {
-  mongoose.connect(config.dbServer, { useNewUrlParser: true, useUnifiedTopology: true });
-
-  const db = mongoose.connection;
-  db.on('error', console.error.bind(console, 'connection error:'));
-  db.once('open', () => {
-    // we're connected!
-  });
+const connect = async ()  => {
+  try{
+    await mongoose.connect(config.dbServer, { useNewUrlParser: true, useUnifiedTopology: true });
+  } catch(error){
+    handleError(error);
+  }
 };
 
 const getCarbonFootprintModel = () => {
