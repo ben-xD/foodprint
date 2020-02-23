@@ -39,8 +39,8 @@ const findCategorisedLabel = (labels) => {
         categoryCarbonFootprintPerKg,
       };
     }
-    return undefined;
   }
+  return undefined;
 };
 
 // For each valid label in a list of labels (aka layer), this function tries to find it in the DB. If none of the labels
