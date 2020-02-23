@@ -4,17 +4,14 @@
   "private": true,
   "scripts": {
     "a": "npm run android",
-    "android": "ENVFILE=.env.dev react-native run-android",
+    "android": "react-native run-android",
     "android:local": "ENVFILE=.env.android.local react-native run-android",
-    "a:release-dev": "ENVFILE=.env.dev react-native run-android --variant=release",
-    "a:release-staging": "ENVFILE=.env.staging react-native run-android --variant=release",
-    "a:release-production": "ENVFILE=.env.prod react-native run-android --variant=release",
+    "a:release": "react-native run-android --variant=release",
     "a:bundle": "cd android && ./gradlew bundleRelease",
+    "a:apk": "cd android && ./gradlew assembleRelease",
     "ios:local": "ENVFILE=.env.ios.local react-native run-ios",
-    "ios": "ENVFILE=.env.dev react-native run-ios",
-    "ios:release-dev": "ENVFILE=.env.dev react-native run-ios --variant=release",
-    "ios:release-staging": "ENVFILE=.env.staging react-native run-ios --variant=release",
-    "ios:release-production": "ENVFILE=.env.prod react-native run-ios --variant=release",
+    "ios": "react-native run-ios",
+    "ios:release": "react-native run-ios --variant=release",
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
@@ -49,7 +46,9 @@
     "react-native-safe-area-context": "^0.6.2",
     "react-native-screens": "^2.0.0-alpha.25",
     "react-native-splash-screen": "^3.2.0",
-    "react-native-vector-icons": "^6.6.0"
+    "react-native-svg": "^11.0.1",
+    "react-native-vector-icons": "^6.6.0",
+    "victory-native": "^34.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.6.2",

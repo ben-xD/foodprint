@@ -16,9 +16,7 @@ import auth from '@react-native-firebase/auth';
 import Config from 'react-native-config';
 import { GoogleSignin } from '@react-native-community/google-signin';
 import { firebase } from '@react-native-firebase/auth';
-import NetInfo, { useNetInfo } from '@react-native-community/netinfo';
-import { useState } from 'react';
-import { Text } from 'react-native';
+import { useNetInfo } from '@react-native-community/netinfo';
 import NoInternet from './src/screens/NoInternet';
 
 const Stack = createStackNavigator();
@@ -47,14 +45,14 @@ const App = () => {
         case 'RESTORE_TOKEN':
           return {
             ...prevState,
-            userIsLoggedIn: action.userIsLoggedIn,
+            userIsLoggedIn: true,
             isLoading: false,
           };
         case 'SIGN_IN':
           return {
             ...prevState,
             isSignout: false,
-            userIsLoggedIn: action.userIsLoggedIn,
+            userIsLoggedIn: true,
           };
         case 'SIGN_OUT':
           return {
@@ -180,9 +178,14 @@ const App = () => {
             {state.isLoading ? (
               // We haven't finished checking for the token yet
               <Stack.Screen name="Loading" component={Loading} />
-            ) : state.userIsLoggedIn === null ? (
+            ) : netInfo.isConnected ? (
               // No token found, user isn't signed in
-              !netInfo.isConnected ? <Stack.Screen name="NoInternet" component={NoInternet}></Stack.Screen >
+              state.userIsLoggedIn ? (
+                <>
+                  <Stack.Screen name="Home" component={Home} />
+                  <Stack.Screen name="Feedback" component={Feedback} />
+                </>
+              )
                 :
                 <>
                   <Stack.Screen
@@ -198,10 +201,7 @@ const App = () => {
                   <Stack.Screen name="Signup" component={Signup} />
                 </>
             ) : (
-                  <>
-                    <Stack.Screen name="Home" component={Home} />
-                    <Stack.Screen name="Feedback" component={Feedback} />
-                  </>
+                  <Stack.Screen name="NoInternet" component={NoInternet}></Stack.Screen >
                 )}
           </Stack.Navigator>
         </NavigationNativeContainer>

@@ -123,7 +123,7 @@ const isConceptValid = async (concept) => {
 
   let isAResponse = await axios.get(`http://api.conceptnet.io/query?start=/c/en/${concept}&rel=/r/IsA&limit=${MAX_NUMBER_OF_CONCEPTS}`);
   isA = getLabelsFromResponse(isAResponse);
-  if (isA.includes("food") || isA.includes("a food")|| isA.includes("fruit")){
+  if (isA.includes("food") || isA.includes("a food")|| isA.includes("fruit") || isA.includes("edible fruit") ){
     return true;
   }
 
@@ -133,7 +133,7 @@ const isConceptValid = async (concept) => {
     return true;
   }
 
-  let RelatedTermsResponse = await axios.get(`http://api.conceptnet.io/query?start=/c/en/${concept}&rel=RelatedTo/r/UsedFor&limit=${MAX_NUMBER_OF_CONCEPTS}`);
+  let RelatedTermsResponse = await axios.get(`http://api.conceptnet.io/query?start=/c/en/${concept}&rel=/r/RelatedTo&limit=${MAX_NUMBER_OF_CONCEPTS}`);
   RelatedTerms = getLabelsFromResponse(RelatedTermsResponse);
   if (RelatedTerms.includes("food")){
     return true;
@@ -192,7 +192,7 @@ const getCarbonFootprintFromImage = async (image) => {
   const firstResponse= await oneLayerSearch(imageLabels);
   if (firstResponse.item) {
     mongooseQueries.disconnect();
-    return { firstResponse };
+    return firstResponse;
   }
 
   // Call ConceptNet to create the next layer:
@@ -202,7 +202,7 @@ const getCarbonFootprintFromImage = async (image) => {
   const nextResponse = await oneLayerSearch(nextLabels);
   if (nextResponse.item) {
     mongooseQueries.disconnect();
-    return { nextResponse };
+    return nextResponse;
   }
 
   mongooseQueries.disconnect();
@@ -230,7 +230,7 @@ const getCarbonFootprintFromName = async (name) => {
   const firstResponse= await oneLayerSearch(labels);
   if (firstResponse.item) {
     mongooseQueries.disconnect();
-    return { firstResponse };
+    return firstResponse;
   }
 
   // Call ConceptNet to create the next layer:
@@ -240,7 +240,7 @@ const getCarbonFootprintFromName = async (name) => {
   const nextResponse = await oneLayerSearch(nextLabels);
   if (nextResponse.item) {
     mongooseQueries.disconnect();
-    return { nextResponse };
+    return nextResponse;
   }
 
   mongooseQueries.disconnect();
