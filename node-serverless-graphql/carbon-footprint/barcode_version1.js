@@ -160,4 +160,8 @@ test_function();
 /*
 let res = cleanName("Tesco tiramisu 30X20g");
 console.log(res);
+<<<<<<< Updated upstream
 */
+=======
+*/
+>>>>>>> Stashed changes

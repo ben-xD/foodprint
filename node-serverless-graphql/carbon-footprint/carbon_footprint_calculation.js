@@ -279,4 +279,4 @@ const getCarbonFootprintFromName = async (name) => {
   };
 };
 
-module.exports = { getCarbonFootprintFromImage, getCarbonFootprintFromName };
+module.exports = { getCarbonFootprintFromImage, getCarbonFootprintFromName};
