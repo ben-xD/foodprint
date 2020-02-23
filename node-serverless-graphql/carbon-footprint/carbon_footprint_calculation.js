@@ -48,10 +48,11 @@ const findCategorisedLabel = (labels) => {
 // Note that  the search is made in order (the labels are already ordered by prediction confidence by Google Vision API).
 // @return CarbonFootprintReport (if a label was found in a DB) or undefined (it any label was found)
 const oneLayerSearch = async (labels) => {
-  for (let i = 0; i < labels.length; i += 1) {
-
-    const nounInLabel = getNounInString(labels[i]);
-
+  
+  const nounLabels = getNounsInLabels(labels);
+  console.log("nounLabels", nounLabels);
+  for (let i = 0; i < nounLabels.length; i += 1) {
+    nounInLabel = nounLabels[i];
     if (await isConceptValid(nounInLabel)){
       const carbonFootprintPerKg = await searchData(nounInLabel);
       if (carbonFootprintPerKg !== undefined) {
@@ -63,7 +64,7 @@ const oneLayerSearch = async (labels) => {
     }
   }
 
-  categoryResult = findCategorisedLabel(labels)
+  categoryResult = findCategorisedLabel(nounLabels)
   if (categoryResult != undefined) {
     return categoryResult;
   }
@@ -84,9 +85,7 @@ const getNextLayer = async (labels) => {
 
     for (let j = 0; j < conceptResponse.length && nextConceptResponse.length < MAX_LENGTH_OF_NEXT_LAYER; j += 1) {
       const concept = conceptResponse[j].end.label;
-      if (await isConceptValid(concept)){
-        nextConceptResponse.push(concept);
-      }
+      nextConceptResponse.push(concept);
     }
   }
 
@@ -110,9 +109,39 @@ const getNounInString = (label) => {
     return label;
   }
   let nounsArray = nlp(label).nouns().out('array');
-  return nounsArray[0];
+  return nounsArray;
 }
 
+//  
+const getNounsInLabels = (labels) => {
+  let nounLabels = [];
+  for (let i = 0; i < labels.length; i++) {
+    let label = labels[i];
+
+    if (label.split(" ").length > 1) {
+      let nounsArray = nlp(label).nouns().out('string');
+      nounsArray = nounsArray.split(" ");
+
+      if (nounsArray.length > 1) {
+        let allNounsInString = ""
+        for (let j = 0; j < nounsArray.length; j++){
+          allNounsInString += nounsArray[j] + " ";
+          nounLabels.push(nounsArray[j]);
+        }
+        allNounsInString = allNounsInString.substring(0, allNounsInString.length - 1); // To remove the last " "
+        nounLabels.splice(i, 0, allNounsInString);
+      } 
+
+      if (nounsArray.length == 1) {
+        nounLabels.push(nounsArray[0])
+      }
+    }
+    else{
+      nounLabels.push(label);
+    }
+  }
+  return nounLabels;
+}
 
 // Assess if a concept is valid by checking if it is related to food (this is done making use of
 // ConceptNet relations).
