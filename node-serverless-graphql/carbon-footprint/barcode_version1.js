@@ -10,7 +10,15 @@ const options = {
 const getCarbonFootprintFromBarcode = async (barcode) => {
     //get data from the barcode
     let data = await getData(barcode);
-    let product_name = data.products[0].description;
+    if(data.products === undefined || data.products.length == 0){
+        console.log('This barcode has no product information');
+        return {
+            item: 'No product information in the barcode',
+            carbonFootprintPerKg: undefined,
+        };
+    }
+    let product_name = cleanName(data.products[0].description);
+
 
     //run getCarbonFootprintFromName (that might be very costly no?). if it returns a value that means the product
     //is in the db and thus return the value.
@@ -39,6 +47,20 @@ const getData = async (barcode) => {
     return tescoResponse.data;
 };
 
+//Function which deletes Tesco or Sainsburys from the product name
+//Also returns grams (for now)
+const cleanName = (name) => {
+    name = name.replace('Tesco', '');
+    name = name.replace('TESCO', '');
+    name = name.replace('Sainsburys', '');
+    name = name.replace('SAINBURYS', '');
+    name = name.replace(/[0-9]g/g, '');
+    name = name.replace(/[0-9]/g, '');
+    name = name.replace(/X/g, ''); //assuming there is no food that starts with X
+    name = name.replace(' ', '');
+
+    return name;
+}
 
 //Passes the data stored in the barcode. Extracts ingredients of the product and from those calculates
 //the carbon footprint. If there are no ingredients, return undefined. (In the case of no ingredients, we have
@@ -48,7 +70,7 @@ const calcCarbonFromIngredients = async (data) => {
     //check whether the product has ingredients at all
     if(data.products[0].ingredients === undefined){
         return {
-            item: data.products[0].description,
+            item: cleanName(data.products[0].description),
             carbonFootprintPerKg: undefined,
         }
     }
@@ -62,7 +84,7 @@ const calcCarbonFromIngredients = async (data) => {
     }
 
     return {
-        item: data.products[0].description,
+        item: cleanName(data.products[0].description),
         carbonFootprintPerKg: carbon,
     };
 
@@ -121,6 +143,9 @@ let paella = '84597752';
 let orange = '50501316';
 let orange_gtin = '02130270000000';
 let tiramisu = '85053274';
+let soap = '066947017';
+let not_a_barcode = '000000';
+let buckwheat = '60955456';
 //let res = getCarbonFootprintFromBarcode(orange_gtin);
 
 const test_function = async () => {
@@ -132,3 +157,7 @@ const test_function = async () => {
 
 test_function();
 
+/*
+let res = cleanName("Tesco tiramisu 30X20g");
+console.log(res);
+*/
