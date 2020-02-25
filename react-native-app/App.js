@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { NavigationNativeContainer } from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Login from './src/screens/Login';
 import Signup from './src/screens/Signup';
@@ -173,7 +173,7 @@ const App = () => {
   return (
     <ApolloProvider client={client}>
       <AuthContext.Provider value={authContext}>
-        <NavigationNativeContainer>
+        <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }}>
             {state.isLoading ? (
               // We haven't finished checking for the token yet
@@ -204,7 +204,7 @@ const App = () => {
                   <Stack.Screen name="NoInternet" component={NoInternet}></Stack.Screen >
                 )}
           </Stack.Navigator>
-        </NavigationNativeContainer>
+        </NavigationContainer>
       </AuthContext.Provider>
     </ApolloProvider>
   );
