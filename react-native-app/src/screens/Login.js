@@ -4,10 +4,8 @@ import { Button, Input, Text } from 'react-native-elements';
 import Password from '../components/Password';
 import Email from '../components/Email';
 import { AuthContext } from '../store/Auth';
-import auth from '@react-native-firebase/auth';
 
-
-export default Login = ({ navigation }) => {
+const Login = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const passwordRef = useRef(null);
@@ -47,3 +45,5 @@ export default Login = ({ navigation }) => {
     </ScrollView>
   );
 };
+
+export default Login;

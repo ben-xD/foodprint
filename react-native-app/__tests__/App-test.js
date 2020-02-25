@@ -1,5 +1,4 @@
 import React from 'react';
-import App from '../App';
 import { } from 'react-native';
 // Note: test renderer must be required after react-native.
 import renderer from 'react-test-renderer';
@@ -11,14 +10,18 @@ jest.mock('react-native-gesture-handler', () => { });
 jest.mock('@react-navigation/stack', () => { return { Header: () => 'whatever' }; });
 jest.mock('@react-native-firebase/auth', () => { return {}; });
 
-it('renders correctly', () => {
-  renderer.create(<App />);
-});
-
 
 it('renders correctly', () => {
   renderer.create(<NoInternet />);
 });
+
+// it('renders correctly', () => {
+//   renderer.create(<App />);
+// });
+
+// it('renders correctly', () => {
+//   renderer.create(<NoInternet />);
+// });
 
 // it('should display loading text if not rehydrated', () => {
 //   const store = mockStore({

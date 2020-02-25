@@ -83,7 +83,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm typescript && npm run lint && npm test",
+      "pre-commit": "npm run lint && npm test",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   }

@@ -3,9 +3,10 @@ import { View, SafeAreaView } from 'react-native';
 import { Text, Button } from 'react-native-elements';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { AuthContext } from '../store/Auth';
+import Signup from './Signup';
 
 
-export default SignupOrRegister = ({ navigation }) => {
+const SignupOrRegister = ({ navigation }) => {
   const { signInWithGoogle, signInAnonymously } = React.useContext(AuthContext);
   const [isPressed, setIsPressed] = useState(false);
 
@@ -78,5 +79,6 @@ export default SignupOrRegister = ({ navigation }) => {
       </View>
     </SafeAreaView >
   );
-}
-  ;
+};
+
+export default SignupOrRegister;

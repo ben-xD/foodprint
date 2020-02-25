@@ -13,7 +13,7 @@ import { AuthContext } from '../store/Auth';
 //   }
 // `
 
-export default Signup = () => {
+const Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const passwordRef = useRef(null);
@@ -64,3 +64,5 @@ export default Signup = () => {
     </SafeAreaView>
   );
 };
+
+export default Signup;
