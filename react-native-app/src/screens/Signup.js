@@ -59,7 +59,7 @@ const Signup = () => {
             <Button
               testID={'joinButton'}
               disabled={isPressed}
-              buttonStyle={{ backgroundColor: 'green', marginVertical: 16 }}
+              buttonStyle={styles.button}
               titleStyle={styles.title}
               title="Join"
               onPress={signUpHandler}
@@ -75,6 +75,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
   },
+  button: { backgroundColor: 'green', marginVertical: 16 },
 });
 
 export default Signup;

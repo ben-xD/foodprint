@@ -3,7 +3,7 @@ import { Input, Overlay, Text } from 'react-native-elements';
 import React, { useState, useEffect } from 'react';
 
 import { gql } from 'apollo-boost';
-import {/*useQuery, */useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/react-hooks';
 
 
 // GraphQL schema for correction mutation

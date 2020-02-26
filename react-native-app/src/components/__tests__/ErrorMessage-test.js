@@ -7,7 +7,7 @@ import renderer from 'react-test-renderer';
 jest.mock('@apollo/react-hooks');
 
 // Check current component against its snapshot
-test('ErrorMessage renders correctly and is the same as its previous snapshot', () => {
+test('ErrorMessage matches previous snapshot', () => {
   useMutation.mockImplementation(() => [null, { loading: null, error: null, data: null }]);
   const tree = renderer.create(<ErrorMessage isVisible={true} />).toJSON();
   expect(tree).toMatchSnapshot();

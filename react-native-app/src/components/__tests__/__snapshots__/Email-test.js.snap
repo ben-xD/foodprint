@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Email renders correctly and is the same as its previous snapshot 1`] = `
+exports[`Email matches previous snapshot 1`] = `
 <View
   style={
     Object {

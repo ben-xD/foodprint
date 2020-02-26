@@ -4,7 +4,6 @@ import { Text, Button } from 'react-native-elements';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { AuthContext } from '../store/Auth';
 
-
 const SignupOrRegister = ({ navigation }) => {
   const { signInWithGoogle, signInAnonymously } = React.useContext(AuthContext);
   const [isPressed, setIsPressed] = useState(false);
@@ -23,12 +22,12 @@ const SignupOrRegister = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{ position: 'absolute', top: 32, alignItems: 'center', marginTop: 32 }}>
+      <View style={styles.titleContainer}>
         <Text h1>
           FoodPrint
         </Text>
       </View>
-      <View style={{ width: '80%' }}>
+      <View style={styles.bodyContainer}>
         <View>
           <Button
             disabled={isPressed}
@@ -55,23 +54,23 @@ const SignupOrRegister = ({ navigation }) => {
             title="Join using email"
             onPress={() => navigation.navigate('Signup')}
           />
-          <View style={{ marginVertical: 12 }}>
-            <Text style={{ fontSize: 18, textAlign: 'center', color: 'grey' }}>Existing user?</Text>
+          <View style={styles.loginButtonContainer}>
+            <Text style={styles.loginText}>Existing user?</Text>
             <Button
               title="LOGIN"
               disabled={isPressed}
-              titleStyle={{ color: 'green', fontSize: 24 }}
+              titleStyle={styles.loginButton}
               onPress={() => navigation.navigate('Login')}
               type="clear"
             />
           </View>
         </View>
       </View>
-      <View style={{ position: 'absolute', bottom: 32 }}>
+      <View style={styles.skipButtonContainer}>
         <Button
           disabled={isPressed}
           title="skip"
-          titleStyle={{ color: 'grey', fontSize: 18 }}
+          titleStyle={styles.skipButton}
           onPress={handleSignInAnonymously}
           type="clear"
         />
@@ -82,6 +81,13 @@ const SignupOrRegister = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: { justifyContent: 'center', alignItems: 'center', height: '100%' },
+  bodyContainer: { width: '80%' },
+  titleContainer: { position: 'absolute', top: 32, alignItems: 'center', marginTop: 32 },
+  loginButtonContainer: { marginVertical: 12 },
+  loginText: { fontSize: 18, textAlign: 'center', color: 'grey' },
+  loginButton: { color: 'green', fontSize: 24 },
+  skipButtonContainer: { position: 'absolute', bottom: 32 },
+  skipButton: { color: 'grey', fontSize: 18 },
 });
 
 export default SignupOrRegister;
