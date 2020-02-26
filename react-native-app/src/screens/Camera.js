@@ -76,7 +76,11 @@ const Camera = ({ route, navigation }) => {
   const barCodeHandler = ({ data, rawData, type, bounds }) => {
     console.log({ data, rawData, type, bounds });
     // save the barcode info into a different components state
+
+    // navigate to loading screen, with image
     navigation.navigate('Feedback', { image: data });
+
+    // TODO make request to backend with barcode in loading screen
   };
 
   return (
