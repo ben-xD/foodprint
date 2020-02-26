@@ -10,12 +10,32 @@ const Login = ({ navigation }) => {
   const [password, setPassword] = useState('');
   const passwordRef = useRef(null);
   const [isPressed, setIsPressed] = useState(false);
-
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
 
   const { signIn } = React.useContext(AuthContext);
 
+  const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
   const loginHandler = async () => {
     setIsPressed(true);
+
+    if (!EMAIL_REGEX.test(email)) {
+      setEmailError('That\s not a valid email.');
+      setIsPressed(false);
+      return;
+    } else {
+      setEmailError('');
+    }
+
+    if (password.length === 0) {
+      setPasswordError('Your password doesn\'t seem long enough.');
+      setIsPressed(false);
+      return;
+    } else {
+      setPasswordError('');
+    }
+
     await signIn({ email, password });
     setIsPressed(false);
   };
@@ -29,7 +49,9 @@ const Login = ({ navigation }) => {
       </View>
       <View style={{ width: '80%' }}>
         <View>
+          {emailError === '' ? <></> : <Text>{emailError}</Text>}
           <Email nextFieldRef={passwordRef} setEmail={setEmail} email={email} />
+          {passwordError === '' ? <></> : <Text>{passwordError}</Text>}
           <Password ref={passwordRef} submitHandler={loginHandler} setPassword={setPassword} password={password} />
         </View>
       </View>

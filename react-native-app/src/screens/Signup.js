@@ -24,12 +24,16 @@ const Signup = () => {
 
     if (!EMAIL_REGEX.test(email)) {
       setEmailError('That\s not a valid email.');
+      setIsPressed(false);
+      return;
     } else {
       setEmailError('');
     }
 
     if (password.length < 8) {
       setPasswordError('Your chosen password is too short.');
+      setIsPressed(false);
+      return;
     } else {
       setPasswordError('');
     }
@@ -50,6 +54,7 @@ const Signup = () => {
           <View>
             {emailError === '' ? <></> : <Text>{emailError}</Text>}
             <Email nextFieldRef={passwordRef} setEmail={setEmail} email={email} />
+            {passwordError === '' ? <></> : <Text>{passwordError}</Text>}
             <Password ref={passwordRef} submitHandler={signUpHandler} setPassword={setPassword} password={password} />
             <Button
               testID={'joinButton'}
