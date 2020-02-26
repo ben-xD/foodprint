@@ -60,6 +60,7 @@ const Login = ({ navigation }) => {
           disabled={isPressed}
           buttonStyle={styles.button}
           titleStyle={styles.buttonText}
+          testID="loginButton"
           title="Login"
           onPress={loginHandler}
         />

@@ -197,6 +197,7 @@ exports[`Login matches previous snapshot 1`] = `
         activeOpacity={0.3}
         disabled={false}
         onPress={[Function]}
+        testID="loginButton"
       >
         <View
           style={

@@ -32,6 +32,7 @@ const SignupOrRegister = ({ navigation }) => {
           <Button
             disabled={isPressed}
             iconContainerStyle={{ marginRight: 24 }}
+            testID={"googleButton"}
             icon={
               <AntDesign
                 style={{ paddingRight: 5 }}
@@ -58,6 +59,7 @@ const SignupOrRegister = ({ navigation }) => {
             <Text style={styles.loginText}>Existing user?</Text>
             <Button
               title="LOGIN"
+              testID="skipButton"
               disabled={isPressed}
               titleStyle={styles.loginButton}
               onPress={() => navigation.navigate('Login')}

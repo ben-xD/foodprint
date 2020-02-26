@@ -84,9 +84,10 @@ const Camera = ({ route, navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <View accessible={true} style={styles.container}>
       <RNCamera
         onBarCodeRead={barCodeHandler}
+        accessible={true}
         style={styles.preview}
         captureAudio={false}
         type={RNCamera.Constants.Type.back}
@@ -106,15 +107,18 @@ const Camera = ({ route, navigation }) => {
             </View>;
           }
           return (
-            <View style={{ flex: 1 }}>
+            <View accessible={true} style={{ flex: 1 }}>
               <ErrorMessage
                 isVisible={isVisible}
                 setVisibility={setVisibility}
                 meal={meal}
                 setMeal={setMeal}
               />
-              <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>
+              <View accessible={true} style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>
                 <TouchableOpacity
+                  accessible={true}
+                  accessibilityLabel="take picture"
+                  accessibilityHint="Take and upload picture to calculate carbon footprint"
                   onPress={() => takePictureHandler(camera)}
                   style={styles.capture} />
               </View>

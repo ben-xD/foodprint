@@ -2,6 +2,7 @@
 
 exports[`FoodOverview matches previous snapshot 1`] = `
 <View
+  accessible={true}
   style={
     Object {
       "backgroundColor": "black",
@@ -20,6 +21,7 @@ exports[`FoodOverview matches previous snapshot 1`] = `
     }
   >
     <RNCamera
+      accessible={true}
       androidCameraPermissionOptions={
         Object {
           "buttonNegative": "Cancel",

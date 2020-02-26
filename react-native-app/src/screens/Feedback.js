@@ -7,7 +7,6 @@ import ErrorMessage from '../components/ErrorMessage';
 const Feedback = ({ route, navigation }) => {
 
   const [isVisible, setVisibility] = useState(false);
-  console.log({ 'route': route.params });
   const [meal, setMeal] = useState(route.params.meal);
 
   const calculateRating = (carbonFootprint) => {
