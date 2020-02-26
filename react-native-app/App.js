@@ -149,6 +149,7 @@ const App = () => {
           console.log({ userCredentials });
         } catch (e) {
           if (e.code === 'auth/email-already-in-use') {
+            // TODO can this function return an Promise<error> back to Signup.js. Then display it there
             return console.warn('tell user email is already used');
           } else if (e.code === 'auth/invalid-email') {
             return console.warn('tell user invalid email');
