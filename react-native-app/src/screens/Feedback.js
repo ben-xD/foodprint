@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { View, Image } from 'react-native';
 import { Text, Button, Rating } from 'react-native-elements';
 import ErrorMessage from '../components/ErrorMessage';
@@ -7,7 +7,7 @@ import ErrorMessage from '../components/ErrorMessage';
 const Feedback = ({ route, navigation }) => {
 
   const [isVisible, setVisibility] = useState(false);
-  console.log({ 'route': route.params })
+  console.log({ 'route': route.params });
   const [meal, setMeal] = useState(route.params.meal);
 
   const calculateRating = (carbonFootprint) => {
@@ -34,7 +34,7 @@ const Feedback = ({ route, navigation }) => {
     } else {
       return 0;
     }
-  }
+  };
 
   console.log({ meal });
 
@@ -54,7 +54,7 @@ const Feedback = ({ route, navigation }) => {
           backgroundColor: 'white',
           margin: 10,
           marginTop: 100,
-          marginBottom: 30
+          marginBottom: 30,
         }}>
           <Image
             style={{ height: 350, width: 350 }}

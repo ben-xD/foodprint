@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
   message: {
     fontSize: 22,
     textAlign: 'center',
-    margin: 20
+    margin: 20,
   },
 });
 

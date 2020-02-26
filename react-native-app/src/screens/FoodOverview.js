@@ -10,8 +10,6 @@ import {
 } from 'react-native';
 
 const FoodOverview = ({ navigation }) => {
-  const [food, setFood] = useState([]);
-
   // useEffect(() => {
   //   navigation.navigate('Camera');
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
