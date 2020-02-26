@@ -7,7 +7,7 @@ beforeEach(() => {
 
 });
 
-
+// Re-use this function to render Signup, as it uses useContext. This 'mocks' that out.
 function renderSignUp(authentication) {
   return render(
     <AuthContext.Provider value={authentication}>

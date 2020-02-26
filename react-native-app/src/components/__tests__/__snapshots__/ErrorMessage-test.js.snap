@@ -44,30 +44,26 @@ exports[`ErrorMessage renders correctly and is the same as its previous snapshot
   transparent={true}
   visible={true}
 >
-  <View
-    accessible={true}
-    focusable={true}
-    onClick={[Function]}
-    onResponderGrant={[Function]}
-    onResponderMove={[Function]}
-    onResponderRelease={[Function]}
-    onResponderTerminate={[Function]}
-    onResponderTerminationRequest={[Function]}
-    onStartShouldSetResponder={[Function]}
-    style={
-      Object {
-        "alignItems": "center",
-        "backgroundColor": "rgba(0, 0, 0, .4)",
-        "height": "100%",
-        "justifyContent": "center",
-        "left": 0,
-        "position": "absolute",
-        "top": 0,
-        "width": "100%",
-      }
-    }
+  <TouchableWithoutFeedback
+    onPress={[Function]}
     testID="RNE__Overlay__backdrop"
-  />
+  >
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "backgroundColor": "rgba(0, 0, 0, .4)",
+          "height": "100%",
+          "justifyContent": "center",
+          "left": 0,
+          "position": "absolute",
+          "top": 0,
+          "width": "100%",
+        }
+      }
+      testID="overlayContainer"
+    />
+  </TouchableWithoutFeedback>
   <View
     pointerEvents="box-none"
     style={

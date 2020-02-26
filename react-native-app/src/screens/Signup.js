@@ -26,7 +26,7 @@ const Signup = () => {
 
     if (password.length < 8) {
       // TODO implement error messages for user
-      return console.warn('alert user, password too short ');
+      return console.warn('alert user, password too short.');
     }
 
     await signUp(email, password);

@@ -4,11 +4,11 @@ Written in typescript and react native.
 
 ## Development guide & testing
 
-- When you run `git commit`, husky runs all the tests and only lets you commit if they pass
+- When you run `git commit` when .js inside `react-native-app` are changed, husky runs all the tests and only lets you commit if they pass
 - To run all the tests, run `npm run test`. To run specific tests, use the run button next to the test in WebStorm
 - There are tests for components, so whenever a component gets changed, it fails the tests and requires to update the relevant snapshot:
-    - Check the snapshot tests that failed and if you are happy with the changes, run `npm run test -u` to update the snapshots
-    - Commit your updated snapshot
+  - Check the snapshot tests that failed and if you are happy with the changes, run `npm run test -u` to update the snapshots
+  - Commit your updated snapshot
 
 ## Problems?
 
@@ -44,5 +44,6 @@ The code is typescript (a superset of javascript), which means you **can** just 
 - TODO add steps for running on a physical Android or Apple device
 
 ## Apollo Client
+
 Setup [here](https://www.apollographql.com/docs/react/get-started/) and
 [here](https://github.com/jaydenseric/apollo-upload-examples)
