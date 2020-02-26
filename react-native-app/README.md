@@ -1,6 +1,17 @@
 # Mobile application
 
-Written in typescript and react native.
+Written in javascript with react native, and associated libraries (react-navigation, jest).
+
+## npm run options
+You can run these by running npm run CODE, where code is:
+
+- `android` runs on an emulator (or device, if android and device is plugged in) (because it uses .env file).
+- `android:local`, like `android`, but points the backend requests to a locally hosted server. You need to run the server in this case.
+- `a` is shorthand for android
+- `ios`, ios version of `android`
+- `release` does `android`, but runs the javascript without debug mode (faster, no debug messages, no reliance on Metro server (which serves your js files to the device/ emulator)).
+- `a:bundle` generates an app bundle file in the `android/build`, and can be uploaded to the google play console to release the app. This is used because it is more convenient than uploading an APK. Recommended by Google.
+- `a:apk` generates an APK file in the `android/build`, and can be manually installed on devices or shared with others, so they can manually install them. This can't be done with an app bundle.
 
 ## Development guide & testing
 
