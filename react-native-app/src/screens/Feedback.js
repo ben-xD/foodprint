@@ -22,7 +22,7 @@ const Feedback = ({ route, navigation }) => {
     } else if (carbonFootprint < 10) {
       return 3;
     } else if (carbonFootprint < 12) {
-      return 2, 5;
+      return 2.5;
     } else if (carbonFootprint < 14) {
       return 2;
     } else if (carbonFootprint < 16) {
