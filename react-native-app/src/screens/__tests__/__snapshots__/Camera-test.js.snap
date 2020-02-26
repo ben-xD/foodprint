@@ -1,11 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`FoodOverview matches previous snapshot 1`] = `
-<SafeAreaView
+<View
   style={
     Object {
-      "height": "100%",
-      "width": "100%",
+      "backgroundColor": "black",
+      "flex": 1,
+      "flexDirection": "column",
     }
   }
 >
@@ -13,125 +14,133 @@ exports[`FoodOverview matches previous snapshot 1`] = `
     style={
       Object {
         "alignItems": "center",
-        "flexDirection": "row",
-        "justifyContent": "space-between",
-        "padding": 8,
+        "flex": 1,
+        "justifyContent": "flex-end",
       }
     }
   >
-    <TouchableOpacity
-      activeOpacity={0.2}
-      onPress={[Function]}
-    >
-      <Text
-        allowFontScaling={false}
-        style={
-          Array [
-            Object {
-              "color": "grey",
-              "fontSize": 45,
-            },
-            Object {
-              "margin": 10,
-            },
-            Object {
-              "fontFamily": "Material Design Icons",
-              "fontStyle": "normal",
-              "fontWeight": "normal",
-            },
-            Object {},
-          ]
+    <RNCamera
+      androidCameraPermissionOptions={
+        Object {
+          "buttonNegative": "Cancel",
+          "buttonPositive": "Ok",
+          "message": "We need your permission to use your camera",
+          "title": "Permission to use camera",
         }
-      >
-        
-      </Text>
-    </TouchableOpacity>
-    <TouchableOpacity
-      activeOpacity={0.2}
-      onPress={[Function]}
-    >
-      <Text
-        allowFontScaling={false}
-        style={
-          Array [
-            Object {
-              "color": "grey",
-              "fontSize": 50,
-            },
-            Object {
-              "margin": 10,
-            },
-            Object {
-              "fontFamily": "Material Design Icons",
-              "fontStyle": "normal",
-              "fontWeight": "normal",
-            },
-            Object {},
-          ]
+      }
+      androidRecordAudioPermissionOptions={
+        Object {
+          "message": "",
+          "title": "",
         }
-      >
-        
-      </Text>
-    </TouchableOpacity>
-  </View>
-  <ScrollView>
+      }
+      autoFocus={1}
+      barCodeScannerEnabled={true}
+      barCodeTypes={Array []}
+      cameraId={null}
+      captureAudio={false}
+      exposure={-1}
+      faceDetectionClassifications={0}
+      faceDetectionLandmarks={0}
+      faceDetectionMode={1}
+      flashMode={1}
+      focusDepth={0}
+      keepAudioSession={false}
+      maxZoom={0}
+      mirrorVideo={false}
+      notAuthorizedView={
+        <View
+          style={
+            Object {
+              "alignItems": "center",
+              "flex": 1,
+              "justifyContent": "center",
+            }
+          }
+        >
+          <Text
+            style={
+              Object {
+                "fontSize": 16,
+                "textAlign": "center",
+              }
+            }
+          >
+            Camera not authorized
+          </Text>
+        </View>
+      }
+      onAudioConnected={[Function]}
+      onAudioInterrupted={[Function]}
+      onBarCodeRead={[Function]}
+      onCameraReady={[Function]}
+      onFacesDetected={[Function]}
+      onGoogleVisionBarcodesDetected={[Function]}
+      onMountError={[Function]}
+      onPictureSaved={[Function]}
+      onSubjectAreaChanged={[Function]}
+      onTextRecognized={[Function]}
+      pendingAuthorizationView={
+        <View
+          style={
+            Object {
+              "alignItems": "center",
+              "flex": 1,
+              "justifyContent": "center",
+            }
+          }
+        >
+          <ActivityIndicator
+            animating={true}
+            color="#999999"
+            hidesWhenStopped={true}
+            size="small"
+          />
+        </View>
+      }
+      permissionDialogMessage=""
+      permissionDialogTitle=""
+      pictureSize="None"
+      playSoundOnCapture={false}
+      style={
+        Object {
+          "bottom": 0,
+          "left": 0,
+          "position": "absolute",
+          "right": 0,
+          "top": 0,
+        }
+      }
+      type={1}
+      useCamera2Api={false}
+      videoStabilizationMode={0}
+      zoom={0}
+    />
     <View
       style={
         Object {
           "alignItems": "center",
-          "justifyContent": "center",
-          "marginHorizontal": 40,
+          "flex": 1,
+          "justifyContent": "flex-end",
         }
       }
     >
-      <Text
+      <ActivityIndicator
+        animating={true}
+        color="white"
+        hidesWhenStopped={true}
+        size="small"
         style={
           Object {
-            "fontSize": 36,
-            "marginVertical": 20,
-            "textAlign": "center",
-          }
-        }
-      >
-        Welcome to FoodPrint!
-      </Text>
-      <Text
-        style={
-          Object {
-            "fontSize": 20,
-            "marginTop": 20,
-            "textAlign": "center",
-          }
-        }
-      >
-        You can now know the carbon footprint of the food you buy simply by scanning its barcode or taking a picture of it!
-      </Text>
-      <Image
-        source={
-          Object {
-            "uri": "https://png2.cleanpng.com/sh/4618a1d69c3326bc75ab0d6a0d3cd256/L0KzQYm3VcIyN5NvjJH0aYP2gLBuTfVud6Vue9H3LXXwf7vwTgN1cZRwfeQ2ZnHmdbP2jBsucZ9oReV2aXzoiX68gsAzPWNnfKdrM0LmQXA9WMIyOGE7T6MAMka7R4mCUMk0P2Q7RuJ3Zx==/kisspng-emoticon-emoji-sticker-facebook-inc-smiley-5b0252bd5b32c1.6821006715268789093736.png",
-          }
-        }
-        style={
-          Object {
-            "height": 200,
-            "marginTop": 10,
-            "width": 200,
+            "alignItems": "center",
+            "height": 80,
+            "justifyContent": "center",
+            "margin": 32,
+            "width": 80,
           }
         }
       />
-      <Text
-        style={
-          Object {
-            "fontSize": 20,
-            "marginTop": 20,
-            "textAlign": "center",
-          }
-        }
-      >
-        To get started, simply click on the Camera icon in the top left corner!
-      </Text>
     </View>
-  </ScrollView>
-</SafeAreaView>
+  </View>
+</View>
 `;

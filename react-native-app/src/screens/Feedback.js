@@ -36,8 +36,6 @@ const Feedback = ({ route, navigation }) => {
     }
   };
 
-  console.log({ meal });
-
   return (
     <View style={{ flex: 1 }}>
       <ErrorMessage

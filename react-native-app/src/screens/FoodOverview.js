@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
   Text,
