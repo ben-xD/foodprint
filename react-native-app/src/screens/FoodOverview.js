@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
   Text,
@@ -6,12 +6,10 @@ import {
   Image,
   View,
   ScrollView,
+  TouchableOpacity,
 } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const FoodOverview = ({ navigation }) => {
-  const [food, setFood] = useState([]);
-
   // useEffect(() => {
   //   navigation.navigate('Camera');
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
