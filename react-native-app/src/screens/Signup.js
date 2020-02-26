@@ -1,17 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, SafeAreaView, ScrollView } from 'react-native';
-import { Button, Input, Text } from 'react-native-elements';
-import auth from '@react-native-firebase/auth';
+import { Button, Text } from 'react-native-elements';
 import Password from '../components/Password';
 import Email from '../components/Email';
 import { useRef } from 'react';
 import { AuthContext } from '../store/Auth';
-
-// const SIGN_UP = qgl`
-//   mutation signUp($email: String!, $password: String!) {
-
-//   }
-// `
 
 const Signup = () => {
   const [email, setEmail] = useState('');
@@ -19,7 +12,7 @@ const Signup = () => {
   const passwordRef = useRef(null);
   const [isPressed, setIsPressed] = useState(false);
 
-  const { signUp } = React.useContext(AuthContext);
+  const { signUp } = useContext(AuthContext);
 
   const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -27,10 +20,12 @@ const Signup = () => {
     setIsPressed(true);
 
     if (!EMAIL_REGEX.test(email)) {
+      // TODO implement error messages for user
       return console.warn('alert user, email invalid.');
     }
 
     if (password.length < 8) {
+      // TODO implement error messages for user
       return console.warn('alert user, password too short ');
     }
 
@@ -40,7 +35,6 @@ const Signup = () => {
 
   return (
     <SafeAreaView>
-
       <ScrollView contentContainerStyle={{ alignItems: 'center' }} style={{ width: '100%', height: '100%' }}>
         <View style={{ alignItems: 'center', justifyContent: 'center', marginVertical: 16 }}>
           <Text h1>
@@ -52,6 +46,7 @@ const Signup = () => {
             <Email nextFieldRef={passwordRef} setEmail={setEmail} email={email} />
             <Password ref={passwordRef} submitHandler={signUpHandler} setPassword={setPassword} password={password} />
             <Button
+              testID={'joinButton'}
               disabled={isPressed}
               buttonStyle={{ backgroundColor: 'green', marginVertical: 16 }}
               titleStyle={{ fontSize: 24 }}
