@@ -15,10 +15,6 @@ it('NoInternet component renders correctly', () => {
   renderer.create(<NoInternet />);
 });
 
-// it('NoInternet component renders correctly', () => {
-//   renderer.create(<NoInternet />);
-// });
-
 // it('renders correctly', () => {
 //   renderer.create(<App />);
 // });
