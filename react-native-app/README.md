@@ -2,6 +2,14 @@
 
 Written in typescript and react native.
 
+## Development guide & testing
+
+- When you run `git commit`, husky runs all the tests and only lets you commit if they pass
+- To run all the tests, run `npm run test`. To run specific tests, use the run button next to the test in WebStorm
+- There are tests for components, so whenever a component gets changed, it fails the tests and requires to update the relevant snapshot:
+    - Check the snapshot tests that failed and if you are happy with the changes, run `npm run test -u` to update the snapshots
+    - Commit your updated snapshot
+
 ## Problems?
 
 - Make sure you node_modules folder is up to date with `npm install`
