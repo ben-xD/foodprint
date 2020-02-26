@@ -3,7 +3,6 @@ import { View, SafeAreaView } from 'react-native';
 import { Text, Button } from 'react-native-elements';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { AuthContext } from '../store/Auth';
-import Signup from './Signup';
 
 
 const SignupOrRegister = ({ navigation }) => {

@@ -5,12 +5,15 @@ import Password from '../components/Password';
 import Email from '../components/Email';
 import { useRef } from 'react';
 import { AuthContext } from '../store/Auth';
+import { StyleSheet } from 'react-native';
 
 const Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const passwordRef = useRef(null);
   const [isPressed, setIsPressed] = useState(false);
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
 
   const { signUp } = useContext(AuthContext);
 
@@ -20,13 +23,15 @@ const Signup = () => {
     setIsPressed(true);
 
     if (!EMAIL_REGEX.test(email)) {
-      // TODO implement error messages for user
-      return console.warn('alert user, email invalid.');
+      setEmailError('That\s not a valid email.');
+    } else {
+      setEmailError('');
     }
 
     if (password.length < 8) {
-      // TODO implement error messages for user
-      return console.warn('alert user, password too short.');
+      setPasswordError('Your chosen password is too short.');
+    } else {
+      setPasswordError('');
     }
 
     await signUp(email, password);
@@ -43,13 +48,14 @@ const Signup = () => {
         </View>
         <View style={{ width: '80%' }}>
           <View>
+            {emailError === '' ? <></> : <Text>{emailError}</Text>}
             <Email nextFieldRef={passwordRef} setEmail={setEmail} email={email} />
             <Password ref={passwordRef} submitHandler={signUpHandler} setPassword={setPassword} password={password} />
             <Button
               testID={'joinButton'}
               disabled={isPressed}
               buttonStyle={{ backgroundColor: 'green', marginVertical: 16 }}
-              titleStyle={{ fontSize: 24 }}
+              titleStyle={styles.title}
               title="Join"
               onPress={signUpHandler}
             />
@@ -59,5 +65,11 @@ const Signup = () => {
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  title: {
+    fontSize: 24,
+  },
+});
 
 export default Signup;

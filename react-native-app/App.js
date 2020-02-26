@@ -45,7 +45,7 @@ const App = () => {
         case 'RESTORE_TOKEN':
           return {
             ...prevState,
-            userIsLoggedIn: true,
+            userIsLoggedIn: action.userIsLoggedIn,
             isLoading: false,
           };
         case 'SIGN_IN':
