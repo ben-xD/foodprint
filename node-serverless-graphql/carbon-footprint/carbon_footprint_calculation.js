@@ -36,7 +36,7 @@ const findCategorisedLabel = (labels) => {
     if(categoryCarbonFootprintPerKg){
       return {
         item: labels[i],
-        categoryCarbonFootprintPerKg,
+        carbonFootprintPerKg: categoryCarbonFootprintPerKg,
       };
     }
     return undefined;
@@ -186,30 +186,7 @@ const getCarbonFootprintFromImage = async (image) => {
   // Get image labels from Google Vision API
   const imageLabels = await getImageLabels(image);
 
-  mongooseQueries.connect();
-
-  // Attempt to find the google vision labels in the database:
-  const firstResponse= await oneLayerSearch(imageLabels);
-  if (firstResponse.item) {
-    mongooseQueries.disconnect();
-    return firstResponse;
-  }
-
-  // Call ConceptNet to create the next layer:
-  const nextLabels = await getNextLayer(imageLabels);
-
-  // Attempt to find the next layer labels in the database:
-  const nextResponse = await oneLayerSearch(nextLabels);
-  if (nextResponse.item) {
-    mongooseQueries.disconnect();
-    return nextResponse;
-  }
-
-  mongooseQueries.disconnect();
-  return {
-    item: imageLabels[0],
-    carbonFootprintPerKg: undefined,
-  };
+  return getCarbonFootprint(imageLabels);
 };
 
 // ****************************************************************
@@ -222,9 +199,11 @@ const getCarbonFootprintFromImage = async (image) => {
 // @return CarbonFootprintReport (carbonFootprintPerKg is undefined if all the searches failed)
 
 const getCarbonFootprintFromName = async (name) => {
+  return getCarbonFootprint([name.toLowerCase()]);
+}
+
+const getCarbonFootprint = async (labels) => {
   mongooseQueries.connect();
-  // Set array of name only for labels
-  const labels = [name.toLowerCase()];
 
   // Attempt to find the google vision labels in the database:
   const firstResponse= await oneLayerSearch(labels);
