@@ -5,8 +5,6 @@ import { useContext } from 'react';
 import { Avatar, Button } from 'react-native-elements';
 import { View } from 'react-native';
 
-
-
 const Settings = ({ navigation }) => {
 
   const { signOut } = useContext(AuthContext);
@@ -21,34 +19,34 @@ const Settings = ({ navigation }) => {
         />
       </View>
       <View style={{ flex: 1, justify: 'flex-start', alignItems: 'flex-start', marginHorizontal: 50 }}>
-          <Button
-            buttonStyle={{ flexDirection: 'row', justifyContent: 'flex-start' }}
-            titleStyle={{ color: 'black', fontSize: 18 }}
-            title="Change username"
-            type="clear"
-            onPress={() => alert('Implement "Change username"')}
-          />
-          <Button
-            buttonStyle={{ flexDirection: 'row', justifyContent: 'flex-start' }}
-            titleStyle={{ color: 'black', fontSize: 18 }}
-            title="Change email address"
-            type="clear"
-            onPress={() => alert('Implement "Change email address"')}
-          />
-          <Button
-            buttonStyle={{ flexDirection: 'row', justifyContent: 'flex-start' }}
-            titleStyle={{ color: 'black', fontSize: 18, textAlign: 'left' }}
-            title="Change password"
-            type="clear"
-            onPress={() => alert('Implement "Change password"')}
-          />
-          <Button
-            buttonStyle={{ flexDirection: 'row', justifyContent: 'flex-start' }}
-            titleStyle={{ color: 'black', fontSize: 18 }}
-            title="Log out"
-            type="clear"
-            onPress={signOut}
-          />
+        <Button
+          buttonStyle={{ flexDirection: 'row', justifyContent: 'flex-start' }}
+          titleStyle={{ color: 'black', fontSize: 18 }}
+          title="Change username"
+          type="clear"
+          onPress={() => alert('Implement "Change username"')}
+        />
+        <Button
+          buttonStyle={{ flexDirection: 'row', justifyContent: 'flex-start' }}
+          titleStyle={{ color: 'black', fontSize: 18 }}
+          title="Change email address"
+          type="clear"
+          onPress={() => alert('Implement "Change email address"')}
+        />
+        <Button
+          buttonStyle={{ flexDirection: 'row', justifyContent: 'flex-start' }}
+          titleStyle={{ color: 'black', fontSize: 18, textAlign: 'left' }}
+          title="Change password"
+          type="clear"
+          onPress={() => alert('Implement "Change password"')}
+        />
+        <Button
+          buttonStyle={{ flexDirection: 'row', justifyContent: 'flex-start' }}
+          titleStyle={{ color: 'black', fontSize: 18 }}
+          title="Log out"
+          type="clear"
+          onPress={signOut}
+        />
       </View>
     </SafeAreaView>
   );
