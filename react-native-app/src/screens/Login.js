@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { View, ScrollView } from 'react-native';
+import { View, ScrollView, StyleSheet } from 'react-native';
 import { Button, Input, Text } from 'react-native-elements';
 import Password from '../components/Password';
 import Email from '../components/Email';
@@ -41,13 +41,13 @@ const Login = ({ navigation }) => {
   };
 
   return (
-    <ScrollView contentContainerStyle={{ alignItems: 'center' }} style={{ width: '100%', height: '100%' }}>
-      <View style={{ alignItems: 'center', justifyContent: 'center', marginVertical: 50 }}>
+    <ScrollView contentContainerStyle={styles.containerContent} style={styles.container}>
+      <View style={styles.titleContainer}>
         <Text h1>
           FoodPrint
         </Text>
       </View>
-      <View style={{ width: '80%' }}>
+      <View style={styles.inputContainer}>
         <View>
           {emailError === '' ? <></> : <Text>{emailError}</Text>}
           <Email nextFieldRef={passwordRef} setEmail={setEmail} email={email} />
@@ -55,11 +55,11 @@ const Login = ({ navigation }) => {
           <Password ref={passwordRef} submitHandler={loginHandler} setPassword={setPassword} password={password} />
         </View>
       </View>
-      <View style={{ width: '80%' }}>
+      <View style={styles.buttonContainer}>
         <Button
           disabled={isPressed}
-          buttonStyle={{ backgroundColor: 'green', marginVertical: 100 }}
-          titleStyle={{ fontSize: 24 }}
+          buttonStyle={styles.button}
+          titleStyle={styles.buttonText}
           title="Login"
           onPress={loginHandler}
         />
@@ -67,5 +67,15 @@ const Login = ({ navigation }) => {
     </ScrollView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: { width: '100%', height: '100%' },
+  containerContent: { alignItems: 'center' },
+  titleContainer: { alignItems: 'center', justifyContent: 'center', marginVertical: 50 },
+  inputContainer: { width: '80%' },
+  buttonContainer: { width: '80%' },
+  button: { backgroundColor: 'green', marginVertical: 100 },
+  buttonText: { fontSize: 24 },
+});
 
 export default Login;

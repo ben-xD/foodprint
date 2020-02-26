@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, SafeAreaView } from 'react-native';
+import { View, SafeAreaView, StyleSheet } from 'react-native';
 import { Text, Button } from 'react-native-elements';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { AuthContext } from '../store/Auth';
@@ -22,7 +22,7 @@ const SignupOrRegister = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={{ justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+    <SafeAreaView style={styles.container}>
       <View style={{ position: 'absolute', top: 32, alignItems: 'center', marginTop: 32 }}>
         <Text h1>
           FoodPrint
@@ -79,5 +79,9 @@ const SignupOrRegister = ({ navigation }) => {
     </SafeAreaView >
   );
 };
+
+const styles = StyleSheet.create({
+  container: { justifyContent: 'center', alignItems: 'center', height: '100%' },
+});
 
 export default SignupOrRegister;
