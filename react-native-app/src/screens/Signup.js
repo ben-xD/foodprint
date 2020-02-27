@@ -4,8 +4,8 @@ import { Button, Text } from 'react-native-elements';
 import Password from '../components/Password';
 import Email from '../components/Email';
 import { useRef } from 'react';
-import { AuthContext } from '../store/Auth';
 import { StyleSheet } from 'react-native';
+import AuthContext from '../context/AuthContext';
 
 const Signup = () => {
   const [email, setEmail] = useState('');

@@ -19,7 +19,6 @@ const POST_PICTURE_MUTATION = gql`
 `;
 
 const Camera = ({ route, navigation }) => {
-
   const [isVisible, setVisibility] = useState(false);
   const [uri, setUri] = useState({});
   const [meal, setMeal] = useState({});

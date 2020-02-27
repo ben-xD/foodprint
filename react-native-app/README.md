@@ -15,6 +15,7 @@ You can run these by running npm run CODE, where code is:
 
 ## Development guide & testing
 
+- Write tests for code you write. Write them before (Test driven development) or after. But definitely before merging to master.
 - When you run `git commit`, husky runs all the tests and only lets you commit if they pass
 - To run all the tests, run `npm run test`. To run specific tests, use the run button next to the test in WebStorm
 - There are tests for components, so whenever a component gets changed, it fails the tests and requires to update the relevant snapshot:

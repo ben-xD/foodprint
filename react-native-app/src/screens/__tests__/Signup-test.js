@@ -2,7 +2,7 @@ import React from 'react';
 import { fireEvent, render, wait } from '@testing-library/react-native';
 import renderer from 'react-test-renderer';
 import Signup from '../Signup';
-import { AuthContext } from '../../store/Auth';
+import AuthContext from '../../context/AuthContext';
 
 // Snapshot test
 test('SignUp renders matches previous snapshot', () => {

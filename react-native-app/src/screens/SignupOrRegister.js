@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { View, SafeAreaView, StyleSheet } from 'react-native';
 import { Text, Button } from 'react-native-elements';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import { AuthContext } from '../store/Auth';
+import AuthContext from '../context/AuthContext';
+
 
 const SignupOrRegister = ({ navigation }) => {
   const { signInWithGoogle, signInAnonymously } = React.useContext(AuthContext);
@@ -32,7 +33,7 @@ const SignupOrRegister = ({ navigation }) => {
           <Button
             disabled={isPressed}
             iconContainerStyle={{ marginRight: 24 }}
-            testID={"googleButton"}
+            testID={'googleButton'}
             icon={
               <AntDesign
                 style={{ paddingRight: 5 }}

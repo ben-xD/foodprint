@@ -1,9 +1,9 @@
 import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { AuthContext } from '../store/Auth';
 import { useContext } from 'react';
 import { Avatar, Button } from 'react-native-elements';
 import { View } from 'react-native';
+import AuthContext from '../context/AuthContext';
 
 const Settings = ({ navigation }) => {
 

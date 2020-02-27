@@ -3,7 +3,7 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 import { fireEvent, render, wait } from '@testing-library/react-native';
 import Login from '../Login';
-import { AuthContext } from '../../store/Auth';
+import AuthContext from '../../context/AuthContext';
 
 jest.mock('@apollo/react-hooks');
 
