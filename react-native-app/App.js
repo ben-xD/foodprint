@@ -6,9 +6,8 @@ import Signup from './src/screens/Signup';
 import SignupOrRegister from './src/screens/SignupOrRegister';
 import { ApolloProvider } from '@apollo/react-hooks';
 import ApolloClient from 'apollo-boost';
-import Feedback from './src/screens/Feedback';
 import Loading from './src/screens/Loading';
-import Home from './src/containers/Home';
+import BottomTabBar from './src/containers/BottomTabBar';
 import { createActionCreators, reducer, initialState } from './src/context/Context';
 import Config from 'react-native-config';
 import { GoogleSignin } from '@react-native-community/google-signin';
@@ -62,10 +61,7 @@ const App = () => {
             ) : netInfo.isConnected ? (
               // No token found, user isn't signed in
               state.userIsLoggedIn ? (
-                <>
-                  <Stack.Screen name="Home" component={Home} />
-                  <Stack.Screen name="Feedback" component={Feedback} />
-                </>
+                <Stack.Screen name="Home" component={BottomTabBar} />
               )
                 :
                 <>

@@ -100,20 +100,20 @@ const Camera = ({ route, navigation }) => {
       >
         {({ camera, status }) => {
           if (!cameraIsReady || status !== 'READY') {
-            return <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>
+            return <View style={styles.loadingContainer}>
               <ActivityIndicator
                 style={styles.noCapture} color={'white'} />
             </View>;
           }
           return (
-            <View accessible={true} style={{ flex: 1 }}>
+            <View accessible={true} style={styles.nonLoadingContainer}>
               <ErrorMessage
                 isVisible={isVisible}
                 setVisibility={setVisibility}
                 meal={meal}
                 setMeal={setMeal}
               />
-              <View accessible={true} style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>
+              <View accessible={true} style={styles.captureContainer}>
                 <TouchableOpacity
                   accessible={true}
                   accessibilityLabel="take picture"
@@ -137,7 +137,20 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     backgroundColor: 'black',
   },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  nonLoadingContainer: {
+    flex: 1,
+  },
   preview: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  captureContainer: {
     flex: 1,
     justifyContent: 'flex-end',
     alignItems: 'center',

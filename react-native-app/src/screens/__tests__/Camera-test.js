@@ -20,7 +20,7 @@ test('Take picture on camera', async () => {
 
   const onTakePhotoEvent = jest.fn(data => data);
 
-  const utils = render(<Camera />)
+  const utils = render(<Camera />);
   // const snapButton = utils.getByLabelText('take picture')
   // console.log({ snapButton })
   // fireEvent.press(joinButton);
