@@ -32,11 +32,11 @@ const searchData = async (label) => {
 // @return CarbonFootprintReport (if found) or undefined (if not found)
 const findCategorisedLabel = (labels) => {
   for (let i = 0; i < labels.length; i += 1) {
-    let categoryCarbonFootprintPerKg = catergorisedCarbonValues[labels[i]]
-    if(categoryCarbonFootprintPerKg){
+    let carbonFootprintPerKg = catergorisedCarbonValues[labels[i]]
+    if(carbonFootprintPerKg){
       return {
         item: labels[i],
-        categoryCarbonFootprintPerKg,
+        carbonFootprintPerKg,
       };
     }
   }
@@ -49,10 +49,8 @@ const findCategorisedLabel = (labels) => {
 // @return CarbonFootprintReport (if a label was found in a DB) or undefined (it any label was found)
 const oneLayerSearch = async (labels) => {
   
-  const nounLabels = getNounsInLabels(labels);
-  console.log("nounLabels", nounLabels);
-  for (let i = 0; i < nounLabels.length; i += 1) {
-    nounInLabel = nounLabels[i];
+  for (let i = 0; i < labels.length; i += 1) {
+    nounInLabel = labels[i];
     if (await isConceptValid(nounInLabel)){
       const carbonFootprintPerKg = await searchData(nounInLabel);
       if (carbonFootprintPerKg !== undefined) {
@@ -64,7 +62,7 @@ const oneLayerSearch = async (labels) => {
     }
   }
 
-  categoryResult = findCategorisedLabel(nounLabels)
+  categoryResult = findCategorisedLabel(labels)
   if (categoryResult != undefined) {
     return categoryResult;
   }
@@ -112,18 +110,31 @@ const getNounInString = (label) => {
   return nounsArray;
 }
 
-//  
+const splitLabelInWords = (label) =>  {
+  let labelSplit = label.split(" ");
+  
+  // Removes any "" included as a word:
+  let index = labelSplit.indexOf("");
+  while (index !== -1){
+    labelSplit.splice(index, 1);
+    index = labelSplit.indexOf("");
+  }
+  return labelSplit;
+}
+
 const getNounsInLabels = (labels) => {
   let nounLabels = [];
   for (let i = 0; i < labels.length; i++) {
     let label = labels[i];
+    let labelSplit = splitLabelInWords(label);
 
-    if (label.split(" ").length > 1) {
+    if (labelSplit.length > 1) {
       let nounsArray = nlp(label).nouns().out('string');
-      nounsArray = nounsArray.split(" ");
+      nounsArray = splitLabelInWords(nounsArray);
 
+      // When there are more than one noun: 
       if (nounsArray.length > 1) {
-        let allNounsInString = ""
+        let allNounsInString = "" // String to concatenate all the nouns
         for (let j = 0; j < nounsArray.length; j++){
           allNounsInString += nounsArray[j] + " ";
           nounLabels.push(nounsArray[j]);
@@ -132,12 +143,15 @@ const getNounsInLabels = (labels) => {
         nounLabels.splice(i, 0, allNounsInString);
       } 
 
-      if (nounsArray.length == 1) {
+      // When there is only one noun in the array:
+      if (nounsArray.length == 1 && nounsArray[0]!= '') {
         nounLabels.push(nounsArray[0])
       }
     }
-    else{
-      nounLabels.push(label);
+
+    // If there isn't any noun, the last word is mantained: 
+    if  (nounLabels.length == 0){
+      nounLabels.push(labelSplit[labelSplit.length - 1]);
     }
   }
   return nounLabels;
@@ -253,7 +267,8 @@ const getCarbonFootprintFromImage = async (image) => {
 const getCarbonFootprintFromName = async (name) => {
   mongooseQueries.connect();
   // Set array of name only for labels
-  const labels = [name.toLowerCase()];
+  let labels = [name.toLowerCase()];
+  labels = getNounsInLabels(labels);
 
   // Attempt to find the google vision labels in the database:
   const firstResponse= await oneLayerSearch(labels);
@@ -263,7 +278,8 @@ const getCarbonFootprintFromName = async (name) => {
   }
 
   // Call ConceptNet to create the next layer:
-  const nextLabels = await getNextLayer(labels);
+  let nextLabels = await getNextLayer(labels);
+  nextLabels = getNounsInLabels(nextLabels);
 
   // Attempt to find the next layer labels in the database:
   const nextResponse = await oneLayerSearch(nextLabels);
