@@ -33,7 +33,7 @@ const searchData = async (label) => {
 const findCategorisedLabel = (labels) => {
   for (let i = 0; i < labels.length; i += 1) {
     let categoryCarbonFootprintPerKg = catergorisedCarbonValues[labels[i]]
-    if(categoryCarbonFootprintPerKg){
+    if (categoryCarbonFootprintPerKg) {
       return {
         item: labels[i],
         carbonFootprintPerKg: categoryCarbonFootprintPerKg,
@@ -52,7 +52,7 @@ const oneLayerSearch = async (labels) => {
 
     const nounInLabel = getNounInString(labels[i]);
 
-    if (await isConceptValid(nounInLabel)){
+    if (await isConceptValid(nounInLabel)) {
       const carbonFootprintPerKg = await searchData(nounInLabel);
       if (carbonFootprintPerKg !== undefined) {
         return {
@@ -84,7 +84,7 @@ const getNextLayer = async (labels) => {
 
     for (let j = 0; j < conceptResponse.length && nextConceptResponse.length < MAX_LENGTH_OF_NEXT_LAYER; j += 1) {
       const concept = conceptResponse[j].end.label;
-      if (await isConceptValid(concept)){
+      if (await isConceptValid(concept)) {
         nextConceptResponse.push(concept);
       }
     }
@@ -105,8 +105,8 @@ const getLabelsFromResponse = (conceptResponse) => {
 };
 
 //  Deletes the adjetives in a string
-const getNounInString = (label) => {
-  if (label.split(" ").length <= 1){
+const getNounInString = (label) => {
+  if (label.split(" ").length <= 1) {
     return label;
   }
   let nounsArray = nlp(label).nouns().out('array');
@@ -117,25 +117,25 @@ const getNounInString = (label) => {
 // Assess if a concept is valid by checking if it is related to food (this is done making use of
 // ConceptNet relations).
 const isConceptValid = async (concept) => {
-  if (concept.split(" ").length > 1){
+  if (concept.split(" ").length > 1) {
     return false;
   }
 
   let isAResponse = await axios.get(`http://api.conceptnet.io/query?start=/c/en/${concept}&rel=/r/IsA&limit=${MAX_NUMBER_OF_CONCEPTS}`);
   isA = getLabelsFromResponse(isAResponse);
-  if (isA.includes("food") || isA.includes("a food")|| isA.includes("fruit") || isA.includes("edible fruit") ){
+  if (isA.includes("food") || isA.includes("a food") || isA.includes("fruit") || isA.includes("edible fruit")) {
     return true;
   }
 
   let usedForResponse = await axios.get(`http://api.conceptnet.io/query?start=/c/en/${concept}&rel=/r/UsedFor&limit=${MAX_NUMBER_OF_CONCEPTS}`);
   usedFor = getLabelsFromResponse(usedForResponse);
-  if (usedFor.includes("eating")){
+  if (usedFor.includes("eating")) {
     return true;
   }
 
   let RelatedTermsResponse = await axios.get(`http://api.conceptnet.io/query?start=/c/en/${concept}&rel=/r/RelatedTo&limit=${MAX_NUMBER_OF_CONCEPTS}`);
   RelatedTerms = getLabelsFromResponse(RelatedTermsResponse);
-  if (RelatedTerms.includes("food")){
+  if (RelatedTerms.includes("food")) {
     return true;
   }
 
@@ -143,9 +143,9 @@ const isConceptValid = async (concept) => {
 };
 
 // Removes the duplicate labels in a list
- const removeDuplicates = (labels) => {
+const removeDuplicates = (labels) => {
   return labels.filter((a, b) => labels.indexOf(a) === b);
- };
+};
 
 // Sends a given image to Google Vision API and returns the labels found.
 // Go to https://docs.google.com/spreadsheets/d/1MQl5HjTbkToTniYZ3w6wwPfPen9yEGbur-11XgVCIT8/edit?usp=sharing
@@ -206,7 +206,7 @@ const getCarbonFootprint = async (labels) => {
   mongooseQueries.connect();
 
   // Attempt to find the google vision labels in the database:
-  const firstResponse= await oneLayerSearch(labels);
+  const firstResponse = await oneLayerSearch(labels);
   if (firstResponse.item) {
     mongooseQueries.disconnect();
     return firstResponse;
