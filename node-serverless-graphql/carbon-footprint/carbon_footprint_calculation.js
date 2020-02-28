@@ -39,8 +39,8 @@ const findCategorisedLabel = (labels) => {
         carbonFootprintPerKg: categoryCarbonFootprintPerKg,
       };
     }
-    return undefined;
   }
+  return undefined;
 };
 
 // For each valid label in a list of labels (aka layer), this function tries to find it in the DB. If none of the labels
@@ -48,6 +48,7 @@ const findCategorisedLabel = (labels) => {
 // Note that  the search is made in order (the labels are already ordered by prediction confidence by Google Vision API).
 // @return CarbonFootprintReport (if a label was found in a DB) or undefined (it any label was found)
 const oneLayerSearch = async (labels) => {
+
   for (let i = 0; i < labels.length; i += 1) {
 
     const nounInLabel = getNounInString(labels[i]);
@@ -110,9 +111,55 @@ const getNounInString = (label) => {
     return label;
   }
   let nounsArray = nlp(label).nouns().out('array');
-  return nounsArray[0];
+  return nounsArray;
 }
 
+const splitLabelInWords = (label) => {
+  let labelSplit = label.split(" ");
+
+  // Removes any "" included as a word:
+  let index = labelSplit.indexOf("");
+  while (index !== -1) {
+    labelSplit.splice(index, 1);
+    index = labelSplit.indexOf("");
+  }
+  return labelSplit;
+}
+
+const getNounsInLabels = (labels) => {
+  let nounLabels = [];
+  for (let i = 0; i < labels.length; i++) {
+    let label = labels[i];
+    let labelSplit = splitLabelInWords(label);
+
+    if (labelSplit.length > 1) {
+      let nounsArray = nlp(label).nouns().out('string');
+      nounsArray = splitLabelInWords(nounsArray);
+
+      // When there are more than one noun: 
+      if (nounsArray.length > 1) {
+        let allNounsInString = "" // String to concatenate all the nouns
+        for (let j = 0; j < nounsArray.length; j++) {
+          allNounsInString += nounsArray[j] + " ";
+          nounLabels.push(nounsArray[j]);
+        }
+        allNounsInString = allNounsInString.substring(0, allNounsInString.length - 1); // To remove the last " "
+        nounLabels.splice(i, 0, allNounsInString);
+      }
+
+      // When there is only one noun in the array:
+      if (nounsArray.length == 1 && nounsArray[0] != '') {
+        nounLabels.push(nounsArray[0])
+      }
+    }
+
+    // If there isn't any noun, the last word is mantained: 
+    if (nounLabels.length == 0) {
+      nounLabels.push(labelSplit[labelSplit.length - 1]);
+    }
+  }
+  return nounLabels;
+}
 
 // Assess if a concept is valid by checking if it is related to food (this is done making use of
 // ConceptNet relations).
@@ -204,6 +251,9 @@ const getCarbonFootprintFromName = async (name) => {
 
 const getCarbonFootprint = async (labels) => {
   mongooseQueries.connect();
+  // Set array of name only for labels
+  let labels = [name.toLowerCase()];
+  labels = getNounsInLabels(labels);
 
   // Attempt to find the google vision labels in the database:
   const firstResponse = await oneLayerSearch(labels);
@@ -213,7 +263,8 @@ const getCarbonFootprint = async (labels) => {
   }
 
   // Call ConceptNet to create the next layer:
-  const nextLabels = await getNextLayer(labels);
+  let nextLabels = await getNextLayer(labels);
+  nextLabels = getNounsInLabels(nextLabels);
 
   // Attempt to find the next layer labels in the database:
   const nextResponse = await oneLayerSearch(nextLabels);
