@@ -1,13 +1,83 @@
-import React, { useState } from 'react';
-import { View, Image } from 'react-native';
-import { Text, Button, Rating } from 'react-native-elements';
-import ErrorMessage from '../components/ErrorMessage';
+import React, { useEffect } from 'react';
+import { View } from 'react-native';
+import { Text } from 'react-native-elements';
+import { gql } from 'apollo-boost';
+import { StyleSheet } from 'react-native';
+import { useMutation } from '@apollo/react-hooks';
 
+// GraphQL schema for picture posting mutation
+const POST_PICTURE_MUTATION = gql`
+  mutation PostPictureMutation($file: PictureFile) {
+    postPicture(file: $file) {
+      product {
+        name
+      }
+      carbonFootprintPerKg
+    }
+  }
+`;
+
+const POST_BARCODE_MUTATION = gql`
+  mutation PostBarcodeMutation($barcode: String) {
+      postBarcode(barcode: $barcode) {
+        product {
+          name
+        }
+        carbonFootprintPerKg
+      }
+  }
+`;
 
 const Feedback = ({ route, navigation }) => {
+  const [uploadPicture, { data: uploadPictureData }] = useMutation(POST_PICTURE_MUTATION);
+  const [postBarcodeMutation, { loading: barcodeLoading, error: barcodeError, data: barcodeData }] = useMutation(POST_BARCODE_MUTATION);
+  // const [isVisible, setVisibility] = useState(false);
 
-  const [isVisible, setVisibility] = useState(false);
-  const [meal, setMeal] = useState(route.params.meal);
+  useEffect(() => {
+    const { file, barcode } = route.params;
+    if (file) {
+      console.log({ file });
+      uploadPicture({ variables: { file } });
+    } else if (barcode) {
+      console.log({ barcode });
+      postBarcodeMutation({ variables: { barcode } });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // useEffect(() => {
+  //   if (pictureError) {
+  //     console.warn({ pictureError });
+  //   }
+  //   console.log({ pictureData, pictureLoading, pictureError });
+  // const mealObject = {
+  //   uri,
+  //   score: meal.score,
+  //   description: meal.description,
+  // };
+  // const mealObject = {
+  //   uri,
+  //   score: pictureData.postPicture.carbonFootprintPerKg,
+  //   description: pictureData.postPicture.product.name,
+  // };
+  // }, []);
+
+  // useEffect(() => {
+  //   if (barcodeError) {
+  //     console.warn({ barcodeError });
+  //   }
+  //   console.log({ barcodeData, barcodeLoading });
+  //   // const mealObject = {
+  //   //   uri,
+  //   //   score: meal.score,
+  //   //   description: meal.description,
+  //   // };
+  //   // const mealObject = {
+  //   //   uri,
+  //   //   score: pictureData.postPicture.carbonFootprintPerKg,
+  //   //   description: pictureData.postPicture.product.name,
+  //   // };
+  // }, []);
 
   const calculateRating = (carbonFootprint) => {
     if (carbonFootprint < 2) {
@@ -36,8 +106,9 @@ const Feedback = ({ route, navigation }) => {
   };
 
   return (
-    <View style={{ flex: 1 }}>
-      <ErrorMessage
+    <View style={styles.container}>
+      <Text>{JSON.stringify(uploadPictureData)}</Text>
+      {/* <ErrorMessage
         isVisible={isVisible}
         setVisibility={setVisibility}
         meal={meal}
@@ -72,9 +143,15 @@ const Feedback = ({ route, navigation }) => {
             onPress={() => setVisibility(true)}
           />
         </View>
-      </View>
+      </View> */}
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});
 
 export default Feedback;
