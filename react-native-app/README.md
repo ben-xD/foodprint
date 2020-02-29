@@ -2,9 +2,9 @@
 
 Written in javascript with react native, and associated libraries (react-navigation, jest).
 
-
 ## TODOs
 - Display correctly (hide logout button) for skipped-login (anonymous) users
+- Look for TODOs in the code
 
 ## npm run options
 You can run these by running npm run CODE, where code is:

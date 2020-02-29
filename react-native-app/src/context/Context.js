@@ -112,6 +112,7 @@ export const createActionCreators = (dispatch) => ({
   },
   deleteAccount: async () => {
     dispatch({ type: 'SIGN_OUT' });
+    // TODO If storing user data, need to call backend to search and delete all user data.
     await auth().currentUser.delete();
   },
 });
