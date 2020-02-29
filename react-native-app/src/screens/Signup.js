@@ -44,13 +44,13 @@ const Signup = () => {
 
   return (
     <SafeAreaView>
-      <ScrollView contentContainerStyle={{ alignItems: 'center' }} style={{ width: '100%', height: '100%' }}>
-        <View style={{ alignItems: 'center', justifyContent: 'center', marginVertical: 16 }}>
+      <ScrollView contentContainerStyle={styles.containerContent} style={styles.container}>
+        <View style={styles.titleContainer}>
           <Text h1>
-            FoodPrint
+            Foodprint
           </Text>
         </View>
-        <View style={{ width: '80%' }}>
+        <View style={styles.inputContainer}>
           <View>
             {emailError === '' ? <></> : <Text>{emailError}</Text>}
             <Email nextFieldRef={passwordRef} setEmail={setEmail} email={email} />
@@ -72,8 +72,23 @@ const Signup = () => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    width: '100%',
+    height: '100%',
+  },
+  containerContent: {
+    alignItems: 'center',
+  },
   title: {
     fontSize: 24,
+  },
+  titleContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginVertical: 16,
+  },
+  inputContainer: {
+    width: '80%',
   },
   button: { backgroundColor: 'green', marginVertical: 16 },
 });

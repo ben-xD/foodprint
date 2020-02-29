@@ -32,27 +32,27 @@ const SignupOrRegister = ({ navigation }) => {
         <View>
           <Button
             disabled={isPressed}
-            iconContainerStyle={{ marginRight: 24 }}
+            iconContainerStyle={styles.googleIconContainer}
             testID={'googleButton'}
             icon={
               <AntDesign
-                style={{ paddingRight: 5 }}
+                style={styles.googleIcon}
                 name="google"
                 size={28}
                 color="black"
               />
             }
-            containerStyle={{ marginVertical: 8 }}
-            buttonStyle={{ backgroundColor: 'white' }}
-            titleStyle={{ fontSize: 24, color: 'black' }}
+            containerStyle={styles.googleContainer}
+            buttonStyle={styles.google}
+            titleStyle={styles.googleText}
             title="Join using Google"
             onPress={handleSignInWithGoogle}
           />
           <Button
             disabled={isPressed}
-            containerStyle={{ marginVertical: 8 }}
-            buttonStyle={{ backgroundColor: 'green' }}
-            titleStyle={{ fontSize: 24 }}
+            containerStyle={styles.signUpContainer}
+            buttonStyle={styles.signUp}
+            titleStyle={styles.signUpText}
             title="Join using email"
             onPress={() => navigation.navigate('Signup')}
           />
@@ -86,6 +86,15 @@ const styles = StyleSheet.create({
   container: { justifyContent: 'center', alignItems: 'center', height: '100%' },
   bodyContainer: { width: '80%' },
   titleContainer: { position: 'absolute', top: 32, alignItems: 'center', marginTop: 32 },
+  googleContainer: { marginVertical: 8 },
+  google: { backgroundColor: 'white' },
+  googleText: { fontSize: 24, color: 'black' },
+  googleIconContainer: { marginRight: 24 },
+  googleIcon: { paddingRight: 5 },
+  signUpContainer: { marginVertical: 8 },
+  signUpText: { fontSize: 24 },
+  signUp: { backgroundColor: 'green' },
+
   loginButtonContainer: { marginVertical: 12 },
   loginText: { fontSize: 18, textAlign: 'center', color: 'grey' },
   loginButton: { color: 'green', fontSize: 24 },

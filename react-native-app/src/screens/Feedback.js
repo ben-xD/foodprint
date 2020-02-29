@@ -29,7 +29,6 @@ const POST_BARCODE_MUTATION = gql`
 `;
 
 const Feedback = ({ route, navigation }) => {
-  const [loading, setLoading] = useState(route.params.loading);
   const [meal, setMeal] = useState(null);
   const [uploadPicture, { loading: pictureLoading, data: pictureData, error: pictureError }] = useMutation(POST_PICTURE_MUTATION);
   const [postBarcodeMutation, { loading: barcodeLoading, error: barcodeError, data: barcodeData }] = useMutation(POST_BARCODE_MUTATION);
@@ -51,7 +50,6 @@ const Feedback = ({ route, navigation }) => {
     }
     // TODO set error, and display.
     console.warn('Error!');
-    setLoading(false);
   }, [pictureError, barcodeError]);
 
   useEffect(() => {
@@ -65,7 +63,6 @@ const Feedback = ({ route, navigation }) => {
         score: pictureData.postPicture.carbonFootprintPerKg,
         description: pictureData.postPicture.product.name,
       });
-      setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pictureData]);
@@ -80,7 +77,6 @@ const Feedback = ({ route, navigation }) => {
         score: barcodeData.postBarcode.carbonFootprintPerKg,
         description: barcodeData.postBarcode.product.name,
       });
-      setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [barcodeData]);
@@ -111,52 +107,63 @@ const Feedback = ({ route, navigation }) => {
     }
   };
 
-  return (
-    <View style={styles.container}>
-      {loading ? <View style={{ height: '100%', justifyContent: 'center' }}><ActivityIndicator /></View> :
-        !meal ? <Text>No meal yet</Text> :
-          <View style={{ flex: 1, justifyContent: 'center' }}>
-            <View style={{
-              flex: 4,
-              alignItems: 'center',
-              justifyContent: 'center',
-              backgroundColor: 'white',
-              margin: 10,
-              marginTop: 100,
-              marginBottom: 30,
-            }}>
-              {meal.uri == null ? <></> :
-                <Image
-                  style={{ height: 350, width: 350 }}
-                  source={{ uri: meal.uri }}
-                />
-              }
-              <Text h2 style={{ marginTop: 20, marginBottom: 10 }}>{meal.description}</Text>
-              <Rating
-                readonly
-                startingValue={calculateRating(meal.score)}
-              />
-              <Text style={{ fontSize: 18, margin: 10 }}>{meal.score}kg of CO2 eq/kg</Text>
-            </View>
-            <View style={{ flex: 1, flexDirection: 'column', marginLeft: 50, marginRight: 50 }}>
-              <Button
-                buttonStyle={{ backgroundColor: 'darkred' }}
-                titleStyle={{ fontSize: 24 }}
-                title="This isn't my item..."
-                // TODO don't pass setMeal, and don't call Post correction in correction. Do it in Feedback instead.
-                onPress={() => navigation.navigate('Correction', { meal })}
-              />
-            </View>
-          </View>
-      }
-    </View>
-  );
+  return pictureLoading || barcodeLoading ?
+    <View style={styles.loading}>
+      <ActivityIndicator />
+    </View > :
+    // todo fix this, no meal yet thing
+    !meal ? <Text>No meal yet</Text> :
+      <View style={styles.container}>
+        <View style={styles.body}>
+          {meal.uri == null ? <></> :
+            <Image
+              style={styles.image}
+              source={{ uri: meal.uri }}
+            />
+          }
+          <Text h2 style={styles.description}>{meal.description}</Text>
+          <Rating
+            readonly
+            startingValue={calculateRating(meal.score)}
+          />
+          <Text style={styles.score}>{meal.score}kg of CO2 eq/kg</Text>
+        </View>
+        <View style={styles.buttonContainer}>
+          <Button
+            buttonStyle={styles.button}
+            titleStyle={styles.buttonText}
+            title="This isn't my item..."
+            // TODO don't pass setMeal, and don't call Post correction in correction. Do it in Feedback instead.
+            onPress={() => navigation.navigate('Correction', { meal, setMeal })}
+          />
+        </View>
+      </View>;
 };
 
 const styles = StyleSheet.create({
+  loading: {
+    height: '100%',
+    justifyContent: 'center',
+  },
   container: {
     flex: 1,
+    justifyContent: 'center',
   },
+  body: {
+    flex: 4,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'white',
+    margin: 10,
+    marginTop: 100,
+    marginBottom: 30,
+  },
+  image: { height: 350, width: 350 },
+  description: { marginTop: 20, marginBottom: 10 },
+  score: { fontSize: 18, margin: 10 },
+  buttonContainer: { flex: 1, flexDirection: 'column', marginLeft: 50, marginRight: 50 },
+  button: { backgroundColor: 'darkred' },
+  buttonText: { fontSize: 24 },
 });
 
 export default Feedback;
