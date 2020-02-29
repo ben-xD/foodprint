@@ -16,7 +16,10 @@ const Food = () => {
       <Stack.Screen
         name="Overview"
         component={FoodOverview}
-        options={{ headerShown: false }}
+        options={{
+          headerShown: true,
+          headerTitle: 'Your Foodprint',
+        }}
       />
       <Stack.Screen name="Camera" component={Camera} />
       <Stack.Screen name="Loading" component={Loading} />

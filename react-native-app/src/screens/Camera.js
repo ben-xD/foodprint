@@ -18,6 +18,7 @@ const Camera = ({ navigation }) => {
 
   const barCodeHandler = ({ data, rawData, type, bounds }) => {
     if (isFocused) {
+      console.log({ data, rawData, type, bounds });
       navigation.navigate('Feedback', { barcode: data, loading: true });
     }
   };

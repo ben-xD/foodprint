@@ -6,31 +6,30 @@ import {
   Image,
   View,
   ScrollView,
-  TouchableOpacity,
 } from 'react-native';
 import { StyleSheet } from 'react-native';
+import { useLayoutEffect } from 'react';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const FoodOverview = ({ navigation }) => {
-  const takePicture = async () => {
-    navigation.navigate('Camera');
-  };
+  <MaterialCommunityIcons name="camera" color={'grey'} size={35} />;
 
-  const goToSettings = async () => {
-    navigation.navigate('Settings');
-  };
+  useLayoutEffect(() => {
+    const takePicture = async () => {
+      navigation.navigate('Camera');
+    };
+
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity onPress={takePicture} >
+          <MaterialCommunityIcons name="camera" color={'grey'} size={28} style={styles.cameraButton} />
+        </TouchableOpacity >
+      ),
+    });
+  }, [navigation]);
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* TODO Don't make custom header, use react navigation built in header instead, with icon props */}
-      <View
-        style={styles.header}>
-        <TouchableOpacity onPress={takePicture}>
-          <MaterialCommunityIcons name="camera" color={'grey'} size={45} style={styles.headerButton} />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={goToSettings}>
-          <MaterialCommunityIcons name="settings-outline" color={'grey'} size={50} style={styles.headerButton} />
-        </TouchableOpacity>
-      </View>
       <ScrollView>
         <View style={styles.contentContainer}>
           <Text style={styles.title}>Welcome</Text>
@@ -49,14 +48,13 @@ const FoodOverview = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: { width: '100%', height: '100%' },
-  // TODO remove header and headerButton once using react navigation header
+  cameraButton: { marginRight: 16 },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 8,
   },
-  headerButton: { margin: 10 },
   contentContainer: { justifyContent: 'center', alignItems: 'center', marginHorizontal: 40 },
   title: { fontSize: 36, marginVertical: 20, textAlign: 'center' },
   subtitle: { fontSize: 20, textAlign: 'center', marginTop: 20 },
