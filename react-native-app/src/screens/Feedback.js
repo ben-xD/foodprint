@@ -29,12 +29,12 @@ const POST_BARCODE_MUTATION = gql`
 `;
 
 const Feedback = ({ route, navigation }) => {
-  const [loading, setLoading] = useState(route.params.loading)
-  const [meal, setMeal] = useState(null)
+  const [loading, setLoading] = useState(route.params.loading);
+  const [meal, setMeal] = useState(null);
   const [uploadPicture, { loading: pictureLoading, data: pictureData, error: pictureError }] = useMutation(POST_PICTURE_MUTATION);
   const [postBarcodeMutation, { loading: barcodeLoading, error: barcodeError, data: barcodeData }] = useMutation(POST_BARCODE_MUTATION);
 
-  // When component is loaded and provided with a file or barcode, make a request 
+  // When component is loaded and provided with a file or barcode, make a request
   useEffect(() => {
     const { file, barcode } = route.params;
     if (file) {
@@ -42,16 +42,17 @@ const Feedback = ({ route, navigation }) => {
     } else if (barcode) {
       postBarcodeMutation({ variables: { barcode } });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    if (!pictureError & !barcodeError) {
-      return
+    if (!pictureError && !barcodeError) {
+      return;
     }
     // TODO set error, and display.
-    console.warn("Error!")
-    setLoading(false)
-  }, [pictureError, barcodeError])
+    console.warn('Error!');
+    setLoading(false);
+  }, [pictureError, barcodeError]);
 
   useEffect(() => {
     if (pictureError) {
@@ -64,8 +65,9 @@ const Feedback = ({ route, navigation }) => {
         score: pictureData.postPicture.carbonFootprintPerKg,
         description: pictureData.postPicture.product.name,
       });
-      setLoading(false)
+      setLoading(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pictureData]);
 
   useEffect(() => {
@@ -77,9 +79,10 @@ const Feedback = ({ route, navigation }) => {
       setMeal({
         score: barcodeData.postBarcode.carbonFootprintPerKg,
         description: barcodeData.postBarcode.product.name,
-      })
-      setLoading(false)
+      });
+      setLoading(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [barcodeData]);
 
   const calculateRating = (carbonFootprint) => {

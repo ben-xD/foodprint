@@ -1,5 +1,5 @@
 import { Image, View } from 'react-native';
-import { Input, Overlay, Text } from 'react-native-elements';
+import { Input, Text } from 'react-native-elements';
 import React, { useState, useEffect } from 'react';
 
 import { gql } from 'apollo-boost';
@@ -20,20 +20,13 @@ mutation PostCorrectionMutation($name: String!) {
 
 const Correction = ({ meal, setMeal }) => {
 
-  const [correctedName, setCorrectedName] = useState(null);
+  const [correctedName, setCorrectedName] = useState("");
   const [postCorrection, { loading: correctionLoading, error: correctionError, data: correctionData }] = useMutation(POST_CORRECTION_MUTATION);
 
   // Handle correction from input field
-  const handleCorrection = (name) => {
-    console.log({ 'Corrected name': name });
-    postCorrectionFunction(name);
-  };
-
-  // Post correction mutation to backend
-  const postCorrectionFunction = async (name) => {
+  const handleCorrection = async () => {
     try {
-      console.log({ 'Sending': correctedName });
-      await postCorrection({ variables: { name } });
+      await postCorrection({ variables: { name: correctedName } });
     } catch (err) {
       console.warn({ err });
     }
@@ -42,7 +35,6 @@ const Correction = ({ meal, setMeal }) => {
   // Respond to changes in correction data (following correction)
   useEffect(() => {
     if (correctionData) {
-      console.log({ 'correctionData': correctionData });
       setMeal({
         ...meal,
         score: correctionData.postCorrection.carbonFootprintPerKg,
@@ -55,7 +47,7 @@ const Correction = ({ meal, setMeal }) => {
   return (
     <View style={{ flex: 1, justifyContent: 'center' }}>
       <View style={{ flex: 2, justifyContent: 'center' }}>
-        <Text h3 style={{ textAlign: 'center' }}>We're sorry we couldn't find your item...</Text>
+        <Text h3 style={{ textAlign: 'center' }}>We couldn't find your item.</Text>
       </View>
       <View style={{ flex: 2.5, alignItems: 'center', justifyContent: 'center' }}>
         <Image
@@ -70,12 +62,9 @@ const Correction = ({ meal, setMeal }) => {
       <View style={{ flex: 1.5 }}>
         <View style={{ margin: 20 }}>
           <Input
-            placeholder="e.g. Cucumber"
+            placeholder="Cucumber"
             onChangeText={value => setCorrectedName(value)}
-            onSubmitEditing={() => {
-              handleCorrection(correctedName);
-              setVisibility(false);
-            }}
+            onSubmitEditing={handleCorrection}
           />
         </View>
       </View>

@@ -62,7 +62,7 @@ exports[`Correction matches previous snapshot 1`] = `
         }
       }
     >
-      We're sorry we couldn't find your item...
+      We couldn't find your item.
     </Text>
   </View>
   <View
@@ -187,7 +187,7 @@ exports[`Correction matches previous snapshot 1`] = `
             editable={true}
             onChangeText={[Function]}
             onSubmitEditing={[Function]}
-            placeholder="e.g. Cucumber"
+            placeholder="Cucumber"
             rejectResponderTermination={true}
             style={
               Object {
