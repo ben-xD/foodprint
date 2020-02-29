@@ -15,6 +15,7 @@ import { useNetInfo } from '@react-native-community/netinfo';
 import NoInternet from './src/screens/NoInternet';
 import auth from '@react-native-firebase/auth';
 import AuthContext from './src/context/AuthContext';
+import DeleteAccount from './src/screens/DeleteAccount';
 
 const Stack = createStackNavigator();
 
@@ -61,7 +62,10 @@ const App = () => {
             ) : netInfo.isConnected ? (
               // No token found, user isn't signed in
               state.userIsLoggedIn ? (
-                <Stack.Screen name="Home" component={BottomTabBar} />
+                <>
+                  <Stack.Screen name="Home" component={BottomTabBar} />
+                  <Stack.Screen name="Delete Account" component={DeleteAccount} />
+                </>
               )
                 :
                 <>

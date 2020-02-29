@@ -110,4 +110,8 @@ export const createActionCreators = (dispatch) => ({
     await AsyncStorage.setItem('userIsLoggedIn', JSON.stringify(true));
     dispatch({ type: 'SIGN_IN', token });
   },
+  deleteAccount: async () => {
+    dispatch({ type: 'SIGN_OUT' });
+    await auth().currentUser.delete();
+  },
 });

@@ -1,11 +1,11 @@
 import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useContext } from 'react';
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
 import AuthContext from '../context/AuthContext';
 import { Linking } from 'react-native';
 import { useState } from 'react';
-import { ListItem } from 'react-native-elements';
+import { ListItem, Text } from 'react-native-elements';
 import { StyleSheet } from 'react-native';
 
 const Settings = ({ navigation }) => {
@@ -19,11 +19,6 @@ const Settings = ({ navigation }) => {
         setErrors(['Unable to open mail app, do you have one set?']);
       },
     );
-  };
-
-  const deleteAccountHandler = () => {
-    // TODO
-    console.warn('TODO Implement this');
   };
 
   return (
@@ -40,17 +35,11 @@ const Settings = ({ navigation }) => {
           bottomDivider
           onPress={openEmail}
         />
-        {/* <ListItem
-          containerStyle={styles.buttonContainer}
-          title="Change password"
-          bottomDivider
-          onPress={signOut}
-        /> */}
         <ListItem
           containerStyle={styles.buttonContainer}
-          title="Delete account and data"
+          title="Delete account"
           bottomDivider
-          onPress={deleteAccountHandler}
+          onPress={() => navigation.navigate('Delete Account')}
         />
         <ListItem
           containerStyle={styles.buttonContainer}
@@ -71,6 +60,7 @@ const Settings = ({ navigation }) => {
 export default Settings;
 
 const styles = StyleSheet.create({
+  modalContainer: { padding: 16 },
   titleContainer: {
     margin: 8,
   },
@@ -86,9 +76,6 @@ const styles = StyleSheet.create({
   },
   button: {
     height: 48,
-  },
-  revokeButton: {
-    backgroundColor: '#bc0303',
   },
 });
 
