@@ -93,7 +93,7 @@ exports[`FoodOverview matches previous snapshot 1`] = `
           }
         }
       >
-        Welcome to FoodPrint!
+        Welcome
       </Text>
       <Text
         style={
@@ -104,7 +104,7 @@ exports[`FoodOverview matches previous snapshot 1`] = `
           }
         }
       >
-        You can now know the carbon footprint of the food you buy simply by scanning its barcode or taking a picture of it!
+        Scan a barcode or snap a picture.
       </Text>
       <Image
         source={
@@ -120,17 +120,6 @@ exports[`FoodOverview matches previous snapshot 1`] = `
           }
         }
       />
-      <Text
-        style={
-          Object {
-            "fontSize": 20,
-            "marginTop": 20,
-            "textAlign": "center",
-          }
-        }
-      >
-        To get started, simply click on the Camera icon in the top left corner!
-      </Text>
     </View>
   </ScrollView>
 </SafeAreaView>

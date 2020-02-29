@@ -4,12 +4,15 @@ import renderer from 'react-test-renderer';
 import { fireEvent, render, wait } from '@testing-library/react-native';
 import Camera from '../Camera';
 import { useMutation } from 'react-apollo';
+import { useIsFocused } from '@react-navigation/native';
 
 jest.mock('@apollo/react-hooks');
+jest.mock('@react-navigation/native')
 
 // Check current component against its snapshot
 test('FoodOverview matches previous snapshot', () => {
   useMutation.mockImplementation(() => [null, { loading: null, error: null, data: null }]);
+  useIsFocused.mockImplementation(() => true)
   const tree = renderer.create(<Camera />).toJSON();
   expect(tree).toMatchSnapshot();
 });

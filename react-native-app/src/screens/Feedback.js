@@ -57,7 +57,7 @@ const Feedback = ({ route, navigation }) => {
     if (pictureError) {
       console.warn({ pictureError });
     }
-    console.log({ pictureData, pictureLoading, pictureError });
+    // console.log({ pictureData, pictureLoading, pictureError });
     if (pictureData) {
       setMeal({
         uri: route.params.uri,
@@ -72,7 +72,7 @@ const Feedback = ({ route, navigation }) => {
     if (barcodeError) {
       console.warn({ barcodeError });
     }
-    console.log({ barcodeData, barcodeLoading, barcodeError });
+    // console.log({ barcodeData, barcodeLoading, barcodeError });
     if (barcodeData) {
       setMeal({
         score: barcodeData.postBarcode.carbonFootprintPerKg,
