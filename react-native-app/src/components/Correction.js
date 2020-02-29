@@ -18,7 +18,7 @@ mutation PostCorrectionMutation($name: String!) {
 }
 `;
 
-const ErrorMessage = ({ isVisible, setVisibility, meal, setMeal }) => {
+const Correction = ({ meal, setMeal }) => {
 
   const [correctedName, setCorrectedName] = useState(null);
   const [postCorrection, { loading: correctionLoading, error: correctionError, data: correctionData }] = useMutation(POST_CORRECTION_MUTATION);
@@ -53,39 +53,34 @@ const ErrorMessage = ({ isVisible, setVisibility, meal, setMeal }) => {
   }, [correctionData]);
 
   return (
-    <Overlay
-      isVisible={isVisible}
-      onBackdropPress={() => setVisibility(false)}
-    >
+    <View style={{ flex: 1, justifyContent: 'center' }}>
+      <View style={{ flex: 2, justifyContent: 'center' }}>
+        <Text h3 style={{ textAlign: 'center' }}>We're sorry we couldn't find your item...</Text>
+      </View>
+      <View style={{ flex: 2.5, alignItems: 'center', justifyContent: 'center' }}>
+        <Image
+          style={{ height: 200, width: 200 }}
+          source={{ uri: 'https://mir-s3-cdn-cf.behance.net/project_modules/disp/fc4a1059120725.5a15c9fa08f78.gif' }}
+        />
+      </View>
       <View style={{ flex: 1, justifyContent: 'center' }}>
-        <View style={{ flex: 2, justifyContent: 'center' }}>
-          <Text h3 style={{ textAlign: 'center' }}>We're sorry we couldn't find your item...</Text>
-        </View>
-        <View style={{ flex: 2.5, alignItems: 'center', justifyContent: 'center' }}>
-          <Image
-            style={{ height: 200, width: 200 }}
-            source={{ uri: 'https://mir-s3-cdn-cf.behance.net/project_modules/disp/fc4a1059120725.5a15c9fa08f78.gif' }}
+        <Text style={{ fontSize: 22, textAlign: 'center', marginHorizontal: 20 }}>Let us know what it was, so we can improve our
+          app:</Text>
+      </View>
+      <View style={{ flex: 1.5 }}>
+        <View style={{ margin: 20 }}>
+          <Input
+            placeholder="e.g. Cucumber"
+            onChangeText={value => setCorrectedName(value)}
+            onSubmitEditing={() => {
+              handleCorrection(correctedName);
+              setVisibility(false);
+            }}
           />
         </View>
-        <View style={{ flex: 1, justifyContent: 'center' }}>
-          <Text style={{ fontSize: 22, textAlign: 'center', marginHorizontal: 20 }}>Let us know what it was, so we can improve our
-          app:</Text>
-        </View>
-        <View style={{ flex: 1.5 }}>
-          <View style={{ margin: 20 }}>
-            <Input
-              placeholder="e.g. Cucumber"
-              onChangeText={value => setCorrectedName(value)}
-              onSubmitEditing={() => {
-                handleCorrection(correctedName);
-                setVisibility(false);
-              }}
-            />
-          </View>
-        </View>
       </View>
-    </Overlay>
+    </View>
   );
 };
 
-export default ErrorMessage;
+export default Correction;

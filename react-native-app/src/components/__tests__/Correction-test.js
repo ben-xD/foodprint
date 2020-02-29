@@ -1,5 +1,5 @@
 import React from 'react';
-import ErrorMessage from '../ErrorMessage';
+import Correction from '../Correction';
 import { useMutation } from '@apollo/react-hooks';
 
 import renderer from 'react-test-renderer';
@@ -7,8 +7,8 @@ import renderer from 'react-test-renderer';
 jest.mock('@apollo/react-hooks');
 
 // Check current component against its snapshot
-test('ErrorMessage matches previous snapshot', () => {
+test('Correction matches previous snapshot', () => {
   useMutation.mockImplementation(() => [null, { loading: null, error: null, data: null }]);
-  const tree = renderer.create(<ErrorMessage isVisible={true} />).toJSON();
+  const tree = renderer.create(<Correction isVisible={true} />).toJSON();
   expect(tree).toMatchSnapshot();
 });

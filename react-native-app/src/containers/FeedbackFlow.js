@@ -4,7 +4,7 @@ import FoodOverview from '../screens/FoodOverview';
 import Camera from '../screens/Camera';
 import Feedback from '../screens/Feedback';
 import Loading from '../screens/Loading';
-import ErrorMessage from '../components/ErrorMessage';
+import Correction from '../components/Correction';
 
 const Stack = createStackNavigator();
 
@@ -18,9 +18,9 @@ const Food = () => {
         component={FoodOverview}
         options={{ headerShown: false }}
       />
-      <Stack.Screen name="Camera" component={Camera}></Stack.Screen>
-      <Stack.Screen name="Loading" component={Loading}></Stack.Screen>
-      <Stack.Screen name="Error" component={ErrorMessage}></Stack.Screen>
+      <Stack.Screen name="Camera" component={Camera} />
+      <Stack.Screen name="Loading" component={Loading} />
+      <Stack.Screen name="Correction" component={Correction} />
       <Stack.Screen name="Feedback" component={Feedback} />
     </Stack.Navigator>
   );

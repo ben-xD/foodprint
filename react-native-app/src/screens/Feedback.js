@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
-import { View } from 'react-native';
-import { Text } from 'react-native-elements';
+import React, { useEffect, useState } from 'react';
+import { View, Text, ActivityIndicator, Image } from 'react-native';
 import { gql } from 'apollo-boost';
 import { StyleSheet } from 'react-native';
 import { useMutation } from '@apollo/react-hooks';
+import { Rating, Button } from 'react-native-elements';
 
 // GraphQL schema for picture posting mutation
 const POST_PICTURE_MUTATION = gql`
@@ -18,7 +18,7 @@ const POST_PICTURE_MUTATION = gql`
 `;
 
 const POST_BARCODE_MUTATION = gql`
-  mutation PostBarcodeMutation($barcode: String) {
+  mutation PostBarcodeMutation($barcode: String!) {
       postBarcode(barcode: $barcode) {
         product {
           name
@@ -29,55 +29,58 @@ const POST_BARCODE_MUTATION = gql`
 `;
 
 const Feedback = ({ route, navigation }) => {
-  const [uploadPicture, { data: uploadPictureData }] = useMutation(POST_PICTURE_MUTATION);
+  const [loading, setLoading] = useState(route.params.loading)
+  const [meal, setMeal] = useState(null)
+  const [uploadPicture, { loading: pictureLoading, data: pictureData, error: pictureError }] = useMutation(POST_PICTURE_MUTATION);
   const [postBarcodeMutation, { loading: barcodeLoading, error: barcodeError, data: barcodeData }] = useMutation(POST_BARCODE_MUTATION);
-  // const [isVisible, setVisibility] = useState(false);
 
+  // When component is loaded and provided with a file or barcode, make a request 
   useEffect(() => {
     const { file, barcode } = route.params;
     if (file) {
-      console.log({ file });
       uploadPicture({ variables: { file } });
     } else if (barcode) {
-      console.log({ barcode });
       postBarcodeMutation({ variables: { barcode } });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // useEffect(() => {
-  //   if (pictureError) {
-  //     console.warn({ pictureError });
-  //   }
-  //   console.log({ pictureData, pictureLoading, pictureError });
-  // const mealObject = {
-  //   uri,
-  //   score: meal.score,
-  //   description: meal.description,
-  // };
-  // const mealObject = {
-  //   uri,
-  //   score: pictureData.postPicture.carbonFootprintPerKg,
-  //   description: pictureData.postPicture.product.name,
-  // };
-  // }, []);
+  useEffect(() => {
+    if (!pictureError & !barcodeError) {
+      return
+    }
+    // TODO set error, and display.
+    console.warn("Error!")
+    setLoading(false)
+  }, [pictureError, barcodeError])
 
-  // useEffect(() => {
-  //   if (barcodeError) {
-  //     console.warn({ barcodeError });
-  //   }
-  //   console.log({ barcodeData, barcodeLoading });
-  //   // const mealObject = {
-  //   //   uri,
-  //   //   score: meal.score,
-  //   //   description: meal.description,
-  //   // };
-  //   // const mealObject = {
-  //   //   uri,
-  //   //   score: pictureData.postPicture.carbonFootprintPerKg,
-  //   //   description: pictureData.postPicture.product.name,
-  //   // };
-  // }, []);
+  useEffect(() => {
+    if (pictureError) {
+      console.warn({ pictureError });
+    }
+    console.log({ pictureData, pictureLoading, pictureError });
+    if (pictureData) {
+      setMeal({
+        uri: route.params.uri,
+        score: pictureData.postPicture.carbonFootprintPerKg,
+        description: pictureData.postPicture.product.name,
+      });
+      setLoading(false)
+    }
+  }, [pictureData]);
+
+  useEffect(() => {
+    if (barcodeError) {
+      console.warn({ barcodeError });
+    }
+    console.log({ barcodeData, barcodeLoading, barcodeError });
+    if (barcodeData) {
+      setMeal({
+        score: barcodeData.postBarcode.carbonFootprintPerKg,
+        description: barcodeData.postBarcode.product.name,
+      })
+      setLoading(false)
+    }
+  }, [barcodeData]);
 
   const calculateRating = (carbonFootprint) => {
     if (carbonFootprint < 2) {
@@ -107,43 +110,42 @@ const Feedback = ({ route, navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text>{JSON.stringify(uploadPictureData)}</Text>
-      {/* <ErrorMessage
-        isVisible={isVisible}
-        setVisibility={setVisibility}
-        meal={meal}
-        setMeal={setMeal}
-      />
-      <View style={{ flex: 1, justifyContent: 'center' }}>
-        <View style={{
-          flex: 4,
-          alignItems: 'center',
-          justifyContent: 'center',
-          backgroundColor: 'white',
-          margin: 10,
-          marginTop: 100,
-          marginBottom: 30,
-        }}>
-          <Image
-            style={{ height: 350, width: 350 }}
-            source={{ uri: meal.uri }}
-          />
-          <Text h2 style={{ marginTop: 20, marginBottom: 10 }}>{meal.description}</Text>
-          <Rating
-            readonly
-            startingValue={calculateRating(meal.score)}
-          />
-          <Text style={{ fontSize: 18, margin: 10 }}>{meal.score}kg of CO2 eq/kg</Text>
-        </View>
-        <View style={{ flex: 1, flexDirection: 'column', marginLeft: 50, marginRight: 50 }}>
-          <Button
-            buttonStyle={{ backgroundColor: 'darkred' }}
-            titleStyle={{ fontSize: 24 }}
-            title="This isn't my item..."
-            onPress={() => setVisibility(true)}
-          />
-        </View>
-      </View> */}
+      {loading ? <View style={{ height: '100%', justifyContent: 'center' }}><ActivityIndicator /></View> :
+        !meal ? <Text>No meal yet</Text> :
+          <View style={{ flex: 1, justifyContent: 'center' }}>
+            <View style={{
+              flex: 4,
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: 'white',
+              margin: 10,
+              marginTop: 100,
+              marginBottom: 30,
+            }}>
+              {meal.uri == null ? <></> :
+                <Image
+                  style={{ height: 350, width: 350 }}
+                  source={{ uri: meal.uri }}
+                />
+              }
+              <Text h2 style={{ marginTop: 20, marginBottom: 10 }}>{meal.description}</Text>
+              <Rating
+                readonly
+                startingValue={calculateRating(meal.score)}
+              />
+              <Text style={{ fontSize: 18, margin: 10 }}>{meal.score}kg of CO2 eq/kg</Text>
+            </View>
+            <View style={{ flex: 1, flexDirection: 'column', marginLeft: 50, marginRight: 50 }}>
+              <Button
+                buttonStyle={{ backgroundColor: 'darkred' }}
+                titleStyle={{ fontSize: 24 }}
+                title="This isn't my item..."
+                // TODO don't pass setMeal, and don't call Post correction in correction. Do it in Feedback instead.
+                onPress={() => navigation.navigate('Correction', { meal })}
+              />
+            </View>
+          </View>
+      }
     </View>
   );
 };

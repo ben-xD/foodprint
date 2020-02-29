@@ -1,7 +1,7 @@
 {
   "name": "node-serverless-graphql-mongodb",
   "version": "1.0.0",
-  "main": "index_remote.js",
+  "main": "index.js",
   "scripts": {
     "start": "functions-framework --target=handler --port=4000",
     "debug": "nodemon --inspect node_modules/@google-cloud/functions-framework --port=4000 --target=handler",

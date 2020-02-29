@@ -1,5 +1,5 @@
 const { getCarbonFootprintFromImage, getCarbonFootprintFromName } = require('./carbon-footprint/carbon_footprint_calculation');
-
+const { getCarbonFootprintFromBarcode } = require('./carbon-footprint/barcode_version1')
 const resolvers = {
   Query: {
     _: () => {
@@ -25,9 +25,22 @@ const resolvers = {
       console.log({ 'Returning': response });
       return response;
     },
+    postBarcode: async (parent, { barcode }, context) => {
+      console.log({ context, parent });
+      console.log(`Received barcode: ${barcode}`);
+      const { item, carbonFootprintPerKg } = await getCarbonFootprintFromBarcode(barcode)
+      const response = {
+        product: {
+          name: item,
+        },
+        carbonFootprintPerKg,
+      };
+      console.log({ 'Returning': response });
+      return response
+    },
     postCorrection: async (parent, { name }) => {
       console.log({ 'Received correction': name });
-      const {item, carbonFootprintPerKg} = await getCarbonFootprintFromName(name);
+      const { item, carbonFootprintPerKg } = await getCarbonFootprintFromName(name);
       const response = {
         product: {
           name: item,

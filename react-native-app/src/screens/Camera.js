@@ -13,12 +13,12 @@ const Camera = ({ navigation }) => {
     const options = { quality: 0.5, base64: true };
     const image = await camera.takePictureAsync(options);
     setCameraIsReady(true);
-    navigation.navigate('Feedback', { file: image });
+    navigation.navigate('Feedback', { file: image, uri: image.uri, loading: true });
   };
 
   const barCodeHandler = ({ data, rawData, type, bounds }) => {
     console.log({ data, rawData, type, bounds });
-    navigation.navigate('Feedback', { barcode: data });
+    navigation.navigate('Feedback', { barcode: data, loading: true });
   };
 
   return (

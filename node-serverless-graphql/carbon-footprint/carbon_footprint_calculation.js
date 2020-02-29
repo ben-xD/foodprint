@@ -251,9 +251,6 @@ const getCarbonFootprintFromName = async (name) => {
 
 const getCarbonFootprint = async (labels) => {
   mongooseQueries.connect();
-  // Set array of name only for labels
-  let labels = [name.toLowerCase()];
-  labels = getNounsInLabels(labels);
 
   // Attempt to find the google vision labels in the database:
   const firstResponse = await oneLayerSearch(labels);
