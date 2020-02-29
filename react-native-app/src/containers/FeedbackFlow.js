@@ -8,18 +8,12 @@ import Correction from '../components/Correction';
 
 const Stack = createStackNavigator();
 
-// TODO Add network requests here to share state between components (ErrorMessage and Feedback)
-
 const Food = () => {
   return (
-    <Stack.Navigator initialRouteName="Overview">
+    <Stack.Navigator initialRouteName="Your Foodprint">
       <Stack.Screen
-        name="Overview"
+        name="Your Foodprint"
         component={FoodOverview}
-        options={{
-          headerShown: true,
-          headerTitle: 'Your Foodprint',
-        }}
       />
       <Stack.Screen name="Camera" component={Camera} />
       <Stack.Screen name="Loading" component={Loading} />

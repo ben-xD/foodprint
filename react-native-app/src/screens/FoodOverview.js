@@ -32,7 +32,6 @@ const FoodOverview = ({ navigation }) => {
     <SafeAreaView style={styles.container}>
       <ScrollView>
         <View style={styles.contentContainer}>
-          <Text style={styles.title}>Welcome</Text>
           <Text style={styles.subtitle}>
             Scan a barcode or snap a picture.
           </Text>
@@ -56,7 +55,6 @@ const styles = StyleSheet.create({
     padding: 8,
   },
   contentContainer: { justifyContent: 'center', alignItems: 'center', marginHorizontal: 40 },
-  title: { fontSize: 36, marginVertical: 20, textAlign: 'center' },
   subtitle: { fontSize: 20, textAlign: 'center', marginTop: 20 },
   image: { width: 200, height: 200, marginTop: 10 },
 });
