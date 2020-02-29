@@ -22,17 +22,6 @@ exports[`FoodOverview matches previous snapshot 1`] = `
       <Text
         style={
           Object {
-            "fontSize": 36,
-            "marginVertical": 20,
-            "textAlign": "center",
-          }
-        }
-      >
-        Welcome
-      </Text>
-      <Text
-        style={
-          Object {
             "fontSize": 20,
             "marginTop": 20,
             "textAlign": "center",
