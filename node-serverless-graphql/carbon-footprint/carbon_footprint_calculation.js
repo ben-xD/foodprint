@@ -78,7 +78,7 @@ const oneLayerSearch = async (labels) => {
 const getNextLayer = async (labels) => {
   const nextConceptResponse = [];
   for (let i = 0; i < labels.length; i += 1) {
-    let conceptResponse = await axios.get(`http://api.conceptnet.io/query?start=/c/en/${labels[i]}&rel=/r/IsA&limit=${MAX_NUMBER_OF_CONCEPTS}`);
+    let conceptResponse = await axios.get(`http://api.conceptnet.io/query?start=/c/en/${labels[i]}&rel=/r/IsA&limit=${MAX_NUMBER_OF_CONCEPTS}&end=/c/en`);
     conceptResponse = conceptResponse.data.edges;
 
     for (let j = 0; j < conceptResponse.length && nextConceptResponse.length < MAX_LENGTH_OF_NEXT_LAYER; j += 1) {
@@ -91,11 +91,12 @@ const getNextLayer = async (labels) => {
   return nextConceptResponse;
 };
 
-// Parses a ConceptNet response to a list of labels.
+// Parses a ConceptNet response to a list of labels, if they are in English
 const getLabelsFromResponse = (conceptResponse) => {
   conceptResponse = conceptResponse.data.edges
   const labels = [];
   for (let i = 0; i < conceptResponse.length; i++) {
+    console.log(conceptResponse[i].end.label, conceptResponse[i].end.language)
     labels.push(conceptResponse[i].end.label);
   }
   return labels;
@@ -157,6 +158,7 @@ const getNounsInLabels = (labels) => {
   return nounLabels;
 }
 
+
 // Assess if a concept is valid by checking if it is related to food (this is done making use of
 // ConceptNet relations).
 const isConceptValid = async (concept) => {
@@ -164,19 +166,19 @@ const isConceptValid = async (concept) => {
     return false;
   }
 
-  let isAResponse = await axios.get(`http://api.conceptnet.io/query?start=/c/en/${concept}&rel=/r/IsA&limit=${MAX_NUMBER_OF_CONCEPTS}`);
+  let isAResponse = await axios.get(`http://api.conceptnet.io/query?start=/c/en/${concept}&rel=/r/IsA&limit=${MAX_NUMBER_OF_CONCEPTS}&end=/c/en`);
   isA = getLabelsFromResponse(isAResponse);
   if (isA.includes("food") || isA.includes("a food")|| isA.includes("fruit") || isA.includes("edible fruit") ){
     return true;
   }
 
-  let usedForResponse = await axios.get(`http://api.conceptnet.io/query?start=/c/en/${concept}&rel=/r/UsedFor&limit=${MAX_NUMBER_OF_CONCEPTS}`);
+  let usedForResponse = await axios.get(`http://api.conceptnet.io/query?start=/c/en/${concept}&rel=/r/UsedFor&limit=${MAX_NUMBER_OF_CONCEPTS}&end=/c/en`);
   usedFor = getLabelsFromResponse(usedForResponse);
   if (usedFor.includes("eating")){
     return true;
   }
 
-  let RelatedTermsResponse = await axios.get(`http://api.conceptnet.io/query?start=/c/en/${concept}&rel=/r/RelatedTo&limit=${MAX_NUMBER_OF_CONCEPTS}`);
+  let RelatedTermsResponse = await axios.get(`http://api.conceptnet.io/query?start=/c/en/${concept}&rel=/r/RelatedTo&limit=${MAX_NUMBER_OF_CONCEPTS}&end=/c/en`);
   RelatedTerms = getLabelsFromResponse(RelatedTermsResponse);
   if (RelatedTerms.includes("food")){
     return true;
@@ -229,8 +231,32 @@ const getCarbonFootprintFromImage = async (image) => {
   // Get image labels from Google Vision API
   const imageLabels = await getImageLabels(image);
 
-  return getCarbonFootprint(imageLabels);
+  mongooseQueries.connect();
+
+  // Attempt to find the google vision labels in the database:
+  const firstResponse= await oneLayerSearch(imageLabels);
+  if (firstResponse.item) {
+    mongooseQueries.disconnect();
+    return firstResponse;
+  }
+
+  // Call ConceptNet to create the next layer:
+  const nextLabels = await getNextLayer(imageLabels);
+
+  // Attempt to find the next layer labels in the database:
+  const nextResponse = await oneLayerSearch(nextLabels);
+  if (nextResponse.item) {
+    mongooseQueries.disconnect();
+    return nextResponse;
+  }
+
+  mongooseQueries.disconnect();
+  return {
+    item: imageLabels[0],
+    carbonFootprintPerKg: undefined,
+  };
 };
+
 
 // ****************************************************************
 //         MAIN FUNCTION FOR POSTCORRECTION REQUESTS
@@ -242,14 +268,11 @@ const getCarbonFootprintFromImage = async (image) => {
 // @return CarbonFootprintReport (carbonFootprintPerKg is undefined if all the searches failed)
 
 const getCarbonFootprintFromName = async (name) => {
-  return getCarbonFootprint([name.toLowerCase()]);
-}
-
-const getCarbonFootprint = async (labels) => {
   mongooseQueries.connect();
   // Set array of name only for labels
   let labels = [name.toLowerCase()];
   labels = getNounsInLabels(labels);
+  // TODO: add plural --> singular
 
   // Attempt to find the google vision labels in the database:
   const firstResponse= await oneLayerSearch(labels);
@@ -260,7 +283,6 @@ const getCarbonFootprint = async (labels) => {
 
   // Call ConceptNet to create the next layer:
   let nextLabels = await getNextLayer(labels);
-  nextLabels = getNounsInLabels(nextLabels);
 
   // Attempt to find the next layer labels in the database:
   const nextResponse = await oneLayerSearch(nextLabels);
@@ -275,5 +297,6 @@ const getCarbonFootprint = async (labels) => {
     carbonFootprintPerKg: undefined,
   };
 };
+
 
 module.exports = { getCarbonFootprintFromImage, getCarbonFootprintFromName};
