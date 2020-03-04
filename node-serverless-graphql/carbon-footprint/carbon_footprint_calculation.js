@@ -160,7 +160,6 @@ const getNounsInLabels = (labels) => {
 
 //
 const singularize = (name) => {
-  console.log(pluralize.singular(name));
   return pluralize.singular(name);
 };
 
