@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { View, SafeAreaView } from 'react-native';
+import { View, SafeAreaView, StyleSheet } from 'react-native';
 import { Text, Button } from 'react-native-elements';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { AuthContext } from '../store/Auth';
 
-
-export default SignupOrRegister = ({ navigation }) => {
+const SignupOrRegister = ({ navigation }) => {
   const { signInWithGoogle, signInAnonymously } = React.useContext(AuthContext);
   const [isPressed, setIsPressed] = useState(false);
 
@@ -22,13 +21,13 @@ export default SignupOrRegister = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={{ justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-      <View style={{ position: 'absolute', top: 32, alignItems: 'center', marginTop: 32 }}>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.titleContainer}>
         <Text h1>
           FoodPrint
         </Text>
       </View>
-      <View style={{ width: '80%' }}>
+      <View style={styles.bodyContainer}>
         <View>
           <Button
             disabled={isPressed}
@@ -55,28 +54,40 @@ export default SignupOrRegister = ({ navigation }) => {
             title="Join using email"
             onPress={() => navigation.navigate('Signup')}
           />
-          <View style={{ marginVertical: 12 }}>
-            <Text style={{ fontSize: 18, textAlign: 'center', color: 'grey' }}>Existing user?</Text>
+          <View style={styles.loginButtonContainer}>
+            <Text style={styles.loginText}>Existing user?</Text>
             <Button
               title="LOGIN"
               disabled={isPressed}
-              titleStyle={{ color: 'green', fontSize: 24 }}
+              titleStyle={styles.loginButton}
               onPress={() => navigation.navigate('Login')}
               type="clear"
             />
           </View>
         </View>
       </View>
-      <View style={{ position: 'absolute', bottom: 32 }}>
+      <View style={styles.skipButtonContainer}>
         <Button
           disabled={isPressed}
           title="skip"
-          titleStyle={{ color: 'grey', fontSize: 18 }}
+          titleStyle={styles.skipButton}
           onPress={handleSignInAnonymously}
           type="clear"
         />
       </View>
     </SafeAreaView >
   );
-}
-  ;
+};
+
+const styles = StyleSheet.create({
+  container: { justifyContent: 'center', alignItems: 'center', height: '100%' },
+  bodyContainer: { width: '80%' },
+  titleContainer: { position: 'absolute', top: 32, alignItems: 'center', marginTop: 32 },
+  loginButtonContainer: { marginVertical: 12 },
+  loginText: { fontSize: 18, textAlign: 'center', color: 'grey' },
+  loginButton: { color: 'green', fontSize: 24 },
+  skipButtonContainer: { position: 'absolute', bottom: 32 },
+  skipButton: { color: 'grey', fontSize: 18 },
+});
+
+export default SignupOrRegister;

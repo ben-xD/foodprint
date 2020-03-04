@@ -1,0 +1,338 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SignupOrRegister matches previous snapshot 1`] = `
+<SafeAreaView
+  style={
+    Object {
+      "alignItems": "center",
+      "height": "100%",
+      "justifyContent": "center",
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "marginTop": 32,
+        "position": "absolute",
+        "top": 32,
+      }
+    }
+  >
+    <Text
+      style={
+        Object {
+          "fontSize": 50,
+        }
+      }
+      theme={
+        Object {
+          "colors": Object {
+            "disabled": "hsl(208, 8%, 90%)",
+            "divider": "#bcbbc1",
+            "error": "#ff190c",
+            "grey0": "#393e42",
+            "grey1": "#43484d",
+            "grey2": "#5e6977",
+            "grey3": "#86939e",
+            "grey4": "#bdc6cf",
+            "grey5": "#e1e8ee",
+            "greyOutline": "#bbb",
+            "platform": Object {
+              "android": Object {
+                "error": "#f44336",
+                "primary": "#2196f3",
+                "secondary": "#9C27B0",
+                "success": "#4caf50",
+                "warning": "#ffeb3b",
+              },
+              "ios": Object {
+                "error": "#ff3b30",
+                "primary": "#007aff",
+                "secondary": "#5856d6",
+                "success": "#4cd964",
+                "warning": "#ffcc00",
+              },
+            },
+            "primary": "#2089dc",
+            "searchBg": "#303337",
+            "secondary": "#8F0CE8",
+            "success": "#52c41a",
+            "warning": "#faad14",
+          },
+        }
+      }
+    >
+      FoodPrint
+    </Text>
+  </View>
+  <View
+    style={
+      Object {
+        "width": "80%",
+      }
+    }
+  >
+    <View>
+      <View
+        style={
+          Object {
+            "borderRadius": 3,
+            "marginVertical": 8,
+          }
+        }
+      >
+        <TouchableOpacity
+          activeOpacity={0.3}
+          disabled={false}
+          onPress={[Function]}
+        >
+          <View
+            style={
+              Object {
+                "alignItems": "center",
+                "backgroundColor": "white",
+                "borderColor": "#2089dc",
+                "borderRadius": 3,
+                "borderWidth": 0,
+                "flexDirection": "row",
+                "justifyContent": "center",
+                "padding": 8,
+              }
+            }
+          >
+            <Text
+              allowFontScaling={false}
+              style={
+                Array [
+                  Object {
+                    "color": "black",
+                    "fontSize": 28,
+                  },
+                  Object {
+                    "paddingRight": 5,
+                  },
+                  Object {
+                    "fontFamily": "anticon",
+                    "fontStyle": "normal",
+                    "fontWeight": "normal",
+                  },
+                  Object {},
+                ]
+              }
+            >
+              
+            </Text>
+            <Text
+              style={
+                Object {
+                  "color": "black",
+                  "fontSize": 24,
+                  "paddingBottom": 1,
+                  "paddingTop": 2,
+                  "textAlign": "center",
+                }
+              }
+            >
+              Join using Google
+            </Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+      <View
+        style={
+          Object {
+            "borderRadius": 3,
+            "marginVertical": 8,
+          }
+        }
+      >
+        <TouchableOpacity
+          activeOpacity={0.3}
+          disabled={false}
+          onPress={[Function]}
+        >
+          <View
+            style={
+              Object {
+                "alignItems": "center",
+                "backgroundColor": "green",
+                "borderColor": "#2089dc",
+                "borderRadius": 3,
+                "borderWidth": 0,
+                "flexDirection": "row",
+                "justifyContent": "center",
+                "padding": 8,
+              }
+            }
+          >
+            <Text
+              style={
+                Object {
+                  "color": "white",
+                  "fontSize": 24,
+                  "paddingBottom": 1,
+                  "paddingTop": 2,
+                  "textAlign": "center",
+                }
+              }
+            >
+              Join using email
+            </Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+      <View
+        style={
+          Object {
+            "marginVertical": 12,
+          }
+        }
+      >
+        <Text
+          style={
+            Object {
+              "color": "grey",
+              "fontSize": 18,
+              "textAlign": "center",
+            }
+          }
+          theme={
+            Object {
+              "colors": Object {
+                "disabled": "hsl(208, 8%, 90%)",
+                "divider": "#bcbbc1",
+                "error": "#ff190c",
+                "grey0": "#393e42",
+                "grey1": "#43484d",
+                "grey2": "#5e6977",
+                "grey3": "#86939e",
+                "grey4": "#bdc6cf",
+                "grey5": "#e1e8ee",
+                "greyOutline": "#bbb",
+                "platform": Object {
+                  "android": Object {
+                    "error": "#f44336",
+                    "primary": "#2196f3",
+                    "secondary": "#9C27B0",
+                    "success": "#4caf50",
+                    "warning": "#ffeb3b",
+                  },
+                  "ios": Object {
+                    "error": "#ff3b30",
+                    "primary": "#007aff",
+                    "secondary": "#5856d6",
+                    "success": "#4cd964",
+                    "warning": "#ffcc00",
+                  },
+                },
+                "primary": "#2089dc",
+                "searchBg": "#303337",
+                "secondary": "#8F0CE8",
+                "success": "#52c41a",
+                "warning": "#faad14",
+              },
+            }
+          }
+        >
+          Existing user?
+        </Text>
+        <View
+          style={
+            Object {
+              "borderRadius": 3,
+            }
+          }
+        >
+          <TouchableOpacity
+            activeOpacity={0.3}
+            disabled={false}
+            onPress={[Function]}
+          >
+            <View
+              style={
+                Object {
+                  "alignItems": "center",
+                  "backgroundColor": "transparent",
+                  "borderColor": "#2089dc",
+                  "borderRadius": 3,
+                  "borderWidth": 0,
+                  "flexDirection": "row",
+                  "justifyContent": "center",
+                  "padding": 8,
+                }
+              }
+            >
+              <Text
+                style={
+                  Object {
+                    "color": "green",
+                    "fontSize": 24,
+                    "paddingBottom": 1,
+                    "paddingTop": 2,
+                    "textAlign": "center",
+                  }
+                }
+              >
+                LOGIN
+              </Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </View>
+  </View>
+  <View
+    style={
+      Object {
+        "bottom": 32,
+        "position": "absolute",
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "borderRadius": 3,
+        }
+      }
+    >
+      <TouchableOpacity
+        activeOpacity={0.3}
+        disabled={false}
+        onPress={[Function]}
+      >
+        <View
+          style={
+            Object {
+              "alignItems": "center",
+              "backgroundColor": "transparent",
+              "borderColor": "#2089dc",
+              "borderRadius": 3,
+              "borderWidth": 0,
+              "flexDirection": "row",
+              "justifyContent": "center",
+              "padding": 8,
+            }
+          }
+        >
+          <Text
+            style={
+              Object {
+                "color": "grey",
+                "fontSize": 18,
+                "paddingBottom": 1,
+                "paddingTop": 2,
+                "textAlign": "center",
+              }
+            }
+          >
+            skip
+          </Text>
+        </View>
+      </TouchableOpacity>
+    </View>
+  </View>
+</SafeAreaView>
+`;

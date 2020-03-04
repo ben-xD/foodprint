@@ -1,26 +1,21 @@
-import React, { useState } from 'react';
-import { View, SafeAreaView } from 'react-native';
-import { Button, Input, Text } from 'react-native-elements';
-import { ScrollView } from 'react-native-gesture-handler';
-import auth from '@react-native-firebase/auth';
+import React, { useState, useContext } from 'react';
+import { View, SafeAreaView, ScrollView } from 'react-native';
+import { Button, Text } from 'react-native-elements';
 import Password from '../components/Password';
 import Email from '../components/Email';
 import { useRef } from 'react';
 import { AuthContext } from '../store/Auth';
+import { StyleSheet } from 'react-native';
 
-// const SIGN_UP = qgl`
-//   mutation signUp($email: String!, $password: String!) {
-
-//   }
-// `
-
-export default Signup = () => {
+const Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const passwordRef = useRef(null);
   const [isPressed, setIsPressed] = useState(false);
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
 
-  const { signUp } = React.useContext(AuthContext);
+  const { signUp } = useContext(AuthContext);
 
   const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -28,11 +23,19 @@ export default Signup = () => {
     setIsPressed(true);
 
     if (!EMAIL_REGEX.test(email)) {
-      return console.warn('alert user, email invalid.');
+      setEmailError('That\s not a valid email.');
+      setIsPressed(false);
+      return;
+    } else {
+      setEmailError('');
     }
 
     if (password.length < 8) {
-      return console.warn('alert user, password too short ');
+      setPasswordError('Your chosen password is too short.');
+      setIsPressed(false);
+      return;
+    } else {
+      setPasswordError('');
     }
 
     await signUp(email, password);
@@ -41,7 +44,6 @@ export default Signup = () => {
 
   return (
     <SafeAreaView>
-
       <ScrollView contentContainerStyle={{ alignItems: 'center' }} style={{ width: '100%', height: '100%' }}>
         <View style={{ alignItems: 'center', justifyContent: 'center', marginVertical: 16 }}>
           <Text h1>
@@ -50,12 +52,15 @@ export default Signup = () => {
         </View>
         <View style={{ width: '80%' }}>
           <View>
+            {emailError === '' ? <></> : <Text>{emailError}</Text>}
             <Email nextFieldRef={passwordRef} setEmail={setEmail} email={email} />
+            {passwordError === '' ? <></> : <Text>{passwordError}</Text>}
             <Password ref={passwordRef} submitHandler={signUpHandler} setPassword={setPassword} password={password} />
             <Button
+              testID={'joinButton'}
               disabled={isPressed}
-              buttonStyle={{ backgroundColor: 'green', marginVertical: 16 }}
-              titleStyle={{ fontSize: 24 }}
+              buttonStyle={styles.button}
+              titleStyle={styles.title}
               title="Join"
               onPress={signUpHandler}
             />
@@ -65,3 +70,12 @@ export default Signup = () => {
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  title: {
+    fontSize: 24,
+  },
+  button: { backgroundColor: 'green', marginVertical: 16 },
+});
+
+export default Signup;

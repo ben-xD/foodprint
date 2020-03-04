@@ -6,7 +6,6 @@ import { useMutation } from '@apollo/react-hooks';
 import ErrorMessage from '../components/ErrorMessage';
 import { StyleSheet } from 'react-native';
 
-
 // GraphQL schema for picture posting mutation
 const POST_PICTURE_MUTATION = gql`
   mutation PostPictureMutation($file: PictureFile) {

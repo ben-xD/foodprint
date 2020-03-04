@@ -1,5 +1,6 @@
 import React from 'react';
 import { Input } from 'react-native-elements';
+import { StyleSheet } from 'react-native';
 
 const Password = React.forwardRef((props, ref) => {
   const { password, setPassword, submitHandler } = props;
@@ -15,9 +16,15 @@ const Password = React.forwardRef((props, ref) => {
       secureTextEntry={true}
       returnKeyType={'join'}
       onSubmitEditing={submitHandler}
-      containerStyle={{ marginBottom: 15 }}
+      containerStyle={styles.container}
     />
   );
+});
+
+const styles = StyleSheet.create({
+  container: {
+    marginBottom: 15,
+  },
 });
 
 export default Password;

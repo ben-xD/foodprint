@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { NavigationNativeContainer } from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Login from './src/screens/Login';
 import Signup from './src/screens/Signup';
@@ -45,7 +45,7 @@ const App = () => {
         case 'RESTORE_TOKEN':
           return {
             ...prevState,
-            userIsLoggedIn: true,
+            userIsLoggedIn: action.userIsLoggedIn,
             isLoading: false,
           };
         case 'SIGN_IN':
@@ -149,6 +149,7 @@ const App = () => {
           console.log({ userCredentials });
         } catch (e) {
           if (e.code === 'auth/email-already-in-use') {
+            // TODO can this function return an Promise<error> back to Signup.js. Then display it there
             return console.warn('tell user email is already used');
           } else if (e.code === 'auth/invalid-email') {
             return console.warn('tell user invalid email');
@@ -173,7 +174,7 @@ const App = () => {
   return (
     <ApolloProvider client={client}>
       <AuthContext.Provider value={authContext}>
-        <NavigationNativeContainer>
+        <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }}>
             {state.isLoading ? (
               // We haven't finished checking for the token yet
@@ -204,7 +205,7 @@ const App = () => {
                   <Stack.Screen name="NoInternet" component={NoInternet}></Stack.Screen >
                 )}
           </Stack.Navigator>
-        </NavigationNativeContainer>
+        </NavigationContainer>
       </AuthContext.Provider>
     </ApolloProvider>
   );
