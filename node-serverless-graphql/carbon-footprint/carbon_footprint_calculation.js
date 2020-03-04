@@ -1,6 +1,5 @@
-const vision = require('@google-cloud/vision');
 const axios = require('axios');
-const credentials = require('../credentials/carbon-7fbf76411514.json');
+const getImageLabels = require('../google_vision')
 const mongooseQueries = require('./mongoose_queries');
 const catergorisedCarbonValues = require("./categorisedCarbonValues.json");
 const nlp = require('compromise');
@@ -146,31 +145,6 @@ const isConceptValid = async (concept) => {
  const removeDuplicates = (labels) => {
   return labels.filter((a, b) => labels.indexOf(a) === b);
  };
-
-// Sends a given image to Google Vision API and returns the labels found.
-// Go to https://docs.google.com/spreadsheets/d/1MQl5HjTbkToTniYZ3w6wwPfPen9yEGbur-11XgVCIT8/edit?usp=sharing
-// to see some examples.
-// @return List of unique label descriptions (e.g. "coffee")
-const getImageLabels = async (image) => {
-  let GoogleResult = [];
-  try {
-    // Using alba's credentials here
-    const client = new vision.ImageAnnotatorClient({
-      credentials,
-    });
-    [GoogleResult] = await client.labelDetection(image);
-  } catch (err) {
-    console.log('Google label detection failed.');
-    console.log(err);
-  }
-  const { labelAnnotations } = GoogleResult; // Array of annotations
-  const processedAnnotations = [];
-  for (let i = 0; i < labelAnnotations.length; i++) {
-    processedAnnotations.push(labelAnnotations[i].description.toLowerCase());
-  }
-  removeDuplicates(processedAnnotations);
-  return processedAnnotations;
-};
 
 // ****************************************************************
 //             MAIN FUNCTION FOR POSTPICTURE REQUESTS
