@@ -16,7 +16,6 @@ const searchData = async (label) => {
   try {
     await carbonModel.findOne({ item: label }, (err, items) => {
       if (err) {
-        console.log(err);
         throw err;
       }
       itemList = items;
@@ -33,12 +32,11 @@ const searchData = async (label) => {
 // @return CarbonFootprintReport (if found) or undefined (if not found)
 const findCategorisedLabel = (labels) => {
   for (let i = 0; i < labels.length; i += 1) {
-    let categoryCarbonFootprintPerKg = catergorisedCarbonValues[labels[i]];
-    if(categoryCarbonFootprintPerKg !== undefined){
-      console.log(categoryCarbonFootprintPerKg);
+    let carbonFootprintPerKg = catergorisedCarbonValues[labels[i]]
+    if(carbonFootprintPerKg){
       return {
         item: labels[i],
-        categoryCarbonFootprintPerKg,
+        carbonFootprintPerKg,
       };
     }
   }
@@ -50,10 +48,9 @@ const findCategorisedLabel = (labels) => {
 // Note that  the search is made in order (the labels are already ordered by prediction confidence by Google Vision API).
 // @return CarbonFootprintReport (if a label was found in a DB) or undefined (it any label was found)
 const oneLayerSearch = async (labels) => {
+  
   for (let i = 0; i < labels.length; i += 1) {
-
-    const nounInLabel = getNounInString(labels[i]);
-
+    nounInLabel = labels[i];
     if (await isConceptValid(nounInLabel)){
       const carbonFootprintPerKg = await searchData(nounInLabel);
       if (carbonFootprintPerKg !== undefined) {
@@ -65,8 +62,8 @@ const oneLayerSearch = async (labels) => {
     }
   }
 
-  categoryResult = findCategorisedLabel(labels);
-  if (categoryResult !== undefined) {
+  categoryResult = findCategorisedLabel(labels)
+  if (categoryResult != undefined) {
     return categoryResult;
   }
   return {
@@ -110,9 +107,55 @@ const getNounInString = (label) => {
     return label;
   }
   let nounsArray = nlp(label).nouns().out('array');
-  return nounsArray[0];
+  return nounsArray;
 }
 
+const splitLabelInWords = (label) =>  {
+  let labelSplit = label.split(" ");
+  
+  // Removes any "" included as a word:
+  let index = labelSplit.indexOf("");
+  while (index !== -1){
+    labelSplit.splice(index, 1);
+    index = labelSplit.indexOf("");
+  }
+  return labelSplit;
+}
+
+const getNounsInLabels = (labels) => {
+  let nounLabels = [];
+  for (let i = 0; i < labels.length; i++) {
+    let label = labels[i];
+    let labelSplit = splitLabelInWords(label);
+
+    if (labelSplit.length > 1) {
+      let nounsArray = nlp(label).nouns().out('string');
+      nounsArray = splitLabelInWords(nounsArray);
+
+      // When there are more than one noun: 
+      if (nounsArray.length > 1) {
+        let allNounsInString = "" // String to concatenate all the nouns
+        for (let j = 0; j < nounsArray.length; j++){
+          allNounsInString += nounsArray[j] + " ";
+          nounLabels.push(nounsArray[j]);
+        }
+        allNounsInString = allNounsInString.substring(0, allNounsInString.length - 1); // To remove the last " "
+        nounLabels.splice(i, 0, allNounsInString);
+      } 
+
+      // When there is only one noun in the array:
+      if (nounsArray.length == 1 && nounsArray[0]!= '') {
+        nounLabels.push(nounsArray[0])
+      }
+    }
+
+    // If there isn't any noun, the last word is mantained: 
+    if  (nounLabels.length == 0){
+      nounLabels.push(labelSplit[labelSplit.length - 1]);
+    }
+  }
+  return nounLabels;
+}
 
 // Assess if a concept is valid by checking if it is related to food (this is done making use of
 // ConceptNet relations).
@@ -123,7 +166,7 @@ const isConceptValid = async (concept) => {
 
   let isAResponse = await axios.get(`http://api.conceptnet.io/query?start=/c/en/${concept}&rel=/r/IsA&limit=${MAX_NUMBER_OF_CONCEPTS}`);
   isA = getLabelsFromResponse(isAResponse);
-  if (isA.includes("food") || isA.includes("a food")|| isA.includes("fruit") || isA.includes("edible fruit") || isA.includes("friut")){
+  if (isA.includes("food") || isA.includes("a food")|| isA.includes("fruit") || isA.includes("edible fruit") ){
     return true;
   }
 
@@ -222,33 +265,34 @@ const getCarbonFootprintFromImage = async (image) => {
 // @return CarbonFootprintReport (carbonFootprintPerKg is undefined if all the searches failed)
 
 const getCarbonFootprintFromName = async (name) => {
-  await mongooseQueries.connect();
+  mongooseQueries.connect();
   // Set array of name only for labels
-  const labels = [name.toLowerCase()];
+  let labels = [name.toLowerCase()];
+  labels = getNounsInLabels(labels);
 
   // Attempt to find the google vision labels in the database:
   const firstResponse= await oneLayerSearch(labels);
   if (firstResponse.item) {
-    await mongooseQueries.disconnect();
+    mongooseQueries.disconnect();
     return firstResponse;
   }
 
   // Call ConceptNet to create the next layer:
-  const nextLabels = await getNextLayer(labels);
+  let nextLabels = await getNextLayer(labels);
+  nextLabels = getNounsInLabels(nextLabels);
 
   // Attempt to find the next layer labels in the database:
   const nextResponse = await oneLayerSearch(nextLabels);
-
   if (nextResponse.item) {
-    await mongooseQueries.disconnect();
+    mongooseQueries.disconnect();
     return nextResponse;
   }
 
-  await mongooseQueries.disconnect();
+  mongooseQueries.disconnect();
   return {
     item: labels[0],
     carbonFootprintPerKg: undefined,
   };
 };
 
-module.exports = { getCarbonFootprintFromImage, getCarbonFootprintFromName };
+module.exports = { getCarbonFootprintFromImage, getCarbonFootprintFromName};
