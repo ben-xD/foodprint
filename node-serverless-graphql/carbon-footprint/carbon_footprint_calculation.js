@@ -4,6 +4,7 @@ const credentials = require('../credentials/carbon-7fbf76411514.json');
 const mongooseQueries = require('./mongoose_queries');
 const catergorisedCarbonValues = require("./categorisedCarbonValues.json");
 const nlp = require('compromise');
+const pluralize = require('pluralize')
 const MAX_LENGTH_OF_NEXT_LAYER = 5;
 const MAX_NUMBER_OF_CONCEPTS = 10;
 // TODO modify into generator/yield
@@ -32,7 +33,7 @@ const searchData = async (label) => {
 // @return CarbonFootprintReport (if found) or undefined (if not found)
 const findCategorisedLabel = (labels) => {
   for (let i = 0; i < labels.length; i += 1) {
-    let carbonFootprintPerKg = catergorisedCarbonValues[labels[i]]
+    let carbonFootprintPerKg = catergorisedCarbonValues[labels[i]];
     if(carbonFootprintPerKg){
       return {
         item: labels[i],
@@ -96,7 +97,6 @@ const getLabelsFromResponse = (conceptResponse) => {
   conceptResponse = conceptResponse.data.edges
   const labels = [];
   for (let i = 0; i < conceptResponse.length; i++) {
-    console.log(conceptResponse[i].end.label, conceptResponse[i].end.language)
     labels.push(conceptResponse[i].end.label);
   }
   return labels;
@@ -146,7 +146,7 @@ const getNounsInLabels = (labels) => {
 
       // When there is only one noun in the array:
       if (nounsArray.length == 1 && nounsArray[0]!= '') {
-        nounLabels.push(nounsArray[0])
+        nounLabels.push(nounsArray[0]);
       }
     }
 
@@ -157,6 +157,12 @@ const getNounsInLabels = (labels) => {
   }
   return nounLabels;
 }
+
+//
+const singularize = (name) => {
+  console.log(pluralize.singular(name));
+  return pluralize.singular(name);
+};
 
 
 // Assess if a concept is valid by checking if it is related to food (this is done making use of
@@ -269,10 +275,12 @@ const getCarbonFootprintFromImage = async (image) => {
 
 const getCarbonFootprintFromName = async (name) => {
   mongooseQueries.connect();
-  // Set array of name only for labels
-  let labels = [name.toLowerCase()];
+  // Preprocess the name (to singular and lower case):
+  name = name.toLowerCase();
+  name = singularize(name);
+  // Set array of name only for labels:
+  let labels = [name];
   labels = getNounsInLabels(labels);
-  // TODO: add plural --> singular
 
   // Attempt to find the google vision labels in the database:
   const firstResponse= await oneLayerSearch(labels);
