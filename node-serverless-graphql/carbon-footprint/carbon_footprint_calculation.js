@@ -102,8 +102,8 @@ const getLabelsFromResponse = (conceptResponse) => {
 };
 
 //  Deletes the adjetives in a string
-const getNounInString = (label) => {
-  if (label.split(" ").length <= 1){
+const getNounInString = (label) => {
+  if (label.split(" ").length <= 1) {
     return label;
   }
   let nounsArray = nlp(label).nouns().out('array');
@@ -166,25 +166,25 @@ const singularize = (name) => {
 // Assess if a concept is valid by checking if it is related to food (this is done making use of
 // ConceptNet relations).
 const isConceptValid = async (concept) => {
-  if (concept.split(" ").length > 1){
+  if (concept.split(" ").length > 1) {
     return false;
   }
 
   let isAResponse = await axios.get(`http://api.conceptnet.io/query?start=/c/en/${concept}&rel=/r/IsA&limit=${MAX_NUMBER_OF_CONCEPTS}&end=/c/en`);
   isA = getLabelsFromResponse(isAResponse);
-  if (isA.includes("food") || isA.includes("a food")|| isA.includes("fruit") || isA.includes("edible fruit") ){
+  if (isA.includes("food") || isA.includes("a food") || isA.includes("fruit") || isA.includes("edible fruit")) {
     return true;
   }
 
   let usedForResponse = await axios.get(`http://api.conceptnet.io/query?start=/c/en/${concept}&rel=/r/UsedFor&limit=${MAX_NUMBER_OF_CONCEPTS}&end=/c/en`);
   usedFor = getLabelsFromResponse(usedForResponse);
-  if (usedFor.includes("eating")){
+  if (usedFor.includes("eating")) {
     return true;
   }
 
   let RelatedTermsResponse = await axios.get(`http://api.conceptnet.io/query?start=/c/en/${concept}&rel=/r/RelatedTo&limit=${MAX_NUMBER_OF_CONCEPTS}&end=/c/en`);
   RelatedTerms = getLabelsFromResponse(RelatedTermsResponse);
-  if (RelatedTerms.includes("food")){
+  if (RelatedTerms.includes("food")) {
     return true;
   }
 
@@ -192,9 +192,9 @@ const isConceptValid = async (concept) => {
 };
 
 // Removes the duplicate labels in a list
- const removeDuplicates = (labels) => {
+const removeDuplicates = (labels) => {
   return labels.filter((a, b) => labels.indexOf(a) === b);
- };
+};
 
 // ****************************************************************
 //             MAIN FUNCTION FOR POSTPICTURE REQUESTS
@@ -256,7 +256,7 @@ const getCarbonFootprintFromName = async (name) => {
   labels = getNounsInLabels(labels);
 
   // Attempt to find the google vision labels in the database:
-  const firstResponse= await oneLayerSearch(labels);
+  const firstResponse = await oneLayerSearch(labels);
   if (firstResponse.item) {
     mongooseQueries.disconnect();
     return firstResponse;

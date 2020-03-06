@@ -6,58 +6,57 @@ import {
   Image,
   View,
   ScrollView,
-  TouchableOpacity,
 } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { useLayoutEffect } from 'react';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const FoodOverview = ({ navigation }) => {
-  // useEffect(() => {
-  //   navigation.navigate('Camera');
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
+  <MaterialCommunityIcons name="camera" color={'grey'} size={35} />;
 
-  const takePicture = async () => {
-    navigation.navigate('Camera');
-  };
+  useLayoutEffect(() => {
+    const takePicture = async () => {
+      navigation.navigate('Camera');
+    };
 
-  const goToSettings = async () => {
-    navigation.navigate('Settings');
-  };
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity onPress={takePicture} >
+          <MaterialCommunityIcons name="camera" color={'grey'} size={28} style={styles.cameraButton} />
+        </TouchableOpacity >
+      ),
+    });
+  }, [navigation]);
 
   return (
-    <SafeAreaView style={{ width: '100%', height: '100%' }}>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          padding: 8,
-        }}>
-        <TouchableOpacity onPress={takePicture}>
-          <MaterialCommunityIcons name="camera" color={'grey'} size={45} style={{ margin: 10 }} />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={goToSettings}>
-          <MaterialCommunityIcons name="settings-outline" color={'grey'} size={50} style={{ margin: 10 }} />
-        </TouchableOpacity>
-      </View>
+    <SafeAreaView style={styles.container}>
       <ScrollView>
-        <View style={{ justifyContent: 'center', alignItems: 'center', marginHorizontal: 40 }}>
-          <Text style={{ fontSize: 36, marginVertical: 20, textAlign: 'center' }}>Welcome to FoodPrint!</Text>
-          <Text style={{ fontSize: 20, textAlign: 'center', marginTop: 20 }}>
-            You can now know the carbon footprint of the food you buy simply by scanning its barcode or taking a picture
-            of it!
+        <View style={styles.contentContainer}>
+          <Text style={styles.subtitle}>
+            Scan a barcode or snap a picture.
           </Text>
           <Image
             source={{ uri: 'https://png2.cleanpng.com/sh/4618a1d69c3326bc75ab0d6a0d3cd256/L0KzQYm3VcIyN5NvjJH0aYP2gLBuTfVud6Vue9H3LXXwf7vwTgN1cZRwfeQ2ZnHmdbP2jBsucZ9oReV2aXzoiX68gsAzPWNnfKdrM0LmQXA9WMIyOGE7T6MAMka7R4mCUMk0P2Q7RuJ3Zx==/kisspng-emoticon-emoji-sticker-facebook-inc-smiley-5b0252bd5b32c1.6821006715268789093736.png' }}
-            style={{ width: 200, height: 200, marginTop: 10 }}
+            style={styles.image}
           />
-          <Text style={{ fontSize: 20, textAlign: 'center', marginTop: 20 }}>
-            To get started, simply click on the Camera icon in the top left corner!
-          </Text>
         </View>
       </ScrollView>
     </SafeAreaView>
   );
 };
 
+const styles = StyleSheet.create({
+  container: { width: '100%', height: '100%' },
+  cameraButton: { marginRight: 16 },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 8,
+  },
+  contentContainer: { justifyContent: 'center', alignItems: 'center', marginHorizontal: 40 },
+  subtitle: { fontSize: 20, textAlign: 'center', marginTop: 20 },
+  image: { width: 200, height: 200, marginTop: 10 },
+});
 
 export default FoodOverview;

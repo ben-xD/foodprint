@@ -9,71 +9,6 @@ exports[`FoodOverview matches previous snapshot 1`] = `
     }
   }
 >
-  <View
-    style={
-      Object {
-        "alignItems": "center",
-        "flexDirection": "row",
-        "justifyContent": "space-between",
-        "padding": 8,
-      }
-    }
-  >
-    <TouchableOpacity
-      activeOpacity={0.2}
-      onPress={[Function]}
-    >
-      <Text
-        allowFontScaling={false}
-        style={
-          Array [
-            Object {
-              "color": "grey",
-              "fontSize": 45,
-            },
-            Object {
-              "margin": 10,
-            },
-            Object {
-              "fontFamily": "Material Design Icons",
-              "fontStyle": "normal",
-              "fontWeight": "normal",
-            },
-            Object {},
-          ]
-        }
-      >
-        
-      </Text>
-    </TouchableOpacity>
-    <TouchableOpacity
-      activeOpacity={0.2}
-      onPress={[Function]}
-    >
-      <Text
-        allowFontScaling={false}
-        style={
-          Array [
-            Object {
-              "color": "grey",
-              "fontSize": 50,
-            },
-            Object {
-              "margin": 10,
-            },
-            Object {
-              "fontFamily": "Material Design Icons",
-              "fontStyle": "normal",
-              "fontWeight": "normal",
-            },
-            Object {},
-          ]
-        }
-      >
-        
-      </Text>
-    </TouchableOpacity>
-  </View>
   <ScrollView>
     <View
       style={
@@ -87,24 +22,13 @@ exports[`FoodOverview matches previous snapshot 1`] = `
       <Text
         style={
           Object {
-            "fontSize": 36,
-            "marginVertical": 20,
-            "textAlign": "center",
-          }
-        }
-      >
-        Welcome to FoodPrint!
-      </Text>
-      <Text
-        style={
-          Object {
             "fontSize": 20,
             "marginTop": 20,
             "textAlign": "center",
           }
         }
       >
-        You can now know the carbon footprint of the food you buy simply by scanning its barcode or taking a picture of it!
+        Scan a barcode or snap a picture.
       </Text>
       <Image
         source={
@@ -120,17 +44,6 @@ exports[`FoodOverview matches previous snapshot 1`] = `
           }
         }
       />
-      <Text
-        style={
-          Object {
-            "fontSize": 20,
-            "marginTop": 20,
-            "textAlign": "center",
-          }
-        }
-      >
-        To get started, simply click on the Camera icon in the top left corner!
-      </Text>
     </View>
   </ScrollView>
 </SafeAreaView>

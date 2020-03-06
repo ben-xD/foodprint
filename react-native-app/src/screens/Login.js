@@ -3,7 +3,7 @@ import { View, ScrollView, StyleSheet } from 'react-native';
 import { Button, Text } from 'react-native-elements';
 import Password from '../components/Password';
 import Email from '../components/Email';
-import { AuthContext } from '../store/Auth';
+import AuthContext from '../context/AuthContext';
 
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -60,6 +60,7 @@ const Login = ({ navigation }) => {
           disabled={isPressed}
           buttonStyle={styles.button}
           titleStyle={styles.buttonText}
+          testID="loginButton"
           title="Login"
           onPress={loginHandler}
         />

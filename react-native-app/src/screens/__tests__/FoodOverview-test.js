@@ -5,6 +5,9 @@ import FoodOverview from '../FoodOverview';
 
 // Check current component against its snapshot
 test('FoodOverview matches previous snapshot', () => {
-  const tree = renderer.create(<FoodOverview />).toJSON();
+  const mockedNavigation = {
+    setOptions: () => { },
+  };
+  const tree = renderer.create(<FoodOverview navigation={mockedNavigation} />).toJSON();
   expect(tree).toMatchSnapshot();
 });
