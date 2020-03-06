@@ -8,40 +8,41 @@ const options = {
 };
 
 const getCarbonFootprintFromBarcode = async (barcode) => {
-  return {
-    item: "Fake data",
-    carbonFootprintPerKg: -1,
-  };
+  // return {
+  //   item: "Fake data",
+  //   carbonFootprintPerKg: -1,
+  // };
 
   // TODO Laura this code does not work:
-  // // get data from the barcode
-  // let data = await getData(barcode);
-  // if (data.products === undefined || data.products.length == 0) {
-  //   console.log('This barcode has no product information');
-  //   return {
-  //     item: 'No product information in the barcode',
-  //     carbonFootprintPerKg: undefined,
-  //   };
-  // }
-  // let product_name = cleanName(data.products[0].description);
+  // get data from the barcode
+  let data = await getData(barcode);
+  if (data.products === undefined || data.products.length == 0) {
+    console.log('This barcode has no product information');
+    return {
+      item: 'No product information in the barcode',
+      carbonFootprintPerKg: undefined,
+    };
+  }
+  let product_name = cleanName(data.products[0].description);
 
 
   // //run getCarbonFootprintFromName (that might be very costly no?). if it returns a value that means the product
   // //is in the db and thus return the value.
-  // let fromNameResult = await getCarbonFootprintFromName(product_name);
-  // if (fromNameResult.carbonFootprintPerKg !== undefined)
-  //   return fromNameResult;
+  console.log(product_name);
+  let fromNameResult = await getCarbonFootprintFromName(product_name);
+  if (fromNameResult.carbonFootprintPerKg !== undefined)
+    return fromNameResult;
 
-  // //if getCarbonFootprintFromName returns an undefined carbonFootprintPerKg, the product is not in the db yet, so sum
-  // //up the ingredients to get the carbon footprint.
-  // let result = calcCarbonFromIngredients(data);
+  //if getCarbonFootprintFromName returns an undefined carbonFootprintPerKg, the product is not in the db yet, so sum
+  //up the ingredients to get the carbon footprint.
+  let result = calcCarbonFromIngredients(data);
 
-  // //store the new product in the db, unless the carbonfootprintperkg is undefined
-  // //mongooseQueries.connect();
-  // //TODO: ADD TO MONGODB
-  // //mongooseQueries.disconnect();
+  //store the new product in the db, unless the carbonfootprintperkg is undefined
+  //mongooseQueries.connect();
+  //TODO: ADD TO MONGODB
+  //mongooseQueries.disconnect();
 
-  // return result;
+  return result;
 
 };
 
@@ -152,7 +153,7 @@ let tiramisu = '85053274';
 let soap = '066947017';
 let not_a_barcode = '000000';
 let buckwheat = '60955456';
-//let res = getCarbonFootprintFromBarcode(orange_gtin);
+let res = getCarbonFootprintFromBarcode(tiramisu);
 
 /*
 let res = cleanName("Tesco tiramisu 30X20g");
