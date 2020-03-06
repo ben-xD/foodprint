@@ -83,9 +83,4 @@
       "node_modules/(?!(jest-)?react-native|react-navigation)"
     ]
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run lint && npm test"
-    }
-  }
 }
