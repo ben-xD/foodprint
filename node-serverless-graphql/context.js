@@ -12,7 +12,7 @@ const getUser = (idToken) => new Promise((resolve, reject) => {
 });
 
 const context = async ({ req }) => {
-  console.log({ headers: req.headers });
+  //console.log({ headers: req.headers });
   const authorization = req.headers.authorization || '';
   const token = authorization.replace('Bearer ', '');
   try {
