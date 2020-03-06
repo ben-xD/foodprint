@@ -14,6 +14,7 @@ NPM run scripts are shortcuts for running programs.
 
 Set-up (You need to be authenticated with a 'service account user' to deploy to gcloud.):
 
+- You need gcloud installed. Find the correct install file from [docs][(https://cloud.google.com/sdk/docs/quickstart-macos](https://cloud.google.com/sdk/docs/quickstart-macos#before-you-begin)). You don't need to follow 'initialize the SDK'.
 - `cd node-serverless-graphql` if not in the folder already.
 - Run `gcloud auth activate-service-account --key-file credentials/carbonfootprint-serverless.json`
 - To debug and read the logs for the server, you need your permission on Google account. Send your gmail account to Ben, and ask him to add you. You can then search for `cloud functions` at [Google Console](https://console.developers.google.com/)
