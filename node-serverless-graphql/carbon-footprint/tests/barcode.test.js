@@ -1,4 +1,4 @@
-const barcode = require('../barcode_version1');
+const barcode = require('../barcode');
 
 // before testing this make sure to add 'Oranges Each' to the db
 test('getCarbonFootprintFromBarcode: barcode of a product that is already in the database', async () => {
