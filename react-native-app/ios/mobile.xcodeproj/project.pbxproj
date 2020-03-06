@@ -748,7 +748,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = uk.orth.foodprint.dan;
+				PRODUCT_BUNDLE_IDENTIFIER = uk.orth.foodprint;
 				PRODUCT_NAME = mobile;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -769,7 +769,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = uk.orth.foodprint.dan;
+				PRODUCT_BUNDLE_IDENTIFIER = uk.orth.foodprint;
 				PRODUCT_NAME = mobile;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";

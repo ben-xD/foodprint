@@ -274,23 +274,23 @@ PODS:
     - React-cxxreact (= 0.61.5)
     - React-jsi (= 0.61.5)
   - React-jsinspector (0.61.5)
-  - react-native-camera (3.18.0):
+  - react-native-camera (3.19.0):
     - React
-    - react-native-camera/RCT (= 3.18.0)
-    - react-native-camera/RN (= 3.18.0)
-  - react-native-camera/RCT (3.18.0):
+    - react-native-camera/RCT (= 3.19.0)
+    - react-native-camera/RN (= 3.19.0)
+  - react-native-camera/RCT (3.19.0):
     - React
-  - react-native-camera/RN (3.18.0):
+  - react-native-camera/RN (3.19.0):
     - React
   - react-native-config (0.12.0):
     - React
   - react-native-geolocation (1.4.2):
     - React
-  - react-native-image-picker (2.3.0):
+  - react-native-image-picker (2.2.0):
     - React
   - react-native-netinfo (5.5.0):
     - React
-  - react-native-safe-area-context (0.6.4):
+  - react-native-safe-area-context (0.6.2):
     - React
   - react-native-splash-screen (3.2.0):
     - React
@@ -329,26 +329,26 @@ PODS:
     - React-cxxreact (= 0.61.5)
     - React-jsi (= 0.61.5)
     - ReactCommon/jscallinvoker (= 0.61.5)
-  - RNCAsyncStorage (1.8.0):
+  - RNCAsyncStorage (1.7.1):
     - React
   - RNCMaskedView (0.1.6):
     - React
-  - RNFBApp (6.3.4):
+  - RNFBApp (6.3.0):
     - Firebase/Core (~> 6.13.0)
     - React
-  - RNFBAuth (6.3.4):
+  - RNFBAuth (6.3.0):
     - Firebase/Auth (~> 6.13.0)
     - Firebase/Core (~> 6.13.0)
     - React
     - RNFBApp
-  - RNGestureHandler (1.6.0):
+  - RNGestureHandler (1.5.3):
     - React
   - RNGoogleSignin (3.0.4):
     - GoogleSignIn (~> 5.0.0)
     - React
-  - RNReanimated (1.7.0):
+  - RNReanimated (1.6.0):
     - React
-  - RNScreens (2.0.0-beta.10):
+  - RNScreens (2.0.0-alpha.25):
     - React
   - RNSVG (11.0.1):
     - React
@@ -544,12 +544,12 @@ SPEC CHECKSUMS:
   React-jsi: cb2cd74d7ccf4cffb071a46833613edc79cdf8f7
   React-jsiexecutor: d5525f9ed5f782fdbacb64b9b01a43a9323d2386
   React-jsinspector: fa0ecc501688c3c4c34f28834a76302233e29dc0
-  react-native-camera: 3308898e1b09bf6211647c6e3e42d5f7aa02259e
+  react-native-camera: 1a62f163f06c7e54811fc9396cdb80269a665238
   react-native-config: f2c2ae45625a068c35681a16b9bfb1ca58b0adc7
-  react-native-geolocation: a7b94614afbd5fd8350e0233a2025c8228fc8041
-  react-native-image-picker: c8a4faf0e75ef3619f215463394388f1c222236b
-  react-native-netinfo: b84ff0cae1147315b5dc1daf0f65c0cc6ee71fb3
-  react-native-safe-area-context: 52342d2d80ea8faadd0ffa76d83b6051f20c5329
+  react-native-geolocation: 79c743ad7a2e86617811ef23f49308824e92520c
+  react-native-image-picker: d7ba8117e782534adbed4581931f2f9ec1db3704
+  react-native-netinfo: 4f7469b001be001975d1566fb757fb04e3905bec
+  react-native-safe-area-context: a1d322930b8c5d04ebeb77cc47cc97575ad27203
   react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
   React-RCTActionSheet: 600b4d10e3aea0913b5a92256d2719c0cdd26d76
   React-RCTAnimation: 791a87558389c80908ed06cc5dfc5e7920dfa360
@@ -561,14 +561,14 @@ SPEC CHECKSUMS:
   React-RCTText: 9ccc88273e9a3aacff5094d2175a605efa854dbe
   React-RCTVibration: a49a1f42bf8f5acf1c3e297097517c6b3af377ad
   ReactCommon: 198c7c8d3591f975e5431bec1b0b3b581aa1c5dd
-  RNCAsyncStorage: 5d83b49070d41fd72906a116c5e7bdac4ea3a814
-  RNCMaskedView: a88953beefbd347a29072d9eba90e42945fe291e
-  RNFBApp: 7d4006751de8bb5cafa2e8d2e7d94ee250df81db
-  RNFBAuth: ed8b865db45f7ded9dbf535e390cba2ba672aede
-  RNGestureHandler: dde546180bf24af0b5f737c8ad04b6f3fa51609a
+  RNCAsyncStorage: 8539fc80a0075fcc9c8e2dff84cd22dc5bf1dacf
+  RNCMaskedView: e5b99bc191945f157adeede68da9d424462de177
+  RNFBApp: ad3fbf3071c5ac5308e02b8dc21845f547976757
+  RNFBAuth: 667d5d5cf86e704ed6224310ad068ef52d37fbf3
+  RNGestureHandler: 02905abe54e1f6e59c081a10b4bd689721e17aa6
   RNGoogleSignin: a00f87261ea13df9a5cea8deafa6927d6f2c3562
-  RNReanimated: 031fe8d9ea93c2bd689a40f05320ef9d96f74d7f
-  RNScreens: c596b54c3ab63b0390aa3cb081edd438147d40ae
+  RNReanimated: e1251783216c7cb0a395314c9889d6662d86ed73
+  RNScreens: 031d10e2b648afc9546f16b6a786d2efc6870310
   RNSVG: 67f1f12dae2cef6ed59a42cae74a6b8f5a9e7b46
   RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
