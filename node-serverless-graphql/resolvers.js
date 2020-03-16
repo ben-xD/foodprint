@@ -1,5 +1,5 @@
 const { getCarbonFootprintFromImage, getCarbonFootprintFromName } = require('./carbon-footprint/carbon_footprint_calculation');
-const { getCarbonFootprintFromBarcode } = require('./carbon-footprint/barcode_version1')
+const { getCarbonFootprintFromBarcode } = require('./carbon-footprint/barcode');
 const resolvers = {
   Query: {
     _: () => {
