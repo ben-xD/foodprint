@@ -1,6 +1,6 @@
 const axios = require('axios');
 const { getCarbonFootprintFromName} = require('./carbon_footprint_calculation');
-const mongooseQueries = require('./mongoose_queries');
+const mongooseQueries = require('../datasources/carbon');
 
 //contains the key to query the Tesco API
 const options = {

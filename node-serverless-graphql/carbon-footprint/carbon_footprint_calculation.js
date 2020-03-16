@@ -1,6 +1,6 @@
 const axios = require('axios');
 const getImageLabels = require('../google_vision')
-const mongooseQueries = require('./mongoose_queries');
+const mongooseQueries = require('../datasources/carbon');
 const catergorisedCarbonValues = require("./categorisedCarbonValues.json");
 const nlp = require('compromise');
 const pluralize = require('pluralize')
@@ -48,7 +48,7 @@ const findCategorisedLabel = (labels) => {
 // Note that  the search is made in order (the labels are already ordered by prediction confidence by Google Vision API).
 // @return CarbonFootprintReport (if a label was found in a DB) or undefined (it any label was found)
 const oneLayerSearch = async (labels) => {
-  
+
   for (let i = 0; i < labels.length; i += 1) {
     nounInLabel = labels[i];
     if (await isConceptValid(nounInLabel)){
@@ -112,7 +112,7 @@ const getNounInString = (label) => {
 
 const splitLabelInWords = (label) =>  {
   let labelSplit = label.split(" ");
-  
+
   // Removes any "" included as a word:
   let index = labelSplit.indexOf("");
   while (index !== -1){
@@ -132,7 +132,7 @@ const getNounsInLabels = (labels) => {
       let nounsArray = nlp(label).nouns().out('string');
       nounsArray = splitLabelInWords(nounsArray);
 
-      // When there are more than one noun: 
+      // When there are more than one noun:
       if (nounsArray.length > 1) {
         let allNounsInString = "" // String to concatenate all the nouns
         for (let j = 0; j < nounsArray.length; j++){
@@ -141,7 +141,7 @@ const getNounsInLabels = (labels) => {
         }
         allNounsInString = allNounsInString.substring(0, allNounsInString.length - 1); // To remove the last " "
         nounLabels.splice(i, 0, allNounsInString);
-      } 
+      }
 
       // When there is only one noun in the array:
       if (nounsArray.length == 1 && nounsArray[0]!= '') {
@@ -149,7 +149,7 @@ const getNounsInLabels = (labels) => {
       }
     }
 
-    // If there isn't any noun, the last word is mantained: 
+    // If there isn't any noun, the last word is mantained:
     if  (nounLabels.length == 0){
       nounLabels.push(labelSplit[labelSplit.length - 1]);
     }

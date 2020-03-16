@@ -1,4 +1,4 @@
-const mongooseQueries = require('../mongoose_queries');
+const mongooseQueries = require('../carbon');
 
 mongooseQueries.connect();
 const carbonModel = mongooseQueries.getCarbonFootprintModel();
