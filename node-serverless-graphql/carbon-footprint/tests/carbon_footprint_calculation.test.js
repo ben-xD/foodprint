@@ -28,11 +28,3 @@ test('getCarbonFootprintFromImage: rice image (shallow layer search)', async() =
   expect(response).toEqual({item: "rice", carbonFootprintPerKg: 1.14});
   jest.setTimeout(5000)
 });
-
-test('getCarbonFootprintFromImage: random image (not expected to be found in database)', async() => {
-  jest.setTimeout(20000)
-  const image_buffer = new Buffer(potato_image, 'base64');
-  let response = await carbon_footprint_calculation.getCarbonFootprintFromImage(image_buffer);
-  expect(response).toEqual({item: "root vegetable", carbonFootprintPerKg: undefined});
-  jest.setTimeout(5000)
-});
