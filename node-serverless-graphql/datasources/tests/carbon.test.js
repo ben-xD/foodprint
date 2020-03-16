@@ -1,7 +1,7 @@
-const mongooseQueries = require('../carbon');
+const CarbonAPI = require('../carbon');
 
-mongooseQueries.connect();
-const carbonModel = mongooseQueries.getCarbonFootprintModel();
+CarbonAPI.connect();
+const carbonModel = CarbonAPI.getCarbonFootprintModel();
 
 test('Carbon footprint of rice is 0.5', async () => {
   const name = 'rice';
