@@ -1,7 +1,6 @@
 const axios = require('axios');
 const getImageLabels = require('../google_vision')
-const CarbonAPI = require('../datasources/carbon');
-const searchData = CarbonAPI.searchData;
+const searchData = require('../datasources/carbon').CarbonAPIInstance.searchData;
 const catergorisedCarbonValues = require("./categorisedCarbonValues.json");
 const nlp = require('compromise');
 const pluralize = require('pluralize')
@@ -190,12 +189,9 @@ const getCarbonFootprintFromImage = async (image) => {
   // Get image labels from Google Vision API
   const imageLabels = await getImageLabels(image);
 
-  CarbonAPI.connect();
-
   // Attempt to find the google vision labels in the database:
   const firstResponse= await oneLayerSearch(imageLabels);
   if (firstResponse.item) {
-    CarbonAPI.disconnect();
     return firstResponse;
   }
 
@@ -205,11 +201,9 @@ const getCarbonFootprintFromImage = async (image) => {
   // Attempt to find the next layer labels in the database:
   const nextResponse = await oneLayerSearch(nextLabels);
   if (nextResponse.item) {
-    CarbonAPI.disconnect();
     return nextResponse;
   }
 
-  CarbonAPI.disconnect();
   return {
     item: imageLabels[0],
     carbonFootprintPerKg: undefined,
@@ -227,7 +221,6 @@ const getCarbonFootprintFromImage = async (image) => {
 // @return CarbonFootprintReport (carbonFootprintPerKg is undefined if all the searches failed)
 
 const getCarbonFootprintFromName = async (name) => {
-  CarbonAPI.connect();
   // Preprocess the name (to singular and lower case):
   name = name.toLowerCase();
   name = singularize(name);
@@ -238,7 +231,6 @@ const getCarbonFootprintFromName = async (name) => {
   // Attempt to find the google vision labels in the database:
   const firstResponse = await oneLayerSearch(labels);
   if (firstResponse.item) {
-    CarbonAPI.disconnect();
     return firstResponse;
   }
 
@@ -248,11 +240,9 @@ const getCarbonFootprintFromName = async (name) => {
   // Attempt to find the next layer labels in the database:
   const nextResponse = await oneLayerSearch(nextLabels);
   if (nextResponse.item) {
-    CarbonAPI.disconnect();
     return nextResponse;
   }
 
-  CarbonAPI.disconnect();
   return {
     item: labels[0],
     carbonFootprintPerKg: undefined,

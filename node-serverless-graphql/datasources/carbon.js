@@ -5,11 +5,16 @@ let carbonSchema;
 
 class CarbonAPI {
 
+  constructor() {
+    connect();
+  }
+
   async connect() {
-    try{
-      await mongoose.connect(config.dbServer, { useNewUrlParser: true, useUnifiedTopology: true });
-    } catch(error){
-      handleError(error);
+    try {
+      await mongoose.connect(config.dbServer, {useNewUrlParser: true, useUnifiedTopology: true});
+      console.log("Carbon API: database connected.")
+    } catch (error) {
+      console.error("Carbon API: DATABASE FAILED TO CONNECT", error);
     }
   }
 
@@ -18,7 +23,7 @@ class CarbonAPI {
       carbonSchema = new mongoose.Schema({
         item: String,
         carbonpkilo: Number,
-      }, { collection: 'carbon' });
+      }, {collection: 'carbon'});
     }
 
     return mongoose.model('Carbon', carbonSchema);
@@ -32,12 +37,30 @@ class CarbonAPI {
     });
   }
 
+  async searchData(label) {
+    const carbonModel = getCarbonFootprintModel();
+    let itemList;
+    try {
+      await carbonModel.findOne({item: label}, (err, items) => {
+        if (err) {
+          throw err;
+        }
+        itemList = items;
+      }).exec();
+
+      return itemList.carbonpkilo;
+
+    } catch (err) {
+      return undefined;
+    }
+  }
+
 }
 
-const connect = async ()  => {
-  try{
-    await mongoose.connect(config.dbServer, { useNewUrlParser: true, useUnifiedTopology: true });
-  } catch(error){
+const connect = async () => {
+  try {
+    await mongoose.connect(config.dbServer, {useNewUrlParser: true, useUnifiedTopology: true});
+  } catch (error) {
     handleError(error);
   }
 };
@@ -47,7 +70,7 @@ const getCarbonFootprintModel = () => {
     carbonSchema = new mongoose.Schema({
       item: String,
       carbonpkilo: Number,
-    }, { collection: 'carbon' });
+    }, {collection: 'carbon'});
   }
 
   return mongoose.model('Carbon', carbonSchema);
@@ -67,7 +90,7 @@ const searchData = async (label) => {
   const carbonModel = getCarbonFootprintModel();
   let itemList;
   try {
-    await carbonModel.findOne({ item: label }, (err, items) => {
+    await carbonModel.findOne({item: label}, (err, items) => {
       if (err) {
         throw err;
       }
@@ -81,5 +104,6 @@ const searchData = async (label) => {
   }
 };
 
+const CarbonAPIInstance = new CarbonAPI();
 
-module.exports = { connect, disconnect, getCarbonFootprintModel, searchData };
+module.exports = {CarbonAPIInstance};
