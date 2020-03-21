@@ -1,32 +1,12 @@
 const axios = require('axios');
 const getImageLabels = require('../google_vision')
 const CarbonAPI = require('../datasources/carbon');
+const searchData = CarbonAPI.searchData;
 const catergorisedCarbonValues = require("./categorisedCarbonValues.json");
 const nlp = require('compromise');
 const pluralize = require('pluralize')
 const MAX_LENGTH_OF_NEXT_LAYER = 5;
 const MAX_NUMBER_OF_CONCEPTS = 10;
-// TODO modify into generator/yield
-
-// Function that tries to find a label in the DB.
-// @return cabonpkilo (if found) or undefined (if not found)
-const searchData = async (label) => {
-  const carbonModel = CarbonAPI.getCarbonFootprintModel();
-  let itemList;
-  try {
-    await carbonModel.findOne({ item: label }, (err, items) => {
-      if (err) {
-        throw err;
-      }
-      itemList = items;
-    }).exec();
-
-    return itemList.carbonpkilo;
-
-  } catch (err) {
-    return undefined;
-  }
-};
 
 // Function that tries to find a label in the DB of categories (cotaining items like fruit, meat, ...)
 // @return CarbonFootprintReport (if found) or undefined (if not found)

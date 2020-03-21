@@ -61,4 +61,25 @@ const disconnect = () => {
   });
 };
 
-module.exports = { connect, disconnect, getCarbonFootprintModel };
+// Function that tries to find a label in the DB.
+// @return cabonpkilo (if found) or undefined (if not found)
+const searchData = async (label) => {
+  const carbonModel = getCarbonFootprintModel();
+  let itemList;
+  try {
+    await carbonModel.findOne({ item: label }, (err, items) => {
+      if (err) {
+        throw err;
+      }
+      itemList = items;
+    }).exec();
+
+    return itemList.carbonpkilo;
+
+  } catch (err) {
+    return undefined;
+  }
+};
+
+
+module.exports = { connect, disconnect, getCarbonFootprintModel, searchData };
