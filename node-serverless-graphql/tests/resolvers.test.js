@@ -3,14 +3,18 @@ const rice_image = require('../carbon-footprint/tests/rice_image');
 
 const VisionAPI = require('../datasources/vision');
 const visionCredentials = require('../credentials/carbon-7fbf76411514.json');
+const CarbonAPI = require('../datasources/carbon');
+
+const carbonAPI = new CarbonAPI();
 
 const dataSources = {
   visionAPI: new VisionAPI(visionCredentials),
+  carbonAPI: carbonAPI
 };
 
 test('getCarbonFootprintFromName: Simple test with an item in the database (rice)', async () => {
   const name = 'rice';
-  const actual = await resolvers.Mutation.postCorrection(null, {name});
+  const actual = await resolvers.Mutation.postCorrection(null, {name}, {dataSources});
   const expected = {product: {name: "rice"}, carbonFootprintPerKg: 1.14};
   expect(actual).toEqual(expected);
 });
