@@ -4,15 +4,23 @@ const typeDefs = require('./schema.js');
 const resolvers = require('./resolvers.js');
 const context = require('./context');
 
+const VisionAPI = require('./datasources/vision');
+const visionCredentials = require('./credentials/carbon-7fbf76411514.json');
+
 // Using $GOOGLE_APPLICATION_CREDENTIALS, which should be set, see `README.md`
 admin.initializeApp({
   credential: admin.credential.applicationDefault(),
   databaseURL: 'https://carbon-footprint-2020.firebaseio.com',
 });
 
+const dataSources = () => ({
+  visionAPI: new VisionAPI(visionCredentials),
+});
+
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  dataSources,
   context,
   playground: true,
   introspection: true,
