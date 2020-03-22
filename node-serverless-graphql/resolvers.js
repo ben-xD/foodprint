@@ -1,5 +1,10 @@
 const { getCarbonFootprintFromImage, getCarbonFootprintFromName } = require('./carbon-footprint/carbon_footprint_calculation');
 const { getCarbonFootprintFromBarcode } = require('./carbon-footprint/barcode');
+
+const VisionAPI = require('./datasources/vision');
+const credentials = require('./credentials/carbon-7fbf76411514.json');
+const visionAPI = new VisionAPI(credentials);
+
 const resolvers = {
   Query: {
     _: () => {
@@ -15,7 +20,7 @@ const resolvers = {
       console.log({ context, parent });
       const image = new Buffer(file.base64, 'base64'); // Decode base64 of "file" to image
       console.log('Received picture');
-      const { item, carbonFootprintPerKg } = await getCarbonFootprintFromImage(image);
+      const { item, carbonFootprintPerKg } = await getCarbonFootprintFromImage(visionAPI, image);
       const response = {
         product: {
           name: item,

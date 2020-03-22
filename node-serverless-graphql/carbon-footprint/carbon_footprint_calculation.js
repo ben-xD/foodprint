@@ -6,9 +6,6 @@ const pluralize = require('pluralize')
 const MAX_LENGTH_OF_NEXT_LAYER = 5;
 const MAX_NUMBER_OF_CONCEPTS = 10;
 
-const VisionAPI = require('../datasources/vision');
-const credentials = require('../credentials/carbon-7fbf76411514.json');
-const visionAPI = new VisionAPI(credentials);
 
 // Function that tries to find a label in the DB of categories (cotaining items like fruit, meat, ...)
 // @return CarbonFootprintReport (if found) or undefined (if not found)
@@ -188,7 +185,7 @@ const removeDuplicates = (labels) => {
 // 4. Tries to find a related concept in the DB or in the categories DB (oneLayerSearch)
 // @return CarbonFootprintReport (carbonFootprintPerKg is undefined if all the searches failed)
 
-const getCarbonFootprintFromImage = async (image) => {
+const getCarbonFootprintFromImage = async (visionAPI, image) => {
   // Get image labels from Google Vision API
   const imageLabels = await visionAPI.getImageLabels(image);
 
