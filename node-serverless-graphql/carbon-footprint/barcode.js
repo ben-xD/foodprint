@@ -1,6 +1,5 @@
 const axios = require('axios');
 const { getCarbonFootprintFromName} = require('./carbon_footprint_calculation');
-const mongooseQueries = require('./mongoose_queries');
 
 //contains the key to query the Tesco API
 const options = {
@@ -31,9 +30,7 @@ const getCarbonFootprintFromBarcode = async (barcode) => {
     let result = calcCarbonFromIngredients(data);
 
     //store the new product in the db, unless the carbonfootprintperkg is undefined
-    //mongooseQueries.connect();
     //TODO: ADD TO MONGODB
-    //mongooseQueries.disconnect();
 
     return result;
 

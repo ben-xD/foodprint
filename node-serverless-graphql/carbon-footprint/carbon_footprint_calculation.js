@@ -1,32 +1,11 @@
 const axios = require('axios');
 const getImageLabels = require('../google_vision')
-const mongooseQueries = require('./mongoose_queries');
+const searchData = require('../datasources/carbon').CarbonAPIInstance.searchData;
 const catergorisedCarbonValues = require("./categorisedCarbonValues.json");
 const nlp = require('compromise');
 const pluralize = require('pluralize')
 const MAX_LENGTH_OF_NEXT_LAYER = 5;
 const MAX_NUMBER_OF_CONCEPTS = 10;
-// TODO modify into generator/yield
-
-// Function that tries to find a label in the DB.
-// @return cabonpkilo (if found) or undefined (if not found)
-const searchData = async (label) => {
-  const carbonModel = mongooseQueries.getCarbonFootprintModel();
-  let itemList;
-  try {
-    await carbonModel.findOne({ item: label }, (err, items) => {
-      if (err) {
-        throw err;
-      }
-      itemList = items;
-    }).exec();
-
-    return itemList.carbonpkilo;
-
-  } catch (err) {
-    return undefined;
-  }
-};
 
 // Function that tries to find a label in the DB of categories (cotaining items like fruit, meat, ...)
 // @return CarbonFootprintReport (if found) or undefined (if not found)
@@ -48,7 +27,7 @@ const findCategorisedLabel = (labels) => {
 // Note that  the search is made in order (the labels are already ordered by prediction confidence by Google Vision API).
 // @return CarbonFootprintReport (if a label was found in a DB) or undefined (it any label was found)
 const oneLayerSearch = async (labels) => {
-  
+
   for (let i = 0; i < labels.length; i += 1) {
     nounInLabel = labels[i];
     if (await isConceptValid(nounInLabel)){
@@ -112,7 +91,7 @@ const getNounInString = (label) => {
 
 const splitLabelInWords = (label) =>  {
   let labelSplit = label.split(" ");
-  
+
   // Removes any "" included as a word:
   let index = labelSplit.indexOf("");
   while (index !== -1){
@@ -132,7 +111,7 @@ const getNounsInLabels = (labels) => {
       let nounsArray = nlp(label).nouns().out('string');
       nounsArray = splitLabelInWords(nounsArray);
 
-      // When there are more than one noun: 
+      // When there are more than one noun:
       if (nounsArray.length > 1) {
         let allNounsInString = "" // String to concatenate all the nouns
         for (let j = 0; j < nounsArray.length; j++){
@@ -141,7 +120,7 @@ const getNounsInLabels = (labels) => {
         }
         allNounsInString = allNounsInString.substring(0, allNounsInString.length - 1); // To remove the last " "
         nounLabels.splice(i, 0, allNounsInString);
-      } 
+      }
 
       // When there is only one noun in the array:
       if (nounsArray.length == 1 && nounsArray[0]!= '') {
@@ -149,7 +128,7 @@ const getNounsInLabels = (labels) => {
       }
     }
 
-    // If there isn't any noun, the last word is mantained: 
+    // If there isn't any noun, the last word is mantained:
     if  (nounLabels.length == 0){
       nounLabels.push(labelSplit[labelSplit.length - 1]);
     }
@@ -210,12 +189,9 @@ const getCarbonFootprintFromImage = async (image) => {
   // Get image labels from Google Vision API
   const imageLabels = await getImageLabels(image);
 
-  mongooseQueries.connect();
-
   // Attempt to find the google vision labels in the database:
   const firstResponse= await oneLayerSearch(imageLabels);
   if (firstResponse.item) {
-    mongooseQueries.disconnect();
     return firstResponse;
   }
 
@@ -225,11 +201,9 @@ const getCarbonFootprintFromImage = async (image) => {
   // Attempt to find the next layer labels in the database:
   const nextResponse = await oneLayerSearch(nextLabels);
   if (nextResponse.item) {
-    mongooseQueries.disconnect();
     return nextResponse;
   }
 
-  mongooseQueries.disconnect();
   return {
     item: imageLabels[0],
     carbonFootprintPerKg: undefined,
@@ -247,7 +221,6 @@ const getCarbonFootprintFromImage = async (image) => {
 // @return CarbonFootprintReport (carbonFootprintPerKg is undefined if all the searches failed)
 
 const getCarbonFootprintFromName = async (name) => {
-  mongooseQueries.connect();
   // Preprocess the name (to singular and lower case):
   name = name.toLowerCase();
   name = singularize(name);
@@ -258,7 +231,6 @@ const getCarbonFootprintFromName = async (name) => {
   // Attempt to find the google vision labels in the database:
   const firstResponse = await oneLayerSearch(labels);
   if (firstResponse.item) {
-    mongooseQueries.disconnect();
     return firstResponse;
   }
 
@@ -268,11 +240,9 @@ const getCarbonFootprintFromName = async (name) => {
   // Attempt to find the next layer labels in the database:
   const nextResponse = await oneLayerSearch(nextLabels);
   if (nextResponse.item) {
-    mongooseQueries.disconnect();
     return nextResponse;
   }
 
-  mongooseQueries.disconnect();
   return {
     item: labels[0],
     carbonFootprintPerKg: undefined,
