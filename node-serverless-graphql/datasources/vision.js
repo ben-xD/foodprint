@@ -1,5 +1,5 @@
 const vision = require('@google-cloud/vision');
-const credentials = require('./credentials/carbon-7fbf76411514.json');
+const credentials = require('../credentials/carbon-7fbf76411514.json');
 
 /**
  * Function to return descriptor labels for input image, using Google Vision API
@@ -38,7 +38,7 @@ const getImageLabels = async (image) => {
 
   // Remove duplicates and return
   labels = labels.filter((element, first_index) => labels.indexOf(element) === first_index)
-  
+
   return labels;
 };
 

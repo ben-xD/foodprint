@@ -1,5 +1,5 @@
 const axios = require('axios');
-const getImageLabels = require('../google_vision')
+const getImageLabels = require('../datasources/vision')
 const searchData = require('../datasources/carbon').CarbonAPIInstance.searchData;
 const catergorisedCarbonValues = require("./categorisedCarbonValues.json");
 const nlp = require('compromise');
