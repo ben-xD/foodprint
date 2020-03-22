@@ -1,11 +1,14 @@
 const axios = require('axios');
-const getImageLabels = require('../datasources/vision')
 const searchData = require('../datasources/carbon').CarbonAPIInstance.searchData;
 const catergorisedCarbonValues = require("./categorisedCarbonValues.json");
 const nlp = require('compromise');
 const pluralize = require('pluralize')
 const MAX_LENGTH_OF_NEXT_LAYER = 5;
 const MAX_NUMBER_OF_CONCEPTS = 10;
+
+const VisionAPI = require('../datasources/vision');
+const credentials = require('../credentials/carbon-7fbf76411514.json');
+const visionAPI = new VisionAPI(credentials);
 
 // Function that tries to find a label in the DB of categories (cotaining items like fruit, meat, ...)
 // @return CarbonFootprintReport (if found) or undefined (if not found)
@@ -187,7 +190,7 @@ const removeDuplicates = (labels) => {
 
 const getCarbonFootprintFromImage = async (image) => {
   // Get image labels from Google Vision API
-  const imageLabels = await getImageLabels(image);
+  const imageLabels = await visionAPI.getImageLabels(image);
 
   // Attempt to find the google vision labels in the database:
   const firstResponse= await oneLayerSearch(imageLabels);
