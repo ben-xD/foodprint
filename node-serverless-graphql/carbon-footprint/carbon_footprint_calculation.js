@@ -3,7 +3,28 @@ const catergorisedCarbonValues = require("./categorisedCarbonValues.json");
 const nlp = require('compromise');
 const pluralize = require('pluralize')
 const MAX_LENGTH_OF_NEXT_LAYER = 5;
-const MAX_NUMBER_OF_CONCEPTS = 10;
+
+class ConceptAPI {
+
+  constructor(MAX_NUMBER_OF_CONCEPTS = 10) {
+    this.MAX_NUMBER_OF_CONCEPTS = MAX_NUMBER_OF_CONCEPTS;
+  }
+
+  async getConceptResponse(label) {
+    return await axios.get(`http://api.conceptnet.io/query?start=/c/en/${label}&rel=/r/IsA&limit=${this.MAX_NUMBER_OF_CONCEPTS}&end=/c/en`);
+  }
+
+  async usedForResponse(label) {
+    return await axios.get(`http://api.conceptnet.io/query?start=/c/en/${label}&rel=/r/UsedFor&limit=${this.MAX_NUMBER_OF_CONCEPTS}&end=/c/en`);
+  }
+
+  async getReletedTerms(label) {
+    return await axios.get(`http://api.conceptnet.io/query?start=/c/en/${label}&rel=/r/RelatedTo&limit=${this.MAX_NUMBER_OF_CONCEPTS}&end=/c/en`);
+  }
+
+}
+
+const conceptAPI = new ConceptAPI();
 
 
 // Function that tries to find a label in the DB of categories (cotaining items like fruit, meat, ...)
@@ -56,7 +77,7 @@ const oneLayerSearch = async (carbonAPI, labels) => {
 const getNextLayer = async (labels) => {
   const nextConceptResponse = [];
   for (let i = 0; i < labels.length; i += 1) {
-    let conceptResponse = await axios.get(`http://api.conceptnet.io/query?start=/c/en/${labels[i]}&rel=/r/IsA&limit=${MAX_NUMBER_OF_CONCEPTS}&end=/c/en`);
+    let conceptResponse = await conceptAPI.getConceptResponse(labels[i]);
     conceptResponse = conceptResponse.data.edges;
 
     for (let j = 0; j < conceptResponse.length && nextConceptResponse.length < MAX_LENGTH_OF_NEXT_LAYER; j += 1) {
@@ -148,19 +169,19 @@ const isConceptValid = async (concept) => {
     return false;
   }
 
-  let isAResponse = await axios.get(`http://api.conceptnet.io/query?start=/c/en/${concept}&rel=/r/IsA&limit=${MAX_NUMBER_OF_CONCEPTS}&end=/c/en`);
+  let isAResponse = await conceptAPI.getConceptResponse(concept);
   isA = getLabelsFromResponse(isAResponse);
   if (isA.includes("food") || isA.includes("a food") || isA.includes("fruit") || isA.includes("edible fruit")) {
     return true;
   }
 
-  let usedForResponse = await axios.get(`http://api.conceptnet.io/query?start=/c/en/${concept}&rel=/r/UsedFor&limit=${MAX_NUMBER_OF_CONCEPTS}&end=/c/en`);
+  let usedForResponse = await conceptAPI.usedForResponse(concept);
   usedFor = getLabelsFromResponse(usedForResponse);
   if (usedFor.includes("eating")) {
     return true;
   }
 
-  let RelatedTermsResponse = await axios.get(`http://api.conceptnet.io/query?start=/c/en/${concept}&rel=/r/RelatedTo&limit=${MAX_NUMBER_OF_CONCEPTS}&end=/c/en`);
+  let RelatedTermsResponse = await conceptAPI.getReletedTerms(concept);
   RelatedTerms = getLabelsFromResponse(RelatedTermsResponse);
   if (RelatedTerms.includes("food")) {
     return true;
