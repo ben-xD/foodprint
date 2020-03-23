@@ -10,7 +10,7 @@
     "a:bundle": "cd android && ./gradlew bundleRelease",
     "a:apk": "cd android && ./gradlew assembleRelease",
     "ios:local": "ENVFILE=.env.ios.local react-native run-ios",
-    "ios": "react-native run-ios --device",
+    "ios": "react-native run-ios",
     "ios:release": "react-native run-ios --configuration Release --device",
     "start": "react-native start",
     "test": "jest",
