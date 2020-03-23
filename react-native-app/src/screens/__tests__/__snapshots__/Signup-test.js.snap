@@ -68,7 +68,7 @@ exports[`SignUp renders matches previous snapshot 1`] = `
           }
         }
       >
-        FoodPrint
+        Foodprint
       </Text>
     </View>
     <View

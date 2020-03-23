@@ -29,6 +29,7 @@ let schema = `
   
   type Mutation {
     postPicture(file: PictureFile): CarbonFootprintReport
+    postBarcode(barcode: String!): CarbonFootprintReport
     postCorrection(name: String!): CarbonFootprintReport
   }
 `;
