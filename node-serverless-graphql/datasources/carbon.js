@@ -4,7 +4,7 @@ const config = require('../carbon-footprint/config');
 class CarbonAPI {
 
   constructor() {
-    this.carbonSchema;
+    this._carbonSchema;
     this.searchData = this.searchData.bind(this);
     this.connect();
   }
@@ -26,19 +26,21 @@ class CarbonAPI {
     });
   }
 
-  getCarbonFootprintModel() {
-    if (!this.carbonSchema) {
-      this.carbonSchema = new mongoose.Schema({
-        item: String,
-        carbonpkilo: Number,
-      }, {collection: 'carbon'});
+  // Search database for given label and return its carbon footprint
+  async searchData(label) {
+
+    const getCarbonFootprintModel = () => {
+      if (!this._carbonSchema) {
+        this._carbonSchema = new mongoose.Schema({
+          item: String,
+          carbonpkilo: Number,
+        }, {collection: 'carbon'});
+      }
+
+      return mongoose.model('Carbon', this._carbonSchema);
     }
 
-    return mongoose.model('Carbon', this.carbonSchema);
-  }
-
-  async searchData(label) {
-    const carbonModel = this.getCarbonFootprintModel();
+    const carbonModel = getCarbonFootprintModel();
     let itemList;
     try {
       await carbonModel.findOne({item: label}, (err, items) => {
