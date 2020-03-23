@@ -1,11 +1,10 @@
 const axios = require('axios');
-const getImageLabels = require('../datasources/vision')
-const searchData = require('../datasources/carbon').CarbonAPIInstance.searchData;
 const catergorisedCarbonValues = require("./categorisedCarbonValues.json");
 const nlp = require('compromise');
 const pluralize = require('pluralize')
 const MAX_LENGTH_OF_NEXT_LAYER = 5;
 const MAX_NUMBER_OF_CONCEPTS = 10;
+
 
 // Function that tries to find a label in the DB of categories (cotaining items like fruit, meat, ...)
 // @return CarbonFootprintReport (if found) or undefined (if not found)
@@ -26,12 +25,12 @@ const findCategorisedLabel = (labels) => {
 // are found in the DB, then it tries to find one in the DB of categories.
 // Note that  the search is made in order (the labels are already ordered by prediction confidence by Google Vision API).
 // @return CarbonFootprintReport (if a label was found in a DB) or undefined (it any label was found)
-const oneLayerSearch = async (labels) => {
+const oneLayerSearch = async (carbonAPI, labels) => {
 
   for (let i = 0; i < labels.length; i += 1) {
     nounInLabel = labels[i];
     if (await isConceptValid(nounInLabel)){
-      const carbonFootprintPerKg = await searchData(nounInLabel);
+      const carbonFootprintPerKg = await carbonAPI.searchData(nounInLabel);
       if (carbonFootprintPerKg !== undefined) {
         return {
           item: nounInLabel,
@@ -185,12 +184,12 @@ const removeDuplicates = (labels) => {
 // 4. Tries to find a related concept in the DB or in the categories DB (oneLayerSearch)
 // @return CarbonFootprintReport (carbonFootprintPerKg is undefined if all the searches failed)
 
-const getCarbonFootprintFromImage = async (image) => {
+const getCarbonFootprintFromImage = async (visionAPI, carbonAPI, image) => {
   // Get image labels from Google Vision API
-  const imageLabels = await getImageLabels(image);
+  const imageLabels = await visionAPI.getImageLabels(image);
 
   // Attempt to find the google vision labels in the database:
-  const firstResponse= await oneLayerSearch(imageLabels);
+  const firstResponse= await oneLayerSearch(carbonAPI, imageLabels);
   if (firstResponse.item) {
     return firstResponse;
   }
@@ -199,7 +198,7 @@ const getCarbonFootprintFromImage = async (image) => {
   const nextLabels = await getNextLayer(imageLabels);
 
   // Attempt to find the next layer labels in the database:
-  const nextResponse = await oneLayerSearch(nextLabels);
+  const nextResponse = await oneLayerSearch(carbonAPI, nextLabels);
   if (nextResponse.item) {
     return nextResponse;
   }
@@ -220,7 +219,7 @@ const getCarbonFootprintFromImage = async (image) => {
 // 3. Tries to find a related concept in the DB or in the categories DB (oneLayerSearch)
 // @return CarbonFootprintReport (carbonFootprintPerKg is undefined if all the searches failed)
 
-const getCarbonFootprintFromName = async (name) => {
+const getCarbonFootprintFromName = async (carbonAPI, name) => {
   // Preprocess the name (to singular and lower case):
   name = name.toLowerCase();
   name = singularize(name);
@@ -229,7 +228,7 @@ const getCarbonFootprintFromName = async (name) => {
   labels = getNounsInLabels(labels);
 
   // Attempt to find the google vision labels in the database:
-  const firstResponse = await oneLayerSearch(labels);
+  const firstResponse = await oneLayerSearch(carbonAPI, labels);
   if (firstResponse.item) {
     return firstResponse;
   }
@@ -238,7 +237,7 @@ const getCarbonFootprintFromName = async (name) => {
   let nextLabels = await getNextLayer(labels);
 
   // Attempt to find the next layer labels in the database:
-  const nextResponse = await oneLayerSearch(nextLabels);
+  const nextResponse = await oneLayerSearch(carbonAPI, nextLabels);
   if (nextResponse.item) {
     return nextResponse;
   }

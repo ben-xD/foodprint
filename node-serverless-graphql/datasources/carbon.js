@@ -57,6 +57,4 @@ class CarbonAPI {
 
 }
 
-const CarbonAPIInstance = new CarbonAPI();
-
-module.exports = {CarbonAPIInstance};
+module.exports = CarbonAPI;

@@ -54,4 +54,4 @@ class VisionAPI {
 
 const VisionAPIInstance = new VisionAPI(credentials);
 
-module.exports = VisionAPIInstance.getImageLabels;
+module.exports = VisionAPI;
