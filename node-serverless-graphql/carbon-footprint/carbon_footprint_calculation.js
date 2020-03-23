@@ -184,12 +184,12 @@ const removeDuplicates = (labels) => {
 // 4. Tries to find a related concept in the DB or in the categories DB (oneLayerSearch)
 // @return CarbonFootprintReport (carbonFootprintPerKg is undefined if all the searches failed)
 
-const getCarbonFootprintFromImage = async (visionAPI, carbonAPI, image) => {
+const getCarbonFootprintFromImage = async (dataSources, image) => {
   // Get image labels from Google Vision API
-  const imageLabels = await visionAPI.getImageLabels(image);
+  const imageLabels = await dataSources.visionAPI.getImageLabels(image);
 
   // Attempt to find the google vision labels in the database:
-  const firstResponse= await oneLayerSearch(carbonAPI, imageLabels);
+  const firstResponse= await oneLayerSearch(dataSources.carbonAPI, imageLabels);
   if (firstResponse.item) {
     return firstResponse;
   }
@@ -198,7 +198,7 @@ const getCarbonFootprintFromImage = async (visionAPI, carbonAPI, image) => {
   const nextLabels = await getNextLayer(imageLabels);
 
   // Attempt to find the next layer labels in the database:
-  const nextResponse = await oneLayerSearch(carbonAPI, nextLabels);
+  const nextResponse = await oneLayerSearch(dataSources.carbonAPI, nextLabels);
   if (nextResponse.item) {
     return nextResponse;
   }
@@ -219,7 +219,7 @@ const getCarbonFootprintFromImage = async (visionAPI, carbonAPI, image) => {
 // 3. Tries to find a related concept in the DB or in the categories DB (oneLayerSearch)
 // @return CarbonFootprintReport (carbonFootprintPerKg is undefined if all the searches failed)
 
-const getCarbonFootprintFromName = async (carbonAPI, name) => {
+const getCarbonFootprintFromName = async (dataSources, name) => {
   // Preprocess the name (to singular and lower case):
   name = name.toLowerCase();
   name = singularize(name);
@@ -228,7 +228,7 @@ const getCarbonFootprintFromName = async (carbonAPI, name) => {
   labels = getNounsInLabels(labels);
 
   // Attempt to find the google vision labels in the database:
-  const firstResponse = await oneLayerSearch(carbonAPI, labels);
+  const firstResponse = await oneLayerSearch(dataSources.carbonAPI, labels);
   if (firstResponse.item) {
     return firstResponse;
   }
@@ -237,7 +237,7 @@ const getCarbonFootprintFromName = async (carbonAPI, name) => {
   let nextLabels = await getNextLayer(labels);
 
   // Attempt to find the next layer labels in the database:
-  const nextResponse = await oneLayerSearch(carbonAPI, nextLabels);
+  const nextResponse = await oneLayerSearch(dataSources.carbonAPI, nextLabels);
   if (nextResponse.item) {
     return nextResponse;
   }
