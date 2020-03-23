@@ -1,31 +1,7 @@
-const axios = require('axios');
 const catergorisedCarbonValues = require("./categorisedCarbonValues.json");
 const nlp = require('compromise');
 const pluralize = require('pluralize')
 const MAX_LENGTH_OF_NEXT_LAYER = 5;
-
-class ConceptAPI {
-
-  constructor(MAX_NUMBER_OF_CONCEPTS = 10) {
-    this.MAX_NUMBER_OF_CONCEPTS = MAX_NUMBER_OF_CONCEPTS;
-  }
-
-  async getConceptResponse(label) {
-    return await axios.get(`http://api.conceptnet.io/query?start=/c/en/${label}&rel=/r/IsA&limit=${this.MAX_NUMBER_OF_CONCEPTS}&end=/c/en`);
-  }
-
-  async usedForResponse(label) {
-    return await axios.get(`http://api.conceptnet.io/query?start=/c/en/${label}&rel=/r/UsedFor&limit=${this.MAX_NUMBER_OF_CONCEPTS}&end=/c/en`);
-  }
-
-  async getReletedTerms(label) {
-    return await axios.get(`http://api.conceptnet.io/query?start=/c/en/${label}&rel=/r/RelatedTo&limit=${this.MAX_NUMBER_OF_CONCEPTS}&end=/c/en`);
-  }
-
-}
-
-const conceptAPI = new ConceptAPI();
-
 
 // Function that tries to find a label in the DB of categories (cotaining items like fruit, meat, ...)
 // @return CarbonFootprintReport (if found) or undefined (if not found)
@@ -46,12 +22,12 @@ const findCategorisedLabel = (labels) => {
 // are found in the DB, then it tries to find one in the DB of categories.
 // Note that  the search is made in order (the labels are already ordered by prediction confidence by Google Vision API).
 // @return CarbonFootprintReport (if a label was found in a DB) or undefined (it any label was found)
-const oneLayerSearch = async (carbonAPI, labels) => {
+const oneLayerSearch = async (dataSources, labels) => {
 
   for (let i = 0; i < labels.length; i += 1) {
     nounInLabel = labels[i];
-    if (await isConceptValid(nounInLabel)){
-      const carbonFootprintPerKg = await carbonAPI.searchData(nounInLabel);
+    if (await isConceptValid(dataSources, nounInLabel)){
+      const carbonFootprintPerKg = await dataSources.carbonAPI.searchData(nounInLabel);
       if (carbonFootprintPerKg !== undefined) {
         return {
           item: nounInLabel,
@@ -74,10 +50,10 @@ const oneLayerSearch = async (carbonAPI, labels) => {
 // Given a layer, finds the "next layer", considered the list of terms matching the ConceptNet "isA" relation with
 // at least one of the labels in the original layer.
 // @return List of labels in the next layer
-const getNextLayer = async (labels) => {
+const getNextLayer = async (dataSources, labels) => {
   const nextConceptResponse = [];
   for (let i = 0; i < labels.length; i += 1) {
-    let conceptResponse = await conceptAPI.getConceptResponse(labels[i]);
+    let conceptResponse = await dataSources.conceptAPI.getConceptResponse(labels[i]);
     conceptResponse = conceptResponse.data.edges;
 
     for (let j = 0; j < conceptResponse.length && nextConceptResponse.length < MAX_LENGTH_OF_NEXT_LAYER; j += 1) {
@@ -164,24 +140,24 @@ const singularize = (name) => {
 
 // Assess if a concept is valid by checking if it is related to food (this is done making use of
 // ConceptNet relations).
-const isConceptValid = async (concept) => {
+const isConceptValid = async (dataSources, concept) => {
   if (concept.split(" ").length > 1) {
     return false;
   }
 
-  let isAResponse = await conceptAPI.getConceptResponse(concept);
+  let isAResponse = await dataSources.conceptAPI.getConceptResponse(concept);
   isA = getLabelsFromResponse(isAResponse);
   if (isA.includes("food") || isA.includes("a food") || isA.includes("fruit") || isA.includes("edible fruit")) {
     return true;
   }
 
-  let usedForResponse = await conceptAPI.usedForResponse(concept);
+  let usedForResponse = await dataSources.conceptAPI.usedForResponse(concept);
   usedFor = getLabelsFromResponse(usedForResponse);
   if (usedFor.includes("eating")) {
     return true;
   }
 
-  let RelatedTermsResponse = await conceptAPI.getReletedTerms(concept);
+  let RelatedTermsResponse = await dataSources.conceptAPI.getReletedTerms(concept);
   RelatedTerms = getLabelsFromResponse(RelatedTermsResponse);
   if (RelatedTerms.includes("food")) {
     return true;
@@ -210,16 +186,16 @@ const getCarbonFootprintFromImage = async (dataSources, image) => {
   const imageLabels = await dataSources.visionAPI.getImageLabels(image);
 
   // Attempt to find the google vision labels in the database:
-  const firstResponse= await oneLayerSearch(dataSources.carbonAPI, imageLabels);
+  const firstResponse= await oneLayerSearch(dataSources, imageLabels);
   if (firstResponse.item) {
     return firstResponse;
   }
 
   // Call ConceptNet to create the next layer:
-  const nextLabels = await getNextLayer(imageLabels);
+  const nextLabels = await getNextLayer(dataSources, imageLabels);
 
   // Attempt to find the next layer labels in the database:
-  const nextResponse = await oneLayerSearch(dataSources.carbonAPI, nextLabels);
+  const nextResponse = await oneLayerSearch(dataSources, nextLabels);
   if (nextResponse.item) {
     return nextResponse;
   }
@@ -249,16 +225,16 @@ const getCarbonFootprintFromName = async (dataSources, name) => {
   labels = getNounsInLabels(labels);
 
   // Attempt to find the google vision labels in the database:
-  const firstResponse = await oneLayerSearch(dataSources.carbonAPI, labels);
+  const firstResponse = await oneLayerSearch(dataSources, labels);
   if (firstResponse.item) {
     return firstResponse;
   }
 
   // Call ConceptNet to create the next layer:
-  let nextLabels = await getNextLayer(labels);
+  let nextLabels = await getNextLayer(dataSources, labels);
 
   // Attempt to find the next layer labels in the database:
-  const nextResponse = await oneLayerSearch(dataSources.carbonAPI, nextLabels);
+  const nextResponse = await oneLayerSearch(dataSources, nextLabels);
   if (nextResponse.item) {
     return nextResponse;
   }

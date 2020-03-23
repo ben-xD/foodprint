@@ -6,13 +6,15 @@ const rice_image = require('./rice_image');
 const VisionAPI = require('../../datasources/vision');
 const credentials = require('../../credentials/carbon-7fbf76411514.json');
 const visionAPI = new VisionAPI(credentials);
-
 const CarbonAPI = require('../../datasources/carbon');
 carbonAPI = new CarbonAPI();
+const ConceptAPI = require('../../datasources/concept');
+conceptAPI = new ConceptAPI();
 
 const dataSources = {
   carbonAPI,
-  visionAPI
+  visionAPI,
+  conceptAPI
 }
 
 test('getCarbonFootprintFromName: Simple test with an item in the database (rice)', async () => {

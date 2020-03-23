@@ -4,12 +4,14 @@ const rice_image = require('../carbon-footprint/tests/rice_image');
 const VisionAPI = require('../datasources/vision');
 const visionCredentials = require('../credentials/carbon-7fbf76411514.json');
 const CarbonAPI = require('../datasources/carbon');
-
 const carbonAPI = new CarbonAPI();
+const ConceptAPI = require('../datasources/concept');
+conceptAPI = new ConceptAPI();
 
 const dataSources = {
   visionAPI: new VisionAPI(visionCredentials),
-  carbonAPI: carbonAPI
+  carbonAPI,
+  conceptAPI
 };
 
 test('getCarbonFootprintFromName: Simple test with an item in the database (rice)', async () => {
