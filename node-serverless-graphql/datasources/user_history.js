@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const config = require('../carbon-footprint/config');
+const CarbonAPI = require('./carbon');
+const carbonAPI = new CarbonAPI();
 
 class userHistory {
 
@@ -110,11 +112,62 @@ class userHistory {
         no_of_datapoints += 1;
       }
     }
-
+    console.log(user_co2, no_of_datapoints);
     return user_co2/no_of_datapoints;
 
   }
 
+  async weekly_average_cf (carbonAPI, user) {
+    const historyModel = await this.getUserHistorytModel();
+
+    var today = new Date();
+    var first = today.getDate() - today.getDay();
+    var firstDayWeek = new Date(today.setDate(first));
+    var lastDayWeek = new Date(today.setDate(first + 6));
+
+    const last_week_data = await historyModel.aggregate([
+      {
+        $match: {
+            "time_stamp": {
+                $lt: lastDayWeek,
+                $gt: firstDayWeek
+            },
+            user_id: user,
+        }
+    }])
+
+    let user_co2 = 0;
+    let no_of_datapoints = 0;
+    for (let i = 0; i < last_week_data.length; i++){
+      let carbonResult = await carbonAPI.searchData(last_week_data[i].item);
+      if(carbonResult.carbonpkilo !== undefined){
+        user_co2 += Number(carbonResult.carbonpkilo);
+        no_of_datapoints += 1;
+      }
+    }
+
+    return user_co2/no_of_datapoints;
+  };
+
+  async weekly_cf_composition (carbonAPI, user) {
+  }
+
+  async montly_average_cf (carbonAPI, user) {
+  }
+
+  async montly_cf_composition (carbonAPI, user) {
+  }
+
 };
 
+
+
 module.exports = userHistory;
+
+
+const userHis = new userHistory();
+//let  res = userHis.avg_co2_for_user(carbonAPI, 1);
+//console.log(res);
+
+let  res2 = userHis.weekly_average_cf(carbonAPI, "1");
+console.log(res2);
