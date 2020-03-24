@@ -25,7 +25,7 @@ const findCategorisedLabel = (labels) => {
 // are found in the DB, then it tries to find one in the DB of categories.
 // Note that  the search is made in order (the labels are already ordered by prediction confidence by Google Vision API).
 // @return CarbonFootprintReport (if a label was found in a DB) or undefined (it any label was found)
-const oneLayerSearch = async (carbonAPI, labels) => {
+const oneLayerSearch = async (datasources, labels) => {
 
   for (let i = 0; i < labels.length; i += 1) {
     nounInLabel = labels[i];
