@@ -4,6 +4,8 @@ import { gql } from 'apollo-boost';
 import { StyleSheet } from 'react-native';
 import { useMutation } from '@apollo/react-hooks';
 import { Rating, Button } from 'react-native-elements';
+import { widthPercentageToDP as percentageWidth, heightPercentageToDP as percentageHeight } from 'react-native-responsive-screen';
+import { ScrollView } from 'react-native-gesture-handler';
 
 // GraphQL schema for picture posting mutation
 const POST_PICTURE_MUTATION = gql`
@@ -114,29 +116,39 @@ const Feedback = ({ route, navigation }) => {
     // todo fix this, no meal yet thing
     !meal ? <Text>No meal yet</Text> :
       <View style={styles.container}>
-        <View style={styles.body}>
-          {meal.uri == null ? <></> :
-            <Image
-              style={styles.image}
-              source={{ uri: meal.uri }}
+        <ScrollView style={styles.scrollView}>
+          <View style={styles.body}>
+            {meal.uri == null ? <></> :
+              <Image
+                style={styles.image}
+                source={{ uri: meal.uri }}
+              />
+            }
+            <Text style={styles.description}>{meal.description}</Text>
+            <Rating
+              readonly
+              startingValue={calculateRating(meal.score)}
+              type="star" // Optionally customisible
+              imageSize={percentageWidth('7%')}
             />
-          }
-          <Text h2 style={styles.description}>{meal.description}</Text>
-          <Rating
-            readonly
-            startingValue={calculateRating(meal.score)}
-          />
-          <Text style={styles.score}>{meal.score}kg of CO2 eq/kg</Text>
-        </View>
-        <View style={styles.buttonContainer}>
-          <Button
-            buttonStyle={styles.button}
-            titleStyle={styles.buttonText}
-            title="This isn't my item..."
-            // TODO don't pass setMeal, and don't call Post correction in correction. Do it in Feedback instead.
-            onPress={() => navigation.navigate('Correction', { meal, setMeal })}
-          />
-        </View>
+            <Text style={styles.score}>{meal.score} kg of CO2 eq/kg</Text>
+          </View>
+          <View style={styles.buttonContainer}>
+            <Button
+              buttonStyle={styles.redButtonStyle}
+              titleStyle={styles.buttonText}
+              title="Wrong item"
+              // TODO don't pass setMeal, and don't call Post correction in correction. Do it in Feedback instead.
+              onPress={() => navigation.navigate('Correction', { meal, setMeal })}
+            />
+            <Button
+              buttonStyle={styles.greenButtonStyle}
+              titleStyle={styles.buttonText}
+              title="Add to history"
+              onPress={() => { alert("'Add to history' not implemented!"); navigation.navigate('Your Foodprint') }}
+            />
+          </View>
+        </ScrollView>
       </View>;
 };
 
@@ -147,23 +159,27 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    justifyContent: 'center',
   },
   body: {
     flex: 4,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'white',
-    margin: 10,
-    marginTop: 100,
-    marginBottom: 30,
+    margin: percentageWidth('3%'),
+    marginTop: percentageHeight('1%'),
   },
-  image: { height: 350, width: 350 },
-  description: { marginTop: 20, marginBottom: 10 },
-  score: { fontSize: 18, margin: 10 },
-  buttonContainer: { flex: 1, flexDirection: 'column', marginLeft: 50, marginRight: 50 },
-  button: { backgroundColor: 'darkred' },
-  buttonText: { fontSize: 24 },
+  image: {
+    height: percentageWidth('85%'),
+    width: percentageWidth('85%'),
+    marginTop: percentageHeight('2%'),
+    marginBottom: percentageHeight('2%'),
+  },
+  description: { fontSize: percentageWidth('8%'), marginTop: percentageHeight('1%'), marginBottom: percentageHeight('1%') },
+  score: { fontSize: percentageWidth('5%'), margin: percentageWidth('2%') },
+  buttonContainer: { flex: 1, flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center' },
+  redButtonStyle: { backgroundColor: 'gray', width: percentageWidth('45%') },
+  greenButtonStyle: { backgroundColor: 'green', width: percentageWidth('45%') },
+  buttonText: { fontSize: percentageWidth('5%') },
 });
 
 export default Feedback;

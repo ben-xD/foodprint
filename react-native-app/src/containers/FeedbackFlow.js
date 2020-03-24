@@ -10,11 +10,8 @@ const Stack = createStackNavigator();
 
 const Food = () => {
   return (
-    <Stack.Navigator initialRouteName="Your Foodprint">
-      <Stack.Screen
-        name="Your Foodprint"
-        component={FoodOverview}
-      />
+    <Stack.Navigator initialRouteName="Your Foodprint" screenOptions={{ headerTintColor: 'green' }}>
+      <Stack.Screen name="Your Foodprint" component={FoodOverview} />
       <Stack.Screen name="Camera" component={Camera} />
       <Stack.Screen name="Loading" component={Loading} />
       <Stack.Screen name="Correction" component={Correction} />
