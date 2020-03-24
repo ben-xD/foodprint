@@ -29,16 +29,16 @@ const oneLayerSearch = async (datasources, labels) => {
 
   for (let i = 0; i < labels.length; i += 1) {
     nounInLabel = labels[i];
-    if (await isConceptValid(datasources, nounInLabel)){
-      const carbonFootprintResponse = await datasources.carbonAPI.searchData(nounInLabel);
-      if (carbonFootprintResponse.carbonpkilo !== undefined) {
+    //if (await isConceptValid(datasources, nounInLabel)){
+    const carbonFootprintResponse = await datasources.carbonAPI.searchData(nounInLabel);
+    if (carbonFootprintResponse.carbonpkilo !== undefined) {
         return {
           item: nounInLabel,
           carbonpkilo: carbonFootprintResponse.carbonpkilo,
           categories: carbonFootprintResponse.categories
         };
-      }
     }
+    //}
   }
 
   categoryResult = findCategorisedLabel(labels)
