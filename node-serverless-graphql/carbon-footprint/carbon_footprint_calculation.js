@@ -262,7 +262,7 @@ const getCarbonFootprintFromName = async (datasources, name) => {
       label: "approximated from product " + nextResponse.item
     };
     console.log(save_to_db);
-    if(dataSources.carbonAPI.searchData([save_to_db.item]).carbonpkilo !== undefined) {
+    if(datasources.carbonAPI.searchData([save_to_db.item]).carbonpkilo !== undefined) {
       datasources.carbonAPI.insert_in_DB(save_to_db);
     }
 
