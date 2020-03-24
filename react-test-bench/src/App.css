@@ -7,7 +7,7 @@
     font-size: calc(10px + 3vmin);
 }
 
-.form-by-name label, input, select {
+.form-by-name label, input, select, div {
   display: block;
   margin: auto;
   text-align: center;

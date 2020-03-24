@@ -1,20 +1,21 @@
 import React from "react";
 import ApolloClient from "apollo-boost";
-import { gql } from 'apollo-boost'
+import {gql} from 'apollo-boost'
 
 const SERVER = "server";
 const PRODUCT = "product";
+const REPORT = "report";
 
 // GraphQL schema for correction mutation
 const POST_CORRECTION_MUTATION = gql`
-mutation PostCorrectionMutation($name: String!) {
-  postCorrection(name: $name) {
-    product {
-      name
+    mutation PostCorrectionMutation($name: String!) {
+        postCorrection(name: $name) {
+            product {
+                name
+            }
+            carbonFootprintPerKg
+        }
     }
-    carbonFootprintPerKg
-  }
-}
 `;
 
 export class FormQueryByName extends React.Component {
@@ -22,7 +23,8 @@ export class FormQueryByName extends React.Component {
     super(props);
     this.state = {
       [SERVER]: 'http://localhost:4000/',
-      [PRODUCT]: ''
+      [PRODUCT]: '',
+      [REPORT]: 'not queried yet'
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -31,7 +33,7 @@ export class FormQueryByName extends React.Component {
 
   handleChange(event) {
     const target = event.target;
-    this.setState({ [target.name]: target.value });
+    this.setState({[target.name]: target.value});
   }
 
   handleSubmit(event) {
@@ -49,25 +51,35 @@ export class FormQueryByName extends React.Component {
           name: this.state[PRODUCT]
         }
       })
-      .then(result => console.log(result));
+      .then(
+        result => {
+          console.log(result.data.postCorrection.carbonFootprintPerKg);
+          this.setState({[REPORT]: result.data.postCorrection.carbonFootprintPerKg});
+        }
+      );
   }
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
-        <label>
-          Server:
-          <select name={SERVER} type="text" value={this.state[SERVER]} onChange={this.handleChange}>
-            <option value="http://localhost:4000/"> http://localhost:4000/</option>
-          </select>
-        </label>
-        {/*<br/>*/}
-        <label>
-          Product name:
-          <input name={PRODUCT} type="text" onChange={this.handleChange} />
-        </label>
-        <input type="submit" value="Submit" />
-      </form>
+      <div>
+        <form onSubmit={this.handleSubmit}>
+          <label>
+            Server:
+            <select name={SERVER} type="text" value={this.state[SERVER]} onChange={this.handleChange}>
+              <option value="http://localhost:4000/"> http://localhost:4000/</option>
+            </select>
+          </label>
+          {/*<br/>*/}
+          <label>
+            Product name:
+            <input name={PRODUCT} type="text" onChange={this.handleChange}/>
+          </label>
+          <input type="submit" value="Submit"/>
+        </form>
+        <p>
+          carbon footprint: {this.state[REPORT]}
+        </p>
+      </div>
     );
   }
 }
