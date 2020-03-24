@@ -262,7 +262,10 @@ const getCarbonFootprintFromName = async (datasources, name) => {
       label: "approximated from product " + nextResponse.item
     };
     console.log(save_to_db);
-    datasources.carbonAPI.insert_in_DB(save_to_db);
+    if(dataSources.carbonAPI.searchData([save_to_db.item]).carbonpkilo !== undefined) {
+      datasources.carbonAPI.insert_in_DB(save_to_db);
+    }
+
     return {
       item: name,
       carbonFootprintPerKg: nextResponse.carbonpkilo
@@ -277,4 +280,4 @@ const getCarbonFootprintFromName = async (datasources, name) => {
 
 
 
-module.exports = { getCarbonFootprintFromImage, getCarbonFootprintFromName};
+module.exports = { getCarbonFootprintFromImage, getCarbonFootprintFromName, singularize};

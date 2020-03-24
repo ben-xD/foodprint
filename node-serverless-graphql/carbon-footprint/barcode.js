@@ -1,5 +1,6 @@
 const axios = require('axios');
-const { getCarbonFootprintFromName} = require('./carbon_footprint_calculation');
+const pluralize = require('pluralize')
+const { getCarbonFootprintFromName } = require('./carbon_footprint_calculation');
 
 //contains the key to query the Tesco API
 const options = {
@@ -37,7 +38,8 @@ const getCarbonFootprintFromBarcode = async (dataSources, barcode) => {
             categories: result.categories,
             label: "approximated from ingredients"
         };
-        await dataSources.carbonAPI.insert_in_DB(save_to_db);
+        if(dataSources.carbonAPI.searchData([save_to_db.item]).carbonpkilo !== undefined)
+            await dataSources.carbonAPI.insert_in_DB(save_to_db);
     }
 
     return {
@@ -53,7 +55,7 @@ const getCarbonFootprintFromBarcode = async (dataSources, barcode) => {
 //Extracts data from the barcode
 //tpnb in the url can be replaced by other barcode types such as gtin, tpnb or tpnc
 const getData = async (barcode) => {
-    let url = 'https://dev.tescolabs.com/product/?gtin='.concat(barcode);
+    let url = 'https://dev.tescolabs.com/product/?tpnb='.concat(barcode);
     let tescoResponse = await axios.get(url, options);
     return tescoResponse.data;
 };
@@ -69,6 +71,8 @@ const cleanName = (name) => {
     name = name.replace(/[0-9]/g, '');
     name = name.replace(/X/g, ''); //assuming there is no food that starts with X
     name = name.replace(' ', '');
+    name = name.toLowerCase();
+    name = pluralize.singular(name);
 
     return name;
 }
