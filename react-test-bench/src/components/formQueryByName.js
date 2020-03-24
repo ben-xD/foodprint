@@ -1,7 +1,21 @@
 import React from "react";
+import ApolloClient from "apollo-boost";
+import { gql } from 'apollo-boost'
 
 const SERVER = "server";
 const PRODUCT = "product";
+
+// GraphQL schema for correction mutation
+const POST_CORRECTION_MUTATION = gql`
+mutation PostCorrectionMutation($name: String!) {
+  postCorrection(name: $name) {
+    product {
+      name
+    }
+    carbonFootprintPerKg
+  }
+}
+`;
 
 export class FormQueryByName extends React.Component {
   constructor(props) {
@@ -17,12 +31,25 @@ export class FormQueryByName extends React.Component {
 
   handleChange(event) {
     const target = event.target;
-    this.setState({[target.name]: target.value});
+    this.setState({ [target.name]: target.value });
   }
 
   handleSubmit(event) {
-    alert('\nserver:' + this.state[SERVER] + '\nproduct name: ' + this.state[PRODUCT]);
+    console.log('\nserver:' + this.state[SERVER] + '\nproduct name: ' + this.state[PRODUCT]);
     event.preventDefault();
+
+    const client = new ApolloClient({
+      uri: 'http://localhost:4000/',
+    });
+
+    client
+      .mutate({
+        mutation: POST_CORRECTION_MUTATION,
+        variables: {
+          name: this.state[PRODUCT]
+        }
+      })
+      .then(result => console.log(result));
   }
 
   render() {
@@ -37,9 +64,9 @@ export class FormQueryByName extends React.Component {
         {/*<br/>*/}
         <label>
           Product name:
-          <input name={PRODUCT} type="text" onChange={this.handleChange}/>
+          <input name={PRODUCT} type="text" onChange={this.handleChange} />
         </label>
-        <input type="submit" value="Submit"/>
+        <input type="submit" value="Submit" />
       </form>
     );
   }
