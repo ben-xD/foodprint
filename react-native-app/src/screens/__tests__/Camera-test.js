@@ -3,10 +3,10 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 import { render } from '@testing-library/react-native';
 import Camera from '../Camera';
+import { useMutation } from 'react-apollo';
 import { useIsFocused } from '@react-navigation/native';
-import { useMutation } from '@apollo/client';
 
-jest.mock('@apollo/client');
+jest.mock('@apollo/react-hooks');
 jest.mock('@react-navigation/native');
 
 // Check current component against its snapshot

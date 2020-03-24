@@ -5,6 +5,8 @@ import { fireEvent, render, wait } from '@testing-library/react-native';
 import Login from '../Login';
 import AuthContext from '../../context/AuthContext';
 
+jest.mock('@apollo/react-hooks');
+
 // Check current component against its snapshot
 test('Login matches previous snapshot', () => {
   const authentication = {

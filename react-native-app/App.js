@@ -1,10 +1,11 @@
-import 'react-native-gesture-handler';
 import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Login from './src/screens/Login';
 import Signup from './src/screens/Signup';
 import SignupOrRegister from './src/screens/SignupOrRegister';
+import { ApolloProvider } from '@apollo/react-hooks';
+import ApolloClient from 'apollo-boost';
 import Loading from './src/screens/Loading';
 import BottomTabBar from './src/containers/BottomTabBar';
 import { createActionCreators, reducer, initialState } from './src/context/Context';
@@ -15,15 +16,10 @@ import NoInternet from './src/screens/NoInternet';
 import auth from '@react-native-firebase/auth';
 import AuthContext from './src/context/AuthContext';
 import DeleteAccount from './src/screens/DeleteAccount';
-import { ApolloProvider, ApolloClient, InMemoryCache, HttpLink } from '@apollo/client';
 
 const Stack = createStackNavigator();
 
 const client = new ApolloClient({
-  cache: new InMemoryCache(),
-  link: new HttpLink({
-    uri: Config.SERVER_URL,
-  }),
   uri: Config.SERVER_URL,
   request: async (operation) => {
     if (!auth().currentUser) {
@@ -56,9 +52,9 @@ const App = () => {
   React.useMemo(() => authContext.restoreTokenFromLocalStorage(), [authContext]);
 
   return (
-    <NavigationContainer>
-      <ApolloProvider client={client}>
-        <AuthContext.Provider value={authContext}>
+    <ApolloProvider client={client}>
+      <AuthContext.Provider value={authContext}>
+        <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }}>
             {state.isLoading ? (
               // If isLoading, we haven't finished checking for the token yet
@@ -89,9 +85,9 @@ const App = () => {
                   <Stack.Screen name="NoInternet" component={NoInternet}></Stack.Screen >
                 )}
           </Stack.Navigator>
-        </AuthContext.Provider>
-      </ApolloProvider>
-    </NavigationContainer>
+        </NavigationContainer>
+      </AuthContext.Provider>
+    </ApolloProvider>
   );
 };
 
