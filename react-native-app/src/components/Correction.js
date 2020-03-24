@@ -5,6 +5,8 @@ import React, { useState, useEffect } from 'react';
 import { gql } from 'apollo-boost';
 import { useMutation } from '@apollo/react-hooks';
 import { StyleSheet } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
+import { widthPercentageToDP as percentageWidth, heightPercentageToDP as percentageHeight } from 'react-native-responsive-screen';
 
 
 // GraphQL schema for correction mutation
@@ -59,26 +61,27 @@ const Correction = ({ route, navigation }) => {
       <ActivityIndicator />
     </View > : (
       <View style={styles.container}>
-        <View style={styles.titleContainer}>
-          <Text h3 style={styles.title}>We couldn't find your item.</Text>
-        </View>
-        <View style={styles.imageContainer}>
-          <Image
-            style={styles.image}
-            source={{ uri: 'https://mir-s3-cdn-cf.behance.net/project_modules/disp/fc4a1059120725.5a15c9fa08f78.gif' }}
-          />
-        </View>
-        <View style={styles.subtitleContainer}>
-          <Text style={styles.subtitle}>Let us know what it was, so we can improve our
-          app:</Text>
-        </View>
-        <View style={styles.inputContainer}>
-          <Input
-            placeholder="Cucumber"
-            onChangeText={value => setCorrectedName(value)}
-            onSubmitEditing={handleCorrection}
-          />
-        </View>
+        <ScrollView>
+          <View style={styles.titleContainer}>
+            <Text style={styles.title}>We could not find your item.</Text>
+          </View>
+          <View style={styles.imageContainer}>
+            <Image
+              style={styles.image}
+              source={{ uri: 'https://mir-s3-cdn-cf.behance.net/project_modules/disp/fc4a1059120725.5a15c9fa08f78.gif' }}
+            />
+          </View>
+          <View style={styles.inputContainer}>
+            <Input
+              placeholder="Cucumber"
+              onChangeText={value => setCorrectedName(value)}
+              onSubmitEditing={handleCorrection}
+            />
+          </View>
+          <View style={styles.subtitleContainer}>
+            <Text style={styles.subtitle}>Let us know what it was, so we can improve our app.</Text>
+          </View>
+        </ScrollView>
       </View >
     );
 };
@@ -89,13 +92,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   container: { flex: 1, justifyContent: 'center' },
-  titleContainer: { flex: 2, justifyContent: 'center' },
-  title: { textAlign: 'center' },
-  imageContainer: { flex: 2.5, alignItems: 'center', justifyContent: 'center' },
-  image: { height: 200, width: 200 },
+  titleContainer: { flex: 2, justifyContent: 'center', marginTop: percentageHeight('10%') },
+  title: { textAlign: 'center', fontSize: percentageWidth('7%') },
+  imageContainer: { flex: 2.5, alignItems: 'center', justifyContent: 'center', marginTop: percentageHeight('5%') },
+  image: { height: percentageWidth('30%'), width: percentageWidth('30%') },
   subtitleContainer: { flex: 1, justifyContent: 'center' },
-  subtitle: { fontSize: 22, textAlign: 'center', marginHorizontal: 20 },
-  inputContainer: { flex: 1.5, margin: 20 },
+  subtitle: { fontSize: percentageWidth('5%'), textAlign: 'center', marginHorizontal: percentageWidth('5%') },
+  inputContainer: { flex: 1.5, margin: percentageWidth('5%') },
 });
 
 export default Correction;

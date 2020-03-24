@@ -4,6 +4,7 @@ import { Button, Text } from 'react-native-elements';
 import Password from '../components/Password';
 import Email from '../components/Email';
 import AuthContext from '../context/AuthContext';
+import { widthPercentageToDP as percentageWidth, heightPercentageToDP as percentageHeight } from 'react-native-responsive-screen';
 
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -21,7 +22,7 @@ const Login = ({ navigation }) => {
     setIsPressed(true);
 
     if (!EMAIL_REGEX.test(email)) {
-      setEmailError('That\s not a valid email.');
+      setEmailError('That is not a valid email.');
       setIsPressed(false);
       return;
     } else {
@@ -75,8 +76,8 @@ const styles = StyleSheet.create({
   titleContainer: { alignItems: 'center', justifyContent: 'center', marginVertical: 50 },
   inputContainer: { width: '80%' },
   buttonContainer: { width: '80%' },
-  button: { backgroundColor: 'green', marginVertical: 100 },
-  buttonText: { fontSize: 24 },
+  button: { backgroundColor: 'green' },
+  buttonText: { fontSize: percentageWidth('5%') },
 });
 
 export default Login;
