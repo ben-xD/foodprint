@@ -7,9 +7,9 @@ const VisionAPI = require('../../datasources/vision');
 const credentials = require('../../credentials/carbon-7fbf76411514.json');
 const visionAPI = new VisionAPI(credentials);
 const CarbonAPI = require('../../datasources/carbon');
-carbonAPI = new CarbonAPI();
+const carbonAPI = new CarbonAPI();
 const ConceptAPI = require('../../datasources/concept');
-conceptAPI = new ConceptAPI();
+const conceptAPI = new ConceptAPI();
 
 const dataSources = {
   carbonAPI,

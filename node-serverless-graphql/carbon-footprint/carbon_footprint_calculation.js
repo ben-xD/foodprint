@@ -3,38 +3,42 @@ const nlp = require('compromise');
 const pluralize = require('pluralize')
 const MAX_LENGTH_OF_NEXT_LAYER = 5;
 
+
 // Function that tries to find a label in the DB of categories (cotaining items like fruit, meat, ...)
 // @return CarbonFootprintReport (if found) or undefined (if not found)
 const findCategorisedLabel = (labels) => {
   for (let i = 0; i < labels.length; i += 1) {
-    let carbonFootprintPerKg = catergorisedCarbonValues[labels[i]];
-    if(carbonFootprintPerKg){
+    let carbonFootprintResponse = catergorisedCarbonValues[labels[i]];
+    if(carbonFootprintResponse){
       return {
         item: labels[i],
-        carbonFootprintPerKg,
+        carbonpkilo: carbonFootprintResponse[0].carbonpkilo,
+        categories: carbonFootprintResponse[0].categories
       };
     }
   }
   return undefined;
 };
 
+
 // For each valid label in a list of labels (aka layer), this function tries to find it in the DB. If none of the labels
 // are found in the DB, then it tries to find one in the DB of categories.
 // Note that  the search is made in order (the labels are already ordered by prediction confidence by Google Vision API).
 // @return CarbonFootprintReport (if a label was found in a DB) or undefined (it any label was found)
-const oneLayerSearch = async (dataSources, labels) => {
+const oneLayerSearch = async (datasources, labels) => {
 
   for (let i = 0; i < labels.length; i += 1) {
     nounInLabel = labels[i];
-    if (await isConceptValid(dataSources, nounInLabel)){
-      const carbonFootprintPerKg = await dataSources.carbonAPI.searchData(nounInLabel);
-      if (carbonFootprintPerKg !== undefined) {
+    //if (await isConceptValid(datasources, nounInLabel)){
+    const carbonFootprintResponse = await datasources.carbonAPI.searchData(nounInLabel);
+    if (carbonFootprintResponse.carbonpkilo !== undefined) {
         return {
           item: nounInLabel,
-          carbonFootprintPerKg,
+          carbonpkilo: carbonFootprintResponse.carbonpkilo,
+          categories: carbonFootprintResponse.categories
         };
-      }
     }
+    //}
   }
 
   categoryResult = findCategorisedLabel(labels)
@@ -43,9 +47,10 @@ const oneLayerSearch = async (dataSources, labels) => {
   }
   return {
     item: undefined,
-    carbonFootprintPerKg: undefined,
+    carbonpkilo: undefined,
   };
 };
+
 
 // Given a layer, finds the "next layer", considered the list of terms matching the ConceptNet "isA" relation with
 // at least one of the labels in the original layer.
@@ -181,23 +186,30 @@ const removeDuplicates = (labels) => {
 // 4. Tries to find a related concept in the DB or in the categories DB (oneLayerSearch)
 // @return CarbonFootprintReport (carbonFootprintPerKg is undefined if all the searches failed)
 
-const getCarbonFootprintFromImage = async (dataSources, image) => {
+const getCarbonFootprintFromImage = async (datasources, image) => {
   // Get image labels from Google Vision API
-  const imageLabels = await dataSources.visionAPI.getImageLabels(image);
+  const imageLabels = await datasources.visionAPI.getImageLabels(image);
 
   // Attempt to find the google vision labels in the database:
-  const firstResponse= await oneLayerSearch(dataSources, imageLabels);
+  const firstResponse = await oneLayerSearch(datasources, imageLabels);
   if (firstResponse.item) {
-    return firstResponse;
+    console.log(firstResponse);
+    return {
+      item: firstResponse.item,
+      carbonFootprintPerKg: firstResponse.carbonpkilo
+    }
   }
 
   // Call ConceptNet to create the next layer:
-  const nextLabels = await getNextLayer(dataSources, imageLabels);
+  const nextLabels = await getNextLayer(datasources, imageLabels);
 
   // Attempt to find the next layer labels in the database:
-  const nextResponse = await oneLayerSearch(dataSources, nextLabels);
+  const nextResponse = await oneLayerSearch(datasources, nextLabels);
   if (nextResponse.item) {
-    return nextResponse;
+    return {
+      item: nextResponse.item,
+      carbonFootprintPerKg: nextResponse.carbonpkilo
+    };
   }
 
   return {
@@ -205,6 +217,7 @@ const getCarbonFootprintFromImage = async (dataSources, image) => {
     carbonFootprintPerKg: undefined,
   };
 };
+
 
 
 // ****************************************************************
@@ -216,7 +229,7 @@ const getCarbonFootprintFromImage = async (dataSources, image) => {
 // 3. Tries to find a related concept in the DB or in the categories DB (oneLayerSearch)
 // @return CarbonFootprintReport (carbonFootprintPerKg is undefined if all the searches failed)
 
-const getCarbonFootprintFromName = async (dataSources, name) => {
+const getCarbonFootprintFromName = async (datasources, name) => {
   // Preprocess the name (to singular and lower case):
   name = name.toLowerCase();
   name = singularize(name);
@@ -225,25 +238,46 @@ const getCarbonFootprintFromName = async (dataSources, name) => {
   labels = getNounsInLabels(labels);
 
   // Attempt to find the google vision labels in the database:
-  const firstResponse = await oneLayerSearch(dataSources, labels);
+  const firstResponse = await oneLayerSearch(datasources, labels);
   if (firstResponse.item) {
-    return firstResponse;
+    return {
+      item: firstResponse.item,
+      carbonFootprintPerKg: firstResponse.carbonpkilo
+    };
   }
 
   // Call ConceptNet to create the next layer:
-  let nextLabels = await getNextLayer(dataSources, labels);
+  let nextLabels = await getNextLayer(datasources, labels);
 
   // Attempt to find the next layer labels in the database:
-  const nextResponse = await oneLayerSearch(dataSources, nextLabels);
+  const nextResponse = await oneLayerSearch(datasources, nextLabels);
   if (nextResponse.item) {
-    return nextResponse;
+    console.log(nextResponse);
+
+    // Clearly, the product was not in the db previousle, therefore add it now.
+    let save_to_db = {
+      item: name,
+      carbonpkilo: nextResponse.carbonpkilo,
+      categories: nextResponse.categories, //CHNANGE HERE TO A FUNC WHICH CAN DECIDE ON THE PROPER CATEGORY!!!!
+      label: "approximated from product " + nextResponse.item
+    };
+    console.log(save_to_db);
+    if(datasources.carbonAPI.searchData([save_to_db.item]).carbonpkilo !== undefined) {
+      datasources.carbonAPI.insert_in_DB(save_to_db);
+    }
+
+    return {
+      item: name,
+      carbonFootprintPerKg: nextResponse.carbonpkilo
+    };
   }
 
   return {
-    item: labels[0],
+    item: name,
     carbonFootprintPerKg: undefined,
   };
 };
 
 
-module.exports = { getCarbonFootprintFromImage, getCarbonFootprintFromName};
+
+module.exports = { getCarbonFootprintFromImage, getCarbonFootprintFromName, singularize};
