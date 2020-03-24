@@ -1,10 +1,10 @@
 import React from 'react';
 import Correction from '../Correction';
-import { useMutation } from '@apollo/react-hooks';
 
 import renderer from 'react-test-renderer';
+import { useMutation } from '@apollo/client';
 
-jest.mock('@apollo/react-hooks');
+jest.mock('@apollo/client');
 
 // Check current component against its snapshot
 test('Correction matches previous snapshot', () => {

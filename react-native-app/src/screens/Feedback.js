@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, ActivityIndicator, Image } from 'react-native';
 import { gql } from 'apollo-boost';
 import { StyleSheet } from 'react-native';
-import { useMutation } from '@apollo/react-hooks';
 import { Rating, Button } from 'react-native-elements';
+import { useMutation } from '@apollo/client';
 
 // GraphQL schema for picture posting mutation
 const POST_PICTURE_MUTATION = gql`

@@ -5,7 +5,7 @@ import SignupOrRegister from '../SignupOrRegister';
 import { fireEvent, render, wait } from '@testing-library/react-native';
 import AuthContext from '../../context/AuthContext';
 
-jest.mock('@apollo/react-hooks');
+jest.mock('@apollo/client');
 
 // Check current component against its snapshot
 test('SignupOrRegister matches previous snapshot', () => {
