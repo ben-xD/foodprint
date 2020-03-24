@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const config = require('../carbon-footprint/config');
 
-class CarbonAPI {
+class userHistory {
 
   constructor() {
     this._hystorySchema;
@@ -30,7 +30,7 @@ class CarbonAPI {
     if(!this._hystorySchema){
       this._hystorySchema = new mongoose.Schema({
         user_id: String,
-        item: Number,
+        item: String,
         time_stamp: Date,
       }, {collection: 'user-history'});
     }
@@ -51,7 +51,6 @@ class CarbonAPI {
     });
   }
 
-  // Search database for given label and return its carbon footprint
   async searchData(user_id) {
 
     const historyModel = await this.getUserHistorytModel();
@@ -77,6 +76,45 @@ class CarbonAPI {
     }
   }
 
-}
+  // Search database for all products consumed by a user
+  async get_all_user_data (user) {
 
-module.exports = CarbonAPI;
+    const carbonModel = await this.getUserHistorytModel();
+    let user_data;
+    try {
+      await carbonModel.find({user_id: user}, (err, items) => {
+        if (err) {
+          throw err;
+        }
+        user_data = items;
+      }).exec();
+
+      return user_data;
+
+    } catch (err) {
+      return undefined;
+    }
+
+  }
+
+  // Calculate the average co2 footprint of a user using all products added by user
+  async avg_co2_for_user (carbonAPI, user) {
+
+    const user_data = await this.get_all_user_data(user);
+    let user_co2 = 0;
+    let no_of_datapoints = 0;
+    for (let i = 0; i < user_data.length; i++){
+      let carbonResult = await carbonAPI.searchData(user_data[i].item);
+      if(carbonResult.carbonpkilo !== undefined){
+        user_co2 += Number(carbonResult.carbonpkilo);
+        no_of_datapoints += 1;
+      }
+    }
+
+    return user_co2/no_of_datapoints;
+
+  }
+
+};
+
+module.exports = userHistory;
