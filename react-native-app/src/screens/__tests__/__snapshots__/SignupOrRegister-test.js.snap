@@ -14,16 +14,16 @@ exports[`SignupOrRegister matches previous snapshot 1`] = `
     style={
       Object {
         "alignItems": "center",
-        "marginTop": 32,
+        "marginTop": 66.5,
         "position": "absolute",
-        "top": 32,
+        "top": 66.5,
       }
     }
   >
     <Text
       style={
         Object {
-          "fontSize": 50,
+          "fontSize": 112.5,
         }
       }
       theme={
@@ -70,7 +70,7 @@ exports[`SignupOrRegister matches previous snapshot 1`] = `
   <View
     style={
       Object {
-        "width": "80%",
+        "width": 600,
       }
     }
   >
@@ -79,7 +79,7 @@ exports[`SignupOrRegister matches previous snapshot 1`] = `
         style={
           Object {
             "borderRadius": 3,
-            "marginVertical": 8,
+            "marginVertical": 13.5,
           }
         }
       >
@@ -109,10 +109,10 @@ exports[`SignupOrRegister matches previous snapshot 1`] = `
                 Array [
                   Object {
                     "color": "black",
-                    "fontSize": 28,
+                    "fontSize": 37.5,
                   },
                   Object {
-                    "paddingRight": 5,
+                    "paddingRight": 22.5,
                   },
                   Object {
                     "fontFamily": "anticon",
@@ -129,7 +129,7 @@ exports[`SignupOrRegister matches previous snapshot 1`] = `
               style={
                 Object {
                   "color": "black",
-                  "fontSize": 24,
+                  "fontSize": 37.5,
                   "paddingBottom": 1,
                   "paddingTop": 2,
                   "textAlign": "center",
@@ -145,7 +145,7 @@ exports[`SignupOrRegister matches previous snapshot 1`] = `
         style={
           Object {
             "borderRadius": 3,
-            "marginVertical": 8,
+            "marginVertical": 13.5,
           }
         }
       >
@@ -172,7 +172,7 @@ exports[`SignupOrRegister matches previous snapshot 1`] = `
               style={
                 Object {
                   "color": "white",
-                  "fontSize": 24,
+                  "fontSize": 37.5,
                   "paddingBottom": 1,
                   "paddingTop": 2,
                   "textAlign": "center",
@@ -187,7 +187,7 @@ exports[`SignupOrRegister matches previous snapshot 1`] = `
       <View
         style={
           Object {
-            "marginVertical": 12,
+            "marginVertical": 40,
           }
         }
       >
@@ -195,7 +195,7 @@ exports[`SignupOrRegister matches previous snapshot 1`] = `
           style={
             Object {
               "color": "grey",
-              "fontSize": 18,
+              "fontSize": 37.5,
               "textAlign": "center",
             }
           }
@@ -270,7 +270,7 @@ exports[`SignupOrRegister matches previous snapshot 1`] = `
                 style={
                   Object {
                     "color": "green",
-                    "fontSize": 24,
+                    "fontSize": 52.5,
                     "paddingBottom": 1,
                     "paddingTop": 2,
                     "textAlign": "center",
@@ -288,7 +288,7 @@ exports[`SignupOrRegister matches previous snapshot 1`] = `
   <View
     style={
       Object {
-        "bottom": 32,
+        "bottom": 66.5,
         "position": "absolute",
       }
     }
@@ -323,14 +323,14 @@ exports[`SignupOrRegister matches previous snapshot 1`] = `
             style={
               Object {
                 "color": "grey",
-                "fontSize": 18,
+                "fontSize": 37.5,
                 "paddingBottom": 1,
                 "paddingTop": 2,
                 "textAlign": "center",
               }
             }
           >
-            skip
+            Skip login
           </Text>
         </View>
       </TouchableOpacity>

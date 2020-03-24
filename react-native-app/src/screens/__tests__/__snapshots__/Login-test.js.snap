@@ -209,7 +209,6 @@ exports[`Login matches previous snapshot 1`] = `
               "borderWidth": 0,
               "flexDirection": "row",
               "justifyContent": "center",
-              "marginVertical": 100,
               "padding": 8,
             }
           }
@@ -218,7 +217,7 @@ exports[`Login matches previous snapshot 1`] = `
             style={
               Object {
                 "color": "white",
-                "fontSize": 24,
+                "fontSize": 37.5,
                 "paddingBottom": 1,
                 "paddingTop": 2,
                 "textAlign": "center",

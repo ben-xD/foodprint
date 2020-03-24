@@ -41,7 +41,7 @@ test('Skip button calls anonymous sign in', async () => {
 
   const utils = renderSignUpOrRegister(authentication);
 
-  const skipButton = utils.getByText('skip');
+  const skipButton = utils.getByText('Skip login');
   fireEvent.press(skipButton);
   await wait(() => expect(utils.queryByTestId('skipButton')));
   expect(signInAnonymously.mock.calls.length).toBe(1);
