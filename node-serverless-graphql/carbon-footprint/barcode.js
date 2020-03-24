@@ -6,7 +6,7 @@ const options = {
     headers: {'Ocp-Apim-Subscription-Key': '6b9983f7c22d42e1a242b91c7b0cfe37'}
 };
 
-const getCarbonFootprintFromBarcode = async (barcode) => {
+const getCarbonFootprintFromBarcode = async (dataSources, barcode) => {
     //get data from the barcode
     let data = await getData(barcode);
     if(data.products === undefined || data.products.length == 0){
@@ -21,16 +21,30 @@ const getCarbonFootprintFromBarcode = async (barcode) => {
 
     //run getCarbonFootprintFromName (that might be very costly no?). if it returns a value that means the product
     //is in the db and thus return the value.
-    let fromNameResult = await getCarbonFootprintFromName(product_name);
+    let fromNameResult = await getCarbonFootprintFromName(dataSources, product_name);
     if(fromNameResult.carbonFootprintPerKg !== undefined)
         return fromNameResult;
 
     //if getCarbonFootprintFromName returns an undefined carbonFootprintPerKg, the product is not in the db yet, so sum
     //up the ingredients to get the carbon footprint.
-    let result = calcCarbonFromIngredients(data);
+    let result = calcCarbonFromIngredients(dataSources, data);
 
     //store the new product in the db, unless the carbonfootprintperkg is undefined
-    //TODO: ADD TO MONGODB
+    if (result.carbonFootprintPerKg !== undefined){
+        let save_to_db = {
+            item: result.item,
+            carbonpkilo: result.carbonFootprintPerKg,
+            categories: result.categories,
+            label: "approximated from ingredients"
+        };
+        await dataSources.carbonAPI.insert_in_DB(save_to_db);
+    }
+
+    return {
+        item: result.item,
+        carbonFootprintPerKg: result.carbonFootprintPerKg
+    };
+
 
     return result;
 
@@ -63,7 +77,7 @@ const cleanName = (name) => {
 //the carbon footprint. If there are no ingredients, return undefined. (In the case of no ingredients, we have
 //already run getCarbonFootprintFromName in etCarbonFootprintFromBarcode, therefore we know this product
 //isnt in the database either.
-const calcCarbonFromIngredients = async (data) => {
+const calcCarbonFromIngredients = async (dataSources, data) => {
     //check whether the product has ingredients at all
     if(data.products[0].ingredients === undefined){
         return {
@@ -75,15 +89,16 @@ const calcCarbonFromIngredients = async (data) => {
     let ingredients_raw = getIngredientList(data);
     let ingredients = delete_junk(ingredients_raw);
     console.log(ingredients);
-    let carbon = await calculate_total_carbon(ingredients);
+    let carbon = await calculate_total_carbon(dataSources, ingredients);
 
-    if (carbon === 0){
-        carbon = undefined;
+    if (carbon_response.carbonFootprintPerKg === 0){
+        carbon_response.carbonFootprintPerKg = undefined;
     }
 
     return {
         item: cleanName(data.products[0].description),
-        carbonFootprintPerKg: carbon,
+        carbonFootprintPerKg: carbon_response.carbonFootprintPerKg,
+        categories: carbon_response.categories
     };
 
 };
@@ -123,17 +138,37 @@ const delete_junk = (ingredients_raw) => {
 };
 
 //Sums up the carbon footprint of all the ingredients within the product
-const calculate_total_carbon = async (ingredients) => {
+const calculate_total_carbon = async (dataSources, ingredients) => {
     let total_carbon = 0;
-    for(let i = 0; i < ingredients.length; i++){
+    let categories = "0000"
+    for(let i = 0; i < ingredients.length && i < 5; i++){
         console.log(ingredients[i]);
-        let carbon = (await getCarbonFootprintFromName(ingredients[i])).carbonFootprintPerKg; //how do i correctly access carbonfootpirngperkd???
-        if(carbon != undefined)
+        let carbonResponse = await getCarbonFootprintFromName(dataSources, ingredients[i]);
+        let carbon = carbonResponse.carbonFootprintPerKg;//how do i correctly access carbonfootpirngperkd???
+        let new_categories = carbonResponse.categories;
+        if(carbon != undefined) {
             total_carbon += carbon;
+            categories = update_categories(categories, new_categories);
+        }
     }
 
-    return total_carbon;
+    return {
+        carbonFootprintPerKg: total_carbon,
+        categories: categories
+    };
 
+};
+
+//Function which updates the status of the categories of a product
+const update_categories = async (categories, new_categories) => {
+
+    for (let i = 0; i < new_categories.length; i++){
+        if(!categories.includes(new_categories[i])){
+            categories = categories.replace("0", new_categories[i]);
+        }
+    }
+
+    return categories;
 };
 
 // //Sample barcodes of foods
