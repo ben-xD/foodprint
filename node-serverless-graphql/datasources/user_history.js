@@ -118,6 +118,39 @@ class userHistory {
     return user_co2 * 1.0 / no_of_datapoints;
 
   }
+  
+  async weekly_average_cf (carbonAPI, user) {
+      
+    const historyModel = await this.getUserHistorytModel();
+
+    var today = new Date();
+    var first = today.getDate() - today.getDay();
+    var firstDayWeek = new Date(today.setDate(first));
+    var lastDayWeek = new Date(today.setDate(first + 6));
+
+    const last_week_data = await historyModel.aggregate([
+      {
+        $match: {
+            "time_stamp": {
+                $lt: lastDayWeek,
+                $gt: firstDayWeek
+            },
+            user_id: user,
+        }
+    }])
+
+    let user_co2 = 0;
+    let no_of_datapoints = 0;
+    for (let i = 0; i < last_week_data.length; i++){
+      let carbonResult = await carbonAPI.searchData(last_week_data[i].item);
+      if(carbonResult.carbonpkilo !== undefined){
+        user_co2 += Number(carbonResult.carbonpkilo);
+        no_of_datapoints += 1;
+      }
+    }
+
+    return user_co2 / no_of_datapoints;
+  }
 
 };
 
