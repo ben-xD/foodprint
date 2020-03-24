@@ -16,7 +16,7 @@ const resolvers = {
       console.log({context, parent});
       const image = new Buffer(file.base64, 'base64'); // Decode base64 of "file" to image
       console.log('Received picture');
-      const {item, carbonFootprintPerKg} = await getCarbonFootprintFromImage(dataSources.visionAPI, dataSources.carbonAPI, image);
+      const {item, carbonFootprintPerKg} = await getCarbonFootprintFromImage(dataSources, image);
       const response = {
         product: {
           name: item,
@@ -41,7 +41,7 @@ const resolvers = {
     },
     postCorrection: async (parent, {name}, {dataSources}) => {
       console.log({'Received correction': name});
-      const {item, carbonFootprintPerKg} = await getCarbonFootprintFromName(dataSources.carbonAPI, name);
+      const {item, carbonFootprintPerKg} = await getCarbonFootprintFromName(dataSources, name);
       const response = {
         product: {
           name: item,
