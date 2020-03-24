@@ -8,7 +8,10 @@ const Tab = createBottomTabNavigator();
 
 const Home = () => {
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+      tabBarOptions={{
+        activeTintColor: 'green',
+      }}>
       <Tab.Screen
         name="Food"
         component={FeedbackFlow}

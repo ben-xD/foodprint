@@ -3,6 +3,7 @@ import { View, SafeAreaView, StyleSheet } from 'react-native';
 import { Text, Button } from 'react-native-elements';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import AuthContext from '../context/AuthContext';
+import { widthPercentageToDP as percentageWidth, heightPercentageToDP as percentageHeight } from 'react-native-responsive-screen';
 
 
 const SignupOrRegister = ({ navigation }) => {
@@ -24,7 +25,7 @@ const SignupOrRegister = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.titleContainer}>
-        <Text h1>
+        <Text style={styles.title}>
           FoodPrint
         </Text>
       </View>
@@ -38,7 +39,7 @@ const SignupOrRegister = ({ navigation }) => {
               <AntDesign
                 style={styles.googleIcon}
                 name="google"
-                size={28}
+                size={percentageWidth('5%')}
                 color="black"
               />
             }
@@ -72,7 +73,7 @@ const SignupOrRegister = ({ navigation }) => {
       <View style={styles.skipButtonContainer}>
         <Button
           disabled={isPressed}
-          title="skip"
+          title="Skip login"
           titleStyle={styles.skipButton}
           onPress={handleSignInAnonymously}
           type="clear"
@@ -84,22 +85,22 @@ const SignupOrRegister = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: { justifyContent: 'center', alignItems: 'center', height: '100%' },
-  bodyContainer: { width: '80%' },
-  titleContainer: { position: 'absolute', top: 32, alignItems: 'center', marginTop: 32 },
-  googleContainer: { marginVertical: 8 },
+  bodyContainer: { width: percentageWidth('80%') },
+  title: { fontSize: percentageWidth('15%') },
+  titleContainer: { position: 'absolute', top: percentageHeight('5%'), alignItems: 'center', marginTop: percentageHeight('5%') },
+  googleContainer: { marginVertical: percentageHeight('1%') },
   google: { backgroundColor: 'white' },
-  googleText: { fontSize: 24, color: 'black' },
-  googleIconContainer: { marginRight: 24 },
-  googleIcon: { paddingRight: 5 },
-  signUpContainer: { marginVertical: 8 },
-  signUpText: { fontSize: 24 },
+  googleText: { fontSize: percentageWidth('5%'), color: 'black' },
+  googleIconContainer: { marginRight: percentageHeight('5%') },
+  googleIcon: { paddingRight: percentageWidth('3%') },
+  signUpContainer: { marginVertical: percentageHeight('1%') },
+  signUpText: { fontSize: percentageWidth('5%') },
   signUp: { backgroundColor: 'green' },
-
-  loginButtonContainer: { marginVertical: 12 },
-  loginText: { fontSize: 18, textAlign: 'center', color: 'grey' },
-  loginButton: { color: 'green', fontSize: 24 },
-  skipButtonContainer: { position: 'absolute', bottom: 32 },
-  skipButton: { color: 'grey', fontSize: 18 },
+  loginButtonContainer: { marginVertical: percentageHeight('3%') },
+  loginText: { fontSize: percentageWidth('5%'), textAlign: 'center', color: 'grey' },
+  loginButton: { color: 'green', fontSize: percentageWidth('7%') },
+  skipButtonContainer: { position: 'absolute', bottom: percentageHeight('5%') },
+  skipButton: { color: 'grey', fontSize: percentageWidth('5%') },
 });
 
 export default SignupOrRegister;

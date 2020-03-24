@@ -36,7 +36,7 @@ Every time you want to deploy to gcloud, replacing the old instance:
    2. Add `export GOOGLE_APPLICATION_CREDENTIALS=PROJECT_DIRECTORY/credentials/carbonfootprint-serverless.json` to your `.bashrc` or `.zshrc`, but remember to replace PROJECT_DIRECTORY with the output of the previous step.
    3. Restart your shell
 2. Run `npm install` or `npm i` to ensure npm dependencies are installed
-3. Run `npm run dev` to run local Apollo server or use `npm run debug` to run local apollo server with debug mode. You can use chrome debugger, go to `chrome://inspect` to get it
+3. Run `npm run start` to run local Apollo server or use `npm run debug` to run local apollo server with debug mode. You can use chrome debugger, go to `chrome://inspect` to get it
 4. In your browser, go to url specified to play around
    - Can for example base64-encode an image and send it via a mutation (see `schema.js`)
 5. Hit the serverless urls from the react native app, by running `npm run ios:local` or `npm run android:local` inside react native app.
