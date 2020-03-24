@@ -26,8 +26,8 @@ class userHistory {
     });
   }
 
-  async getUserHistorytModel () {
-    if(!this._hystorySchema){
+  async getUserHistorytModel() {
+    if (!this._hystorySchema) {
       this._hystorySchema = new mongoose.Schema({
         user_id: String,
         item: String,
@@ -38,12 +38,16 @@ class userHistory {
     return mongoose.model('user-history', this._hystorySchema);
   }
 
-  async insert_in_DB (new_data) {
+  // Add a new entry to users product list.
+  // Entry could look as follows:
+  //    user_id: "1"
+  //    item: "rice"
+  //    time_stamp: "20/04/2020"
+  async insert_in_DB(new_data) {
 
     const historyModel = await this.getUserHistorytModel();
-    console.log(historyModel);
-    historyModel.collection.insert(new_data, function(err, docs){
-      if(err){
+    historyModel.collection.insert(new_data, function (err, docs) {
+      if (err) {
         return console.error(err);
       } else {
         console.log("Document inserted into the user history collection");
@@ -77,12 +81,12 @@ class userHistory {
   }
 
   // Search database for all products consumed by a user
-  async get_all_user_data (user) {
+  async get_all_user_data(user) {
 
-    const carbonModel = await this.getUserHistorytModel();
+    const historyModel = await this.getUserHistorytModel();
     let user_data;
     try {
-      await carbonModel.find({user_id: user}, (err, items) => {
+      await historyModel.find({user_id: user}, (err, items) => {
         if (err) {
           throw err;
         }
@@ -98,20 +102,20 @@ class userHistory {
   }
 
   // Calculate the average co2 footprint of a user using all products added by user
-  async avg_co2_for_user (carbonAPI, user) {
+  async avg_co2_for_user(carbonAPI, user) {
 
     const user_data = await this.get_all_user_data(user);
     let user_co2 = 0;
     let no_of_datapoints = 0;
-    for (let i = 0; i < user_data.length; i++){
+    for (let i = 0; i < user_data.length; i++) {
       let carbonResult = await carbonAPI.searchData(user_data[i].item);
-      if(carbonResult.carbonpkilo !== undefined){
+      if (carbonResult.carbonpkilo !== undefined) {
         user_co2 += Number(carbonResult.carbonpkilo);
         no_of_datapoints += 1;
       }
     }
 
-    return user_co2/no_of_datapoints;
+    return user_co2 * 1.0 / no_of_datapoints;
 
   }
 
