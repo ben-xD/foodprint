@@ -1,14 +1,21 @@
-/**
- * @format
- */
-
-import 'react-native';
-import React from 'react';
-import App from '../App';
-
-// Note: test renderer must be required after react-native.
-import renderer from 'react-test-renderer';
+// End to end tests and big integration tests go here.
+// Other tests can be found in their respective folders, alongside the implementations.
 
 it('renders correctly', () => {
-  renderer.create(<App />);
+  // renderer.create(<App />);
 });
+
+// import React from 'react';
+// import { cleanup } from '@testing-library/react-native';
+
+// afterEach(cleanup);
+
+// describe('test reducer and actions', () => {
+//   it('', () => {
+
+//   });
+
+//   it('', () => {
+
+//   });
+// });

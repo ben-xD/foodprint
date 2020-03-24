@@ -1,6 +1,31 @@
 # Mobile application
 
-Written in typescript and react native.
+Written in javascript with react native, and associated libraries (react-navigation, jest).
+
+## TODOs
+- Display correctly (hide logout button) for skipped-login (anonymous) users
+- Look for TODOs in the code
+
+## npm run options
+You can run these by running npm run CODE, where code is:
+
+- `android` runs on an emulator (or device, if android and device is plugged in) (because it uses .env file).
+- `android:local`, like `android`, but points the backend requests to a locally hosted server. You need to run the server in this case.
+- `a` is shorthand for android
+- `ios`, ios version of `android`, add `-- DEVICE_NAME` to command (e.g. `npm run-ios "Joe's iPhone"`)
+- `ios:release`, same as `ios`, but in release mode
+- `release` does `android`, but runs the javascript without debug mode (faster, no debug messages, no reliance on Metro server (which serves your js files to the device/emulator)).
+- `a:bundle` generates an app bundle file in the `android/build`, and can be uploaded to the google play console to release the app. This is used because it is more convenient than uploading an APK. Recommended by Google.
+- `a:apk` generates an APK file in the `android/build`, and can be manually installed on devices or shared with others, so they can manually install them. This can't be done with an app bundle.
+
+## Development guide & testing
+
+- Write tests for code you write. Write them before (Test driven development) or after. But definitely before merging to master.
+- When you run `git commit`, husky runs all the tests and only lets you commit if they pass
+- To run all the tests, run `npm run test`. To run specific tests, use the run button next to the test in WebStorm
+- There are tests for components, so whenever a component gets changed, it fails the tests and requires to update the relevant snapshot:
+  - Check the snapshot tests that failed and if you are happy with the changes, run `npm run test -u` to update the snapshots
+  - Commit your updated snapshot
 
 ## Problems?
 
@@ -36,5 +61,6 @@ The code is typescript (a superset of javascript), which means you **can** just 
 - TODO add steps for running on a physical Android or Apple device
 
 ## Apollo Client
+
 Setup [here](https://www.apollographql.com/docs/react/get-started/) and
 [here](https://github.com/jaydenseric/apollo-upload-examples)

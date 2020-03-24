@@ -1,11 +1,11 @@
 {
   "name": "node-serverless-graphql-mongodb",
   "version": "1.0.0",
-  "main": "index_remote.js",
+  "main": "index.js",
   "scripts": {
     "start": "functions-framework --target=handler --port=4000",
     "debug": "nodemon --inspect node_modules/@google-cloud/functions-framework --port=4000 --target=handler",
-    "deploy": "gcloud functions deploy footprint --entry-point handler --runtime nodejs10 --trigger-http",
+    "deploy": "gcloud functions deploy footprint --entry-point handler --runtime nodejs10 --trigger-http --region=europe-west2",
     "test": "jest",
     "test:coverage": "jest  --coverage"
   },
@@ -18,7 +18,8 @@
     "compromise": "^13.1.0",
     "firebase": "^7.8.1",
     "firebase-admin": "^8.9.2",
-    "mongoose": "^5.8.11"
+    "mongoose": "^5.8.11",
+    "pluralize": "^8.0.0"
   },
   "devDependencies": {
     "@google-cloud/vision": "^1.8.0",

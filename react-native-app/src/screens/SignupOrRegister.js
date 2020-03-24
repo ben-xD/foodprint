@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { View, SafeAreaView } from 'react-native';
+import { View, SafeAreaView, StyleSheet } from 'react-native';
 import { Text, Button } from 'react-native-elements';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import { AuthContext } from '../store/Auth';
+import AuthContext from '../context/AuthContext';
+import { widthPercentageToDP as percentageWidth, heightPercentageToDP as percentageHeight } from 'react-native-responsive-screen';
 
 
-export default SignupOrRegister = ({ navigation }) => {
+const SignupOrRegister = ({ navigation }) => {
   const { signInWithGoogle, signInAnonymously } = React.useContext(AuthContext);
   const [isPressed, setIsPressed] = useState(false);
 
@@ -22,61 +23,84 @@ export default SignupOrRegister = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={{ justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-      <View style={{ position: 'absolute', top: 32, alignItems: 'center', marginTop: 32 }}>
-        <Text h1>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.titleContainer}>
+        <Text style={styles.title}>
           FoodPrint
         </Text>
       </View>
-      <View style={{ width: '80%' }}>
+      <View style={styles.bodyContainer}>
         <View>
           <Button
             disabled={isPressed}
-            iconContainerStyle={{ marginRight: 24 }}
+            iconContainerStyle={styles.googleIconContainer}
+            testID={'googleButton'}
             icon={
               <AntDesign
-                style={{ paddingRight: 5 }}
+                style={styles.googleIcon}
                 name="google"
-                size={28}
+                size={percentageWidth('5%')}
                 color="black"
               />
             }
-            containerStyle={{ marginVertical: 8 }}
-            buttonStyle={{ backgroundColor: 'white' }}
-            titleStyle={{ fontSize: 24, color: 'black' }}
+            containerStyle={styles.googleContainer}
+            buttonStyle={styles.google}
+            titleStyle={styles.googleText}
             title="Join using Google"
             onPress={handleSignInWithGoogle}
           />
           <Button
             disabled={isPressed}
-            containerStyle={{ marginVertical: 8 }}
-            buttonStyle={{ backgroundColor: 'green' }}
-            titleStyle={{ fontSize: 24 }}
+            containerStyle={styles.signUpContainer}
+            buttonStyle={styles.signUp}
+            titleStyle={styles.signUpText}
             title="Join using email"
             onPress={() => navigation.navigate('Signup')}
           />
-          <View style={{ marginVertical: 12 }}>
-            <Text style={{ fontSize: 18, textAlign: 'center', color: 'grey' }}>Existing user?</Text>
+          <View style={styles.loginButtonContainer}>
+            <Text style={styles.loginText}>Existing user?</Text>
             <Button
               title="LOGIN"
+              testID="skipButton"
               disabled={isPressed}
-              titleStyle={{ color: 'green', fontSize: 24 }}
+              titleStyle={styles.loginButton}
               onPress={() => navigation.navigate('Login')}
               type="clear"
             />
           </View>
         </View>
       </View>
-      <View style={{ position: 'absolute', bottom: 32 }}>
+      <View style={styles.skipButtonContainer}>
         <Button
           disabled={isPressed}
-          title="skip"
-          titleStyle={{ color: 'grey', fontSize: 18 }}
+          title="Skip login"
+          titleStyle={styles.skipButton}
           onPress={handleSignInAnonymously}
           type="clear"
         />
       </View>
     </SafeAreaView >
   );
-}
-  ;
+};
+
+const styles = StyleSheet.create({
+  container: { justifyContent: 'center', alignItems: 'center', height: '100%' },
+  bodyContainer: { width: percentageWidth('80%') },
+  title: { fontSize: percentageWidth('15%') },
+  titleContainer: { position: 'absolute', top: percentageHeight('5%'), alignItems: 'center', marginTop: percentageHeight('5%') },
+  googleContainer: { marginVertical: percentageHeight('1%') },
+  google: { backgroundColor: 'white' },
+  googleText: { fontSize: percentageWidth('5%'), color: 'black' },
+  googleIconContainer: { marginRight: percentageHeight('5%') },
+  googleIcon: { paddingRight: percentageWidth('3%') },
+  signUpContainer: { marginVertical: percentageHeight('1%') },
+  signUpText: { fontSize: percentageWidth('5%') },
+  signUp: { backgroundColor: 'green' },
+  loginButtonContainer: { marginVertical: percentageHeight('3%') },
+  loginText: { fontSize: percentageWidth('5%'), textAlign: 'center', color: 'grey' },
+  loginButton: { color: 'green', fontSize: percentageWidth('7%') },
+  skipButtonContainer: { position: 'absolute', bottom: percentageHeight('5%') },
+  skipButton: { color: 'grey', fontSize: percentageWidth('5%') },
+});
+
+export default SignupOrRegister;
