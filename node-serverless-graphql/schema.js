@@ -3,7 +3,6 @@ const { gql } = require('apollo-server');
 let schema = `
   scalar Upload
 
-
   type Product {
     name: String
   }
@@ -15,6 +14,12 @@ let schema = `
     width: Int
     pictureOrientation: Int
     deviceOrientation: Int
+  }
+
+  input UserHistoryEntry {
+    userId: String
+    productId: String
+    timeStamp: String
   }
  
   type CarbonFootprintReport {
@@ -31,6 +36,7 @@ let schema = `
     postPicture(file: PictureFile): CarbonFootprintReport
     postBarcode(barcode: String!): CarbonFootprintReport
     postCorrection(name: String!): CarbonFootprintReport
+    postUserHistoryEntry(entry: UserHistoryEntry): Boolean
   }
 `;
 
