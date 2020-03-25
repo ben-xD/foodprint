@@ -16,12 +16,6 @@ let schema = `
     deviceOrientation: Int
   }
 
-  input UserHistoryEntry {
-    userId: String
-    productId: String
-    timeStamp: String
-  }
- 
   type CarbonFootprintReport {
     product: Product
     carbonFootprint: Float
@@ -36,7 +30,7 @@ let schema = `
     postPicture(file: PictureFile): CarbonFootprintReport
     postBarcode(barcode: String!): CarbonFootprintReport
     postCorrection(name: String!): CarbonFootprintReport
-    postUserHistoryEntry(entry: UserHistoryEntry): Boolean
+    postUserHistoryEntry(item: String): Boolean
   }
 `;
 

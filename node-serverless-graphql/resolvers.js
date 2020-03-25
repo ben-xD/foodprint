@@ -7,7 +7,7 @@ const resolvers = {
     },
   },
   Mutation: {
-    postPicture: async (parent, { file }, { dataSources }, context) => {
+    postPicture: async (parent, { file }, context) => {
       // // The following code will make the function return 403, if user is not logged in.
       // if (!context.user) {
       // Throw a 403 error instead of "ERROR", to provide more meaning to clients
@@ -43,7 +43,7 @@ const resolvers = {
       console.log({ 'Returning': response });
       return response;
     },
-    postCorrection: async (parent, { name }, { dataSources }, context) => {
+    postCorrection: async (parent, { name }, { dataSources }) => {
       console.log({ 'Received correction': name });
       const { item, carbonFootprintPerKg } = await getCarbonFootprintFromName(dataSources, name);
       const response = {
@@ -55,10 +55,20 @@ const resolvers = {
       console.log({ 'Returning': response });
       return response;
     },
-    postUserHistoryEntry: async (parent, { entry }, context) => {
-      console.log({ entry });
-      console.log('Received postUserHistoryEntry mutation...');
-      return true;
+    postUserHistoryEntry: async (parent, { item }, { dataSources, user }) => {
+      console.log('Received history entry for...');
+      console.log({ 'item': item });
+      const uid = user.uid;
+      console.log({ 'user id': uid });
+      const timestamp = new Date().valueOf();
+      console.log({ timestamp });
+      try {
+        dataSources.carbonAPI.insert_in_user_history_DB({ item, uid, timestamp });
+        return true;
+      } catch (err) {
+        console.log(err);
+        return false;
+      }
     },
   },
 };

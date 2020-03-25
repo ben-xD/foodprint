@@ -31,8 +31,8 @@ const POST_BARCODE_MUTATION = gql`
 `;
 
 const Post_User_History_Entry = gql`
-  mutation postUserHistoryEntry($entry: UserHistoryEntry) {
-    postUserHistoryEntry(entry: $entry)
+  mutation postUserHistoryEntry($item: String) {
+    postUserHistoryEntry(item: $item)
   }
 `;
 
@@ -91,18 +91,15 @@ const Feedback = ({ route, navigation }) => {
   }, [barcodeData]);
 
   // Add item to user history
-  const addToHistory = async () => {
-    const entry = {
-      userId: 'Joe',
-      productId: 'Apple',
-      timeStamp: '24 March 2020',
-    };
-    await postUserHistoryEntryMutation({ variables: { entry } });
+  const addToHistory = async (item) => {
+    await postUserHistoryEntryMutation({ variables: { item } });
     console.log('addToHistory not implemented...');
   };
 
   const calculateRating = (carbonFootprint) => {
-    if (carbonFootprint < 2) {
+    if (carbonFootprint < 0) {
+      return 0;
+    } else if (carbonFootprint < 2) {
       return 5;
     } else if (carbonFootprint < 4) {
       return 4.5;
@@ -163,7 +160,11 @@ const Feedback = ({ route, navigation }) => {
               buttonStyle={styles.greenButtonStyle}
               titleStyle={styles.buttonText}
               title="Add to history"
-              onPress={() => { addToHistory(); }} //navigation.navigate('Your Foodprint') }}
+              onPress={() => {
+                addToHistory(meal.description);
+                alert("Sent item to to user history (backend)... Dashboard to be implemented!");
+                navigation.navigate('Your Foodprint');
+              }}
             />
           </View>
         </ScrollView>
