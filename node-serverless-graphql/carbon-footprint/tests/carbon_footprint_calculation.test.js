@@ -17,29 +17,39 @@ const dataSources = {
   conceptAPI
 }
 
-test('getCarbonFootprintFromName: Simple test with an item in the database (rice)', async () => {
-  jest.setTimeout(10000);
-  let response = await carbon_footprint_calculation.getCarbonFootprintFromName(dataSources,"rice");
-  expect(response).toEqual({item: "rice", carbonFootprintPerKg: 1.14});
+const mockDataSources = {
+  carbonAPI: {
+    searchData: jest.fn(),
+  }
+}
+
+describe('mocked dataSources', () => {
+
+  test('getCarbonFootprintFromName: Simple test with an item in the database (rice)', async () => {
+    mockDataSources.carbonAPI.searchData.mockReturnValueOnce({
+      "carbonpkilo": 1.14,
+      "categories": "1000"
+    });
+    let response = await carbon_footprint_calculation.getCarbonFootprintFromName(mockDataSources, "rice");
+    expect(response).toEqual({item: "rice", carbonFootprintPerKg: 1.14});
+    expect(mockDataSources.carbonAPI.searchData).toBeCalledWith('rice');
+  });
+
 });
 
-test('getCarbonFootprintFromName: Item not in database but is part of categorised shortlist (fruit)', async () => {
-  jest.setTimeout(10000);
-  let response = await carbon_footprint_calculation.getCarbonFootprintFromName(dataSources,"fruit");
-  expect(response).toEqual({item: "fruit", carbonFootprintPerKg: 1.1});
-});
+describe('real dataSources (no mocking)', () => {
 
-// test('getCarbonFootprintFromImage: orange image (deep layer search)', async() => {
-//   jest.setTimeout(10000)
-//   const image_buffer = new Buffer(orange_image, 'base64');
-//   let response = await carbon_footprint_calculation.getCarbonFootprintFromImage(image_buffer);
-//   expect(response).toEqual({item: "citrus", carbonFootprintPerKg: 0.5});
-//   jest.setTimeout(5000)
-// });
+  test('getCarbonFootprintFromName: Item not in database but is part of categorised shortlist (fruit)', async () => {
+    jest.setTimeout(10000);
+    let response = await carbon_footprint_calculation.getCarbonFootprintFromName(dataSources, "fruit");
+    expect(response).toEqual({item: "fruit", carbonFootprintPerKg: 1.1});
+  });
 
-test('getCarbonFootprintFromImage: rice image (shallow layer search)', async() => {
-  jest.setTimeout(30000);
-  const image_buffer = new Buffer(rice_image, 'base64');
-  let response = await carbon_footprint_calculation.getCarbonFootprintFromImage(dataSources, image_buffer);
-  expect(response).toEqual({item: "rice", carbonFootprintPerKg: 1.14});
-});
+  test('getCarbonFootprintFromImage: rice image (shallow layer search)', async () => {
+    jest.setTimeout(30000);
+    const image_buffer = new Buffer(rice_image, 'base64');
+    let response = await carbon_footprint_calculation.getCarbonFootprintFromImage(dataSources, image_buffer);
+    expect(response).toEqual({item: "rice", carbonFootprintPerKg: 1.14});
+  });
+
+})
