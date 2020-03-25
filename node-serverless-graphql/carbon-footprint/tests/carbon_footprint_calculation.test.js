@@ -45,15 +45,18 @@ describe('mocked dataSources: getCarbonFootprintFromName', () => {
     expect(mockDataSources.carbonAPI.searchData).toBeCalledWith('rice');
   });
 
+  test('"fruit" is not in the database and is returned from categorised shortlist (fruit)', async () => {
+    mockDataSources.carbonAPI.searchData.mockReturnValueOnce({
+      "carbonpkilo": undefined,
+      "categories": undefined
+    });
+    let response = await carbon_footprint_calculation.getCarbonFootprintFromName(mockDataSources, "fruit");
+    expect(response).toEqual({item: "fruit", carbonFootprintPerKg: 1.1});
+  });
+
 });
 
 describe('real dataSources (no mocking)', () => {
-
-  test('getCarbonFootprintFromName: Item not in database but is part of categorised shortlist (fruit)', async () => {
-    jest.setTimeout(10000);
-    let response = await carbon_footprint_calculation.getCarbonFootprintFromName(dataSources, "fruit");
-    expect(response).toEqual({item: "fruit", carbonFootprintPerKg: 1.1});
-  });
 
   test('getCarbonFootprintFromImage: rice image (shallow layer search)', async () => {
     jest.setTimeout(30000);
