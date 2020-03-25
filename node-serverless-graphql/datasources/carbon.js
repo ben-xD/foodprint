@@ -40,17 +40,6 @@ class CarbonAPI {
     return mongoose.model('Carbon', this._carbonSchema);
   }
 
-  async _getUserHistoryModel() {
-    if (!this._userHistorySchema) {
-      this._userHistorySchema = new mongoose.Schema({
-        user_id: String,
-        item: String,
-        timestamp: Date
-      }, { collection: 'user-history' });
-    }
-
-    return mongoose.model('Carbon', this._userHistorySchema);
-  }
 
   async insert_in_DB(new_data) {
 
@@ -65,18 +54,6 @@ class CarbonAPI {
     });
   }
 
-  async insert_in_user_history_DB(new_data) {
-
-    const userHistoryModel = await this._getUserHistoryModel();
-    console.log(userHistoryModel);
-    userHistoryModel.collection.insert(new_data, function (err, docs) {
-      if (err) {
-        return console.error(err);
-      } else {
-        console.log("Document inserted into the user-history collection");
-      }
-    });
-  }
 
   // Search database for given label and return its carbon footprint
   async searchData(label) {

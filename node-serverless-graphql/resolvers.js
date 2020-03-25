@@ -60,10 +60,8 @@ const resolvers = {
       console.log({ 'item': item });
       const uid = user.uid;
       console.log({ 'user id': uid });
-      const timestamp = new Date().valueOf();
-      console.log({ timestamp });
       try {
-        dataSources.carbonAPI.insert_in_user_history_DB({ item, uid, timestamp });
+        dataSources.userHistory.insert_in_DB({ "user_id": uid, "item": item});
         return true;
       } catch (err) {
         console.log(err);
