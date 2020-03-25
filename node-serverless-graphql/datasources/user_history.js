@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const config = require('../carbon-footprint/config');
 const CarbonAPI = require('./carbon');
-const carbonAPI = new CarbonAPI();
 
 class userHistory {
 
@@ -17,9 +16,9 @@ class userHistory {
   async connect() {
     try {
       await mongoose.connect(config.dbServer, {useNewUrlParser: true, useUnifiedTopology: true});
-      console.log("Carbon API: database connected.")
+      console.log("User API: database connected.")
     } catch (error) {
-      console.error("Carbon API: DATABASE FAILED TO CONNECT", error);
+      console.error("User API: DATABASE FAILED TO CONNECT", error);
     }
   }
 
