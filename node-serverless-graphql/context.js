@@ -4,6 +4,7 @@ const getUser = (idToken) => new Promise((resolve, reject) => {
   admin.auth().verifyIdToken(idToken)
     .then((decodedToken) => {
       // const { uid } = decodedToken;
+      // its called decodedToken, but it contains uid!
       resolve(decodedToken);
     }).catch((error) => {
       // Or return empty user, to signify no user

@@ -18,11 +18,13 @@ const dataSources = {
 }
 
 test('getCarbonFootprintFromName: Simple test with an item in the database (rice)', async () => {
+  jest.setTimeout(10000);
   let response = await carbon_footprint_calculation.getCarbonFootprintFromName(dataSources,"rice");
   expect(response).toEqual({item: "rice", carbonFootprintPerKg: 1.14});
 });
 
 test('getCarbonFootprintFromName: Item not in database but is part of categorised shortlist (fruit)', async () => {
+  jest.setTimeout(10000);
   let response = await carbon_footprint_calculation.getCarbonFootprintFromName(dataSources,"fruit");
   expect(response).toEqual({item: "fruit", carbonFootprintPerKg: 1.1});
 });
@@ -36,9 +38,8 @@ test('getCarbonFootprintFromName: Item not in database but is part of categorise
 // });
 
 test('getCarbonFootprintFromImage: rice image (shallow layer search)', async() => {
-  jest.setTimeout(15000);
+  jest.setTimeout(30000);
   const image_buffer = new Buffer(rice_image, 'base64');
   let response = await carbon_footprint_calculation.getCarbonFootprintFromImage(dataSources, image_buffer);
   expect(response).toEqual({item: "rice", carbonFootprintPerKg: 1.14});
-  jest.setTimeout(5000);
 });
