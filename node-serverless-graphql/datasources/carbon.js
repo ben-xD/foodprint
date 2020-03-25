@@ -5,13 +5,14 @@ class CarbonAPI {
 
   constructor() {
     this._carbonSchema;
+    this._userHistorySchema;
     this.searchData = this.searchData.bind(this);
     this.connect();
   }
 
   async connect() {
     try {
-      await mongoose.connect(config.dbServer, {useNewUrlParser: true, useUnifiedTopology: true});
+      await mongoose.connect(config.dbServer, { useNewUrlParser: true, useUnifiedTopology: true });
       console.log("Carbon API: database connected.")
     } catch (error) {
       console.error("Carbon API: DATABASE FAILED TO CONNECT", error);
@@ -26,25 +27,37 @@ class CarbonAPI {
     });
   }
 
-  async getCarbonFootprintModel () {
-    if(!this._carbonSchema){
+  async _getCarbonFootprintModel() {
+    if (!this._carbonSchema) {
       this._carbonSchema = new mongoose.Schema({
         item: String,
         carbonpkilo: Number,
         categories: String,
         label: String
-      }, {collection: 'carbon'});
+      }, { collection: 'carbon' });
     }
 
     return mongoose.model('Carbon', this._carbonSchema);
   }
 
-  async insert_in_DB (new_data) {
+  async _getUserHistoryModel() {
+    if (!this._userHistorySchema) {
+      this._userHistorySchema = new mongoose.Schema({
+        user_id: String,
+        item: String,
+        timestamp: Date
+      }, { collection: 'user-history' });
+    }
 
-    const carbonModel = await this.getCarbonFootprintModel();
+    return mongoose.model('Carbon', this._userHistorySchema);
+  }
+
+  async insert_in_DB(new_data) {
+
+    const carbonModel = await this._getCarbonFootprintModel();
     console.log(carbonModel);
-    carbonModel.collection.insert(new_data, function(err, docs){
-      if(err){
+    carbonModel.collection.insert(new_data, function (err, docs) {
+      if (err) {
         return console.error(err);
       } else {
         console.log("Document inserted into the carbon collection");
@@ -52,13 +65,26 @@ class CarbonAPI {
     });
   }
 
+  async insert_in_user_history_DB(new_data) {
+
+    const userHistoryModel = await this._getUserHistoryModel();
+    console.log(userHistoryModel);
+    userHistoryModel.collection.insert(new_data, function (err, docs) {
+      if (err) {
+        return console.error(err);
+      } else {
+        console.log("Document inserted into the user-history collection");
+      }
+    });
+  }
+
   // Search database for given label and return its carbon footprint
   async searchData(label) {
 
-    const carbonModel = await this.getCarbonFootprintModel();
+    const carbonModel = await this._getCarbonFootprintModel();
     let itemList;
     try {
-      await carbonModel.findOne({item: label}, (err, items) => {
+      await carbonModel.findOne({ item: label }, (err, items) => {
         if (err) {
           throw err;
         }

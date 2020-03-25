@@ -7,11 +7,15 @@ const resolvers = {
     },
   },
   Mutation: {
-    postPicture: async (parent, { file }, { dataSources }, context) => {
+    postPicture: async (parent, { file }, context) => {
+      // // The following code will make the function return 403, if user is not logged in.
       // if (!context.user) {
       // Throw a 403 error instead of "ERROR", to provide more meaning to clients
       //   throw new Error('you must be logged in');
       // }
+
+      // // You can access the user id, using
+      // console.log(`User id is: ${context.user.uid}`)
 
       console.log({ context, parent });
       const image = new Buffer(file.base64, 'base64'); // Decode base64 of "file" to image
@@ -50,6 +54,21 @@ const resolvers = {
       };
       console.log({ 'Returning': response });
       return response;
+    },
+    postUserHistoryEntry: async (parent, { item }, { dataSources, user }) => {
+      console.log('Received history entry for...');
+      console.log({ 'item': item });
+      const uid = user.uid;
+      console.log({ 'user id': uid });
+      const timestamp = new Date().valueOf();
+      console.log({ timestamp });
+      try {
+        dataSources.carbonAPI.insert_in_user_history_DB({ item, uid, timestamp });
+        return true;
+      } catch (err) {
+        console.log(err);
+        return false;
+      }
     },
   },
 };

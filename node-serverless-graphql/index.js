@@ -19,8 +19,8 @@ const carbonAPI = new CarbonAPI();
 
 const dataSources = () => ({
   visionAPI: new VisionAPI(visionCredentials),
-  carbonAPI: carbonAPI,
-  conceptAPI: new ConceptAPI()
+  carbonAPI,
+  conceptAPI: new ConceptAPI(),
 });
 
 const server = new ApolloServer({
@@ -32,4 +32,8 @@ const server = new ApolloServer({
   introspection: true,
 });
 
-exports.handler = server.createHandler();
+exports.handler = server.createHandler({
+  cors: {
+    origin: true,
+  },
+});

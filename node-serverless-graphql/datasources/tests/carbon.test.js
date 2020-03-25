@@ -2,11 +2,24 @@ const CarbonAPI = require('../carbon');
 
 let carbonAPI = new CarbonAPI();
 
-test('Carbon footprint of rice is 1.14', async () => {
+test('Carbon footprint of rice is 1.14 and category is 1000', async () => {
+  jest.setTimeout(10000);
   const name = 'rice';
-  const expected = 1.14;
+  const expected = { carbonpkilo: 1.14, categories: '1000' };
   expect.assertions(1);
   const res = await carbonAPI.searchData(name);
-  const actual = res.carbonpkilo;
+  console.log('res', res);
+  const actual = res;
+  expect(actual).toEqual(expected);
+});
+
+test('Item that is not in the database returns undefined', async () => {
+  jest.setTimeout(10000);
+  const name = 'definitely-not-in-the-db someRandomNoise';
+  const expected = { carbonpkilo: undefined, categories: undefined };
+  expect.assertions(1);
+  const res = await carbonAPI.searchData(name);
+  console.log('res', res);
+  const actual = res;
   expect(actual).toEqual(expected);
 });
