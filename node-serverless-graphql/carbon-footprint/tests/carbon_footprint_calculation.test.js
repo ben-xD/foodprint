@@ -23,14 +23,24 @@ const mockDataSources = {
   }
 }
 
-describe('mocked dataSources', () => {
+describe('mocked dataSources: getCarbonFootprintFromName', () => {
 
-  test('getCarbonFootprintFromName: Simple test with an item in the database (rice)', async () => {
+  test('"rice" is a known item in the database', async () => {
     mockDataSources.carbonAPI.searchData.mockReturnValueOnce({
       "carbonpkilo": 1.14,
       "categories": "1000"
     });
     let response = await carbon_footprint_calculation.getCarbonFootprintFromName(mockDataSources, "rice");
+    expect(response).toEqual({item: "rice", carbonFootprintPerKg: 1.14});
+    expect(mockDataSources.carbonAPI.searchData).toBeCalledWith('rice');
+  });
+
+  test('"Some nice RICE" is converted into "rice" and footprint for "rice" is returned', async () => {
+    mockDataSources.carbonAPI.searchData.mockReturnValueOnce({
+      "carbonpkilo": 1.14,
+      "categories": "1000"
+    });
+    let response = await carbon_footprint_calculation.getCarbonFootprintFromName(mockDataSources, "Some nice RICE");
     expect(response).toEqual({item: "rice", carbonFootprintPerKg: 1.14});
     expect(mockDataSources.carbonAPI.searchData).toBeCalledWith('rice');
   });
