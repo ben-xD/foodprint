@@ -23,7 +23,7 @@ const mockDataSources = {
   }
 }
 
-describe('mocked dataSources: getCarbonFootprintFromName', () => {
+describe('getCarbonFootprintFromName (mocked dataSources)', () => {
 
   test('"rice" is a known item in the database', async () => {
     mockDataSources.carbonAPI.searchData.mockReturnValueOnce({
@@ -56,7 +56,8 @@ describe('mocked dataSources: getCarbonFootprintFromName', () => {
 
 });
 
-describe('real dataSources (no mocking)', () => {
+
+describe('getCarbonFootprintFromImage (no mocking)', () => {
 
   test('getCarbonFootprintFromImage: rice image (shallow layer search)', async () => {
     jest.setTimeout(30000);
