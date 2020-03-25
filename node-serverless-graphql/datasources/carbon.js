@@ -5,7 +5,6 @@ class CarbonAPI {
 
   constructor() {
     this._carbonSchema;
-    this._userHistorySchema;
     this.searchData = this.searchData.bind(this);
     this.connect();
   }
