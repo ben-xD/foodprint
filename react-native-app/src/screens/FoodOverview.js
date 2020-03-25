@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
   Text,
@@ -6,13 +6,26 @@ import {
   Image,
   View,
   ScrollView,
+  StyleSheet,
 } from 'react-native';
-import { StyleSheet } from 'react-native';
+import {
+  VictoryBar,
+  VictoryChart,
+  VictoryAxis,
+  VictoryStack,
+  VictoryLine,
+  VictoryPie,
+  VictoryLabel
+} from 'victory-native';
+import { Button, Overlay } from 'react-native-elements';
 import { useLayoutEffect } from 'react';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { widthPercentageToDP as percentageWidth, heightPercentageToDP as percentageHeight } from 'react-native-responsive-screen';
 
 const FoodOverview = ({ navigation }) => {
-  <MaterialCommunityIcons name="camera" color={'grey'} size={35} />;
+
+  const [food, setFood] = useState([]);
+  const [isVisible, setVisibility] = useState(true);
 
   useLayoutEffect(() => {
     const takePicture = async () => {
@@ -28,26 +41,164 @@ const FoodOverview = ({ navigation }) => {
     });
   }, [navigation]);
 
+  //Mock-up data: Total average
+  const averageFootprint = [
+    {label: ' ', footprint: 17.25},
+    {label: ' ', footprint: 26.7-17.25},
+  ];
+
+  //Mock-up data: Monthly
+  const plantBasedData = [
+    { month: 'Oct', footprint: 19.00 },
+    { month: 'Nov', footprint: 16.50 },
+    { month: 'Dec', footprint: 13.50 },
+    { month: 'Jan', footprint: 16.50 },
+    { month: 'Feb', footprint: 14.25 },
+    { month: 'Mar', footprint: 13.00 },
+  ];
+
+  const eggAndDairyData = [
+    { month: 'Oct', footprint: 19.00 },
+    { month: 'Nov', footprint: 16.50 },
+    { month: 'Dec', footprint: 13.50 },
+    { month: 'Jan', footprint: 16.50 },
+    { month: 'Feb', footprint: 14.25 },
+    { month: 'Mar', footprint: 13.00 },
+  ];
+
+  const fishData = [
+    { month: 'Oct', footprint: 19.00 },
+    { month: 'Nov', footprint: 16.50 },
+    { month: 'Dec', footprint: 13.50 },
+    { month: 'Jan', footprint: 16.50 },
+    { month: 'Feb', footprint: 14.25 },
+    { month: 'Mar', footprint: 13.00 },
+  ];
+
+  const meatData = [
+    { month: 'Oct', footprint: 19.00 },
+    { month: 'Nov', footprint: 16.50 },
+    { month: 'Dec', footprint: 13.50 },
+    { month: 'Jan', footprint: 16.50 },
+    { month: 'Feb', footprint: 14.25 },
+    { month: 'Mar', footprint: 13.00 },
+  ];
+
+  //Mock-up data: Monthly average
+  const average = 63.67;
+
+  const userAverage = [
+    { month: 'Oct', footprint: average },
+    { month: 'Nov', footprint: average },
+    { month: 'Dec', footprint: average },
+    { month: 'Jan', footprint: average },
+    { month: 'Feb', footprint: average },
+    { month: 'Mar', footprint: average },
+  ];
+
+  const calculateColour = (carbonFootprint) => {
+    if (carbonFootprint < 4) {
+      return 'forestgreen';
+    } else if (carbonFootprint < 12) {
+      return 'yellowgreen';
+    } else if (carbonFootprint < 16) {
+      return 'yellow';
+    } else if (carbonFootprint < 20) {
+      return 'orange';
+    }
+    return 'red';
+  };
+
+  const calculateSmiley = (carbonFootprint) => {
+    if (carbonFootprint < 4) {
+      return require('../images/sparkling-eyes-smiley.png');
+    } else if (carbonFootprint < 12) {
+      return require('../images/happy-smiley.png');
+    } else if (carbonFootprint < 16) {
+      return require('../images/shy-smiley.png');
+    } else if (carbonFootprint < 20) {
+      return require('../images/unimpressed-smiley.png');
+    }
+    return require('../images/crying-smiley.png');
+  };
+
   return (
-    <SafeAreaView style={styles.container}>
       <ScrollView>
-        <View style={styles.contentContainer}>
-          <Text style={styles.subtitle}>
-            Scan a barcode or snap a picture.
-          </Text>
+        <View>
+          <Text style={{ fontSize:18, color:'grey', padding:percentageHeight('2%'), position:'absolute' }}>Your average carbon footprint per item:</Text>
           <Image
-            source={ require('../images/heart-eyes-smiley.png') }
-            style={styles.image}
+              source={ calculateSmiley(17.25) }
+              style={{height:percentageHeight('15%'), width:percentageWidth('30%'), position:'absolute', alignSelf:'center', marginTop:percentageHeight('12%')}}
+          />
+          <Text style={{ fontSize:24, color:'grey', position:'absolute', alignSelf:'center', marginTop:percentageHeight('28%')} }>17.25 units</Text>
+        </View>
+        <View style={{height:percentageHeight('35%'), alignItems:'center', paddingTop:percentageHeight('2%')}}>
+          <VictoryPie
+            data={averageFootprint}
+            x="label"
+            y="footprint"
+            standalone={true}
+            colorScale={[calculateColour(17.25), 'transparent']}
+            startAngle={-90}
+            endAngle={90}
+            innerRadius={140}
+            // containerComponent={<VictoryContainer style={{border: "1px solid #ccc"}}/>}
           />
         </View>
-      </ScrollView>
-    </SafeAreaView>
+        <View style={{ flexDirection: 'row', justifyContent:'center'}}>
+          <Button title='Weekly'/>
+          <Button title='Monthly'/>
+        </View>
+        <View style={{ justifyContent:'center', alignItems:'center', flexDirection:'row'}}>
+          <Text style={{ fontSize:22, color:'grey'}}>57 units this month</Text>
+          <Text style={{ marginLeft:15}}>-14% compared{"\n"}to last month</Text>
+        </View>
+        <View style={{justifyContent:'center', alignItems:'center', paddingLeft:percentageWidth('5%')}}>
+          <VictoryChart
+              domainPadding={20}
+          >
+            <VictoryAxis
+                dependentAxis
+                label="Carbon footprint"
+            />
+            <VictoryAxis
+                label="Month"
+            />
+            <VictoryAxis/>
+            <VictoryStack colorScale={['olivedrab', 'gold', 'skyblue', 'firebrick']}>
+              <VictoryBar data={plantBasedData} x="month" y="footprint" label="Vegetables"/>
+              <VictoryBar data={eggAndDairyData} x="month" y="footprint" label="Eggs & Dairy"/>
+              <VictoryBar data={fishData} x="month" y="footprint" label="Fish"/>
+              <VictoryBar data={meatData} x="month" y="footprint" label="Meat"/>
+            </VictoryStack>
+            <VictoryLine data={userAverage} x="month" y="footprint"/>
+          </VictoryChart>
+        </View>
+      <Overlay isVisible = { isVisible } onBackdropPress = {() => setVisibility(false)}>
+        <ScrollView>
+          <View style={styles.contentContainer}>
+            <Text style={ styles.title }>Welcome to FoodPrint!</Text>
+            <Text style={styles.text}>
+              You can now know the carbon footprint of the food you buy simply by scanning its barcode or taking a picture
+              of it!
+            </Text>
+            <Image
+              source={ require('../images/heart-eyes-smiley.png') }
+              style={styles.image}
+            />
+            <Text style={{fontSize:20, textAlign:'center', marginTop:20}}>
+              To get started, simply click on the Camera icon in the top left corner!
+            </Text>
+          </View>
+        </ScrollView>
+      </Overlay>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: { width: '100%', height: '100%' },
-  cameraButton: { marginRight: 16 },
+  cameraButton: { marginRight: percentageWidth('5%') },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -55,8 +206,9 @@ const styles = StyleSheet.create({
     padding: 8,
   },
   contentContainer: { justifyContent: 'center', alignItems: 'center', marginHorizontal: 40 },
-  subtitle: { fontSize: 20, textAlign: 'center', marginTop: 20 },
-  image: { width: 200, height: 200, marginTop: 10 },
+  text: { fontSize: 20, textAlign: 'center', marginTop: 20 },
+  title: { fontSize: 36, marginVertical: 20, textAlign:'center' },
+  image: { width: percentageWidth('55%'), height: percentageHeight('25%'), marginTop: percentageHeight('2%') },
 });
 
 export default FoodOverview;
