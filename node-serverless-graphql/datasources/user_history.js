@@ -334,17 +334,3 @@ class userHistory {
 };
 
 module.exports = userHistory;
-
-
-// TESTS:
-// const userHis = new userHistory();
-// let today = new Date();
-// console.log(today);
-// let new_date = userHis.convert_date(today, -2);
-// console.log(new_date);
-
-// let  res = userHis.avg_co2_for_user(carbonAPI, 1);
-// let  res2 = userHis.weekly_average_cf(carbonAPI, "1", 2);
-// let  res3 =  userHis.weekly_cf_composition(carbonAPI, "1", 2);
-// let  res4 = userHis.monthly_average_cf(carbonAPI, "1", 0);
-// let  res5 =  userHis.monthly_cf_composition(carbonAPI, "2", 0);
