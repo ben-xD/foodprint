@@ -41,7 +41,7 @@ const oneLayerSearch = async (datasources, labels) => {
     //}
   }
 
-  categoryResult = findCategorisedLabel(labels)
+  const categoryResult = findCategorisedLabel(labels)
   if (categoryResult != undefined) {
     return categoryResult;
   }
