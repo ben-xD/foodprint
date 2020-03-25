@@ -328,7 +328,7 @@ module.exports = userHistory;
 
 
 //  TESTS:
-const userHis = new userHistory();
+// const userHis = new userHistory();
 //let  res = userHis.avg_co2_for_user(carbonAPI, 1);
 
 //let  res2 = userHis.weekly_average_cf(carbonAPI, "1");
