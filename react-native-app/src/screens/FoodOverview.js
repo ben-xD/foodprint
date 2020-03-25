@@ -36,7 +36,7 @@ const FoodOverview = ({ navigation }) => {
             Scan a barcode or snap a picture.
           </Text>
           <Image
-            source={{ uri: 'https://png2.cleanpng.com/sh/4618a1d69c3326bc75ab0d6a0d3cd256/L0KzQYm3VcIyN5NvjJH0aYP2gLBuTfVud6Vue9H3LXXwf7vwTgN1cZRwfeQ2ZnHmdbP2jBsucZ9oReV2aXzoiX68gsAzPWNnfKdrM0LmQXA9WMIyOGE7T6MAMka7R4mCUMk0P2Q7RuJ3Zx==/kisspng-emoticon-emoji-sticker-facebook-inc-smiley-5b0252bd5b32c1.6821006715268789093736.png' }}
+            source={ require('../images/heart-eyes-smiley.png') }
             style={styles.image}
           />
         </View>
