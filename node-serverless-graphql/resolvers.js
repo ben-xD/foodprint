@@ -20,7 +20,7 @@ const resolvers = {
       console.log({ context, parent });
       const image = new Buffer(file.base64, 'base64'); // Decode base64 of "file" to image
       console.log('Received picture');
-      const { item, carbonFootprintPerKg } = await getCarbonFootprintFromImage(dataSources, image);
+      const { item, carbonFootprintPerKg } = await getCarbonFootprintFromImage(context.dataSources, image);
       const response = {
         product: {
           name: item,
@@ -33,7 +33,7 @@ const resolvers = {
     postBarcode: async (parent, { barcode }, context) => {
       console.log({ context, parent });
       console.log(`Received barcode: ${barcode}`);
-      const { item, carbonFootprintPerKg } = await getCarbonFootprintFromBarcode(dataSources, barcode);
+      const { item, carbonFootprintPerKg } = await getCarbonFootprintFromBarcode(context.dataSources, barcode);
       const response = {
         product: {
           name: item,
