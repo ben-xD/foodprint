@@ -26,7 +26,7 @@ class CarbonAPI {
     });
   }
 
-  async getCarbonFootprintModel () {
+  async _getCarbonFootprintModel () {
     if(!this._carbonSchema){
       this._carbonSchema = new mongoose.Schema({
         item: String,
@@ -41,7 +41,7 @@ class CarbonAPI {
 
   async insert_in_DB (new_data) {
 
-    const carbonModel = await this.getCarbonFootprintModel();
+    const carbonModel = await this._getCarbonFootprintModel();
     console.log(carbonModel);
     carbonModel.collection.insert(new_data, function(err, docs){
       if(err){
@@ -55,7 +55,7 @@ class CarbonAPI {
   // Search database for given label and return its carbon footprint
   async searchData(label) {
 
-    const carbonModel = await this.getCarbonFootprintModel();
+    const carbonModel = await this._getCarbonFootprintModel();
     let itemList;
     try {
       await carbonModel.findOne({item: label}, (err, items) => {
