@@ -20,7 +20,6 @@ import {
 import { Button, Overlay } from 'react-native-elements';
 import { widthPercentageToDP as percentageWidth, heightPercentageToDP as percentageHeight } from 'react-native-responsive-screen';
 import FAB from 'react-native-fab';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const Foodprint = ({ navigation }) => {
   const [isVisible, setVisibility] = useState(true);
@@ -181,9 +180,7 @@ const Foodprint = ({ navigation }) => {
   return (
     <SafeAreaView>
       <ScrollView>
-
         {/*General carbon footprint score*/}
-
         <View style={{ height: percentageHeight('29%'), alignItems: 'center' }}>
           <Image
             source={calculateSmiley(totalAverage)}
@@ -325,9 +322,9 @@ const Foodprint = ({ navigation }) => {
             </View>
           </ScrollView>
         </Overlay>
-      </ScrollView >
+      </ScrollView>
       <FAB buttonColor="#008000" iconTextColor="#FFFFFF" onClickAction={takePicture} visible={true} iconTextComponent={<MaterialCommunityIcons name="camera" color={'grey'} size={35} />} />
-    </ SafeAreaView>
+    </SafeAreaView>
   );
 };
 
