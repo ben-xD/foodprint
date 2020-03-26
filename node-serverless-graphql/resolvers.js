@@ -7,7 +7,7 @@ const resolvers = {
     },
   },
   Mutation: {
-    postPicture: async (parent, { file }, context) => {
+    postPicture: async (parent, { file }, { dataSources }, context) => {
       // // The following code will make the function return 403, if user is not logged in.
       // if (!context.user) {
       // Throw a 403 error instead of "ERROR", to provide more meaning to clients
