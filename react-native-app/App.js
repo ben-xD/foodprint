@@ -12,10 +12,14 @@ import { createActionCreators, reducer, initialState } from './src/context/Conte
 import Config from 'react-native-config';
 import { GoogleSignin } from '@react-native-community/google-signin';
 import { useNetInfo } from '@react-native-community/netinfo';
-import NoInternet from './src/screens/NoInternet';
 import auth from '@react-native-firebase/auth';
 import AuthContext from './src/context/AuthContext';
 import DeleteAccount from './src/screens/DeleteAccount';
+import Snackbar from 'react-native-snackbar';
+import Camera from './src/screens/Camera';
+import Feedback from './src/screens/Feedback';
+import Correction from './src/components/Correction';
+import Foodprint from './src/screens/Foodprint';
 
 const Stack = createStackNavigator();
 
@@ -47,6 +51,17 @@ const App = () => {
     });
   }, []);
 
+  useEffect(() => {
+    console.log({ netInfo });
+    if (netInfo.details !== null && !netInfo.isConnected) {
+      console.log('Displaying "no internet connection" snack');
+      Snackbar.show({
+        text: 'No internet connection',
+        duration: Snackbar.LENGTH_SHORT,
+      });
+    }
+  }, [netInfo]);
+
   const [state, dispatch] = React.useReducer(reducer, initialState);
   const authContext = React.useMemo(() => createActionCreators(dispatch), [dispatch]);
   React.useMemo(() => authContext.restoreTokenFromLocalStorage(), [authContext]);
@@ -59,11 +74,16 @@ const App = () => {
             {state.isLoading ? (
               // If isLoading, we haven't finished checking for the token yet
               <Stack.Screen name="Loading" component={Loading} />
-            ) : netInfo.isConnected ? (
+            ) :
               // No token found, user isn't signed in
               state.userIsLoggedIn ? (
                 <>
                   <Stack.Screen name="Home" component={BottomTabBar} />
+                  <Stack.Screen name="Your Foodprint" component={Foodprint} />
+                  <Stack.Screen name="Camera" component={Camera} />
+                  <Stack.Screen name="Correction" component={Correction} />
+                  <Stack.Screen name="Feedback" component={Feedback} />
+                  {/* Refactor deleteAccount into new Settings */}
                   <Stack.Screen name="Delete Account" component={DeleteAccount} />
                 </>
               )
@@ -80,10 +100,7 @@ const App = () => {
                   />
                   <Stack.Screen name="Login" component={Login} />
                   <Stack.Screen name="Signup" component={Signup} />
-                </>
-            ) : (
-                  <Stack.Screen name="NoInternet" component={NoInternet}></Stack.Screen >
-                )}
+                </>}
           </Stack.Navigator>
         </NavigationContainer>
       </AuthContext.Provider>

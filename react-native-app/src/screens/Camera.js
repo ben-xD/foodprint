@@ -3,10 +3,27 @@ import { TouchableOpacity, View, ActivityIndicator } from 'react-native';
 import { RNCamera } from 'react-native-camera';
 import { useIsFocused } from '@react-navigation/native';
 import { StyleSheet } from 'react-native';
+import { useNetInfo } from '@react-native-community/netinfo';
+import { useEffect } from 'react';
+import Snackbar from 'react-native-snackbar';
 
 const Camera = ({ navigation }) => {
+  const netInfo = useNetInfo();
   const isFocused = useIsFocused();
   const [cameraIsReady, setCameraIsReady] = useState(true);
+
+  useEffect(() => {
+    console.log({ netInfo });
+    if (netInfo.details !== null && !netInfo.isConnected) {
+      console.log('Displaying "no internet connection" snack');
+      Snackbar.show({
+        text: 'No internet connection',
+        duration: Snackbar.LENGTH_INDEFINITE,
+      });
+    } else if (netInfo.isConnected) {
+      Snackbar.dismiss();
+    }
+  }, [netInfo]);
 
   const takePictureHandler = async (camera) => {
     setCameraIsReady(false);
@@ -39,7 +56,7 @@ const Camera = ({ navigation }) => {
         }}
       >
         {({ camera, status }) => {
-          if (!cameraIsReady || status !== 'READY') {
+          if (!netInfo.isConnected || !cameraIsReady || status !== 'READY') {
             return <View style={styles.loadingContainer}>
               <ActivityIndicator
                 style={styles.noCapture} color={'white'} />

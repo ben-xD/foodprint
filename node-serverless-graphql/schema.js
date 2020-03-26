@@ -1,40 +1,53 @@
 const { gql } = require('apollo-server');
 
-let schema = `
-  scalar Upload
+const typeDefs = gql`
+    scalar Upload
 
 
-  type Product {
-    name: String
-  }
+    type ProductFootprint {
+        name: String
+        carbonFootprintPerKg: Float
+    }
 
-  input PictureFile {
-    base64: String
-    uri: String
-    height: Int
-    width: Int
-    pictureOrientation: Int
-    deviceOrientation: Int
-  }
- 
-  type CarbonFootprintReport {
-    product: Product
-    carbonFootprint: Float
-    carbonFootprintPerKg: Float
-  }
-  
-  type Query {
-    _: String
-  }
-  
-  type Mutation {
-    postPicture(file: PictureFile): CarbonFootprintReport
-    postBarcode(barcode: String!): CarbonFootprintReport
-    postCorrection(name: String!): CarbonFootprintReport
-  }
+    input PictureFile {
+        base64: String
+        uri: String
+        height: Int
+        width: Int
+        pictureOrientation: Int
+        deviceOrientation: Int
+    }
+
+    enum ReportResolution {
+        WEEK
+        MONTH
+    }
+
+    type TimeReport {
+        periodNumber: Int # week/month number starting with current period of 0, previous -1 etc.
+        avgCarbonFootpring: Float
+    }
+
+    type CategoryReport {
+        category: String
+        timeReport: [TimeReport]
+    }
+
+    type Query {
+        _: String
+        getUserAvg: Float
+        getPeriodAvg(timezone: Int!, resolution: ReportResolution!): [TimeReport]
+        reportByCategory(timezone: Int!, resolution: ReportResolution!): [CategoryReport]
+    }
+
+    type Mutation {
+        postPicture(file: PictureFile): ProductFootprint
+        postBarcode(barcode: String!): ProductFootprint
+        postCorrection(name: String!): ProductFootprint
+        postUserHistoryEntry(item: String): Boolean
+    }
 `;
 
 // Construct a schema, using GraphQL schema language
-const typeDefs = gql(schema);
 
 module.exports = typeDefs;

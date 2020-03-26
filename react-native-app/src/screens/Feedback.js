@@ -6,14 +6,13 @@ import { useMutation } from '@apollo/react-hooks';
 import { Rating, Button } from 'react-native-elements';
 import { widthPercentageToDP as percentageWidth, heightPercentageToDP as percentageHeight } from 'react-native-responsive-screen';
 import { ScrollView } from 'react-native-gesture-handler';
+import Snackbar from 'react-native-snackbar';
 
 // GraphQL schema for picture posting mutation
 const POST_PICTURE_MUTATION = gql`
   mutation PostPictureMutation($file: PictureFile) {
     postPicture(file: $file) {
-      product {
-        name
-      }
+      name
       carbonFootprintPerKg
     }
   }
@@ -22,9 +21,7 @@ const POST_PICTURE_MUTATION = gql`
 const POST_BARCODE_MUTATION = gql`
   mutation PostBarcodeMutation($barcode: String!) {
       postBarcode(barcode: $barcode) {
-        product {
-          name
-        }
+        name
         carbonFootprintPerKg
       }
   }
@@ -35,7 +32,7 @@ const Feedback = ({ route, navigation }) => {
   const [uploadPicture, { loading: pictureLoading, data: pictureData, error: pictureError }] = useMutation(POST_PICTURE_MUTATION);
   const [postBarcodeMutation, { loading: barcodeLoading, error: barcodeError, data: barcodeData }] = useMutation(POST_BARCODE_MUTATION);
 
-  // When component is loaded and provided with a file or barcode, make a request
+  // make relevant request when component is loaded AND provided with either file or barcode
   useEffect(() => {
     const { file, barcode } = route.params;
     if (file) {
@@ -50,8 +47,10 @@ const Feedback = ({ route, navigation }) => {
     if (!pictureError && !barcodeError) {
       return;
     }
-    // TODO set error, and display.
-    console.warn('Error!');
+    Snackbar.show({
+      text: 'Oops, something went wrong :(',
+      duration: Snackbar.LENGTH_SHORT,
+    });
   }, [pictureError, barcodeError]);
 
   useEffect(() => {
@@ -63,7 +62,7 @@ const Feedback = ({ route, navigation }) => {
       setMeal({
         uri: route.params.uri,
         score: pictureData.postPicture.carbonFootprintPerKg,
-        description: pictureData.postPicture.product.name,
+        description: pictureData.postPicture.name,
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -77,7 +76,7 @@ const Feedback = ({ route, navigation }) => {
     if (barcodeData) {
       setMeal({
         score: barcodeData.postBarcode.carbonFootprintPerKg,
-        description: barcodeData.postBarcode.product.name,
+        description: barcodeData.postBarcode.name,
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -114,7 +113,9 @@ const Feedback = ({ route, navigation }) => {
       <ActivityIndicator />
     </View > :
     // todo fix this, no meal yet thing
-    !meal ? <Text>No meal yet</Text> :
+    !meal ? <View>
+      <Text>Oops, something went wrong.</Text>
+    </View> :
       <View style={styles.container}>
         <ScrollView style={styles.scrollView}>
           <View style={styles.body}>
@@ -145,7 +146,7 @@ const Feedback = ({ route, navigation }) => {
               buttonStyle={styles.greenButtonStyle}
               titleStyle={styles.buttonText}
               title="Add to history"
-              onPress={() => { alert("'Add to history' not implemented!"); navigation.navigate('Your Foodprint') }}
+              onPress={() => { alert("'Add to history' not implemented!"); navigation.navigate('Your Foodprint'); }}
             />
           </View>
         </ScrollView>
