@@ -230,7 +230,7 @@ class userHistAPI {
       }
     }
     if (no_of_datapoints > 0){
-      return user_co2 / no_of_datapoints;
+      return (user_co2 / no_of_datapoints).toFixed(2);
     } 
     return 0
   }
