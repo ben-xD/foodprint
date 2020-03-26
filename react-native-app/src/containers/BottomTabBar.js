@@ -2,7 +2,7 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Settings from '../screens/Settings';
-import FoodOverview from '../screens/FoodOverview';
+import Foodprint from '../screens/Foodprint';
 
 const Tab = createBottomTabNavigator();
 
@@ -14,7 +14,7 @@ const Home = () => {
       }}>
       <Tab.Screen
         name="Your Foodprint"
-        component={FoodOverview}
+        component={Foodprint}
         options={{
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons

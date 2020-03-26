@@ -10,7 +10,7 @@ jest.mock('@apollo/react-hooks');
 jest.mock('@react-navigation/native');
 
 // Check current component against its snapshot
-test('FoodOverview matches previous snapshot', () => {
+test('Foodprint matches previous snapshot', () => {
   useMutation.mockImplementation(() => [null, { loading: null, error: null, data: null }]);
   useIsFocused.mockImplementation(() => true);
   const tree = renderer.create(<Camera />).toJSON();

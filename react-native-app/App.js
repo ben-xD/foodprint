@@ -19,7 +19,7 @@ import Snackbar from 'react-native-snackbar';
 import Camera from './src/screens/Camera';
 import Feedback from './src/screens/Feedback';
 import Correction from './src/components/Correction';
-import FoodOverview from './src/screens/FoodOverview';
+import Foodprint from './src/screens/Foodprint';
 
 const Stack = createStackNavigator();
 
@@ -79,7 +79,7 @@ const App = () => {
               state.userIsLoggedIn ? (
                 <>
                   <Stack.Screen name="Home" component={BottomTabBar} />
-                  <Stack.Screen name="Your Foodprint" component={FoodOverview} />
+                  <Stack.Screen name="Your Foodprint" component={Foodprint} />
                   <Stack.Screen name="Camera" component={Camera} />
                   <Stack.Screen name="Correction" component={Correction} />
                   <Stack.Screen name="Feedback" component={Feedback} />

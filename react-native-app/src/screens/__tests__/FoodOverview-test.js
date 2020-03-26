@@ -1,13 +1,13 @@
 import React from 'react';
 
 import renderer from 'react-test-renderer';
-import FoodOverview from '../FoodOverview';
+import Foodprint from '../Foodprint';
 
 // Check current component against its snapshot
-test('FoodOverview matches previous snapshot', () => {
+test('Foodprint matches previous snapshot', () => {
   const mockedNavigation = {
     setOptions: () => { },
   };
-  const tree = renderer.create(<FoodOverview navigation={mockedNavigation} />).toJSON();
+  const tree = renderer.create(<Foodprint navigation={mockedNavigation} />).toJSON();
   expect(tree).toMatchSnapshot();
 });
