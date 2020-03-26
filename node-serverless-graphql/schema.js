@@ -1,6 +1,6 @@
 const { gql } = require('apollo-server');
 
-let schema = `
+const typeDefs = gql`
   scalar Upload
 
 
@@ -35,6 +35,5 @@ let schema = `
 `;
 
 // Construct a schema, using GraphQL schema language
-const typeDefs = gql(schema);
 
 module.exports = typeDefs;
