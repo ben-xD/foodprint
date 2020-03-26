@@ -19,7 +19,7 @@ describe('real dataSources (no mocking)', () => {
     jest.setTimeout(30000);
     const name = 'rice';
     const actual = await resolvers.Mutation.postCorrection(null, {name}, {dataSources});
-    const expected = {product: {name: "rice"}, carbonFootprintPerKg: 1.14};
+    const expected = {name: "rice", carbonFootprintPerKg: 1.14};
     expect(actual).toEqual(expected);
   });
 
@@ -27,7 +27,7 @@ describe('real dataSources (no mocking)', () => {
     jest.setTimeout(30000);
     const file = {base64: rice_image};
     let actual = await resolvers.Mutation.postPicture(null, {file}, {dataSources}, null);
-    const expected = {product: {name: "rice"}, carbonFootprintPerKg: 1.14};
+    const expected = {name: "rice", carbonFootprintPerKg: 1.14};
     expect(actual).toEqual(expected);
   });
 
