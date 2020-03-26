@@ -235,7 +235,7 @@ const Foodprint = ({ navigation }) => {
                   height={percentageHeight('38%')}
                 >
                   <VictoryAxis dependentAxis orientation="left" offsetX={percentageWidth('15%')} label="Carbon footprint" />
-                  <VictoryAxis label="Week" domain={[-5,0]} tickFormat={(t) => (t === 0) ? 'Now' : ('s' + t)} />
+                  <VictoryAxis label="Week" domain={[-5,0.01]} tickFormat={(t) => (t === 0) ? 'Now' : ('s' + t)} />
                   <VictoryStack colorScale={['olivedrab', 'gold', 'skyblue', 'firebrick']}>
                     <VictoryBar data={weeklyComposition['Plant based']} sortKey="week" x="week" y="weekly_cf" label="Vegetables" />
                     <VictoryBar data={weeklyComposition['Eggs and dairy']} sortKey="week" x="week" y="weekly_cf" label="Eggs & Dairy" />
@@ -266,7 +266,7 @@ const Foodprint = ({ navigation }) => {
                     height={percentageHeight('38%')}
                   >
                     <VictoryAxis dependentAxis orientation="left" offsetX={percentageWidth('15%')} label="Carbon footprint" />
-                    <VictoryAxis label="Month" domain={[-5,0]} tickFormat={(t) => ((month + t) >= 0) ? monthList[month + t] : monthList[month + t + 12]} />
+                    <VictoryAxis label="Month" domain={[-5,0.01]} tickFormat={(t) => ((month + t) >= 0) ? monthList[month + t] : monthList[month + t + 12]} />
                     <VictoryStack colorScale={['olivedrab', 'gold', 'skyblue', 'firebrick']}>
                       <VictoryBar data={monthlyComposition['Plant based']} sortKey="month" x="month" y="monthly_cf" />
                       <VictoryBar data={monthlyComposition['Eggs and dairy']} sortKey="month" x="month" y="monthly_cf" />
