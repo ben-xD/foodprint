@@ -1,5 +1,5 @@
-// import { NativeModules } from 'react-native';
-// import { jest } from 'jest';
+import { jest } from 'jest';
+
 
 // jest.mock('Linking', () => {
 //   return {
