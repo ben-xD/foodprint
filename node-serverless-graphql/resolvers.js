@@ -31,7 +31,7 @@ const resolvers = {
     postBarcode: async (parent, { barcode }, { dataSources }, context) => {
       console.log({ context, parent });
       console.log(`Received barcode: ${barcode}`);
-      const { item, carbonFootprintPerKg } = await getCarbonFootprintFromBarcode(context.dataSources, barcode);
+      const { item, carbonFootprintPerKg } = await getCarbonFootprintFromBarcode(dataSources, barcode);
       const response = {
         name: item,
         carbonFootprintPerKg,
