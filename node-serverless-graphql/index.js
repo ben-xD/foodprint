@@ -1,6 +1,5 @@
 const { ApolloServer } = require('apollo-server-cloud-functions');
 const admin = require('firebase-admin');
-const {Sequelize} = require('sequelize');
 const typeDefs = require('./schema.js');
 const resolvers = require('./resolvers.js');
 const context = require('./context');
