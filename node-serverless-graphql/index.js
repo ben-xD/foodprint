@@ -21,7 +21,6 @@ admin.initializeApp({
 let store = {isConnected: false}
 
 const carbonAPI = new CarbonAPI(store);
-const carbonAPI2 =  new CarbonAPI(store);
 
 const dataSources = () => ({
   visionAPI: new VisionAPI(visionCredentials),
