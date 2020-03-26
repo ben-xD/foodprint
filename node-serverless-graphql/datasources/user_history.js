@@ -7,21 +7,21 @@ class userHistory {
     this._hystorySchema;
     this.searchData = this.searchData.bind(this);
     this.store = store;
-    if (!this.store.isConnected){
-      this.store.isConnected = true;
-      this.connect();
-    } 
+    this.connect();
     this.NUMBER_OF_WEEKS_RETURNED = 6;
     this.NUMBER_OF_MONTHS_RETURNED = 6;
     this.CATEGORIES = ['Plant based', 'Fish', 'Meat', 'Eggs and dairy'];
   }
 
   async connect() {
-    try {
-        await mongoose.connect(config.dbServer, { useNewUrlParser: true, useUnifiedTopology: true });
-        console.log("History API: database connected.")
-    } catch (error) {
-        console.error("History API: DATABASE FAILED TO CONNECT", error);
+    if (!this.store.isConnected){
+      this.store.isConnected = true;
+      try {
+          await mongoose.connect(config.dbServer, { useNewUrlParser: true, useUnifiedTopology: true });
+          console.log("History API: database connected.")
+      } catch (error) {
+          console.error("History API: DATABASE FAILED TO CONNECT", error);
+      }
     }
   }
 

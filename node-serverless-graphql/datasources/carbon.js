@@ -7,18 +7,18 @@ class CarbonAPI {
     this._carbonSchema;
     this.searchData = this.searchData.bind(this);
     this.store = store
-    if (!this.store.isConnected){
-      this.store.isConnected = true;
-      this.connect();
-    } 
+    this.connect();
   }
 
   async connect() {
-    try {
-      await mongoose.connect(config.dbServer, { useNewUrlParser: true, useUnifiedTopology: true });
-      console.log("Carbon API: database connected.")
-    } catch (error) {
-      console.error("Carbon API: DATABASE FAILED TO CONNECT", error);
+    if (!this.store.isConnected){
+      this.store.isConnected = true;
+      try {
+        await mongoose.connect(config.dbServer, { useNewUrlParser: true, useUnifiedTopology: true });
+        console.log("Carbon API: database connected.")
+      } catch (error) {
+        console.error("Carbon API: DATABASE FAILED TO CONNECT", error);
+      }
     }
   }
 
