@@ -285,20 +285,6 @@ const Foodprint = ({ navigation }) => {
                 </View>
               </View>
             )}
-          <View>
-            {/*<VictoryLegend*/}
-            {/*    x={percentageWidth('10%')}*/}
-            {/*    y={percentageHeight('90%')}*/}
-            {/*    orientation="horizontal"*/}
-            {/*    gutter={20}*/}
-            {/*    style={{ border: { stroke: "black" } }}*/}
-            {/*    colorScale={['olivedrab', 'gold', 'skyblue', 'firebrick']}*/}
-            {/*    data={[*/}
-            {/*      { name: 'Plant' }, { name: 'Eggs & Dairy' }, { name: 'Fish' }, { name: 'Meat' }*/}
-            {/*    ]}*/}
-            {/*    standalone={true}*/}
-            {/*/>*/}
-          </View>
         </View>
         {/*Overlay for welcome screen*/}
         <Overlay isVisible={isVisible} onBackdropPress={() => setVisibility(false)}>
