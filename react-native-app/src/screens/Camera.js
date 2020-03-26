@@ -13,9 +13,7 @@ const Camera = ({ navigation }) => {
   const [cameraIsReady, setCameraIsReady] = useState(true);
 
   useEffect(() => {
-    console.log({ netInfo });
     if (netInfo.details !== null && !netInfo.isConnected) {
-      console.log('Displaying "no internet connection" snack');
       Snackbar.show({
         text: 'No internet connection',
         duration: Snackbar.LENGTH_INDEFINITE,
