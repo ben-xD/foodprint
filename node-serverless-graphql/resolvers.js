@@ -55,11 +55,11 @@ const resolvers = {
       console.log({ 'Returning': response });
       return response;
     },
-    postUserHistoryEntry: async (parent, { entry }, context) => {
-      console.log({ entry });
-      console.log('Received postUserHistoryEntry mutation...');
-      return true;
-    },
+    // postUserHistoryEntry: async (parent, { entry }, context) => {
+    //   console.log({ entry });
+    //   console.log('Received postUserHistoryEntry mutation...');
+    //   return true;
+    // },
   },
 };
 
