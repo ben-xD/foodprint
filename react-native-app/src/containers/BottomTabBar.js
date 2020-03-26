@@ -1,8 +1,8 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import FeedbackFlow from './FeedbackFlow';
 import Settings from '../screens/Settings';
+import FoodOverview from '../screens/FoodOverview';
 
 const Tab = createBottomTabNavigator();
 
@@ -13,8 +13,8 @@ const Home = () => {
         activeTintColor: 'green',
       }}>
       <Tab.Screen
-        name="Food"
-        component={FeedbackFlow}
+        name="Your Foodprint"
+        component={FoodOverview}
         options={{
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons

@@ -8,25 +8,12 @@ import {
   ScrollView,
 } from 'react-native';
 import { StyleSheet } from 'react-native';
-import { useLayoutEffect } from 'react';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import FAB from 'react-native-fab';
 
-const FoodOverview = ({ navigation }) => {
-  <MaterialCommunityIcons name="camera" color={'grey'} size={35} />;
-
-  useLayoutEffect(() => {
-    const takePicture = async () => {
-      navigation.navigate('Camera');
-    };
-
-    navigation.setOptions({
-      headerRight: () => (
-        <TouchableOpacity onPress={takePicture} >
-          <MaterialCommunityIcons name="camera" color={'grey'} size={28} style={styles.cameraButton} />
-        </TouchableOpacity >
-      ),
-    });
-  }, [navigation]);
+const Foodprint = ({ navigation }) => {
+  const takePicture = async () => {
+    navigation.navigate('Camera');
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -41,6 +28,7 @@ const FoodOverview = ({ navigation }) => {
           />
         </View>
       </ScrollView>
+      <FAB buttonColor="#008000" iconTextColor="#FFFFFF" onClickAction={takePicture} visible={true} iconTextComponent={<MaterialCommunityIcons name="camera" color={'grey'} size={35} />} />
     </SafeAreaView>
   );
 };
@@ -59,4 +47,4 @@ const styles = StyleSheet.create({
   image: { width: 200, height: 200, marginTop: 10 },
 });
 
-export default FoodOverview;
+export default Foodprint;
