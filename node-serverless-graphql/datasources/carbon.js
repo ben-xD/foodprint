@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const config = require('../carbon-footprint/config');
 
 class CarbonAPI {
 
@@ -7,20 +6,6 @@ class CarbonAPI {
     this._carbonSchema;
     this.searchData = this.searchData.bind(this);
     this.store = store
-    this.connect();
-  }
-
-  async connect() {
-    if (!this.store.isConnected){
-      this.store.isConnected = true;
-      try {
-        await mongoose.connect(config.dbServer, { useNewUrlParser: true, useUnifiedTopology: true });
-        console.log("Carbon API: database connected.")
-      } catch (error) {
-        this.store.isConnected = false;
-        console.error("Carbon API: DATABASE FAILED TO CONNECT", error);
-      }
-    }
   }
 
   async disconnect() {
@@ -31,25 +16,10 @@ class CarbonAPI {
     });
   }
 
-  async _getCarbonFootprintModel() {
-    if (!this._carbonSchema) {
-      this._carbonSchema = new mongoose.Schema({
-        item: String,
-        carbonpkilo: Number,
-        categories: String,
-        label: String
-      }, { collection: 'carbon' });
-    }
-
-    return mongoose.model('Carbon', this._carbonSchema);
-  }
-
-
   async insert_in_DB(new_data) {
 
-    const carbonModel = await this._getCarbonFootprintModel();
-    console.log(carbonModel);
-    carbonModel.collection.insert(new_data, function (err, docs) {
+    console.log(store.carbon.collection);
+    this.store.carbon.collection.insert(new_data, function (err, docs) {
       if (err) {
         return console.error(err);
       } else {
@@ -58,14 +28,12 @@ class CarbonAPI {
     });
   }
 
-
   // Search database for given label and return its carbon footprint
   async searchData(label) {
 
-    const carbonModel = await this._getCarbonFootprintModel();
     let itemList;
     try {
-      await carbonModel.findOne({ item: label }, (err, items) => {
+      await this.store.carbon.findOne({ item: label }, (err, items) => {
         if (err) {
           throw err;
         }

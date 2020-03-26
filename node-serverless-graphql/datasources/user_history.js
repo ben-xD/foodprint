@@ -1,29 +1,14 @@
 const mongoose = require('mongoose');
-const config = require('../carbon-footprint/config');
 
-class userHistory {
+class userHistAPI {
 
   constructor( store ) {
     this._hystorySchema;
     this.searchData = this.searchData.bind(this);
     this.store = store;
-    this.connect();
     this.NUMBER_OF_WEEKS_RETURNED = 6;
     this.NUMBER_OF_MONTHS_RETURNED = 6;
     this.CATEGORIES = ['Plant based', 'Fish', 'Meat', 'Eggs and dairy'];
-  }
-
-  async connect() {
-    if (!this.store.isConnected){
-      this.store.isConnected = true;
-      try {
-          await mongoose.connect(config.dbServer, { useNewUrlParser: true, useUnifiedTopology: true });
-          console.log("History API: database connected.")
-      } catch (error) {
-          this.store.isConnected = false;
-          console.error("History API: DATABASE FAILED TO CONNECT", error);
-      }
-    }
   }
 
   async disconnect() {
@@ -36,10 +21,9 @@ class userHistory {
 
   async searchData(user_id) {
 
-    const historyModel = await this.getUserHistorytModel();
     let itemList;
     try {
-      await historyModel.findOne({user_id: user_id}, (err, items) => {
+      await this.store.userHist.findOne({user_id: user_id}, (err, items) => {
         if (err) {
           throw err;
         }
@@ -59,17 +43,6 @@ class userHistory {
     }
   }
 
-  async getUserHistorytModel() {
-    if (!this._hystorySchema) {
-      this._hystorySchema = new mongoose.Schema({
-        user_id: String,
-        item: String,
-        time_stamp: Date,
-      }, {collection: 'user-history'});
-    }
-
-    return mongoose.model('user-history', this._hystorySchema);
-  }
 
 // #################################################################################
 //                               Functions used in resolvers
@@ -83,8 +56,7 @@ class userHistory {
     // add the timestamp to new_data:
     new_data["time_stamp"] = new Date();
 
-    const historyModel = await this.getUserHistorytModel();
-    historyModel.collection.insert(new_data, function (err, docs) {
+    this.store.userHist.collection.insert(new_data, function (err, docs) {
       if (err) {
         return console.error(err);
       } else {
@@ -165,10 +137,9 @@ class userHistory {
   // Search database for all products consumed by a user
   async get_all_user_data(user) {
 
-    const historyModel = await this.getUserHistorytModel();
     let user_data;
     try {
-      await historyModel.find({user_id: user}, (err, items) => {
+      await this.store.userHist.find({user_id: user}, (err, items) => {
         if (err) {
           throw err;
         }
@@ -187,8 +158,7 @@ class userHistory {
   async get_week_i_data(user, timezone, i){
     
     const today = new Date();
-    const historyModel = await this.getUserHistorytModel();
-    const week_i_data = await historyModel.aggregate([
+    const week_i_data = await this.store.userHist.aggregate([
       { $project: {
           week_period:{
             $subtract: [
@@ -214,8 +184,7 @@ class userHistory {
   async get_month_i_data(user, timezone, i){
     
     const today = new Date();
-    const historyModel = await this.getUserHistorytModel();
-    const month_i_data = await historyModel.aggregate([
+    const month_i_data = await this.store.userHist.aggregate([
       { $project: {
           month_period:{
             $subtract: [
@@ -337,4 +306,4 @@ class userHistory {
 
 };
 
-module.exports = userHistory;
+module.exports = userHistAPI;
