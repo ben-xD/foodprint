@@ -14,6 +14,7 @@ import {
   VictoryStack,
   VictoryLine,
   VictoryPie,
+  VictoryLegend,
 } from 'victory-native';
 import { Button, Overlay } from 'react-native-elements';
 import { useLayoutEffect } from 'react';
@@ -241,9 +242,9 @@ const totalAverage = 17.25;
               </View>
               <View style={{ marginVertical:percentageHeight('2%') }}>
                 <VictoryChart
-                    padding={{top:percentageHeight('2%'), bottom:percentageHeight('7%'),left:percentageWidth('15%'), right:percentageWidth('10%')}}
+                    padding={{top:percentageHeight('2%'), bottom:percentageHeight('12%'),left:percentageWidth('15%'), right:percentageWidth('10%')}}
                     domainPadding={percentageWidth('5%')}
-                    height={percentageHeight('35%')}
+                    height={percentageHeight('38%')}
                 >
                   <VictoryAxis dependentAxis orientation="left" offsetX={percentageWidth('15%')} label="Carbon footprint"/>
                   <VictoryAxis label="Week" domain={[-5,0]} tickFormat={(t) => (t === 0) ? 'Now' : ('s' + t)}/>
@@ -253,6 +254,13 @@ const totalAverage = 17.25;
                     <VictoryBar data={weeklyComposition.Fish} x="week" y="p_weekly_cf" label="Fish"/>
                     <VictoryBar data={weeklyComposition.Meat} x="week" y="p_weekly_cf" label="Meat"/>
                   </VictoryStack>
+                  <VictoryLegend
+                      data={[{name:'Plant'}, {name:'Eggs & Dairy'}, {name:'Fish'}, {name:'Meat'}]}
+                      colorScale={['olivedrab', 'gold', 'skyblue', 'firebrick']}
+                      orientation="horizontal"
+                      x={percentageWidth('15%')}
+                      y={percentageHeight('32%')}
+                  />
                   <VictoryLine data={weeklyUserAverage} x="week" y="footprint"/>
                 </VictoryChart>
               </View>
@@ -265,9 +273,9 @@ const totalAverage = 17.25;
               </View>
               <View style={{ marginVertical:percentageHeight('2%') }}>
                 <VictoryChart
-                    padding={{top:percentageHeight('2%'), bottom:percentageHeight('7%'),left:percentageWidth('15%'), right:percentageWidth('10%')}}
+                    padding={{top:percentageHeight('2%'), bottom:percentageHeight('12%'),left:percentageWidth('15%'), right:percentageWidth('10%')}}
                     domainPadding={percentageWidth('5%')}
-                    height={percentageHeight('35%')}
+                    height={percentageHeight('38%')}
                 >
                   <VictoryAxis dependentAxis orientation="left" offsetX={percentageWidth('15%')} label="Carbon footprint"/>
                   <VictoryAxis label="Month" domain={[-5,0]} tickFormat={(t) => ((month + t) >= 0) ? monthList[month + t] : monthList[month + t + 12]}/>
@@ -277,12 +285,36 @@ const totalAverage = 17.25;
                     <VictoryBar data={monthlyComposition.Fish} x="monthly" y="p_monthly_cf" label="Fish"/>
                     <VictoryBar data={monthlyComposition.Meat} x="monthly" y="p_monthly_cf" label="Meat"/>
                   </VictoryStack>
+                  <VictoryLegend
+                      data={[{name:'Plant'}, {name:'Eggs & Dairy'}, {name:'Fish'}, {name:'Meat'}]}
+                      colorScale={['olivedrab', 'gold', 'skyblue', 'firebrick']}
+                      orientation="horizontal"
+                      x={percentageWidth('15%')}
+                      y={percentageHeight('32%')}
+                  />
                   <VictoryLine data={monthlyUserAverage} x="month" y="footprint"/>
                 </VictoryChart>
               </View>
             </View>
           )}
+          <View>
+            {/*<VictoryLegend*/}
+            {/*    x={percentageWidth('10%')}*/}
+            {/*    y={percentageHeight('90%')}*/}
+            {/*    orientation="horizontal"*/}
+            {/*    gutter={20}*/}
+            {/*    style={{ border: { stroke: "black" } }}*/}
+            {/*    colorScale={['olivedrab', 'gold', 'skyblue', 'firebrick']}*/}
+            {/*    data={[*/}
+            {/*      { name: 'Plant' }, { name: 'Eggs & Dairy' }, { name: 'Fish' }, { name: 'Meat' }*/}
+            {/*    ]}*/}
+            {/*    standalone={true}*/}
+            {/*/>*/}
+          </View>
         </View>
+
+      {/*Overlay for welcome screen*/}
+
       <Overlay isVisible = { isVisible } onBackdropPress = {() => setVisibility(false)}>
         <ScrollView>
           <View style={styles.contentContainer}>
@@ -314,10 +346,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 8,
   },
-  contentContainer: { justifyContent: 'center', alignItems: 'center', marginVertical: percentageWidth('5%') },
-  text: {  fontSize: percentageWidth('4%'), textAlign: 'center', marginTop: percentageHeight('3%') },
-  title: { fontSize: percentageWidth('7%'), marginVertical: percentageHeight('3%'), textAlign:'center' },
-  image: { width: percentageWidth('35%'), height: percentageHeight('18%'), marginTop: percentageHeight('2%') },
+  contentContainer: { justifyContent: 'center', alignItems: 'center', margin: percentageWidth('4%') },
+  text: {  fontSize: percentageWidth('4%'), textAlign: 'center', margin: percentageHeight('3%') },
+  title: { fontSize: percentageWidth('7%'), margin: percentageHeight('2%'), textAlign:'center' },
+  image: { width: percentageWidth('38%'), height: percentageHeight('18%') },
   score: { fontSize:percentageWidth('6%'), color:'grey'},
   buttonTitle: { fontSize:percentageWidth('5%')},
   button: { width: percentageWidth('30%'), height:45 },
