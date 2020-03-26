@@ -4,7 +4,7 @@ const CarbonAPI = require('../carbon');
 let userHistAPI = new UserHistAPI(store)
 let carbonAPI = new CarbonAPI();
 
-describe('Real database', () => {
+describe('Real user history database', () => {
 
     test('Returns true if inserting a new user history entry to the database is successful', async () => {
         jest.setTimeout(10000);
