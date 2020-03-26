@@ -20,6 +20,7 @@ class userHistory {
           await mongoose.connect(config.dbServer, { useNewUrlParser: true, useUnifiedTopology: true });
           console.log("History API: database connected.")
       } catch (error) {
+          this.store.isConnected = false;
           console.error("History API: DATABASE FAILED TO CONNECT", error);
       }
     }

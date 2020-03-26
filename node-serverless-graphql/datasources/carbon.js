@@ -17,6 +17,7 @@ class CarbonAPI {
         await mongoose.connect(config.dbServer, { useNewUrlParser: true, useUnifiedTopology: true });
         console.log("Carbon API: database connected.")
       } catch (error) {
+        this.store.isConnected = false;
         console.error("Carbon API: DATABASE FAILED TO CONNECT", error);
       }
     }
