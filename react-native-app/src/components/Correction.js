@@ -13,9 +13,7 @@ import { widthPercentageToDP as percentageWidth, heightPercentageToDP as percent
 const POST_CORRECTION_MUTATION = gql`
 mutation PostCorrectionMutation($name: String!) {
   postCorrection(name: $name) {
-    product {
-      name
-    }
+    name
     carbonFootprintPerKg
   }
 }
@@ -49,7 +47,7 @@ const Correction = ({ route, navigation }) => {
       setMeal({
         ...meal,
         score: correctionData.postCorrection.carbonFootprintPerKg,
-        description: correctionData.postCorrection.product.name,
+        description: correctionData.postCorrection.name,
       });
       navigation.goBack();
     }

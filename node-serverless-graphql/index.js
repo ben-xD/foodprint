@@ -35,6 +35,8 @@ const server = new ApolloServer({
   context,
   playground: true,
   introspection: true,
+  mocks: true, // TODO: Delete this once the all the resolvers for schema.js are implemented
+  mockEntireSchema: false, // TODO: Delete this once the all the resolvers for schema.js are implemented
 });
 
 exports.handler = server.createHandler({

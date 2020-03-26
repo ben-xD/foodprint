@@ -11,9 +11,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 const POST_PICTURE_MUTATION = gql`
   mutation PostPictureMutation($file: PictureFile) {
     postPicture(file: $file) {
-      product {
-        name
-      }
+      name
       carbonFootprintPerKg
     }
   }
@@ -22,9 +20,7 @@ const POST_PICTURE_MUTATION = gql`
 const POST_BARCODE_MUTATION = gql`
   mutation PostBarcodeMutation($barcode: String!) {
       postBarcode(barcode: $barcode) {
-        product {
-          name
-        }
+        name
         carbonFootprintPerKg
       }
   }
@@ -70,7 +66,7 @@ const Feedback = ({ route, navigation }) => {
       setMeal({
         uri: route.params.uri,
         score: pictureData.postPicture.carbonFootprintPerKg,
-        description: pictureData.postPicture.product.name,
+        description: pictureData.postPicture.name,
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -84,7 +80,7 @@ const Feedback = ({ route, navigation }) => {
     if (barcodeData) {
       setMeal({
         score: barcodeData.postBarcode.carbonFootprintPerKg,
-        description: barcodeData.postBarcode.product.name,
+        description: barcodeData.postBarcode.name,
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

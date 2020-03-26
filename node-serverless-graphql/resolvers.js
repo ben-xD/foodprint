@@ -22,9 +22,7 @@ const resolvers = {
       console.log('Received picture');
       const { item, carbonFootprintPerKg } = await getCarbonFootprintFromImage(context.dataSources, image);
       const response = {
-        product: {
-          name: item,
-        },
+        name: item,
         carbonFootprintPerKg,
       };
       console.log({ 'Returning': response });
@@ -35,9 +33,7 @@ const resolvers = {
       console.log(`Received barcode: ${barcode}`);
       const { item, carbonFootprintPerKg } = await getCarbonFootprintFromBarcode(context.dataSources, barcode);
       const response = {
-        product: {
-          name: item,
-        },
+        name: item,
         carbonFootprintPerKg,
       };
       console.log({ 'Returning': response });
@@ -47,9 +43,7 @@ const resolvers = {
       console.log({ 'Received correction': name });
       const { item, carbonFootprintPerKg } = await getCarbonFootprintFromName(dataSources, name);
       const response = {
-        product: {
-          name: item,
-        },
+        name: item,
         carbonFootprintPerKg,
       };
       console.log({ 'Returning': response });
