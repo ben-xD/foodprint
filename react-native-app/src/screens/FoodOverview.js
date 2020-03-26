@@ -184,18 +184,20 @@ const totalAverage = 17.25;
     return require('../images/crying-smiley.png');
   };
 
-  const month = new Date().getMonth() + 1; //Current Month
+  const month = new Date().getMonth(); //Current Month
   const monthList = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
   return (
       <ScrollView>
 
-        <View style={{height:percentageHeight('32%'), alignItems:'center'}}>
+        {/*General carbon footprint score*/}
+
+        <View style={{ height:percentageHeight('29%'), alignItems:'center'}}>
           <Image
               source={ calculateSmiley(totalAverage) }
-              style={{height:percentageHeight('15%'), width:percentageWidth('30%'), position:'absolute', alignSelf:'center', marginTop:percentageHeight('12%')}}
+              style={{ height:percentageHeight('10%'), width:percentageWidth('20%'), position:'absolute', alignSelf:'center', marginTop:percentageHeight('12%')}}
           />
-          <Text style={{ fontSize:24, color:'grey', position:'absolute', alignSelf:'center', marginTop:percentageHeight('28%')} }>{totalAverage} units</Text>
+          <Text style={ [styles.score, {position:'absolute', alignSelf:'center', marginTop:percentageHeight('24%')}] }>{totalAverage} units</Text>
           <VictoryPie
             data={averageFootprint}
             x="label"
@@ -204,32 +206,45 @@ const totalAverage = 17.25;
             colorScale={[calculateColour(totalAverage), 'transparent']}
             startAngle={-90}
             endAngle={90}
-            innerRadius={140}
+            innerRadius={percentageHeight('16%')}
+            height={percentageHeight('40%')}
           />
         </View>
+
+        {/*Monthly vs Weekly buttons*/}
+
         <View style={{ flexDirection: 'row', justifyContent:'center', paddingVertical:percentageHeight('2%')}}>
           <Button
               title="Weekly"
-              buttonStyle={{width:percentageWidth('30%'), backgroundColor:((timeSpan === 'weekly') ? 'green' : 'grey')}}
+              titleStyle={ styles.buttonTitle }
+              buttonStyle={ [styles.button, { backgroundColor:((timeSpan === 'weekly') ? 'green' : 'grey')}]}
               containerStyle={{ paddingHorizontal:percentageWidth('2%')}}
               onPress = {() => setTimeSpan('weekly')}
           />
           <Button
               title="Monthly"
-              buttonStyle={{width:percentageWidth('30%'), backgroundColor:((timeSpan === 'monthly') ? 'green' : 'grey')}}
+              titleStyle={ styles.buttonTitle }
+              buttonStyle={ [styles.button, {backgroundColor:((timeSpan === 'monthly') ? 'green' : 'grey')}] }
               containerStyle={{ paddingHorizontal:percentageWidth('2%')}}
               onPress = {() => setTimeSpan('monthly')}
           />
         </View>
+
+        {/*Monthly or weekly carbon footprint composition*/}
+
         <View>
           {(timeSpan === 'weekly') ? (
-            <View>
-              <View style={{ justifyContent:'center', alignItems:'center', flexDirection:'row'}}>
-                <Text style={{ fontSize:22, color:'grey'}}>{thisWeek} units this week</Text>
-                <Text style={{ marginLeft:15}}>{weekSign}{Math.round(changeSinceLastWeek)}% compared{"\n"}to last week</Text>
+            <View style={ styles.contentContainer }>
+              <View style={{ flexDirection:'row'}}>
+                <Text style={ styles.score }>{thisWeek} units this week</Text>
+                <Text style={{ fontSize:percentageWidth('3%'), marginLeft:percentageWidth('2%')}}>{weekSign}{Math.round(changeSinceLastWeek)}% compared{"\n"}to last week</Text>
               </View>
-              <View style={{justifyContent:'center', alignItems:'center'}}>
-                <VictoryChart padding={{top:percentageHeight('1%'), bottom:percentageHeight('5%'), left:percentageWidth('15%'), right:percentageWidth('10%'),}} domainPadding={20}>
+              <View style={{ marginVertical:percentageHeight('2%') }}>
+                <VictoryChart
+                    padding={{top:percentageHeight('2%'), bottom:percentageHeight('7%'),left:percentageWidth('15%'), right:percentageWidth('10%')}}
+                    domainPadding={percentageWidth('5%')}
+                    height={percentageHeight('35%')}
+                >
                   <VictoryAxis dependentAxis orientation="left" offsetX={percentageWidth('15%')} label="Carbon footprint"/>
                   <VictoryAxis label="Week" domain={[-5,0]} tickFormat={(t) => (t === 0) ? 'Now' : ('s' + t)}/>
                   <VictoryStack colorScale={['olivedrab', 'gold', 'skyblue', 'firebrick']}>
@@ -243,15 +258,19 @@ const totalAverage = 17.25;
               </View>
             </View>
           ) : (
-            <View>
-              <View style={{ justifyContent:'center', alignItems:'center', flexDirection:'row'}}>
-                <Text style={{ fontSize:22, color:'grey'}}>{thisMonth} units this month</Text>
-                <Text style={{ marginLeft:15}}>{monthSign}{Math.round(changeSinceLastMonth)}% compared{'\n'}to last month</Text>
+            <View style={ styles.contentContainer }>
+              <View style={{ flexDirection:'row' }}>
+                <Text style={styles.score}>{thisMonth} units this month</Text>
+                <Text style={{ fontSize:percentageWidth('3%'), marginLeft:percentageWidth('2%')}}>{monthSign}{Math.round(changeSinceLastMonth)}% compared{'\n'}to last month</Text>
               </View>
-              <View style={{justifyContent:'center', alignItems:'center'}}>
-                <VictoryChart padding={{top:percentageHeight('1%'), bottom:percentageHeight('5%'), left:percentageWidth('15%'), right:percentageWidth('10%') }} domainPadding={20}>
+              <View style={{ marginVertical:percentageHeight('2%') }}>
+                <VictoryChart
+                    padding={{top:percentageHeight('2%'), bottom:percentageHeight('7%'),left:percentageWidth('15%'), right:percentageWidth('10%')}}
+                    domainPadding={percentageWidth('5%')}
+                    height={percentageHeight('35%')}
+                >
                   <VictoryAxis dependentAxis orientation="left" offsetX={percentageWidth('15%')} label="Carbon footprint"/>
-                  <VictoryAxis label="Month" domain={[-5,0]} tickFormat={(t) => ((month + t) >= 1) ? monthList[month + t - 1] : monthList[month + t + 11]}/>
+                  <VictoryAxis label="Month" domain={[-5,0]} tickFormat={(t) => ((month + t) >= 0) ? monthList[month + t] : monthList[month + t + 12]}/>
                   <VictoryStack colorScale={['olivedrab', 'gold', 'skyblue', 'firebrick']}>
                     <VictoryBar data={monthlyComposition['Plant based']} x="monthly" y="p_monthly_cf" label="Vegetables"/>
                     <VictoryBar data={monthlyComposition['Eggs and dairy']} x="monthly" y="p_monthly_cf" label="Eggs & Dairy"/>
@@ -263,7 +282,6 @@ const totalAverage = 17.25;
               </View>
             </View>
           )}
-
         </View>
       <Overlay isVisible = { isVisible } onBackdropPress = {() => setVisibility(false)}>
         <ScrollView>
@@ -277,7 +295,7 @@ const totalAverage = 17.25;
               source={ require('../images/heart-eyes-smiley.png') }
               style={styles.image}
             />
-            <Text style={{fontSize:20, textAlign:'center', marginTop:20}}>
+            <Text style={styles.text}>
               To get started, simply click on the Camera icon in the top left corner!
             </Text>
           </View>
@@ -296,10 +314,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 8,
   },
-  contentContainer: { justifyContent: 'center', alignItems: 'center', marginHorizontal: 40 },
-  text: { fontSize: 20, textAlign: 'center', marginTop: 20 },
-  title: { fontSize: 36, marginVertical: 20, textAlign:'center' },
-  image: { width: percentageWidth('55%'), height: percentageHeight('25%'), marginTop: percentageHeight('2%') },
+  contentContainer: { justifyContent: 'center', alignItems: 'center', marginVertical: percentageWidth('5%') },
+  text: {  fontSize: percentageWidth('4%'), textAlign: 'center', marginTop: percentageHeight('3%') },
+  title: { fontSize: percentageWidth('7%'), marginVertical: percentageHeight('3%'), textAlign:'center' },
+  image: { width: percentageWidth('35%'), height: percentageHeight('18%'), marginTop: percentageHeight('2%') },
+  score: { fontSize:percentageWidth('6%'), color:'grey'},
+  buttonTitle: { fontSize:percentageWidth('5%')},
+  button: { width: percentageWidth('30%'), height:45 },
 });
 
 export default FoodOverview;
