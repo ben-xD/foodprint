@@ -65,3 +65,6 @@ buck-out/
 
 # Jest
 coverage
+
+# App specific
+.env

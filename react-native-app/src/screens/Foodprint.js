@@ -19,7 +19,7 @@ import {
 } from 'victory-native';
 import { Button, Overlay } from 'react-native-elements';
 import { widthPercentageToDP as percentageWidth, heightPercentageToDP as percentageHeight } from 'react-native-responsive-screen';
-import FAB from 'react-native-fab';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const Foodprint = ({ navigation }) => {
   const [isVisible, setVisibility] = useState(true);
@@ -301,10 +301,7 @@ const Foodprint = ({ navigation }) => {
           </View>
         </View>
         {/*Overlay for welcome screen*/}
-        <Overlay isVisible={isVisible} onBackdropPress={() => {
-          console.log('backdrop?');
-          setVisibility(false);
-        }}>
+        <Overlay isVisible={isVisible} onBackdropPress={() => setVisibility(false)}>
           <ScrollView>
             <View style={styles.contentContainer}>
               <Text style={styles.title}>Welcome to FoodPrint!</Text>
@@ -323,8 +320,11 @@ const Foodprint = ({ navigation }) => {
           </ScrollView>
         </Overlay>
       </ScrollView>
-      <FAB buttonColor="#008000" iconTextColor="#FFFFFF" onClickAction={takePicture} visible={true} iconTextComponent={<MaterialCommunityIcons name="camera" color={'grey'} size={35} />} />
-    </SafeAreaView>
+      <TouchableOpacity onPress={takePicture} containerStyle={{ backgroundColor: '#008000', width: 64, height: 64, position: 'absolute', bottom: 25, right: 25, borderRadius: 32, alignItems: 'center', justifyContent: 'center' }}>
+        <MaterialCommunityIcons name="camera" color={'white'} size={28} />
+      </TouchableOpacity>
+      {/* <FAB buttonColor="#008000" iconTextColor="#FFFFFF" onClickAction={takePicture} visible={true} iconTextComponent={} /> */}
+    </SafeAreaView >
   );
 };
 
