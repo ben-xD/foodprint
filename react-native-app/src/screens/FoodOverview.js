@@ -14,7 +14,6 @@ import {
   VictoryStack,
   VictoryLine,
   VictoryPie,
-  VictoryLabel
 } from 'victory-native';
 import { Button, Overlay } from 'react-native-elements';
 import { useLayoutEffect } from 'react';
@@ -40,103 +39,123 @@ const FoodOverview = ({ navigation }) => {
     });
   }, [navigation]);
 
-  // totalAverage = avg_co2_for_user(carbonAPI, user);
+const totalAverage = 17.25;
+
 
   //Mock-up data: Total average
   const averageFootprint = [
-    {label: ' ', footprint: 17.25},
-    {label: ' ', footprint: 26.7-17.25},
+    {label: ' ', footprint: totalAverage},
+    {label: ' ', footprint: 26.7 - totalAverage},
   ];
 
-  //Mock-up data: Monthly v1
-  const plantBasedData = [
-    { month: 'Oct', footprint: 19.00 },
-    { month: 'Nov', footprint: 16.50 },
-    { month: 'Dec', footprint: 13.50 },
-    { month: 'Jan', footprint: 16.50 },
-    { month: 'Feb', footprint: 14.25 },
-    { month: 'Mar', footprint: 13.00 },
-  ];
-
-  const eggAndDairyData = [
-    { month: 'Oct', footprint: 19.00 },
-    { month: 'Nov', footprint: 16.50 },
-    { month: 'Dec', footprint: 13.50 },
-    { month: 'Jan', footprint: 16.50 },
-    { month: 'Feb', footprint: 14.25 },
-    { month: 'Mar', footprint: 13.00 },
-  ];
-
-  const fishData = [
-    { month: 'Oct', footprint: 19.00 },
-    { month: 'Nov', footprint: 16.50 },
-    { month: 'Dec', footprint: 13.50 },
-    { month: 'Jan', footprint: 16.50 },
-    { month: 'Feb', footprint: 14.25 },
-    { month: 'Mar', footprint: 13.00 },
-  ];
-
-  const meatData = [
-    { month: 'Oct', footprint: 19.00 },
-    { month: 'Nov', footprint: 16.50 },
-    { month: 'Dec', footprint: 13.50 },
-    { month: 'Jan', footprint: 16.50 },
-    { month: 'Feb', footprint: 14.25 },
-    { month: 'Mar', footprint: 13.00 },
-  ];
-
-  // Mock up data: monthly v2
+  // Mock up data: monthly
   const monthlyComposition = {
       'Plant based': [
-    { monthly: 0, p_monthly_cf: 0.36 },
-    { monthly: -1, p_monthly_cf: 0 },
-    { monthly: -2, p_monthly_cf: 0 },
-    { monthly: -3, p_monthly_cf: 0 },
-    { monthly: -4, p_monthly_cf: 3.61 },
-    { monthly: -5, p_monthly_cf: 0 },
-    { monthly: -6, p_monthly_cf: 0 }
+    { monthly: 0, p_monthly_cf: 13.50 },
+    { monthly: -1, p_monthly_cf: 19.00 },
+    { monthly: -2, p_monthly_cf: 16.50 },
+    { monthly: -3, p_monthly_cf: 14.25 },
+    { monthly: -4, p_monthly_cf: 13.00 },
+    { monthly: -5, p_monthly_cf: 16.50 },
   ],
       'Fish': [
-    { monthly: 0, p_monthly_cf: 0 },
-    { monthly: -1, p_monthly_cf: 0 },
-    { monthly: -2, p_monthly_cf: 0 },
-    { monthly: -3, p_monthly_cf: 0 },
-    { monthly: -4, p_monthly_cf: 0 },
-    { monthly: -5, p_monthly_cf: 0 },
-    { monthly: -6, p_monthly_cf: 0 }
+    { monthly: 0, p_monthly_cf: 13.50 },
+    { monthly: -1, p_monthly_cf: 13.00 },
+    { monthly: -2, p_monthly_cf: 16.50 },
+    { monthly: -3, p_monthly_cf: 19.00 },
+    { monthly: -4, p_monthly_cf: 14.25 },
+    { monthly: -5, p_monthly_cf: 13.00 },
   ],
       'Meat': [
-    { monthly: 0, p_monthly_cf: 0 },
-    { monthly: -1, p_monthly_cf: 0 },
-    { monthly: -2, p_monthly_cf: 0 },
-    { monthly: -3, p_monthly_cf: 0 },
-    { monthly: -4, p_monthly_cf: 0 },
-    { monthly: -5, p_monthly_cf: 0 },
-    { monthly: -6, p_monthly_cf: 22.9 }
+    { monthly: 0, p_monthly_cf: 13.50 },
+    { monthly: -1, p_monthly_cf: 16.50 },
+    { monthly: -2, p_monthly_cf: 19.00 },
+    { monthly: -3, p_monthly_cf: 13.00 },
+    { monthly: -4, p_monthly_cf: 14.25 },
+    { monthly: -5, p_monthly_cf: 16.50 }
   ],
       'Eggs and dairy': [
-    { monthly: 0, p_monthly_cf: 0 },
-    { monthly: -1, p_monthly_cf: 0 },
-    { monthly: -2, p_monthly_cf: 0 },
-    { monthly: -3, p_monthly_cf: 0 },
-    { monthly: -4, p_monthly_cf: 0 },
-    { monthly: -5, p_monthly_cf: 0 },
-    { monthly: -6, p_monthly_cf: 0 }
+    { monthly: 0, p_monthly_cf: 13.50 },
+    { monthly: -1, p_monthly_cf: 16.5 },
+    { monthly: -2, p_monthly_cf: 19 },
+    { monthly: -3, p_monthly_cf: 13 },
+    { monthly: -4, p_monthly_cf: 14.25 },
+    { monthly: -5, p_monthly_cf: 13 },
   ],
   };
 
 
-  //Mock-up data: Monthly average
-  const average = 63.67;
+  const monthlyAverage = 64;
 
-  const userAverage = [
-    { month: 'Oct', footprint: average },
-    { month: 'Nov', footprint: average },
-    { month: 'Dec', footprint: average },
-    { month: 'Jan', footprint: average },
-    { month: 'Feb', footprint: average },
-    { month: 'Mar', footprint: average },
+  const monthlyUserAverage = [
+    { month: 0, footprint: monthlyAverage },
+    { month: -1, footprint: monthlyAverage },
+    { month: -2, footprint: monthlyAverage },
+    { month: -3, footprint: monthlyAverage },
+    { month: -4, footprint: monthlyAverage },
+    { month: -5, footprint: monthlyAverage },
   ];
+
+  // This months's carbon footprint
+  const thisMonth = monthlyComposition['Plant based'][0].p_monthly_cf + monthlyComposition.Fish[0].p_monthly_cf + monthlyComposition.Meat[0].p_monthly_cf + monthlyComposition["Eggs and dairy"][0].p_monthly_cf;
+  const lastMonth = monthlyComposition['Plant based'][1].p_monthly_cf + monthlyComposition.Fish[1].p_monthly_cf + monthlyComposition.Meat[1].p_monthly_cf + monthlyComposition["Eggs and dairy"][1].p_monthly_cf;
+  const changeSinceLastMonth = ((thisMonth - lastMonth) * 100) / thisMonth;
+  const monthSign = ((changeSinceLastMonth > 0) ? '+' : '');
+
+
+  // Mock up data: weekly
+  const weeklyComposition = {
+    'Plant based': [
+      { week: 0, p_weekly_cf: 3.8 },
+      { week: -1, p_weekly_cf: 2.7 },
+      { week: -2, p_weekly_cf: 3.3 },
+      { week: -3, p_weekly_cf: 2.85 },
+      { week: -4, p_weekly_cf: 2.6 },
+      { week: -5, p_weekly_cf: 3.3 },
+    ],
+    'Fish': [
+      { week: 0, p_weekly_cf: 3.8 },
+      { week: -1, p_weekly_cf: 2.6 },
+      { week: -2, p_weekly_cf: 3.3 },
+      { week: -3, p_weekly_cf: 2.7 },
+      { week: -4, p_weekly_cf: 2.85 },
+      { week: -5, p_weekly_cf: 2.6 },
+    ],
+    'Meat': [
+      { week: 0, p_weekly_cf: 3.8 },
+      { week: -1, p_weekly_cf: 3.3 },
+      { week: -2, p_weekly_cf: 2.85 },
+      { week: -3, p_weekly_cf: 2.6 },
+      { week: -4, p_weekly_cf: 2.7 },
+      { week: -5, p_weekly_cf: 3.3 }
+    ],
+    'Eggs and dairy': [
+      { week: 0, p_weekly_cf: 3.8 },
+      { week: -1, p_weekly_cf: 3.3 },
+      { week: -2, p_weekly_cf: 2.85 },
+      { week: -3, p_weekly_cf: 2.6 },
+      { week: -4, p_weekly_cf: 2.7 },
+      { week: -5, p_weekly_cf: 2.6 },
+    ],
+  };
+
+
+  const weeklyAverage = 12.8;
+
+  const weeklyUserAverage = [
+    { week: 0, footprint: weeklyAverage },
+    { week: -1, footprint: weeklyAverage },
+    { week: -2, footprint: weeklyAverage },
+    { week: -3, footprint: weeklyAverage },
+    { week: -4, footprint: weeklyAverage },
+    { week: -5, footprint: weeklyAverage },
+  ];
+
+  // This week's carbon footprint
+  const thisWeek = weeklyComposition['Plant based'][0].p_weekly_cf + weeklyComposition.Fish[0].p_weekly_cf + weeklyComposition.Meat[0].p_weekly_cf + weeklyComposition["Eggs and dairy"][0].p_weekly_cf;
+  const lastWeek = weeklyComposition['Plant based'][1].p_weekly_cf + weeklyComposition.Fish[1].p_weekly_cf + weeklyComposition.Meat[1].p_weekly_cf + weeklyComposition["Eggs and dairy"][1].p_weekly_cf;
+  const changeSinceLastWeek = ((thisWeek - lastWeek) * 100) / thisWeek;
+  const weekSign = ((changeSinceLastWeek > 0) ? '+' : '');
 
 
   const calculateColour = (carbonFootprint) => {
@@ -165,21 +184,24 @@ const FoodOverview = ({ navigation }) => {
     return require('../images/crying-smiley.png');
   };
 
+  const month = new Date().getMonth() + 1; //Current Month
+  const monthList = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
   return (
       <ScrollView>
 
         <View style={{height:percentageHeight('32%'), alignItems:'center'}}>
           <Image
-              source={ calculateSmiley(17.25) }
+              source={ calculateSmiley(totalAverage) }
               style={{height:percentageHeight('15%'), width:percentageWidth('30%'), position:'absolute', alignSelf:'center', marginTop:percentageHeight('12%')}}
           />
-          <Text style={{ fontSize:24, color:'grey', position:'absolute', alignSelf:'center', marginTop:percentageHeight('28%')} }>17.25 units</Text>
+          <Text style={{ fontSize:24, color:'grey', position:'absolute', alignSelf:'center', marginTop:percentageHeight('28%')} }>{totalAverage} units</Text>
           <VictoryPie
             data={averageFootprint}
             x="label"
             y="footprint"
             standalone={true}
-            colorScale={[calculateColour(17.25), 'transparent']}
+            colorScale={[calculateColour(totalAverage), 'transparent']}
             startAngle={-90}
             endAngle={90}
             innerRadius={140}
@@ -199,23 +221,49 @@ const FoodOverview = ({ navigation }) => {
               onPress = {() => setTimeSpan('monthly')}
           />
         </View>
-        <View style={{ justifyContent:'center', alignItems:'center', flexDirection:'row'}}>
-          <Text style={{ fontSize:22, color:'grey'}}>57 units this month</Text>
-          <Text style={{ marginLeft:15}}>-14% compared{"\n"}to last month</Text>
-        </View>
+        <View>
+          {(timeSpan === 'weekly') ? (
+            <View>
+              <View style={{ justifyContent:'center', alignItems:'center', flexDirection:'row'}}>
+                <Text style={{ fontSize:22, color:'grey'}}>{thisWeek} units this week</Text>
+                <Text style={{ marginLeft:15}}>{weekSign}{Math.round(changeSinceLastWeek)}% compared{"\n"}to last week</Text>
+              </View>
+              <View style={{justifyContent:'center', alignItems:'center'}}>
+                <VictoryChart padding={{top:percentageHeight('1%'), bottom:percentageHeight('5%'), left:percentageWidth('15%'), right:percentageWidth('10%'),}} domainPadding={20}>
+                  <VictoryAxis dependentAxis orientation="left" offsetX={percentageWidth('15%')} label="Carbon footprint"/>
+                  <VictoryAxis label="Week" domain={[-5,0]} tickFormat={(t) => (t === 0) ? 'Now' : ('s' + t)}/>
+                  <VictoryStack colorScale={['olivedrab', 'gold', 'skyblue', 'firebrick']}>
+                    <VictoryBar data={weeklyComposition['Plant based']} x="week" y="p_weekly_cf" label="Vegetables"/>
+                    <VictoryBar data={weeklyComposition['Eggs and dairy']} x="week" y="p_weekly_cf" label="Eggs & Dairy"/>
+                    <VictoryBar data={weeklyComposition.Fish} x="week" y="p_weekly_cf" label="Fish"/>
+                    <VictoryBar data={weeklyComposition.Meat} x="week" y="p_weekly_cf" label="Meat"/>
+                  </VictoryStack>
+                  <VictoryLine data={weeklyUserAverage} x="week" y="footprint"/>
+                </VictoryChart>
+              </View>
+            </View>
+          ) : (
+            <View>
+              <View style={{ justifyContent:'center', alignItems:'center', flexDirection:'row'}}>
+                <Text style={{ fontSize:22, color:'grey'}}>{thisMonth} units this month</Text>
+                <Text style={{ marginLeft:15}}>{monthSign}{Math.round(changeSinceLastMonth)}% compared{'\n'}to last month</Text>
+              </View>
+              <View style={{justifyContent:'center', alignItems:'center'}}>
+                <VictoryChart padding={{top:percentageHeight('1%'), bottom:percentageHeight('5%'), left:percentageWidth('15%'), right:percentageWidth('10%') }} domainPadding={20}>
+                  <VictoryAxis dependentAxis orientation="left" offsetX={percentageWidth('15%')} label="Carbon footprint"/>
+                  <VictoryAxis label="Month" domain={[-5,0]} tickFormat={(t) => ((month + t) >= 1) ? monthList[month + t - 1] : monthList[month + t + 11]}/>
+                  <VictoryStack colorScale={['olivedrab', 'gold', 'skyblue', 'firebrick']}>
+                    <VictoryBar data={monthlyComposition['Plant based']} x="monthly" y="p_monthly_cf" label="Vegetables"/>
+                    <VictoryBar data={monthlyComposition['Eggs and dairy']} x="monthly" y="p_monthly_cf" label="Eggs & Dairy"/>
+                    <VictoryBar data={monthlyComposition.Fish} x="monthly" y="p_monthly_cf" label="Fish"/>
+                    <VictoryBar data={monthlyComposition.Meat} x="monthly" y="p_monthly_cf" label="Meat"/>
+                  </VictoryStack>
+                  <VictoryLine data={monthlyUserAverage} x="month" y="footprint"/>
+                </VictoryChart>
+              </View>
+            </View>
+          )}
 
-        <View style={{justifyContent:'center', alignItems:'center'}}>
-          <VictoryChart padding={{top:percentageHeight('1%'), bottom:percentageHeight('5%'), left:percentageWidth('15%'), right:percentageWidth('8%'),}} domainPadding={20}>
-            <VictoryAxis dependentAxis label="Carbon footprint"/>
-            <VictoryAxis label="Month"/>
-            <VictoryStack colorScale={['olivedrab', 'gold', 'skyblue', 'firebrick']}>
-              <VictoryBar data={monthlyComposition["Plant based"]} x="month" y="footprint" label="Vegetables"/>
-              <VictoryBar data={monthlyComposition["Eggs and dairy"]} x="month" y="footprint" label="Eggs & Dairy"/>
-              <VictoryBar data={monthlyComposition.Fish} x="month" y="footprint" label="Fish"/>
-              <VictoryBar data={monthlyComposition.Meat} x="month" y="footprint" label="Meat"/>
-            </VictoryStack>
-            <VictoryLine data={userAverage} x="month" y="footprint"/>
-          </VictoryChart>
         </View>
       <Overlay isVisible = { isVisible } onBackdropPress = {() => setVisibility(false)}>
         <ScrollView>
