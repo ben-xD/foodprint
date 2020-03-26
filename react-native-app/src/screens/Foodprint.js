@@ -41,36 +41,36 @@ const Foodprint = ({ navigation }) => {
   // Mock up data: monthly
   const monthlyComposition = {
     'Plant based': [
-      { monthly: 0, p_monthly_cf: 13.50 },
-      { monthly: -1, p_monthly_cf: 19.00 },
-      { monthly: -2, p_monthly_cf: 16.50 },
-      { monthly: -3, p_monthly_cf: 14.25 },
-      { monthly: -4, p_monthly_cf: 13.00 },
-      { monthly: -5, p_monthly_cf: 16.50 },
+      { month: 0, monthly_cf: 13.50 },
+      { month: -1, monthly_cf: 19.00 },
+      { month: -2, monthly_cf: 16.50 },
+      { month: -3, monthly_cf: 14.25 },
+      { month: -4, monthly_cf: 13.00 },
+      { month: -5, monthly_cf: 16.50 },
     ],
     'Fish': [
-      { monthly: 0, p_monthly_cf: 13.50 },
-      { monthly: -1, p_monthly_cf: 13.00 },
-      { monthly: -2, p_monthly_cf: 16.50 },
-      { monthly: -3, p_monthly_cf: 19.00 },
-      { monthly: -4, p_monthly_cf: 14.25 },
-      { monthly: -5, p_monthly_cf: 13.00 },
+      { month: 0, monthly_cf: 13.50 },
+      { month: -1, monthly_cf: 13.00 },
+      { month: -2, monthly_cf: 16.50 },
+      { month: -3, monthly_cf: 19.00 },
+      { month: -4, monthly_cf: 14.25 },
+      { month: -5, monthly_cf: 13.00 },
     ],
     'Meat': [
-      { monthly: 0, p_monthly_cf: 13.50 },
-      { monthly: -1, p_monthly_cf: 16.50 },
-      { monthly: -2, p_monthly_cf: 19.00 },
-      { monthly: -3, p_monthly_cf: 13.00 },
-      { monthly: -4, p_monthly_cf: 14.25 },
-      { monthly: -5, p_monthly_cf: 16.50 },
+      { month: 0, monthly_cf: 13.50 },
+      { month: -1, monthly_cf: 16.50 },
+      { month: -2, monthly_cf: 19.00 },
+      { month: -3, monthly_cf: 13.00 },
+      { month: -4, monthly_cf: 14.25 },
+      { month: -5, monthly_cf: 16.50 },
     ],
     'Eggs and dairy': [
-      { monthly: 0, p_monthly_cf: 13.50 },
-      { monthly: -1, p_monthly_cf: 16.5 },
-      { monthly: -2, p_monthly_cf: 19 },
-      { monthly: -3, p_monthly_cf: 13 },
-      { monthly: -4, p_monthly_cf: 14.25 },
-      { monthly: -5, p_monthly_cf: 13 },
+      { month: 0, monthly_cf: 13.50 },
+      { month: -1, monthly_cf: 16.5 },
+      { month: -2, monthly_cf: 19 },
+      { month: -3, monthly_cf: 13 },
+      { month: -4, monthly_cf: 14.25 },
+      { month: -5, monthly_cf: 13 },
     ],
   };
 
@@ -87,8 +87,8 @@ const Foodprint = ({ navigation }) => {
   ];
 
   // This months's carbon footprint
-  const thisMonth = monthlyComposition['Plant based'][0].p_monthly_cf + monthlyComposition.Fish[0].p_monthly_cf + monthlyComposition.Meat[0].p_monthly_cf + monthlyComposition['Eggs and dairy'][0].p_monthly_cf;
-  const lastMonth = monthlyComposition['Plant based'][1].p_monthly_cf + monthlyComposition.Fish[1].p_monthly_cf + monthlyComposition.Meat[1].p_monthly_cf + monthlyComposition['Eggs and dairy'][1].p_monthly_cf;
+  const thisMonth = monthlyComposition['Plant based'][0].monthly_cf + monthlyComposition.Fish[0].monthly_cf + monthlyComposition.Meat[0].monthly_cf + monthlyComposition['Eggs and dairy'][0].monthly_cf;
+  const lastMonth = monthlyComposition['Plant based'][1].monthly_cf + monthlyComposition.Fish[1].monthly_cf + monthlyComposition.Meat[1].monthly_cf + monthlyComposition['Eggs and dairy'][1].monthly_cf;
   const changeSinceLastMonth = ((thisMonth - lastMonth) * 100) / thisMonth;
   const monthSign = ((changeSinceLastMonth > 0) ? '+' : '');
 
@@ -96,36 +96,36 @@ const Foodprint = ({ navigation }) => {
   // Mock up data: weekly
   const weeklyComposition = {
     'Plant based': [
-      { week: 0, p_weekly_cf: 3.8 },
-      { week: -1, p_weekly_cf: 2.7 },
-      { week: -2, p_weekly_cf: 3.3 },
-      { week: -3, p_weekly_cf: 2.85 },
-      { week: -4, p_weekly_cf: 2.6 },
-      { week: -5, p_weekly_cf: 3.3 },
+      { week: 0, weekly_cf: 3.8 },
+      { week: -1, weekly_cf: 2.7 },
+      { week: -2, weekly_cf: 3.3 },
+      { week: -3, weekly_cf: 2.85 },
+      { week: -4, weekly_cf: 2.6 },
+      { week: -5, weekly_cf: 3.3 },
     ],
     'Fish': [
-      { week: 0, p_weekly_cf: 3.8 },
-      { week: -1, p_weekly_cf: 2.6 },
-      { week: -2, p_weekly_cf: 3.3 },
-      { week: -3, p_weekly_cf: 2.7 },
-      { week: -4, p_weekly_cf: 2.85 },
-      { week: -5, p_weekly_cf: 2.6 },
+      { week: 0, weekly_cf: 3.8 },
+      { week: -1, weekly_cf: 2.6 },
+      { week: -2, weekly_cf: 3.3 },
+      { week: -3, weekly_cf: 2.7 },
+      { week: -4, weekly_cf: 2.85 },
+      { week: -5, weekly_cf: 2.6 },
     ],
     'Meat': [
-      { week: 0, p_weekly_cf: 3.8 },
-      { week: -1, p_weekly_cf: 3.3 },
-      { week: -2, p_weekly_cf: 2.85 },
-      { week: -3, p_weekly_cf: 2.6 },
-      { week: -4, p_weekly_cf: 2.7 },
-      { week: -5, p_weekly_cf: 3.3 },
+      { week: 0, weekly_cf: 3.8 },
+      { week: -1, weekly_cf: 3.3 },
+      { week: -2, weekly_cf: 2.85 },
+      { week: -3, weekly_cf: 2.6 },
+      { week: -4, weekly_cf: 2.7 },
+      { week: -5, weekly_cf: 3.3 },
     ],
     'Eggs and dairy': [
-      { week: 0, p_weekly_cf: 3.8 },
-      { week: -1, p_weekly_cf: 3.3 },
-      { week: -2, p_weekly_cf: 2.85 },
-      { week: -3, p_weekly_cf: 2.6 },
-      { week: -4, p_weekly_cf: 2.7 },
-      { week: -5, p_weekly_cf: 2.6 },
+      { week: 0, weekly_cf: 3.8 },
+      { week: -1, weekly_cf: 3.3 },
+      { week: -2, weekly_cf: 2.85 },
+      { week: -3, weekly_cf: 2.6 },
+      { week: -4, weekly_cf: 2.7 },
+      { week: -5, weekly_cf: 2.6 },
     ],
   };
 
@@ -142,8 +142,8 @@ const Foodprint = ({ navigation }) => {
   ];
 
   // This week's carbon footprint
-  const thisWeek = weeklyComposition['Plant based'][0].p_weekly_cf + weeklyComposition.Fish[0].p_weekly_cf + weeklyComposition.Meat[0].p_weekly_cf + weeklyComposition['Eggs and dairy'][0].p_weekly_cf;
-  const lastWeek = weeklyComposition['Plant based'][1].p_weekly_cf + weeklyComposition.Fish[1].p_weekly_cf + weeklyComposition.Meat[1].p_weekly_cf + weeklyComposition['Eggs and dairy'][1].p_weekly_cf;
+  const thisWeek = weeklyComposition['Plant based'][0].weekly_cf + weeklyComposition.Fish[0].weekly_cf + weeklyComposition.Meat[0].weekly_cf + weeklyComposition['Eggs and dairy'][0].weekly_cf;
+  const lastWeek = weeklyComposition['Plant based'][1].weekly_cf + weeklyComposition.Fish[1].weekly_cf + weeklyComposition.Meat[1].weekly_cf + weeklyComposition['Eggs and dairy'][1].weekly_cf;
   const changeSinceLastWeek = ((thisWeek - lastWeek) * 100) / thisWeek;
   const weekSign = ((changeSinceLastWeek > 0) ? '+' : '');
 
@@ -235,12 +235,12 @@ const Foodprint = ({ navigation }) => {
                   height={percentageHeight('38%')}
                 >
                   <VictoryAxis dependentAxis orientation="left" offsetX={percentageWidth('15%')} label="Carbon footprint" />
-                  <VictoryAxis label="Week" domain={[-5, 0]} tickFormat={(t) => (t === 0) ? 'Now' : ('s' + t)} />
+                  <VictoryAxis label="Week" domain={[-5,0]} tickFormat={(t) => (t === 0) ? 'Now' : ('s' + t)} />
                   <VictoryStack colorScale={['olivedrab', 'gold', 'skyblue', 'firebrick']}>
-                    <VictoryBar data={weeklyComposition['Plant based']} x="week" y="p_weekly_cf" label="Vegetables" />
-                    <VictoryBar data={weeklyComposition['Eggs and dairy']} x="week" y="p_weekly_cf" label="Eggs & Dairy" />
-                    <VictoryBar data={weeklyComposition.Fish} x="week" y="p_weekly_cf" label="Fish" />
-                    <VictoryBar data={weeklyComposition.Meat} x="week" y="p_weekly_cf" label="Meat" />
+                    <VictoryBar data={weeklyComposition['Plant based']} sortKey="week" x="week" y="weekly_cf" label="Vegetables" />
+                    <VictoryBar data={weeklyComposition['Eggs and dairy']} sortKey="week" x="week" y="weekly_cf" label="Eggs & Dairy" />
+                    <VictoryBar data={weeklyComposition.Fish} sortKey="week" x="week" y="weekly_cf" label="Fish" />
+                    <VictoryBar data={weeklyComposition.Meat} sortKey="week" x="week" y="weekly_cf" label="Meat" />
                   </VictoryStack>
                   <VictoryLegend
                     data={[{ name: 'Plant' }, { name: 'Eggs & Dairy' }, { name: 'Fish' }, { name: 'Meat' }]}
@@ -266,12 +266,12 @@ const Foodprint = ({ navigation }) => {
                     height={percentageHeight('38%')}
                   >
                     <VictoryAxis dependentAxis orientation="left" offsetX={percentageWidth('15%')} label="Carbon footprint" />
-                    <VictoryAxis label="Month" domain={[-5, 0]} tickFormat={(t) => ((month + t) >= 0) ? monthList[month + t] : monthList[month + t + 12]} />
+                    <VictoryAxis label="Month" domain={[-5,0]} tickFormat={(t) => ((month + t) >= 0) ? monthList[month + t] : monthList[month + t + 12]} />
                     <VictoryStack colorScale={['olivedrab', 'gold', 'skyblue', 'firebrick']}>
-                      <VictoryBar data={monthlyComposition['Plant based']} x="monthly" y="p_monthly_cf" label="Vegetables" />
-                      <VictoryBar data={monthlyComposition['Eggs and dairy']} x="monthly" y="p_monthly_cf" label="Eggs & Dairy" />
-                      <VictoryBar data={monthlyComposition.Fish} x="monthly" y="p_monthly_cf" label="Fish" />
-                      <VictoryBar data={monthlyComposition.Meat} x="monthly" y="p_monthly_cf" label="Meat" />
+                      <VictoryBar data={monthlyComposition['Plant based']} sortKey="month" x="month" y="monthly_cf" />
+                      <VictoryBar data={monthlyComposition['Eggs and dairy']} sortKey="month" x="month" y="monthly_cf" />
+                      <VictoryBar data={monthlyComposition.Fish} sortKey="month" x="month" y="monthly_cf" />
+                      <VictoryBar data={monthlyComposition.Meat} sortKey="month" x="month" y="monthly_cf" />
                     </VictoryStack>
                     <VictoryLegend
                       data={[{ name: 'Plant' }, { name: 'Eggs & Dairy' }, { name: 'Fish' }, { name: 'Meat' }]}
