@@ -3,10 +3,14 @@ const config = require('../carbon-footprint/config');
 
 class CarbonAPI {
 
-  constructor() {
+  constructor( store ) {
     this._carbonSchema;
     this.searchData = this.searchData.bind(this);
-    this.connect();
+    this.store = store
+    if (!this.store.isConnected){
+      this.store.isConnected = true;
+      this.connect();
+    } 
   }
 
   async connect() {

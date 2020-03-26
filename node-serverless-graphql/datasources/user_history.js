@@ -1,24 +1,29 @@
 const mongoose = require('mongoose');
 const config = require('../carbon-footprint/config');
-const CarbonAPI = require('./carbon');
 
 class userHistory {
 
-  constructor() {
+  constructor( store ) {
     this._hystorySchema;
     this.searchData = this.searchData.bind(this);
-    this.connect();
+    this.store = store;
+    if (!this.store.isConnected){
+      this.store.isConnected = true;
+      this.connect();
+    } 
     this.NUMBER_OF_WEEKS_RETURNED = 6;
     this.NUMBER_OF_MONTHS_RETURNED = 6;
     this.CATEGORIES = ['Plant based', 'Fish', 'Meat', 'Eggs and dairy'];
   }
 
   async connect() {
-    try {
-      await mongoose.connect(config.dbServer, {useNewUrlParser: true, useUnifiedTopology: true});
-      console.log("User API: database connected.")
-    } catch (error) {
-      console.error("User API: DATABASE FAILED TO CONNECT", error);
+    if (!this.store.isConnected){
+      try {
+        await mongoose.connect(config.dbServer, { useNewUrlParser: true, useUnifiedTopology: true });
+        console.log("History API: database connected.")
+      } catch (error) {
+        console.error("History API: DATABASE FAILED TO CONNECT", error);
+      }
     }
   }
 

@@ -1,5 +1,6 @@
 const { ApolloServer } = require('apollo-server-cloud-functions');
 const admin = require('firebase-admin');
+const {Sequelize} = require('sequelize');
 const typeDefs = require('./schema.js');
 const resolvers = require('./resolvers.js');
 const context = require('./context');
@@ -16,13 +17,17 @@ admin.initializeApp({
   databaseURL: 'https://carbon-footprint-2020.firebaseio.com',
 });
 
-const carbonAPI = new CarbonAPI();
+
+let store = {isConnected: false}
+
+const carbonAPI = new CarbonAPI(store);
+const carbonAPI2 =  new CarbonAPI(store);
 
 const dataSources = () => ({
   visionAPI: new VisionAPI(visionCredentials),
-  carbonAPI,
   conceptAPI: new ConceptAPI(),
-  userHistAPI: new UserHistAPI(),
+  carbonAPI:  carbonAPI,
+  userHistAPI: new UserHistAPI(store),
 });
 
 const server = new ApolloServer({
