@@ -28,7 +28,7 @@ const resolvers = {
       console.log({ 'Returning': response });
       return response;
     },
-    postBarcode: async (parent, { barcode }, context) => {
+    postBarcode: async (parent, { barcode }, { dataSources }, context) => {
       console.log({ context, parent });
       console.log(`Received barcode: ${barcode}`);
       const { item, carbonFootprintPerKg } = await getCarbonFootprintFromBarcode(context.dataSources, barcode);
@@ -39,7 +39,7 @@ const resolvers = {
       console.log({ 'Returning': response });
       return response;
     },
-    postCorrection: async (parent, { name }, { dataSources }) => {
+    postCorrection: async (parent, { name }, { dataSources }, context) => {
       console.log({ 'Received correction': name });
       const { item, carbonFootprintPerKg } = await getCarbonFootprintFromName(dataSources, name);
       const response = {
