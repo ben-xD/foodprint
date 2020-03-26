@@ -18,14 +18,33 @@ const typeDefs = gql`
         deviceOrientation: Int
     }
 
+    enum ReportResolution {
+        WEEK
+        MONTH
+    }
+
+    type TimeReport {
+        periodNumber: Int # week/month number starting with current period of 0, previous -1 etc.
+        avgCarbonFootpring: Float
+    }
+
+    type CategoryReport {
+        category: String
+        timeReport: [TimeReport]
+    }
+
     type Query {
         _: String
+        getUserAvg: Float
+        getPeriodAvg(timezone: Int!, resolution: ReportResolution!): [TimeReport]
+        reportByCategory(timezone: Int!, resolution: ReportResolution!): [CategoryReport]
     }
 
     type Mutation {
         postPicture(file: PictureFile): ProductFootprint
         postBarcode(barcode: String!): ProductFootprint
         postCorrection(name: String!): ProductFootprint
+        postUserHistoryEntry(item: String): Boolean
     }
 `;
 
