@@ -188,8 +188,7 @@ const removeDuplicates = (labels) => {
 
 const getCarbonFootprintFromImage = async (datasources, image) => {
   // Get image labels from Google Vision API
-  let imageLabels = await datasources.visionAPI.getImageLabels(image);
-  imageLabels = getNounsInLabels(imageLabels);
+  const imageLabels = await datasources.visionAPI.getImageLabels(image);
 
   // Attempt to find the google vision labels in the database:
   const firstResponse = await oneLayerSearch(datasources, imageLabels);

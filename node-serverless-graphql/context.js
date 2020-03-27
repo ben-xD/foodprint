@@ -13,14 +13,15 @@ const getUser = (idToken) => new Promise((resolve, reject) => {
 });
 
 const context = async ({ req }) => {
+  //console.log({ headers: req.headers });
   const authorization = req.headers.authorization || '';
   const token = authorization.replace('Bearer ', '');
   try {
     const user = await getUser(token);
+    console.log({ user });
     return { user };
   } catch (err) {
-    console.info("No 'user' object will be available in context, as token was not decoded successfully.")
-    // console.info(err);
+    // console.error(err);
     return {};
   }
 };
