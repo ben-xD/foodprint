@@ -17,8 +17,16 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import WelcomeScreen from '../components/WelcomeScreen';
 import WeeklyDisplay from '../components/WeeklyDisplay';
 import MonthlyDisplay from '../components/MonthlyDisplay';
+import gql from 'graphql-tag';
+import {useMutation, useQuery} from '@apollo/react-hooks';
+
+// //GraphQL schema
+// const GET_AVERAGE = gql`
+//   query getUserAvg
+// `;
 
 const Foodprint = ({ navigation }) => {
+
   const [isVisible, setVisibility] = useState(true);
   const [timeSpan, setTimeSpan] = useState('weekly');
 
@@ -26,12 +34,19 @@ const Foodprint = ({ navigation }) => {
     navigation.navigate('Camera');
   };
 
-  const totalAverage = 17.25;
+  function totalAverage() {
+    // const { loading, error, data } = useQuery(GET_AVERAGE);
+    //
+    // if (loading) {return 'Loading...';}
+    // if (error) {return `Error! ${error.message}`;}
+    // return data;
+    return 17.25;
+  }
 
   //Mock-up data: Total average
   const averageFootprint = [
-    { label: ' ', footprint: totalAverage },
-    { label: ' ', footprint: 26.7 - totalAverage },
+    { label: ' ', footprint: totalAverage() },
+    { label: ' ', footprint: 26.7 - totalAverage() },
   ];
 
   const calculateColour = (carbonFootprint) => {
@@ -67,16 +82,16 @@ const Foodprint = ({ navigation }) => {
         {/*General carbon footprint score*/}
         <View style={{ height: percentageHeight('29%'), alignItems: 'center' }}>
           <Image
-            source={calculateSmiley(totalAverage)}
+            source={calculateSmiley(totalAverage())}
             style={{ height: percentageHeight('10%'), width: percentageWidth('20%'), position: 'absolute', alignSelf: 'center', marginTop: percentageHeight('12%') }}
           />
-          <Text style={[styles.score, { position: 'absolute', alignSelf: 'center', marginTop: percentageHeight('24%') }]}>{totalAverage} units</Text>
+          <Text style={[styles.score, { position: 'absolute', alignSelf: 'center', marginTop: percentageHeight('24%') }]}>{totalAverage()} units</Text>
           <VictoryPie
             data={averageFootprint}
             x="label"
             y="footprint"
             standalone={true}
-            colorScale={[calculateColour(totalAverage), 'transparent']}
+            colorScale={[calculateColour(totalAverage()), 'transparent']}
             startAngle={-90}
             endAngle={90}
             innerRadius={percentageHeight('16%')}
