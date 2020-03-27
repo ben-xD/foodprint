@@ -22,7 +22,7 @@ describe('Real user history database', () => {
     test('Average co2 of all products for user test_user is 0.62 (rounded up)', async () => {
         jest.setTimeout(10000);
         const user = 'test_user';
-        const expected = "0.62"";
+        const expected = "0.62";
         expect.assertions(1);
         const res = await userHistAPI.avg_co2_for_user(carbonAPI, user);
         console.log('res', res);

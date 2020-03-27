@@ -5,6 +5,74 @@ const resolvers = {
   Query: {
     _: () => {
     },
+    getUserAvg: async (parent, context) => {
+      if (!context.user) {
+        // Throw a 403 error because token was invalid or missing in context.js
+        throw new Error('You must be logged in.');
+      }
+      const { dataSources, user } = context;
+      const uid = user.uid;
+      console.log(("Returning average co2 for user"));
+      console.log(uid);
+      let avg_co2;
+      try {
+        avg_co2 = dataSources.userHistAPI.avg_co2_for_user(dataSources.carbonAPI, uid);
+        return avg_co2;
+      } catch (err) {
+        console.log(err);
+        return undefined;
+      }
+    },
+    getPeriodAvg: async (parent, { timezone, resolution}, context) => {
+      if (!context.user) {
+        // Throw a 403 error because token was invalid or missing in context.js
+        throw new Error('You must be logged in.');
+      }
+      const { dataSources, user } = context;
+      const uid = user.uid;
+      let avg;
+      try{
+        if (resolution === "WEEKLY"){
+          console.log(("Returning weekly average co2 last 6 weeks for user "));
+          console.log(uid);
+          avg = dataSources.userHistAPI.weekly_average_cf(dataSources.carbonAPI, uid, timezone);
+          return avg;
+        } else if (resolution === "MONTHLY"){
+          console.log(("Returning monthly average co2 last 6 months for user "));
+          console.log(uid);
+          avg = dataSources.userHistAPI.monthly_average_cf(dataSources.carbonAPI, uid, timezone);
+          return avg;
+        }
+      } catch (err) {
+        console.log(err);
+        return undefined;
+      }
+    },
+    reportByCategory: async (parent, { timezone, resolution}, context) => {
+      if (!context.user) {
+        // Throw a 403 error because token was invalid or missing in context.js
+        throw new Error('You must be logged in.');
+      }
+      const { dataSources, user } = context;
+      const uid = user.uid;
+      let res;
+      try{
+        if (resolution === "WEEKLY"){
+          console.log(("Returning categorised information on co2 for the last 6 weeks for user "));
+          console.log(uid);
+          res = dataSources.userHistAPI.weekly_cf_composition(dataSources.carbonAPI, uid, timezone);
+          return res;
+        } else if (resolution === "MONTHLY"){
+          console.log(("Returning categorised information on co2 last 6 months for user "));
+          console.log(uid);
+          res = dataSources.userHistAPI.monthly_cf_composition(dataSources.carbonAPI, uid, timezone);
+          return res;
+        }
+      } catch (err) {
+        console.log(err);
+        return undefined;
+      }
+    },
   },
   Mutation: {
     postPicture: async (parent, { file }, context) => {
