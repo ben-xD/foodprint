@@ -4,18 +4,21 @@ const orange_image = require('./orange_image');
 const rice_image = require('./rice_image');
 
 const VisionAPI = require('../../datasources/vision');
-const credentials = require('../../credentials/carbon-7fbf76411514.json');
-const visionAPI = new VisionAPI(credentials);
+const visionCredentials = require('../../credentials/carbon-7fbf76411514.json');
 const CarbonAPI = require('../../datasources/carbon');
-const carbonAPI = new CarbonAPI();
 const ConceptAPI = require('../../datasources/concept');
-const conceptAPI = new ConceptAPI();
+const userHistAPI = require('../../datasources/user_history');
+
+const  { createStore, deleteStore } = require('../../utils');
+const store = createStore();
+const carbonAPI = new CarbonAPI(store);
 
 const dataSources = {
-  carbonAPI,
-  visionAPI,
-  conceptAPI
-}
+  visionAPI: new VisionAPI(visionCredentials),
+  conceptAPI: new ConceptAPI(),
+  carbonAPI:  carbonAPI,
+  userHistAPI: new userHistAPI(store),
+};
 
 const mockDataSources = {
   carbonAPI: {
