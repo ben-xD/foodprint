@@ -89,7 +89,6 @@ const Feedback = ({ route, navigation }) => {
   // Add item to user history
   const addToHistory = async (item) => {
     await postUserHistoryEntryMutation({ variables: { item } });
-    console.log('addToHistory not implemented...');
   };
 
   const calculateRating = (carbonFootprint) => {
