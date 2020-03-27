@@ -25,7 +25,7 @@ const typeDefs = gql`
 
     type TimeReport {
         periodNumber: Int # week/month number starting with current period of 0, previous -1 etc.
-        avgCarbonFootpring: Float
+        avgCarbonFootprint: Float
     }
 
     type CategoryReport {
