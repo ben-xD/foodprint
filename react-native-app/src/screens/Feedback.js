@@ -26,10 +26,17 @@ const POST_BARCODE_MUTATION = gql`
   }
 `;
 
+const Post_User_History_Entry = gql`
+  mutation postUserHistoryEntry($item: String) {
+    postUserHistoryEntry(item: $item)
+  }
+`;
+
 const Feedback = ({ route, navigation }) => {
   const [meal, setMeal] = useState(null);
   const [uploadPicture, { loading: pictureLoading, data: pictureData, error: pictureError }] = useMutation(POST_PICTURE_MUTATION);
   const [postBarcodeMutation, { loading: barcodeLoading, error: barcodeError, data: barcodeData }] = useMutation(POST_BARCODE_MUTATION);
+  const [postUserHistoryEntryMutation, { loading: historyLoading, error: historyError, data: historyData }] = useMutation(Post_User_History_Entry);
 
   // When component is loaded and provided with a file or barcode, make a request
   useEffect(() => {
@@ -79,8 +86,15 @@ const Feedback = ({ route, navigation }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [barcodeData]);
 
+  // Add item to user history
+  const addToHistory = async (item) => {
+    await postUserHistoryEntryMutation({ variables: { item } });
+  };
+
   const calculateRating = (carbonFootprint) => {
-    if (carbonFootprint < 2) {
+    if (carbonFootprint < 0) {
+      return 0;
+    } else if (carbonFootprint < 2) {
       return 5;
     } else if (carbonFootprint < 4) {
       return 4.5;
@@ -141,7 +155,11 @@ const Feedback = ({ route, navigation }) => {
               buttonStyle={styles.greenButtonStyle}
               titleStyle={styles.buttonText}
               title="Add to history"
-              onPress={() => { alert("'Add to history' not implemented!"); navigation.navigate('Your Foodprint') }}
+              onPress={() => {
+                addToHistory(meal.description);
+                alert("Sent item to to user history (backend)... Dashboard to be implemented!");
+                navigation.navigate('Your Foodprint');
+              }}
             />
           </View>
         </ScrollView>
