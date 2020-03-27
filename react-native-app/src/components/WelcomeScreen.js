@@ -1,7 +1,7 @@
-import {Overlay} from "react-native-elements";
-import {Image, ScrollView, StyleSheet, Text, View} from "react-native";
-import React from "react";
-import {heightPercentageToDP as percentageHeight, widthPercentageToDP as percentageWidth} from "react-native-responsive-screen";
+import {Overlay} from 'react-native-elements';
+import {Image, ScrollView, StyleSheet, Text, View} from 'react-native';
+import React from 'react';
+import {heightPercentageToDP as percentageHeight, widthPercentageToDP as percentageWidth} from 'react-native-responsive-screen';
 
 const WelcomeScreen = ({setVisibility, isVisible}) => {
  return (
