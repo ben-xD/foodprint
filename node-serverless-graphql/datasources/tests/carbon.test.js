@@ -1,9 +1,6 @@
 const CarbonAPI = require('../carbon');
 
-const  { createStore, deleteStore } = require('../../utils');
-const store = createStore();
-
-let carbonAPI = new CarbonAPI(store);
+let carbonAPI = new CarbonAPI();
 
 describe('Real database', () => {
 
