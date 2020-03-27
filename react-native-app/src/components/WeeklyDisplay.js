@@ -3,7 +3,7 @@ import { heightPercentageToDP as percentageHeight, widthPercentageToDP as percen
 import {VictoryAxis, VictoryBar, VictoryChart, VictoryLegend, VictoryLine, VictoryStack} from 'victory-native';
 import React from 'react';
 
-const WeeklyDisplay = () => {
+const WeeklyDisplay = ({ timeDifference }) => {
 
  // Mock up data: weekly
  const weeklyComposition = {

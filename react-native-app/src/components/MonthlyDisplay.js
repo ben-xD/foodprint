@@ -2,8 +2,15 @@ import {StyleSheet, Text, View} from 'react-native';
 import { heightPercentageToDP as percentageHeight, widthPercentageToDP as percentageWidth} from 'react-native-responsive-screen';
 import {VictoryAxis, VictoryBar, VictoryChart, VictoryLegend, VictoryLine, VictoryStack} from 'victory-native';
 import React from 'react';
+import gql from 'graphql-tag';
+import {useQuery} from '@apollo/react-hooks';
 
-const MonthlyDisplay = () => {
+const GET_AVERAGE = gql`query UserAverage($timezone: Int!, $resolution: ReportResolution!) {
+  getPeriodAvg(timezone: $timezone, resolution: $resolution)
+}`;
+
+
+const MonthlyDisplay = ({ timeDifference }) => {
 
  // Mock up data: monthly
  const monthlyComposition = {

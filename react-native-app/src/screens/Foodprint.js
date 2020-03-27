@@ -18,29 +18,29 @@ import WelcomeScreen from '../components/WelcomeScreen';
 import WeeklyDisplay from '../components/WeeklyDisplay';
 import MonthlyDisplay from '../components/MonthlyDisplay';
 import gql from 'graphql-tag';
-import {useMutation, useQuery} from '@apollo/react-hooks';
+import {useQuery} from '@apollo/react-hooks';
 
-// //GraphQL schema
-// const GET_AVERAGE = gql`
-//   query getUserAvg
-// `;
+//GraphQL schema
+const GET_AVERAGE = gql`query {
+  getUserAvg
+}`;
 
 const Foodprint = ({ navigation }) => {
 
   const [isVisible, setVisibility] = useState(true);
   const [timeSpan, setTimeSpan] = useState('weekly');
+  const { loading, error, data } = useQuery(GET_AVERAGE);
 
   const takePicture = async () => {
     navigation.navigate('Camera');
   };
 
   function totalAverage() {
-    // const { loading, error, data } = useQuery(GET_AVERAGE);
-    //
-    // if (loading) {return 'Loading...';}
-    // if (error) {return `Error! ${error.message}`;}
-    // return data;
-    return 17.25;
+
+    if (loading) {return 'Loading...';}
+    if (error) {return `Error! ${error.message}`;}
+    return data;
+    // return 17.25;
   }
 
   //Mock-up data: Total average
@@ -73,6 +73,12 @@ const Foodprint = ({ navigation }) => {
       return require('../images/unimpressed-smiley.png');
     }
     return require('../images/crying-smiley.png');
+  };
+
+  const getTimeDifference = () => {
+    const date = new Date();
+    const timeDifference = date.getTimezoneOffset();
+    return (timeDifference/60);
   };
 
 
@@ -122,9 +128,9 @@ const Foodprint = ({ navigation }) => {
 
         <View>
           {(timeSpan === 'weekly') ? (
-              <WeeklyDisplay/>
+              <WeeklyDisplay timeDifference={getTimeDifference()}/>
           ) : (
-              <MonthlyDisplay/>
+              <MonthlyDisplay timeDifference={getTimeDifference()}/>
             )}
         </View>
         <WelcomeScreen setVisibility={setVisibility} isVisible={isVisible}/>
