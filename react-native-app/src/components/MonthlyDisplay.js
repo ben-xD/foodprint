@@ -10,7 +10,7 @@ import React from 'react';
 // const GET_AVERAGE = gql`query {
 //   getPeriodAvg(timezone: $timezone, resolution:MONTH) {
 //     periodNumber
-//     avgCarbonFootpring
+//     avgCarbonFootprint
 //   }
 // }`;
 
@@ -20,7 +20,7 @@ import React from 'react';
 //     category
 //     timeReport {
 //       periodNumber
-//       avgCarbonFootpring
+//       avgCarbonFootprint
 //     }
 //   }
 // }
@@ -45,51 +45,51 @@ const MonthlyDisplay = ({ timeDifference }) => {
  const compositionError = false;
  const compositionData = {
   'Plant based': [
-   { 'periodNumber': 0, 'avgCarbonFootpring': 13.50 },
-   { 'periodNumber': -1, 'avgCarbonFootpring': 19.00 },
-   { 'periodNumber': -2, 'avgCarbonFootpring': 16.50 },
-   { 'periodNumber': -3, 'avgCarbonFootpring': 14.25 },
-   { 'periodNumber': -4, 'avgCarbonFootpring': 13.00 },
-   { 'periodNumber': -5, 'avgCarbonFootpring': 16.50 },
+   { 'periodNumber': 0, 'avgCarbonFootprint': 13.50 },
+   { 'periodNumber': -1, 'avgCarbonFootprint': 19.00 },
+   { 'periodNumber': -2, 'avgCarbonFootprint': 16.50 },
+   { 'periodNumber': -3, 'avgCarbonFootprint': 14.25 },
+   { 'periodNumber': -4, 'avgCarbonFootprint': 13.00 },
+   { 'periodNumber': -5, 'avgCarbonFootprint': 16.50 },
   ],
   'Fish': [
-   { 'periodNumber': 0, 'avgCarbonFootpring': 13.50 },
-   { 'periodNumber': -1, 'avgCarbonFootpring': 13.00 },
-   { 'periodNumber': -2, 'avgCarbonFootpring': 16.50 },
-   { 'periodNumber': -3, 'avgCarbonFootpring': 19.00 },
-   { 'periodNumber': -4, 'avgCarbonFootpring': 14.25 },
-   { 'periodNumber': -5, 'avgCarbonFootpring': 13.00 },
+   { 'periodNumber': 0, 'avgCarbonFootprint': 13.50 },
+   { 'periodNumber': -1, 'avgCarbonFootprint': 13.00 },
+   { 'periodNumber': -2, 'avgCarbonFootprint': 16.50 },
+   { 'periodNumber': -3, 'avgCarbonFootprint': 19.00 },
+   { 'periodNumber': -4, 'avgCarbonFootprint': 14.25 },
+   { 'periodNumber': -5, 'avgCarbonFootprint': 13.00 },
   ],
   'Meat': [
-   { 'periodNumber': 0, 'avgCarbonFootpring': 13.50 },
-   { 'periodNumber': -1, 'avgCarbonFootpring': 16.50 },
-   { 'periodNumber': -2, 'avgCarbonFootpring': 19.00 },
-   { 'periodNumber': -3, 'avgCarbonFootpring': 13.00 },
-   { 'periodNumber': -4, 'avgCarbonFootpring': 14.25 },
-   { 'periodNumber': -5, 'avgCarbonFootpring': 16.50 },
+   { 'periodNumber': 0, 'avgCarbonFootprint': 13.50 },
+   { 'periodNumber': -1, 'avgCarbonFootprint': 16.50 },
+   { 'periodNumber': -2, 'avgCarbonFootprint': 19.00 },
+   { 'periodNumber': -3, 'avgCarbonFootprint': 13.00 },
+   { 'periodNumber': -4, 'avgCarbonFootprint': 14.25 },
+   { 'periodNumber': -5, 'avgCarbonFootprint': 16.50 },
   ],
   'Eggs and dairy': [
-   { 'periodNumber': 0, 'avgCarbonFootpring': 13.50 },
-   { 'periodNumber': -1, 'avgCarbonFootpring': 16.5 },
-   { 'periodNumber': -2, 'avgCarbonFootpring': 19 },
-   { 'periodNumber': -3, 'avgCarbonFootpring': 13 },
-   { 'periodNumber': -4, 'avgCarbonFootpring': 14.25 },
-   { 'periodNumber': -5, 'avgCarbonFootpring': 13 },
+   { 'periodNumber': 0, 'avgCarbonFootprint': 13.50 },
+   { 'periodNumber': -1, 'avgCarbonFootprint': 16.5 },
+   { 'periodNumber': -2, 'avgCarbonFootprint': 19 },
+   { 'periodNumber': -3, 'avgCarbonFootprint': 13 },
+   { 'periodNumber': -4, 'avgCarbonFootprint': 14.25 },
+   { 'periodNumber': -5, 'avgCarbonFootprint': 13 },
   ],
  };
 
  const monthlyUserAverage = [
-  { 'periodNumber': 0, 'avgCarbonFootpring': averageData },
-  { 'periodNumber': -1, 'avgCarbonFootpring': averageData },
-  { 'periodNumber': -2, 'avgCarbonFootpring': averageData },
-  { 'periodNumber': -3, 'avgCarbonFootpring': averageData },
-  { 'periodNumber': -4, 'avgCarbonFootpring': averageData },
-  { 'periodNumber': -5, 'avgCarbonFootpring': averageData },
+  { 'periodNumber': 0, 'avgCarbonFootprint': averageData },
+  { 'periodNumber': -1, 'avgCarbonFootprint': averageData },
+  { 'periodNumber': -2, 'avgCarbonFootprint': averageData },
+  { 'periodNumber': -3, 'avgCarbonFootprint': averageData },
+  { 'periodNumber': -4, 'avgCarbonFootprint': averageData },
+  { 'periodNumber': -5, 'avgCarbonFootprint': averageData },
  ];
 
  // This months's carbon footprint
- const thisMonth = compositionData['Plant based'][0].avgCarbonFootpring + compositionData.Fish[0].avgCarbonFootpring + compositionData.Meat[0].avgCarbonFootpring + compositionData['Eggs and dairy'][0].avgCarbonFootpring;
- const lastMonth = compositionData['Plant based'][1].avgCarbonFootpring + compositionData.Fish[1].avgCarbonFootpring + compositionData.Meat[1].avgCarbonFootpring + compositionData['Eggs and dairy'][1].avgCarbonFootpring;
+ const thisMonth = compositionData['Plant based'][0].avgCarbonFootprint + compositionData.Fish[0].avgCarbonFootprint + compositionData.Meat[0].avgCarbonFootprint + compositionData['Eggs and dairy'][0].avgCarbonFootprint;
+ const lastMonth = compositionData['Plant based'][1].avgCarbonFootprint + compositionData.Fish[1].avgCarbonFootprint + compositionData.Meat[1].avgCarbonFootprint + compositionData['Eggs and dairy'][1].avgCarbonFootprint;
  const changeSinceLastMonth = ((thisMonth - lastMonth) * 100) / thisMonth;
  const monthSign = ((changeSinceLastMonth > 0) ? '+' : '');
 
@@ -130,10 +130,10 @@ const MonthlyDisplay = ({ timeDifference }) => {
            <VictoryAxis dependentAxis orientation="left" offsetX={percentageWidth('15%')} label="Carbon footprint" />
            <VictoryAxis label="Month" domain={[-5,0.01]} tickFormat={(t) => ((month + t) >= 0) ? monthList[month + t] : monthList[month + t + 12]} />
            <VictoryStack colorScale={['olivedrab', 'gold', 'skyblue', 'firebrick']}>
-             <VictoryBar data={compositionData['Plant based']} sortKey="periodNumber" x="periodNumber" y="avgCarbonFootpring" />
-             <VictoryBar data={compositionData['Eggs and dairy']} sortKey="periodNumber" x="periodNumber" y="avgCarbonFootpring" />
-             <VictoryBar data={compositionData.Fish} sortKey="periodNumber" x="periodNumber" y="avgCarbonFootpring" />
-             <VictoryBar data={compositionData.Meat} sortKey="periodNumber" x="periodNumber" y="avgCarbonFootpring" />
+             <VictoryBar data={compositionData['Plant based']} sortKey="periodNumber" x="periodNumber" y="avgCarbonFootprint" />
+             <VictoryBar data={compositionData['Eggs and dairy']} sortKey="periodNumber" x="periodNumber" y="avgCarbonFootprint" />
+             <VictoryBar data={compositionData.Fish} sortKey="periodNumber" x="periodNumber" y="avgCarbonFootprint" />
+             <VictoryBar data={compositionData.Meat} sortKey="periodNumber" x="periodNumber" y="avgCarbonFootprint" />
            </VictoryStack>
            <VictoryLegend
              data={[{ name: 'Plant' }, { name: 'Eggs & Dairy' }, { name: 'Fish' }, { name: 'Meat' }]}
@@ -142,7 +142,7 @@ const MonthlyDisplay = ({ timeDifference }) => {
              x={percentageWidth('15%')}
              y={percentageHeight('32%')}
            />
-           <VictoryLine data={monthlyUserAverage} x="periodNumber" y="avgCarbonFootpring" />
+           <VictoryLine data={monthlyUserAverage} x="periodNumber" y="avgCarbonFootprint" />
          </VictoryChart>
        </View>
      ))}

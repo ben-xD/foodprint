@@ -10,7 +10,7 @@ import React from 'react';
 // const GET_AVERAGE = gql`query {
 //   getPeriodAvg(timezone: $timezone, resolution:WEEK) {
 //     periodNumber
-//     avgCarbonFootpring
+//     avgCarbonFootprint
 //   }
 // }`;
 
@@ -20,7 +20,7 @@ import React from 'react';
 //     category
 //     timeReport {
 //       periodNumber
-//       avgCarbonFootpring
+//       avgCarbonFootprint
 //     }
 //   }
 // }
@@ -44,51 +44,51 @@ const WeeklyDisplay = ({ timeDifference }) => {
  const compositionError = false;
  const compositionData = {
   'Plant based': [
-   { 'periodNumber': 0, 'avgCarbonFootpring': 3.8 },
-   { 'periodNumber': -1, 'avgCarbonFootpring': 2.7 },
-   { 'periodNumber': -2, 'avgCarbonFootpring': 3.3 },
-   { 'periodNumber': -3, 'avgCarbonFootpring': 2.85 },
-   { 'periodNumber': -4, 'avgCarbonFootpring': 2.6 },
-   { 'periodNumber': -5, 'avgCarbonFootpring': 3.3 },
+   { 'periodNumber': 0, 'avgCarbonFootprint': 3.8 },
+   { 'periodNumber': -1, 'avgCarbonFootprint': 2.7 },
+   { 'periodNumber': -2, 'avgCarbonFootprint': 3.3 },
+   { 'periodNumber': -3, 'avgCarbonFootprint': 2.85 },
+   { 'periodNumber': -4, 'avgCarbonFootprint': 2.6 },
+   { 'periodNumber': -5, 'avgCarbonFootprint': 3.3 },
   ],
   'Fish': [
-   { 'periodNumber': 0, 'avgCarbonFootpring': 3.8 },
-   { 'periodNumber': -1, 'avgCarbonFootpring': 2.6 },
-   { 'periodNumber': -2, 'avgCarbonFootpring': 3.3 },
-   { 'periodNumber': -3, 'avgCarbonFootpring': 2.7 },
-   { 'periodNumber': -4, 'avgCarbonFootpring': 2.85 },
-   { 'periodNumber': -5, 'avgCarbonFootpring': 2.6 },
+   { 'periodNumber': 0, 'avgCarbonFootprint': 3.8 },
+   { 'periodNumber': -1, 'avgCarbonFootprint': 2.6 },
+   { 'periodNumber': -2, 'avgCarbonFootprint': 3.3 },
+   { 'periodNumber': -3, 'avgCarbonFootprint': 2.7 },
+   { 'periodNumber': -4, 'avgCarbonFootprint': 2.85 },
+   { 'periodNumber': -5, 'avgCarbonFootprint': 2.6 },
   ],
   'Meat': [
-   { 'periodNumber': 0, 'avgCarbonFootpring': 3.8 },
-   { 'periodNumber': -1, 'avgCarbonFootpring': 3.3 },
-   { 'periodNumber': -2, 'avgCarbonFootpring': 2.85 },
-   { 'periodNumber': -3, 'avgCarbonFootpring': 2.6 },
-   { 'periodNumber': -4, 'avgCarbonFootpring': 2.7 },
-   { 'periodNumber': -5, 'avgCarbonFootpring': 3.3 },
+   { 'periodNumber': 0, 'avgCarbonFootprint': 3.8 },
+   { 'periodNumber': -1, 'avgCarbonFootprint': 3.3 },
+   { 'periodNumber': -2, 'avgCarbonFootprint': 2.85 },
+   { 'periodNumber': -3, 'avgCarbonFootprint': 2.6 },
+   { 'periodNumber': -4, 'avgCarbonFootprint': 2.7 },
+   { 'periodNumber': -5, 'avgCarbonFootprint': 3.3 },
   ],
   'Eggs and dairy': [
-   { 'periodNumber': 0, 'avgCarbonFootpring': 3.8 },
-   { 'periodNumber': -1, 'avgCarbonFootpring': 3.3 },
-   { 'periodNumber': -2, 'avgCarbonFootpring': 2.85 },
-   { 'periodNumber': -3, 'avgCarbonFootpring': 2.6 },
-   { 'periodNumber': -4, 'avgCarbonFootpring': 2.7 },
-   { 'periodNumber': -5, 'avgCarbonFootpring': 2.6 },
+   { 'periodNumber': 0, 'avgCarbonFootprint': 3.8 },
+   { 'periodNumber': -1, 'avgCarbonFootprint': 3.3 },
+   { 'periodNumber': -2, 'avgCarbonFootprint': 2.85 },
+   { 'periodNumber': -3, 'avgCarbonFootprint': 2.6 },
+   { 'periodNumber': -4, 'avgCarbonFootprint': 2.7 },
+   { 'periodNumber': -5, 'avgCarbonFootprint': 2.6 },
   ],
  };
 
  const weeklyUserAverage = [
-  { 'periodNumber': 0, 'avgCarbonFootpring': averageData },
-  { 'periodNumber': -1, 'avgCarbonFootpring': averageData },
-  { 'periodNumber': -2, 'avgCarbonFootpring': averageData },
-  { 'periodNumber': -3, 'avgCarbonFootpring': averageData },
-  { 'periodNumber': -4, 'avgCarbonFootpring': averageData },
-  { 'periodNumber': -5, 'avgCarbonFootpring': averageData },
+  { 'periodNumber': 0, 'avgCarbonFootprint': averageData },
+  { 'periodNumber': -1, 'avgCarbonFootprint': averageData },
+  { 'periodNumber': -2, 'avgCarbonFootprint': averageData },
+  { 'periodNumber': -3, 'avgCarbonFootprint': averageData },
+  { 'periodNumber': -4, 'avgCarbonFootprint': averageData },
+  { 'periodNumber': -5, 'avgCarbonFootprint': averageData },
  ];
 
  // This week's carbon footprint
- const thisWeek = compositionData['Plant based'][0].avgCarbonFootpring + compositionData.Fish[0].avgCarbonFootpring + compositionData.Meat[0].avgCarbonFootpring + compositionData['Eggs and dairy'][0].avgCarbonFootpring;
- const lastWeek = compositionData['Plant based'][1].avgCarbonFootpring + compositionData.Fish[1].avgCarbonFootpring + compositionData.Meat[1].avgCarbonFootpring + compositionData['Eggs and dairy'][1].avgCarbonFootpring;
+ const thisWeek = compositionData['Plant based'][0].avgCarbonFootprint + compositionData.Fish[0].avgCarbonFootprint + compositionData.Meat[0].avgCarbonFootprint + compositionData['Eggs and dairy'][0].avgCarbonFootprint;
+ const lastWeek = compositionData['Plant based'][1].avgCarbonFootprint + compositionData.Fish[1].avgCarbonFootprint + compositionData.Meat[1].avgCarbonFootprint + compositionData['Eggs and dairy'][1].avgCarbonFootprint;
  const changeSinceLastWeek = ((thisWeek - lastWeek) * 100) / thisWeek;
  const weekSign = ((changeSinceLastWeek > 0) ? '+' : '');
 
@@ -127,10 +127,10 @@ const WeeklyDisplay = ({ timeDifference }) => {
        <VictoryAxis dependentAxis orientation="left" offsetX={percentageWidth('15%')} label="Carbon footprint" />
        <VictoryAxis label="Week" domain={[-5,0.01]} tickFormat={(t) => (t === 0) ? 'Now' : ('s' + t)} />
        <VictoryStack colorScale={['olivedrab', 'gold', 'skyblue', 'firebrick']}>
-         <VictoryBar data={compositionData['Plant based']} sortKey="periodNumber" x="periodNumber" y="avgCarbonFootpring"/>
-         <VictoryBar data={compositionData['Eggs and dairy']} sortKey="periodNumber" x="periodNumber" y="avgCarbonFootpring"/>
-         <VictoryBar data={compositionData.Fish} sortKey="periodNumber" x="periodNumber" y="avgCarbonFootpring"/>
-         <VictoryBar data={compositionData.Meat} sortKey="periodNumber" x="periodNumber" y="avgCarbonFootpring"/>
+         <VictoryBar data={compositionData['Plant based']} sortKey="periodNumber" x="periodNumber" y="avgCarbonFootprint"/>
+         <VictoryBar data={compositionData['Eggs and dairy']} sortKey="periodNumber" x="periodNumber" y="avgCarbonFootprint"/>
+         <VictoryBar data={compositionData.Fish} sortKey="periodNumber" x="periodNumber" y="avgCarbonFootprint"/>
+         <VictoryBar data={compositionData.Meat} sortKey="periodNumber" x="periodNumber" y="avgCarbonFootprint"/>
        </VictoryStack>
        <VictoryLegend
             data={[{ name: 'Plant' }, { name: 'Eggs & Dairy' }, { name: 'Fish' }, { name: 'Meat' }]}
@@ -139,7 +139,7 @@ const WeeklyDisplay = ({ timeDifference }) => {
             x={percentageWidth('15%')}
             y={percentageHeight('32%')}
        />
-       <VictoryLine data={weeklyUserAverage} x="periodNumber" y="avgCarbonFootpring" />
+       <VictoryLine data={weeklyUserAverage} x="periodNumber" y="avgCarbonFootprint" />
        </VictoryChart>
      </View>
   ))}
