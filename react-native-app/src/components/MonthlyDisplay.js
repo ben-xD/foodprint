@@ -5,9 +5,9 @@ import React from 'react';
 import gql from 'graphql-tag';
 import {useQuery} from '@apollo/react-hooks';
 
-const GET_AVERAGE = gql`query UserAverage($timezone: Int!, $resolution: ReportResolution!) {
-  getPeriodAvg(timezone: $timezone, resolution: $resolution)
-}`;
+// const GET_AVERAGE = gql`query UserAverage($timezone: Int!, $resolution: ReportResolution!) {
+//   getPeriodAvg(timezone: $timezone, resolution: $resolution)
+// }`;
 
 
 const MonthlyDisplay = ({ timeDifference }) => {
