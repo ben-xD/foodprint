@@ -36,7 +36,7 @@ const typeDefs = gql`
     type Query {
         _: String
         getUserAvg: Float
-        getPeriodAvg(timezone: Int!, resolution: ReportResolution!): [TimeReport]
+        getPeriodAvg(timezone: Int!, resolution: ReportResolution!): Float
         reportByCategory(timezone: Int!, resolution: ReportResolution!): [CategoryReport]
     }
 
