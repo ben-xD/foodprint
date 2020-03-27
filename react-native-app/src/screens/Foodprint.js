@@ -20,6 +20,8 @@ import {
 import { Button, Overlay } from 'react-native-elements';
 import { widthPercentageToDP as percentageWidth, heightPercentageToDP as percentageHeight } from 'react-native-responsive-screen';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import WelcomeScreen from '../components/WelcomeScreen';
+import Email from "../components/Email";
 
 const Foodprint = ({ navigation }) => {
   const [isVisible, setVisibility] = useState(true);
@@ -286,25 +288,7 @@ const Foodprint = ({ navigation }) => {
               </View>
             )}
         </View>
-        {/*Overlay for welcome screen*/}
-        <Overlay isVisible={isVisible} onBackdropPress={() => setVisibility(false)}>
-          <ScrollView>
-            <View style={styles.contentContainer}>
-              <Text style={styles.title}>Welcome to FoodPrint!</Text>
-              <Text style={styles.text}>
-                You can now know the carbon footprint of the food you buy simply by scanning its barcode or taking a picture
-                of it!
-            </Text>
-              <Image
-                source={require('../images/heart-eyes-smiley.png')}
-                style={styles.image}
-              />
-              <Text style={styles.text}>
-                To get started, simply click on the Camera icon in the top left corner!
-            </Text>
-            </View>
-          </ScrollView>
-        </Overlay>
+        <WelcomeScreen setVisibility={setVisibility} isVisible={isVisible}/>
       </ScrollView>
       <TouchableOpacity onPress={takePicture} containerStyle={{ backgroundColor: '#008000', width: 64, height: 64, position: 'absolute', bottom: 25, right: 25, borderRadius: 32, alignItems: 'center', justifyContent: 'center' }}>
         <MaterialCommunityIcons name="camera" color={'white'} size={28} />
