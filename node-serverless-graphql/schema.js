@@ -29,15 +29,17 @@ const typeDefs = gql`
     }
 
     type CategoryReport {
-        category: String
-        timeReport: [TimeReport]
+        plantBased: [TimeReport]
+        fish: [TimeReport]
+        meat: [TimeReport]
+        eggsAndDairy: [TimeReport]
     }
 
     type Query {
         _: String
         getUserAvg: Float
         getPeriodAvg(timezone: Int!, resolution: ReportResolution!): Float
-        reportByCategory(timezone: Int!, resolution: ReportResolution!): [CategoryReport]
+        reportByCategory(timezone: Int!, resolution: ReportResolution!): CategoryReport
     }
 
     type Mutation {
