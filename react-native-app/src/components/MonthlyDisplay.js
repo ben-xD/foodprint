@@ -2,66 +2,94 @@ import {StyleSheet, Text, View} from 'react-native';
 import { heightPercentageToDP as percentageHeight, widthPercentageToDP as percentageWidth} from 'react-native-responsive-screen';
 import {VictoryAxis, VictoryBar, VictoryChart, VictoryLegend, VictoryLine, VictoryStack} from 'victory-native';
 import React from 'react';
-import gql from 'graphql-tag';
-import {useQuery} from '@apollo/react-hooks';
+//DO NOT DELETE THE FOLLOWING COMMENTED CODE
+// import gql from 'graphql-tag';
+// import {useQuery} from '@apollo/react-hooks';
 
-// const GET_AVERAGE = gql`query UserAverage($timezone: Int!, $resolution: ReportResolution!) {
-//   getPeriodAvg(timezone: $timezone, resolution: $resolution)
+//DO NOT DELETE THE FOLLOWING COMMENTED CODE
+// const GET_AVERAGE = gql`query {
+//   getPeriodAvg(timezone: $timezone, resolution:MONTH) {
+//     periodNumber
+//     avgCarbonFootpring
+//   }
 // }`;
+
+//DO NOT DELETE THE FOLLOWING COMMENTED CODE
+// const GET_COMPOSITION = gql`query {
+//   reportByCategory(timezone: $timezone, resolution:MONTH) {
+//     category
+//     timeReport {
+//       periodNumber
+//       avgCarbonFootpring
+//     }
+//   }
+// }
+// `;
 
 
 const MonthlyDisplay = ({ timeDifference }) => {
 
- // Mock up data: monthly
- const monthlyComposition = {
+ //DO NOT DELETE THE FOLLOWING COMMENTED CODE
+ // const { loading: averageLoading, error: averageError, data: averageData } = useQuery(GET_AVERAGE, {
+ //  variables: { timeDifference },
+ // });
+ // const { loading: compositionLoading, error: compositionError, data: compositionData } = useQuery(GET_COMPOSITION, {
+ //  variables: { timeDifference },
+ // });
+
+ //Following code is here to mimick response from back-end
+ const averageLoading = false;
+ const averageError = false;
+ const averageData = 64;
+ const compositionLoading = false;
+ const compositionError = false;
+ const compositionData = {
   'Plant based': [
-   { month: 0, monthly_cf: 13.50 },
-   { month: -1, monthly_cf: 19.00 },
-   { month: -2, monthly_cf: 16.50 },
-   { month: -3, monthly_cf: 14.25 },
-   { month: -4, monthly_cf: 13.00 },
-   { month: -5, monthly_cf: 16.50 },
+   { 'periodNumber': 0, 'avgCarbonFootpring': 13.50 },
+   { 'periodNumber': -1, 'avgCarbonFootpring': 19.00 },
+   { 'periodNumber': -2, 'avgCarbonFootpring': 16.50 },
+   { 'periodNumber': -3, 'avgCarbonFootpring': 14.25 },
+   { 'periodNumber': -4, 'avgCarbonFootpring': 13.00 },
+   { 'periodNumber': -5, 'avgCarbonFootpring': 16.50 },
   ],
   'Fish': [
-   { month: 0, monthly_cf: 13.50 },
-   { month: -1, monthly_cf: 13.00 },
-   { month: -2, monthly_cf: 16.50 },
-   { month: -3, monthly_cf: 19.00 },
-   { month: -4, monthly_cf: 14.25 },
-   { month: -5, monthly_cf: 13.00 },
+   { 'periodNumber': 0, 'avgCarbonFootpring': 13.50 },
+   { 'periodNumber': -1, 'avgCarbonFootpring': 13.00 },
+   { 'periodNumber': -2, 'avgCarbonFootpring': 16.50 },
+   { 'periodNumber': -3, 'avgCarbonFootpring': 19.00 },
+   { 'periodNumber': -4, 'avgCarbonFootpring': 14.25 },
+   { 'periodNumber': -5, 'avgCarbonFootpring': 13.00 },
   ],
   'Meat': [
-   { month: 0, monthly_cf: 13.50 },
-   { month: -1, monthly_cf: 16.50 },
-   { month: -2, monthly_cf: 19.00 },
-   { month: -3, monthly_cf: 13.00 },
-   { month: -4, monthly_cf: 14.25 },
-   { month: -5, monthly_cf: 16.50 },
+   { 'periodNumber': 0, 'avgCarbonFootpring': 13.50 },
+   { 'periodNumber': -1, 'avgCarbonFootpring': 16.50 },
+   { 'periodNumber': -2, 'avgCarbonFootpring': 19.00 },
+   { 'periodNumber': -3, 'avgCarbonFootpring': 13.00 },
+   { 'periodNumber': -4, 'avgCarbonFootpring': 14.25 },
+   { 'periodNumber': -5, 'avgCarbonFootpring': 16.50 },
   ],
   'Eggs and dairy': [
-   { month: 0, monthly_cf: 13.50 },
-   { month: -1, monthly_cf: 16.5 },
-   { month: -2, monthly_cf: 19 },
-   { month: -3, monthly_cf: 13 },
-   { month: -4, monthly_cf: 14.25 },
-   { month: -5, monthly_cf: 13 },
+   { 'periodNumber': 0, 'avgCarbonFootpring': 13.50 },
+   { 'periodNumber': -1, 'avgCarbonFootpring': 16.5 },
+   { 'periodNumber': -2, 'avgCarbonFootpring': 19 },
+   { 'periodNumber': -3, 'avgCarbonFootpring': 13 },
+   { 'periodNumber': -4, 'avgCarbonFootpring': 14.25 },
+   { 'periodNumber': -5, 'avgCarbonFootpring': 13 },
   ],
  };
 
- const monthlyAverage = 64;
-
  const monthlyUserAverage = [
-  { month: 0, footprint: monthlyAverage },
-  { month: -1, footprint: monthlyAverage },
-  { month: -2, footprint: monthlyAverage },
-  { month: -3, footprint: monthlyAverage },
-  { month: -4, footprint: monthlyAverage },
-  { month: -5, footprint: monthlyAverage },
+  { 'periodNumber': 0, 'avgCarbonFootpring': averageData },
+  { 'periodNumber': -1, 'avgCarbonFootpring': averageData },
+  { 'periodNumber': -2, 'avgCarbonFootpring': averageData },
+  { 'periodNumber': -3, 'avgCarbonFootpring': averageData },
+  { 'periodNumber': -4, 'avgCarbonFootpring': averageData },
+  { 'periodNumber': -5, 'avgCarbonFootpring': averageData },
  ];
 
  // This months's carbon footprint
- const thisMonth = monthlyComposition['Plant based'][0].monthly_cf + monthlyComposition.Fish[0].monthly_cf + monthlyComposition.Meat[0].monthly_cf + monthlyComposition['Eggs and dairy'][0].monthly_cf;
- const lastMonth = monthlyComposition['Plant based'][1].monthly_cf + monthlyComposition.Fish[1].monthly_cf + monthlyComposition.Meat[1].monthly_cf + monthlyComposition['Eggs and dairy'][1].monthly_cf;
+ const thisMonth = compositionData['Plant based'][0].avgCarbonFootpring + compositionData.Fish[0].avgCarbonFootpring + compositionData.Meat[0].avgCarbonFootpring + compositionData['Eggs and dairy'][0].avgCarbonFootpring;
+ const lastMonth = compositionData['Plant based'][1].avgCarbonFootpring + compositionData.Fish[1].avgCarbonFootpring + compositionData.Meat[1].avgCarbonFootpring + compositionData['Eggs and dairy'][1].avgCarbonFootpring;
  const changeSinceLastMonth = ((thisMonth - lastMonth) * 100) / thisMonth;
  const monthSign = ((changeSinceLastMonth > 0) ? '+' : '');
 
@@ -69,42 +97,67 @@ const MonthlyDisplay = ({ timeDifference }) => {
  const monthList = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
  return (
-     <View style={styles.contentContainer}>
-      <View style={{ flexDirection: 'row' }}>
-       <Text style={styles.score}>{thisMonth} units this month</Text>
-       <Text style={{ fontSize: percentageWidth('3%'), marginLeft: percentageWidth('2%') }}>{monthSign}{Math.round(changeSinceLastMonth)}% compared{'\n'}to last month</Text>
-      </View>
-      <View style={{ marginVertical: percentageHeight('2%') }}>
-       <VictoryChart
+   <View style={styles.contentContainer}>
+     {(averageLoading) ? (
+       <View style={ styles.messageContainer }>
+         <Text>Your data is loading</Text>
+       </View>
+     ) : ((averageError) ? (
+       <View style={ styles.messageContainer }>
+         <Text>An error has occurred</Text>
+       </View>
+     ) : (
+       <View style={ styles.scoreContainer }>
+         <Text style={ styles.score }>{thisMonth} units this month</Text>
+         <Text style={ styles.comparison }>{monthSign}{Math.round(changeSinceLastMonth)}% compared{'\n'}to last month</Text>
+       </View>
+     ))}
+     {(compositionLoading) ? (
+       <View style={ styles.graphContainer }>
+         <Text>Your data is loading</Text>
+       </View>
+     ) : ((compositionError) ? (
+       <View style={ styles.graphContainer }>
+         <Text>An error has occurred</Text>
+       </View>
+     ) : (
+       <View style={ styles.graphContainer }>
+         <VictoryChart
            padding={{ top: percentageHeight('2%'), bottom: percentageHeight('12%'), left: percentageWidth('15%'), right: percentageWidth('10%') }}
            domainPadding={percentageWidth('5%')}
            height={percentageHeight('38%')}
-       >
-        <VictoryAxis dependentAxis orientation="left" offsetX={percentageWidth('15%')} label="Carbon footprint" />
-        <VictoryAxis label="Month" domain={[-5,0.01]} tickFormat={(t) => ((month + t) >= 0) ? monthList[month + t] : monthList[month + t + 12]} />
-        <VictoryStack colorScale={['olivedrab', 'gold', 'skyblue', 'firebrick']}>
-         <VictoryBar data={monthlyComposition['Plant based']} sortKey="month" x="month" y="monthly_cf" />
-         <VictoryBar data={monthlyComposition['Eggs and dairy']} sortKey="month" x="month" y="monthly_cf" />
-         <VictoryBar data={monthlyComposition.Fish} sortKey="month" x="month" y="monthly_cf" />
-         <VictoryBar data={monthlyComposition.Meat} sortKey="month" x="month" y="monthly_cf" />
-        </VictoryStack>
-        <VictoryLegend
-            data={[{ name: 'Plant' }, { name: 'Eggs & Dairy' }, { name: 'Fish' }, { name: 'Meat' }]}
-            colorScale={['olivedrab', 'gold', 'skyblue', 'firebrick']}
-            orientation="horizontal"
-            x={percentageWidth('15%')}
-            y={percentageHeight('32%')}
-        />
-        <VictoryLine data={monthlyUserAverage} x="month" y="footprint" />
-       </VictoryChart>
-      </View>
-     </View>
+         >
+           <VictoryAxis dependentAxis orientation="left" offsetX={percentageWidth('15%')} label="Carbon footprint" />
+           <VictoryAxis label="Month" domain={[-5,0.01]} tickFormat={(t) => ((month + t) >= 0) ? monthList[month + t] : monthList[month + t + 12]} />
+           <VictoryStack colorScale={['olivedrab', 'gold', 'skyblue', 'firebrick']}>
+             <VictoryBar data={compositionData['Plant based']} sortKey="periodNumber" x="periodNumber" y="avgCarbonFootpring" />
+             <VictoryBar data={compositionData['Eggs and dairy']} sortKey="periodNumber" x="periodNumber" y="avgCarbonFootpring" />
+             <VictoryBar data={compositionData.Fish} sortKey="periodNumber" x="periodNumber" y="avgCarbonFootpring" />
+             <VictoryBar data={compositionData.Meat} sortKey="periodNumber" x="periodNumber" y="avgCarbonFootpring" />
+           </VictoryStack>
+           <VictoryLegend
+             data={[{ name: 'Plant' }, { name: 'Eggs & Dairy' }, { name: 'Fish' }, { name: 'Meat' }]}
+             colorScale={['olivedrab', 'gold', 'skyblue', 'firebrick']}
+             orientation="horizontal"
+             x={percentageWidth('15%')}
+             y={percentageHeight('32%')}
+           />
+           <VictoryLine data={monthlyUserAverage} x="periodNumber" y="avgCarbonFootpring" />
+         </VictoryChart>
+       </View>
+     ))}
+   </View>
  );
 };
 
+
 const styles = StyleSheet.create({
+ messageContainer: { height:percentageHeight('4%') },
+ scoreContainer: { flexDirection: 'row' },
+ graphContainer: { height:percentageHeight('38%'), justifyContent:'center', marginVertical: percentageHeight('2%') },
  contentContainer: { justifyContent: 'center', alignItems: 'center', margin: percentageWidth('4%'), marginBottom: 64 },
  score: { fontSize: percentageWidth('6%'), color: 'grey' },
+ comparison: { fontSize: percentageWidth('3%'), marginLeft: percentageWidth('2%') },
 });
 
 export default MonthlyDisplay;
