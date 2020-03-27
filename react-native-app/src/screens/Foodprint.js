@@ -9,20 +9,14 @@ import {
   SafeAreaView,
 } from 'react-native';
 import {
-  VictoryBar,
-  VictoryChart,
-  VictoryAxis,
-  VictoryStack,
-  VictoryLine,
   VictoryPie,
-  VictoryLegend,
 } from 'victory-native';
-import { Button, Overlay } from 'react-native-elements';
+import { Button } from 'react-native-elements';
 import { widthPercentageToDP as percentageWidth, heightPercentageToDP as percentageHeight } from 'react-native-responsive-screen';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import WelcomeScreen from '../components/WelcomeScreen';
-import WeeklyDisplay from "../components/WeeklyDisplay";
-import MonthlyDisplay from "../components/MonthlyDisplay";
+import WeeklyDisplay from '../components/WeeklyDisplay';
+import MonthlyDisplay from '../components/MonthlyDisplay';
 
 const Foodprint = ({ navigation }) => {
   const [isVisible, setVisibility] = useState(true);
@@ -129,18 +123,6 @@ const Foodprint = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  container: { width: '100%', height: '100%' },
-  cameraButton: { marginRight: percentageWidth('5%') },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 8,
-  },
-  contentContainer: { justifyContent: 'center', alignItems: 'center', margin: percentageWidth('4%'), marginBottom: 64 },
-  text: { fontSize: percentageWidth('4%'), textAlign: 'center', margin: percentageHeight('3%') },
-  title: { fontSize: percentageWidth('7%'), margin: percentageHeight('2%'), textAlign: 'center' },
-  image: { width: percentageWidth('38%'), height: percentageHeight('18%') },
   score: { fontSize: percentageWidth('6%'), color: 'grey' },
   buttonTitle: { fontSize: percentageWidth('5%') },
   button: { width: percentageWidth('30%'), height: 45 },
