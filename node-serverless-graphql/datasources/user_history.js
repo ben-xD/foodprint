@@ -8,7 +8,7 @@ class userHistAPI {
     this.store = store;
     this.NUMBER_OF_WEEKS_RETURNED = 6;
     this.NUMBER_OF_MONTHS_RETURNED = 6;
-    this.CATEGORIES = ['Plant based', 'Fish', 'Meat', 'Eggs and dairy'];
+    this.CATEGORIES = ['plantBased', 'fish', 'meat', 'eggsAndDairy'];
   }
 
   async searchData(user_id) {
@@ -69,26 +69,28 @@ class userHistAPI {
   // Calculates the average cf per week of a user
   async weekly_average_cf (carbonAPI, user, timezone) {
     
-    let table = [];
+    let sum = 0;
 
-    for (let i = 0; i < this.NUMBER_OF_WEEKS_RETURNED; i++){
+    for (let i = 1; i < this.NUMBER_OF_WEEKS_RETURNED; i++){
       // Get data for every week:
       let week_i_data = await this.get_week_i_data(user, timezone, i);
-      let average = await this.average_data(carbonAPI, week_i_data);
-      table.push({week: -i, p_weekly_cf: average});
+      let week_cf = await this.average_data(carbonAPI, week_i_data);
+      sum = sum + week_cf;
     }
-    console.log(table);
-    return table;
+
+    let average = sum/(this.NUMBER_OF_WEEKS_RETURNED - 1); // -1 because the current week is not taken into account
+    console.log(average);
+    return average;
   };
 
   // Calculates the weekly composition of a user
   async weekly_cf_composition (carbonAPI, user, timezone) {
 
-    let table = await this.create_weekly_cf_composition_table();
+    let table = await this.create_cf_composition_table();
 
     for (let i = 0; i < this.NUMBER_OF_WEEKS_RETURNED; i++){
       const week_i_data = await this.get_week_i_data(user, timezone, i);
-      table = await this.sum_week_data_to_table(carbonAPI, week_i_data, i, table);
+      table = await this.sum_period_data_to_table(carbonAPI, week_i_data, i, table);
     }
     console.log(table);
     return table;
@@ -97,26 +99,28 @@ class userHistAPI {
   // Calculates the average cf per month of a user
   async monthly_average_cf (carbonAPI, user, timezone) {
 
-    let table = [];
+    let sum = 0;
 
-    for (let i = 0; i < this.NUMBER_OF_WEEKS_RETURNED; i++){
+    for (let i = 1; i < this.NUMBER_OF_WEEKS_RETURNED; i++){
       // Get data for every week:
       let month_i_data = await this.get_month_i_data(user, timezone, i);
-      let average = await this.average_data(carbonAPI, month_i_data);
-      table.push({month: -i, p_monthly_cf: average});
+      let month_cf= await this.average_data(carbonAPI, month_i_data);
+      sum = sum + month_cf;
     }
-    console.log(table);
-    return table;
+
+    let average = sum/(this.NUMBER_OF_MONTHS_RETURNED - 1); // -1 because the current week is not taken into account
+    console.log(average);
+    return average;
   };
 
   // Calculates the monthly composition of a user
   async monthly_cf_composition (carbonAPI, user, timezone) {
 
-    let table = await this.create_monthly_cf_composition_table();
+    let table = await this.create_cf_composition_table();
 
     for (let i = 0; i < this.NUMBER_OF_WEEKS_RETURNED; i++){
       const month_i_data = await this.get_month_i_data(user, timezone, i);
-      table = await this.sum_month_data_to_table(carbonAPI, month_i_data, i, table);
+      table = await this.sum_period_data_to_table(carbonAPI, month_i_data, i, table);
     }
     console.log(table);
     return table;
@@ -223,18 +227,18 @@ class userHistAPI {
       }
     }
     if (no_of_datapoints > 0){
-      return (user_co2 / no_of_datapoints).toFixed(2);
-    } 
+      return +(user_co2 / no_of_datapoints).toFixed(2);   // "+" to avoid toFixed convert result to string
+     } 
     return 0
   }
 
-  // Creates a table to store the weekly compositions
-  async create_weekly_cf_composition_table() {
+   // Creates a table to store the compositions
+   async create_cf_composition_table() {
 
     // In each subtable, there are NUMBER_OF_WEEKS_RETURNED weeks
     let subtable = []
     for (let i = 0; i < this.NUMBER_OF_WEEKS_RETURNED; i++){
-       subtable.push({week: -i, p_weekly_cf: 0})
+       subtable.push({periodNumber: -i, avgCarbonFootprint: 0})
     }
 
     // One subtable for each category:
@@ -246,50 +250,16 @@ class userHistAPI {
     return table;
   };
 
-  // Adds the data (week_i_data) of a week to the compositions table
-  async sum_week_data_to_table(carbonAPI, week_i_data, week, table){
-    for (let i = 0; i < week_i_data.length; i++){ // For each item found
-      let carbonResult = await carbonAPI.searchData(week_i_data[i].item);
+  // Adds the data (period_i_data) of a period i (week or month) to the compositions table
+  async sum_period_data_to_table(carbonAPI, period_i_data, period, table){
+    for (let i = 0; i < period_i_data.length; i++){ // For each item found
+      let carbonResult = await carbonAPI.searchData(period_i_data[i].item);
       if(carbonResult.carbonpkilo !== undefined){ 
         const categories = carbonResult.categories.toString();
         for (let cat = 1; cat < 5; cat ++){
           if (categories.includes(cat)){
-            table[this.CATEGORIES[cat-1]][week]["p_weekly_cf"] += carbonResult.carbonpkilo;
-          }
-        }
-      }
-    }
-    return table;
-  };
-
-  // Creates a table to store the monthly compositions
-  async create_monthly_cf_composition_table() {
-
-    let subtable = []
-    for (let i = 0; i < this.NUMBER_OF_MONTHS_RETURNED; i++){
-       subtable.push({month: -i, p_monthly_cf: 0})
-    }
-
-    // one subtable for each category:
-    let table = {}
-    for (let cat = 0; cat < 4; cat++){
-      table[this.CATEGORIES[cat]] = JSON.parse(JSON.stringify(subtable));
-    } 
-
-    return table;
-  };
-
-  // Adds the data (month_i_data) of a month to the compositions table
-  async sum_month_data_to_table(carbonAPI, month_i_data, month, table){
-
-    for (let i = 0; i < month_i_data.length; i++){ // For each item found
-      let carbonResult = await carbonAPI.searchData(month_i_data[i].item);
-      if(carbonResult.carbonpkilo !== undefined){ 
-        const categories = carbonResult.categories.toString();
-
-        for (let cat = 1; cat < 5; cat ++){
-          if (categories.includes(cat)){
-            table[this.CATEGORIES[cat-1]][month]["p_monthly_cf"] += carbonResult.carbonpkilo;
+            let cf = +carbonResult.carbonpkilo.toFixed(2);
+            table[this.CATEGORIES[cat-1]][period]["avgCarbonFootprint"] += cf;
           }
         }
       }
