@@ -56,7 +56,7 @@ class userHistAPI {
     // add the timestamp to new_data:
     new_data["time_stamp"] = new Date();
 
-    this.store.userHist.collection.insert(new_data, function (err, docs) {
+    await this.store.userHist.collection.insert(new_data, function (err, docs) {
       if (err) {
         return console.error(err);
       } else {
@@ -149,6 +149,7 @@ class userHistAPI {
       return user_data;
 
     } catch (err) {
+      console.log(err);
       return undefined;
     }
 

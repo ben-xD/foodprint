@@ -1,8 +1,10 @@
-const UserHistAPI = require('./datasources/user_history');
 const CarbonAPI = require('../carbon');
+const UserHistAPI = require('../user_history');
+const  { createStore } = require('../../utils');
+const store = createStore();
 
-let userHistAPI = new UserHistAPI(store)
-let carbonAPI = new CarbonAPI();
+let userHistAPI = new UserHistAPI(store);
+let carbonAPI = new CarbonAPI(store);
 
 describe('Real user history database', () => {
 

@@ -31,6 +31,5 @@ module.exports.createStore = () => {
 
       store['userHist'] =  mongoose.model('user-history', histSchema);
 
-    console.log("store", store)
     return store;
   };
