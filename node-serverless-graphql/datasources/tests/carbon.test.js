@@ -1,6 +1,6 @@
 const CarbonAPI = require('../carbon');
 
-const  { createStore } = require('../../utils');
+const  { createStore, deleteStore } = require('../../utils');
 const store = createStore();
 
 let carbonAPI = new CarbonAPI(store);

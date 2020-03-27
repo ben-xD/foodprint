@@ -9,7 +9,7 @@ const CarbonAPI = require('../../datasources/carbon');
 const ConceptAPI = require('../../datasources/concept');
 const userHistAPI = require('../../datasources/user_history');
 
-const  { createStore } = require('../../utils');
+const  { createStore, deleteStore } = require('../../utils');
 const store = createStore();
 const carbonAPI = new CarbonAPI(store);
 

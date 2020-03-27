@@ -11,14 +11,6 @@ class userHistAPI {
     this.CATEGORIES = ['Plant based', 'Fish', 'Meat', 'Eggs and dairy'];
   }
 
-  async disconnect() {
-    mongoose.disconnect((err) => {
-      if (err) {
-        console.error(err);
-      }
-    });
-  }
-
   async searchData(user_id) {
 
     let itemList;

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const config = require('./carbon-footprint/config');
 
-module.exports.createStore = () => {
+const createStore = () => {
 
     // Create connection to MongoDB:
     try {
@@ -33,3 +33,15 @@ module.exports.createStore = () => {
 
     return store;
   };
+
+const deleteStore = () => {
+
+  mongoose.disconnect((err) => {
+    if (err) {
+      console.error(err);
+    }
+  });
+  
+};
+
+module.exports = { createStore , deleteStore};

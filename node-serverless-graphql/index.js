@@ -3,7 +3,7 @@ const admin = require('firebase-admin');
 const typeDefs = require('./schema.js');
 const resolvers = require('./resolvers.js');
 const context = require('./context');
-const  { createStore } = require('./utils');
+const  { createStore, deleteStore } = require('./utils');
 
 const VisionAPI = require('./datasources/vision');
 const visionCredentials = require('./credentials/carbon-7fbf76411514.json');

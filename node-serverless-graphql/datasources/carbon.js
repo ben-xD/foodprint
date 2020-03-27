@@ -8,14 +8,6 @@ class CarbonAPI {
     this.store = store
   }
 
-  async disconnect() {
-    mongoose.disconnect((err) => {
-      if (err) {
-        console.error(err);
-      }
-    });
-  }
-
   async insert_in_DB(new_data) {
 
     console.log(store.carbon.collection);
