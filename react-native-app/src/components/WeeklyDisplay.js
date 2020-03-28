@@ -2,6 +2,8 @@ import {StyleSheet, Text, View} from 'react-native';
 import { heightPercentageToDP as percentageHeight, widthPercentageToDP as percentageWidth} from 'react-native-responsive-screen';
 import {VictoryAxis, VictoryBar, VictoryChart, VictoryLegend, VictoryLine, VictoryStack} from 'victory-native';
 import React from 'react';
+import {Tooltip} from "react-native-elements";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 //DO NOT DELETE THE FOLLOWING COMMENTED CODE
 // import gql from 'graphql-tag';
 // import {useQuery} from '@apollo/react-hooks';
@@ -148,6 +150,18 @@ const WeeklyDisplay = ({ timeDifference }) => {
       <View style={ styles.scoreContainer }>
        <Text style={ styles.score }>{sum()[0]} units this week</Text>
        <Text style={ styles.comparison }>{weekSign}{Math.round(changeSinceLastWeek())}% compared{'\n'}to last week</Text>
+       <Tooltip
+           popover={<Text>These scores correspond to your carbon footprint this week, and how it compares to last
+            week’s.{"\n\n"}The following graph shows your weekly carbon footprint over the last 6 weeks with respect to
+            each of the following food categories: "Plant" (e.g. cereal, fruits, vegetables), "Eggs & Dairy", "Fish"
+            and "Meat".{"\n\n"}Your personal average weekly carbon footprint is also given by the black line.
+           </Text>}
+           backgroundColor={'green'}
+           height={percentageHeight('50%')}
+           width={percentageWidth('80%')}
+       >
+        <MaterialCommunityIcons name="help-circle" color={'grey'} size={percentageWidth('4%')} />
+       </Tooltip>
       </View>
       <View style={ styles.graphContainer }>
        <VictoryChart

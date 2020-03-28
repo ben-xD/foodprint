@@ -2,8 +2,10 @@ import {heightPercentageToDP as percentageHeight, widthPercentageToDP as percent
 import {VictoryPie} from 'victory-native';
 import React from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
+import { Tooltip } from 'react-native-elements';
 //DO NOT DELETE THE FOLLOWING COMMENTED CODE
 import gql from 'graphql-tag';
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 // import {useQuery} from '@apollo/react-hooks';
 
 
@@ -65,7 +67,18 @@ const GeneralDisplay = () => {
            source={calculateSmiley(data)}
            style={ styles.image }
          />
-         <Text style={[styles.score ]}>{data} units</Text>
+         <View style={ [ styles.score, { flexDirection:'row'} ]}>
+           <Text style={{ margin:percentageWidth('1%')}}>{data} units</Text>
+           <Tooltip
+               popover={<Text>This score corresponds to the average carbon footprint of all the items you have
+                added to your history since you have started using Foodprint.</Text>}
+               backgroundColor={'green'}
+               height={percentageHeight('30%')}
+               width={percentageWidth('50%')}
+           >
+             <MaterialCommunityIcons name="help-circle" color={'grey'} size={percentageWidth('4%')} />
+           </Tooltip>
+         </View>
          <VictoryPie
            data={[ {x: ' ', y: data}, {x: ' ', y: 26.7 - data} ]}
            standalone={true}
