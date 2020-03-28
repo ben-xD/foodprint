@@ -151,9 +151,9 @@ const WeeklyDisplay = ({ timeDifference }) => {
       </View>
       <View style={ styles.graphContainer }>
        <VictoryChart
-           padding={{ top: percentageHeight('2%'), bottom: percentageHeight('12%'), left: percentageWidth('15%'), right: percentageWidth('10%') }}
+           padding={{ top: percentageHeight('8%'), bottom: percentageHeight('18%'), left: percentageWidth('15%'), right: percentageWidth('10%') }}
            domainPadding={ percentageWidth('5%') }
-           height={ percentageHeight('38%') }
+           height={ percentageHeight('50%') }
        >
        <VictoryAxis dependentAxis orientation="left" offsetX={percentageWidth('15%')} label="Carbon footprint" />
        <VictoryAxis label="Week" domain={[-5,0.01]} tickFormat={(t) => (t === 0) ? 'Now' : ('s' + t)} />
@@ -167,8 +167,10 @@ const WeeklyDisplay = ({ timeDifference }) => {
             data={[{ name: 'Plant' }, { name: 'Eggs & Dairy' }, { name: 'Fish' }, { name: 'Meat' }]}
             colorScale={['olivedrab', 'gold', 'skyblue', 'firebrick']}
             orientation="horizontal"
+            itemsPerRow={2}
+            gutter={percentageWidth('15%')}
             x={percentageWidth('15%')}
-            y={percentageHeight('32%')}
+            y={percentageHeight('40%')}
        />
        <VictoryLine data={ [
            { x: 0, y: averageData.getPeriodAvg },

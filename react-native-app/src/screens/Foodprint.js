@@ -5,6 +5,7 @@ import {
   ScrollView,
   StyleSheet,
   SafeAreaView,
+  Text,
 } from 'react-native';
 import { Button } from 'react-native-elements';
 import { widthPercentageToDP as percentageWidth, heightPercentageToDP as percentageHeight } from 'react-native-responsive-screen';
@@ -37,7 +38,7 @@ const Foodprint = ({ navigation }) => {
       <ScrollView>
 
         {/*General carbon footprint score*/}
-        <View style={ styles.generalDisplayContainer }>
+        <View>
           <GeneralDisplay/>
         </View>
 
@@ -67,6 +68,11 @@ const Foodprint = ({ navigation }) => {
               <MonthlyDisplay timeDifference={getTimeDifference()}/>
             )}
         </View>
+        <View style={{ margin:percentageWidth('5%'), marginTop:percentageHeight('7%'), marginBottom:percentageHeight('15%') }}>
+          <Text style={{ fontSize:percentageWidth('3%')}}>The carbon footprint displayed in this app,
+            including this page, are given in kilograms of CO2 per kilogram of food. The weight of any food item is
+            systematically normalised to 1kg to get to this result.</Text>
+        </View>
         <WelcomeScreen setVisibility={setVisibility} isVisible={isVisible}/>
       </ScrollView>
 
@@ -80,12 +86,11 @@ const Foodprint = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  generalDisplayContainer: { marginTop:percentageHeight('3%')},
   score: { fontSize: percentageWidth('6%'), color: 'grey' },
   buttonContainer: { flexDirection: 'row', justifyContent: 'center', paddingVertical: percentageHeight('2%') },
   buttonTitle: { fontSize: percentageWidth('5%') },
   button: { width: percentageWidth('30%'), height: 45 },
-  camera: { backgroundColor: '#008000', width: 64, height: 64, position: 'absolute', top: 30, left: 25, borderRadius: 32, alignItems: 'center', justifyContent: 'center' },
+  camera: { backgroundColor: '#008000', width: 64, height: 64, position: 'absolute', bottom: 30, right: 25, borderRadius: 32, alignItems: 'center', justifyContent: 'center' },
 });
 
 export default Foodprint;
