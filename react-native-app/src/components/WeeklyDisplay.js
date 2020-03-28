@@ -134,7 +134,7 @@ const WeeklyDisplay = ({ timeDifference }) => {
 
 
  return (
- <View>
+ <View style={ styles.componentContainer }>
    {(averageLoading || compositionLoading) ? (
      <View style={ styles.graphContainer }>
        <Text>Your data is loading</Text>
@@ -171,12 +171,12 @@ const WeeklyDisplay = ({ timeDifference }) => {
             y={percentageHeight('32%')}
        />
        <VictoryLine data={ [
-       { x: 0, y: averageData.getPeriodAvg },
-       { x: -1, y: averageData.getPeriodAvg },
-       { x: -2, y: averageData.getPeriodAvg },
-       { x: -3, y: averageData.getPeriodAvg },
-       { x: -4, y: averageData.getPeriodAvg },
-       { x: -5, y: averageData.getPeriodAvg },
+           { x: 0, y: averageData.getPeriodAvg },
+           { x: -1, y: averageData.getPeriodAvg },
+           { x: -2, y: averageData.getPeriodAvg },
+           { x: -3, y: averageData.getPeriodAvg },
+           { x: -4, y: averageData.getPeriodAvg },
+           { x: -5, y: averageData.getPeriodAvg },
         ]} />
        </VictoryChart>
       </View>
@@ -190,7 +190,8 @@ const styles = StyleSheet.create({
  messageContainer: { height:percentageHeight('4%') },
  scoreContainer: { flexDirection: 'row' },
  graphContainer: { height:percentageHeight('38%'), justifyContent:'center', marginVertical: percentageHeight('2%') },
- contentContainer: { justifyContent: 'center', alignItems: 'center', margin: percentageWidth('4%'), marginBottom: 64 },
+ contentContainer: { justifyContent: 'center', alignItems: 'center', margin: percentageWidth('4%') },
+ componentContainer: { alignItems:'center' },
  score: { fontSize: percentageWidth('6%'), color: 'grey' },
  comparison: { fontSize: percentageWidth('3%'), marginLeft: percentageWidth('2%') },
 });

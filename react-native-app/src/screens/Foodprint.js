@@ -37,7 +37,7 @@ const Foodprint = ({ navigation }) => {
       <ScrollView>
 
         {/*General carbon footprint score*/}
-        <View>
+        <View style={ styles.generalDisplayContainer }>
           <GeneralDisplay/>
         </View>
 
@@ -80,11 +80,12 @@ const Foodprint = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
+  generalDisplayContainer: { marginTop:percentageHeight('3%')},
   score: { fontSize: percentageWidth('6%'), color: 'grey' },
   buttonContainer: { flexDirection: 'row', justifyContent: 'center', paddingVertical: percentageHeight('2%') },
   buttonTitle: { fontSize: percentageWidth('5%') },
   button: { width: percentageWidth('30%'), height: 45 },
-  camera: { backgroundColor: '#008000', width: 64, height: 64, position: 'absolute', bottom: 25, right: 25, borderRadius: 32, alignItems: 'center', justifyContent: 'center' },
+  camera: { backgroundColor: '#008000', width: 64, height: 64, position: 'absolute', top: 30, left: 25, borderRadius: 32, alignItems: 'center', justifyContent: 'center' },
 });
 
 export default Foodprint;

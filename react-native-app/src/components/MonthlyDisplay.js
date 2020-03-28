@@ -140,7 +140,7 @@ const MonthlyDisplay = ({ timeDifference }) => {
  const monthList = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
  return (
-   <View>
+   <View style={ styles.componentContainer }>
      {(averageLoading || compositionLoading) ? (
        <View style={ styles.graphContainer }>
          <Text>Your data is loading</Text>
@@ -197,7 +197,8 @@ const styles = StyleSheet.create({
  messageContainer: { height:percentageHeight('4%') },
  scoreContainer: { flexDirection: 'row' },
  graphContainer: { height:percentageHeight('38%'), justifyContent:'center', marginVertical: percentageHeight('2%') },
- contentContainer: { justifyContent: 'center', alignItems: 'center', margin: percentageWidth('4%'), marginBottom: 64 },
+ contentContainer: { justifyContent: 'center', alignItems: 'center', margin: percentageWidth('4%') },
+ componentContainer: { alignItems:'center' },
  score: { fontSize: percentageWidth('6%'), color: 'grey' },
  comparison: { fontSize: percentageWidth('3%'), marginLeft: percentageWidth('2%') },
 });
