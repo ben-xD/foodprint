@@ -89,16 +89,45 @@ const WeeklyDisplay = ({ timeDifference }) => {
 
 
  // This week's carbon footprint
- const thisWeek = () => {
+ const sum = () => {
   if (compositionLoading || compositionError) return 0;
-  return (compositionData.reportByCategory.plantBased[0].avgCarbonFootprint + compositionData.reportByCategory.fish[0].avgCarbonFootprint + compositionData.reportByCategory.meat[0].avgCarbonFootprint + compositionData.reportByCategory.eggsAndDairy[0].avgCarbonFootprint)
+
+  let thisWeek = 0;
+  let lastWeek = 0;
+
+  for (let i = 0; i < compositionData.reportByCategory.plantBased.length; i++) {
+
+   if (compositionData.reportByCategory.plantBased[i].periodNumber === 0) {
+    thisWeek += compositionData.reportByCategory.plantBased[i].avgCarbonFootprint;
+   } else if (compositionData.reportByCategory.plantBased[i].periodNumber === -1) {
+    lastWeek += compositionData.reportByCategory.plantBased[i].avgCarbonFootprint;
+   }
+
+   if (compositionData.reportByCategory.eggsAndDairy[i].periodNumber === 0) {
+    thisWeek += compositionData.reportByCategory.eggsAndDairy[i].avgCarbonFootprint;
+   } else if (compositionData.reportByCategory.eggsAndDairy[i].periodNumber === -1) {
+    lastWeek += compositionData.reportByCategory.eggsAndDairy[i].avgCarbonFootprint;
+   }
+
+   if (compositionData.reportByCategory.fish[i].periodNumber === 0) {
+    thisWeek += compositionData.reportByCategory.fish[i].avgCarbonFootprint;
+   } else if (compositionData.reportByCategory.fish[i].periodNumber === -1) {
+    lastWeek += compositionData.reportByCategory.fish[i].avgCarbonFootprint;
+   }
+
+   if (compositionData.reportByCategory.meat[i].periodNumber === 0) {
+    thisWeek += compositionData.reportByCategory.meat[i].avgCarbonFootprint;
+   } else if (compositionData.reportByCategory.meat[i].periodNumber === -1) {
+    lastWeek += compositionData.reportByCategory.meat[i].avgCarbonFootprint;
+   }
+  }
+  return [thisWeek, lastWeek];
  };
 
  const changeSinceLastWeek = () => {
   if (compositionLoading || compositionError) return 0;
-  const value = thisWeek();
-  const lastWeek = compositionData.reportByCategory.plantBased[1].avgCarbonFootprint + compositionData.reportByCategory.fish[1].avgCarbonFootprint + compositionData.reportByCategory.meat[1].avgCarbonFootprint + compositionData.reportByCategory.eggsAndDairy[1].avgCarbonFootprint;
-  return (((value - lastWeek) * 100) / value);
+  const value = sum();
+  return (((value[0] - value[1]) * 100) / value[0]);
  };
 
  const weekSign = ((changeSinceLastWeek() > 0) ? '+' : '');
@@ -117,7 +146,7 @@ const WeeklyDisplay = ({ timeDifference }) => {
    ) : (
      <View style={ styles.contentContainer }>
       <View style={ styles.scoreContainer }>
-       <Text style={ styles.score }>{thisWeek()} units this week</Text>
+       <Text style={ styles.score }>{sum()[0]} units this week</Text>
        <Text style={ styles.comparison }>{weekSign}{Math.round(changeSinceLastWeek())}% compared{'\n'}to last week</Text>
       </View>
       <View style={ styles.graphContainer }>

@@ -92,16 +92,45 @@ const MonthlyDisplay = ({ timeDifference }) => {
 
 
  // This months's carbon footprint
- const thisMonth = () => {
+ const sum = () => {
   if (compositionLoading || compositionError) return 0;
-  return (compositionData.reportByCategory.plantBased[0].avgCarbonFootprint + compositionData.reportByCategory.fish[0].avgCarbonFootprint + compositionData.reportByCategory.meat[0].avgCarbonFootprint + compositionData.reportByCategory.eggsAndDairy[0].avgCarbonFootprint)
+
+  let thisMonth = 0;
+  let lastMonth = 0;
+
+  for (let i = 0; i < compositionData.reportByCategory.plantBased.length; i++) {
+
+   if (compositionData.reportByCategory.plantBased[i].periodNumber === 0) {
+    thisMonth += compositionData.reportByCategory.plantBased[i].avgCarbonFootprint;
+   } else if (compositionData.reportByCategory.plantBased[i].periodNumber === -1) {
+    lastMonth += compositionData.reportByCategory.plantBased[i].avgCarbonFootprint;
+   }
+
+   if (compositionData.reportByCategory.eggsAndDairy[i].periodNumber === 0) {
+    thisMonth += compositionData.reportByCategory.eggsAndDairy[i].avgCarbonFootprint;
+   } else if (compositionData.reportByCategory.eggsAndDairy[i].periodNumber === -1) {
+    lastMonth += compositionData.reportByCategory.eggsAndDairy[i].avgCarbonFootprint;
+   }
+
+   if (compositionData.reportByCategory.fish[i].periodNumber === 0) {
+    thisMonth += compositionData.reportByCategory.fish[i].avgCarbonFootprint;
+   } else if (compositionData.reportByCategory.fish[i].periodNumber === -1) {
+    lastMonth += compositionData.reportByCategory.fish[i].avgCarbonFootprint;
+   }
+
+   if (compositionData.reportByCategory.meat[i].periodNumber === 0) {
+    thisMonth += compositionData.reportByCategory.meat[i].avgCarbonFootprint;
+   } else if (compositionData.reportByCategory.meat[i].periodNumber === -1) {
+    lastMonth += compositionData.reportByCategory.meat[i].avgCarbonFootprint;
+   }
+  }
+  return [thisMonth, lastMonth];
  };
 
  const changeSinceLastMonth = () => {
   if (compositionLoading || compositionError) return 0;
-  const value = thisMonth();
-  const lastMonth = compositionData.reportByCategory.plantBased[1].avgCarbonFootprint + compositionData.reportByCategory.fish[1].avgCarbonFootprint + compositionData.reportByCategory.meat[1].avgCarbonFootprint + compositionData.reportByCategory.eggsAndDairy[1].avgCarbonFootprint;
-  return (((value - lastMonth) * 100) / value);
+  const value = sum();
+  return (((value[0] - value[1]) * 100) / value[0]);
  };
 
  const monthSign = ((changeSinceLastMonth() > 0) ? '+' : '');
@@ -123,7 +152,7 @@ const MonthlyDisplay = ({ timeDifference }) => {
      ) : (
          <View style={styles.contentContainer}>
          <View style={ styles.scoreContainer }>
-          <Text style={ styles.score }>{thisMonth()} units this month</Text>
+          <Text style={ styles.score }>{sum()[0]} units this month</Text>
           <Text style={ styles.comparison }>{monthSign}{Math.round(changeSinceLastMonth())}% compared{'\n'}to last month</Text>
          </View>
        <View style={ styles.graphContainer }>
