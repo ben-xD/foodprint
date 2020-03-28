@@ -3,12 +3,12 @@ import {VictoryPie} from 'victory-native';
 import React from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
 //DO NOT DELETE THE FOLLOWING COMMENTED CODE
-// import gql from 'graphql-tag';
+import gql from 'graphql-tag';
 // import {useQuery} from '@apollo/react-hooks';
 
 
 //DO NOT DELETE THE FOLLOWING COMMENTED CODE
-//GraphQL schema
+// GraphQL schema
 // const GET_AVERAGE = gql`query {
 //   getUserAvg
 // }`;
