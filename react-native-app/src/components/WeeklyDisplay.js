@@ -2,8 +2,8 @@ import {StyleSheet, Text, View} from 'react-native';
 import { heightPercentageToDP as percentageHeight, widthPercentageToDP as percentageWidth} from 'react-native-responsive-screen';
 import {VictoryAxis, VictoryBar, VictoryChart, VictoryLegend, VictoryLine, VictoryStack} from 'victory-native';
 import React from 'react';
-import {Tooltip} from "react-native-elements";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import {Tooltip} from 'react-native-elements';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 //DO NOT DELETE THE FOLLOWING COMMENTED CODE
 // import gql from 'graphql-tag';
 // import {useQuery} from '@apollo/react-hooks';
@@ -92,7 +92,7 @@ const WeeklyDisplay = ({ timeDifference }) => {
 
  // This week's carbon footprint
  const sum = () => {
-  if (compositionLoading || compositionError) return 0;
+  if (compositionLoading || compositionError) {return 0;}
 
   let thisWeek = 0;
   let lastWeek = 0;
@@ -127,7 +127,7 @@ const WeeklyDisplay = ({ timeDifference }) => {
  };
 
  const changeSinceLastWeek = () => {
-  if (compositionLoading || compositionError) return 0;
+  if (compositionLoading || compositionError) {return 0;}
   const value = sum();
   return (((value[0] - value[1]) * 100) / value[0]);
  };
@@ -151,14 +151,14 @@ const WeeklyDisplay = ({ timeDifference }) => {
        <Text style={ styles.score }>{sum()[0]} units this week</Text>
        <Text style={ styles.comparison }>{weekSign}{Math.round(changeSinceLastWeek())}% compared{'\n'}to last week</Text>
        <Tooltip
-           popover={<Text>These scores correspond to your carbon footprint this week, and how it compares to last
-            week’s.{"\n\n"}The following graph shows your weekly carbon footprint over the last 6 weeks with respect to
-            each of the following food categories: "Plant" (e.g. cereal, fruits, vegetables), "Eggs & Dairy", "Fish"
-            and "Meat".{"\n\n"}Your personal average weekly carbon footprint is also given by the black line.
-           </Text>}
+           popover={<Text style={ styles.tooltipContent }>These scores correspond to your carbon footprint this week,
+            and how it compares to last week’s.{'\n\n'}The following graph shows your weekly carbon footprint over the
+            last 6 weeks with respect to each of the following food categories: "Plant" (e.g. cereal, fruits,
+            vegetables), "Eggs & Dairy", "Fish" and "Meat".{'\n\n'}Your personal average weekly carbon footprint is also
+            given by the black line.</Text>}
            backgroundColor={'green'}
-           height={percentageHeight('50%')}
-           width={percentageWidth('80%')}
+           height={percentageHeight('40%')}
+           width={percentageWidth('84%')}
        >
         <MaterialCommunityIcons name="help-circle" color={'grey'} size={percentageWidth('4%')} />
        </Tooltip>
@@ -210,6 +210,7 @@ const styles = StyleSheet.create({
  componentContainer: { alignItems:'center' },
  score: { fontSize: percentageWidth('6%'), color: 'grey' },
  comparison: { fontSize: percentageWidth('3%'), marginLeft: percentageWidth('2%') },
+ tooltipContent: { color:'white', fontSize:percentageWidth('4%') },
 });
 
 export default WeeklyDisplay;

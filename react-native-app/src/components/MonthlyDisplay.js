@@ -2,6 +2,8 @@ import {StyleSheet, Text, View} from 'react-native';
 import { heightPercentageToDP as percentageHeight, widthPercentageToDP as percentageWidth} from 'react-native-responsive-screen';
 import {VictoryAxis, VictoryBar, VictoryChart, VictoryLegend, VictoryLine, VictoryStack} from 'victory-native';
 import React from 'react';
+import {Tooltip} from 'react-native-elements';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 //DO NOT DELETE THE FOLLOWING COMMENTED CODE
 // import gql from 'graphql-tag';
 // import {useQuery} from '@apollo/react-hooks';
@@ -93,7 +95,7 @@ const MonthlyDisplay = ({ timeDifference }) => {
 
  // This months's carbon footprint
  const sum = () => {
-  if (compositionLoading || compositionError) return 0;
+  if (compositionLoading || compositionError) {return 0;}
 
   let thisMonth = 0;
   let lastMonth = 0;
@@ -128,7 +130,7 @@ const MonthlyDisplay = ({ timeDifference }) => {
  };
 
  const changeSinceLastMonth = () => {
-  if (compositionLoading || compositionError) return 0;
+  if (compositionLoading || compositionError) {return 0;}
   const value = sum();
   return (((value[0] - value[1]) * 100) / value[0]);
  };
@@ -154,6 +156,18 @@ const MonthlyDisplay = ({ timeDifference }) => {
          <View style={ styles.scoreContainer }>
           <Text style={ styles.score }>{sum()[0]} units this month</Text>
           <Text style={ styles.comparison }>{monthSign}{Math.round(changeSinceLastMonth())}% compared{'\n'}to last month</Text>
+          <Tooltip
+              popover={<Text style={ styles.tooltipContent }>These scores correspond to your carbon footprint this
+               month, and how it compares to last month’s.{'\n\n'}The following graph shows your monthly carbon
+               footprint over the last 6 months with respect to each of the following food categories: "Plant" (e.g.
+               cereal, fruits, vegetables), "Eggs & Dairy", "Fish" and "Meat".{'\n\n'}Your personal average monthly
+               carbon footprint is also given by the black line.</Text>}
+              backgroundColor={'green'}
+              height={percentageHeight('40%')}
+              width={percentageWidth('84%')}
+          >
+           <MaterialCommunityIcons name="help-circle" color={'grey'} size={percentageWidth('4%')} />
+          </Tooltip>
          </View>
        <View style={ styles.graphContainer }>
          <VictoryChart
@@ -203,6 +217,7 @@ const styles = StyleSheet.create({
  componentContainer: { alignItems:'center' },
  score: { fontSize: percentageWidth('6%'), color: 'grey' },
  comparison: { fontSize: percentageWidth('3%'), marginLeft: percentageWidth('2%') },
+ tooltipContent: { color:'white', fontSize:percentageWidth('4%') },
 });
 
 export default MonthlyDisplay;

@@ -70,11 +70,11 @@ const GeneralDisplay = () => {
          <View style={ [ styles.score, { flexDirection:'row'} ]}>
            <Text style={{ margin:percentageWidth('1%')}}>{data} units</Text>
            <Tooltip
-               popover={<Text>This score corresponds to the average carbon footprint of all the items you have
-                added to your history since you have started using Foodprint.</Text>}
+               popover={<Text style={ styles.tooltipContent }>This score corresponds to the average carbon footprint of
+                all the items you have added to your history since you have started using Foodprint.</Text>}
                backgroundColor={'green'}
-               height={percentageHeight('30%')}
-               width={percentageWidth('50%')}
+               height={percentageHeight('20%')}
+               width={percentageWidth('65%')}
            >
              <MaterialCommunityIcons name="help-circle" color={'grey'} size={percentageWidth('4%')} />
            </Tooltip>
@@ -97,6 +97,7 @@ const GeneralDisplay = () => {
 const styles = StyleSheet.create({
  messageContainer: { height: percentageHeight('29%'), alignItems: 'center', justifyContent:'center' },
  graphContainer: { height: percentageHeight('29%'), alignItems: 'center' },
+ tooltipContent: { color:'white', fontSize:percentageWidth('4%') },
  image: { height: percentageHeight('10%'), width: percentageWidth('20%'), position: 'absolute', alignSelf: 'center', marginTop: percentageHeight('12%') },
  score: { fontSize: percentageWidth('6%'), color: 'grey', position: 'absolute', alignSelf: 'center', marginTop: percentageHeight('24%') },
 });
