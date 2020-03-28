@@ -89,14 +89,24 @@ const MonthlyDisplay = ({ timeDifference }) => {
    ],
   },
  };
- 
+
 
  // This months's carbon footprint
- const thisMonth = compositionData.reportByCategory.plantBased[0].avgCarbonFootprint + compositionData.reportByCategory.fish[0].avgCarbonFootprint + compositionData.reportByCategory.meat[0].avgCarbonFootprint + compositionData.reportByCategory.eggsAndDairy[0].avgCarbonFootprint;
- const lastMonth = compositionData.reportByCategory.plantBased[1].avgCarbonFootprint + compositionData.reportByCategory.fish[1].avgCarbonFootprint + compositionData.reportByCategory.meat[1].avgCarbonFootprint + compositionData.reportByCategory.eggsAndDairy[1].avgCarbonFootprint;
- const changeSinceLastMonth = ((thisMonth - lastMonth) * 100) / thisMonth;
- const monthSign = ((changeSinceLastMonth > 0) ? '+' : '');
+ const thisMonth = () => {
+  if (compositionLoading || compositionError) return 0;
+  return (compositionData.reportByCategory.plantBased[0].avgCarbonFootprint + compositionData.reportByCategory.fish[0].avgCarbonFootprint + compositionData.reportByCategory.meat[0].avgCarbonFootprint + compositionData.reportByCategory.eggsAndDairy[0].avgCarbonFootprint)
+ };
 
+ const changeSinceLastMonth = () => {
+  if (compositionLoading || compositionError) return 0;
+  const value = thisMonth();
+  const lastMonth = compositionData.reportByCategory.plantBased[1].avgCarbonFootprint + compositionData.reportByCategory.fish[1].avgCarbonFootprint + compositionData.reportByCategory.meat[1].avgCarbonFootprint + compositionData.reportByCategory.eggsAndDairy[1].avgCarbonFootprint;
+  return (((value - lastMonth) * 100) / value);
+ };
+
+ const monthSign = ((changeSinceLastMonth() > 0) ? '+' : '');
+
+ // Calculate current month for x-axis display
  const month = new Date().getMonth(); //Current Month
  const monthList = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
@@ -113,8 +123,8 @@ const MonthlyDisplay = ({ timeDifference }) => {
      ) : (
          <View style={styles.contentContainer}>
          <View style={ styles.scoreContainer }>
-          <Text style={ styles.score }>{thisMonth} units this month</Text>
-          <Text style={ styles.comparison }>{monthSign}{Math.round(changeSinceLastMonth)}% compared{'\n'}to last month</Text>
+          <Text style={ styles.score }>{thisMonth()} units this month</Text>
+          <Text style={ styles.comparison }>{monthSign}{Math.round(changeSinceLastMonth())}% compared{'\n'}to last month</Text>
          </View>
        <View style={ styles.graphContainer }>
          <VictoryChart

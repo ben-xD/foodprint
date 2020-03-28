@@ -89,10 +89,19 @@ const WeeklyDisplay = ({ timeDifference }) => {
 
 
  // This week's carbon footprint
- const thisWeek = compositionData.reportByCategory.plantBased[0].avgCarbonFootprint + compositionData.reportByCategory.fish[0].avgCarbonFootprint + compositionData.reportByCategory.meat[0].avgCarbonFootprint + compositionData.reportByCategory.eggsAndDairy[0].avgCarbonFootprint;
- const lastWeek = compositionData.reportByCategory.plantBased[1].avgCarbonFootprint + compositionData.reportByCategory.fish[1].avgCarbonFootprint + compositionData.reportByCategory.meat[1].avgCarbonFootprint + compositionData.reportByCategory.eggsAndDairy[1].avgCarbonFootprint;
- const changeSinceLastWeek = ((thisWeek - lastWeek) * 100) / thisWeek;
- const weekSign = ((changeSinceLastWeek > 0) ? '+' : '');
+ const thisWeek = () => {
+  if (compositionLoading || compositionError) return 0;
+  return (compositionData.reportByCategory.plantBased[0].avgCarbonFootprint + compositionData.reportByCategory.fish[0].avgCarbonFootprint + compositionData.reportByCategory.meat[0].avgCarbonFootprint + compositionData.reportByCategory.eggsAndDairy[0].avgCarbonFootprint)
+ };
+
+ const changeSinceLastWeek = () => {
+  if (compositionLoading || compositionError) return 0;
+  const value = thisWeek();
+  const lastWeek = compositionData.reportByCategory.plantBased[1].avgCarbonFootprint + compositionData.reportByCategory.fish[1].avgCarbonFootprint + compositionData.reportByCategory.meat[1].avgCarbonFootprint + compositionData.reportByCategory.eggsAndDairy[1].avgCarbonFootprint;
+  return (((value - lastWeek) * 100) / value);
+ };
+
+ const weekSign = ((changeSinceLastWeek() > 0) ? '+' : '');
 
 
  return (
@@ -108,8 +117,8 @@ const WeeklyDisplay = ({ timeDifference }) => {
    ) : (
      <View style={ styles.contentContainer }>
       <View style={ styles.scoreContainer }>
-       <Text style={ styles.score }>{thisWeek} units this week</Text>
-       <Text style={ styles.comparison }>{weekSign}{Math.round(changeSinceLastWeek)}% compared{'\n'}to last week</Text>
+       <Text style={ styles.score }>{thisWeek()} units this week</Text>
+       <Text style={ styles.comparison }>{weekSign}{Math.round(changeSinceLastWeek())}% compared{'\n'}to last week</Text>
       </View>
       <View style={ styles.graphContainer }>
        <VictoryChart
