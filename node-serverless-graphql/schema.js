@@ -25,19 +25,21 @@ const typeDefs = gql`
 
     type TimeReport {
         periodNumber: Int # week/month number starting with current period of 0, previous -1 etc.
-        avgCarbonFootpring: Float
+        avgCarbonFootprint: Float
     }
 
     type CategoryReport {
-        category: String
-        timeReport: [TimeReport]
+        plantBased: [TimeReport]
+        fish: [TimeReport]
+        meat: [TimeReport]
+        eggsAndDairy: [TimeReport]
     }
 
     type Query {
         _: String
         getUserAvg: Float
-        getPeriodAvg(timezone: Int!, resolution: ReportResolution!): [TimeReport]
-        reportByCategory(timezone: Int!, resolution: ReportResolution!): [CategoryReport]
+        getPeriodAvg(timezone: Int!, resolution: ReportResolution!): Float
+        reportByCategory(timezone: Int!, resolution: ReportResolution!): CategoryReport
     }
 
     type Mutation {
