@@ -20,6 +20,10 @@ const GeneralDisplay = () => {
   //DO NOT DELETE THE FOLLOWING COMMENTED CODE
   let { loading, error, data } = useQuery(GET_INDEFINITE_AVERAGE);
 
+ // let loading = false;
+ // let error = true;
+ // let data = null;
+
   const calculateColour = (carbonFootprint) => {
     if (carbonFootprint < 4) {
       return 'forestgreen';
@@ -54,28 +58,31 @@ const GeneralDisplay = () => {
   }
  };
 
- const getGeneralScoreCache = async () => {
-  try {
-   const retrievedValue = await AsyncStorage.getItem('generalScore');
-   data.getUserAvg = JSON.parse(retrievedValue);
-  } catch (e) {
-   console.log('Error retrieving generalScore' + e);
+ const getGeneralScore = async () => {
+  if (error) {
+   try {
+    const retrievedValue = await AsyncStorage.getItem('generalScore');
+    data = JSON.parse(retrievedValue);
+   } catch (e) {
+    console.log('Error retrieving generalScore' + e);
+   }
   }
+  return data;
  }
 
  useEffect(() => {
    if (data) {
-      saveGeneralScore(JSON.stringify(data.getUserAvg));
+      saveGeneralScore(JSON.stringify(data));
      }
    }
  );
 
- useEffect(() => {
-  if (error) {
-   getGeneralScoreCache();
-  }
- }
- );
+ // useEffect(() => {
+ //  if (error) {
+ //   getGeneralScore();
+ //  }
+ // }
+ // );
 
  return (
    <View>
@@ -94,7 +101,7 @@ const GeneralDisplay = () => {
            style={ styles.image }
          />
          <View style={ [ styles.scoreContainer ]}>
-           <Text style={ styles.score }>{data.getUserAvg} units</Text>
+           <Text style={ styles.score }>{getGeneralScore().getUserAvg} units</Text>
            <Tooltip
                popover={<Text style={ styles.tooltipContent }>This score corresponds to the average carbon footprint of
                 all the items you have added to your history since you have started using Foodprint.</Text>}
