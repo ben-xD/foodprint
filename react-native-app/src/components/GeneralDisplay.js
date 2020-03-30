@@ -1,29 +1,28 @@
 import {heightPercentageToDP as percentageHeight, widthPercentageToDP as percentageWidth} from 'react-native-responsive-screen';
 import {VictoryPie} from 'victory-native';
 import React from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {ActivityIndicator, Image, StyleSheet, Text, View} from 'react-native';
 import { Tooltip } from 'react-native-elements';
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 //DO NOT DELETE THE FOLLOWING COMMENTED CODE
 import gql from 'graphql-tag';
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-// import {useQuery} from '@apollo/react-hooks';
+import {useQuery} from '@apollo/react-hooks';
 
 
 //DO NOT DELETE THE FOLLOWING COMMENTED CODE
-// GraphQL schema
-// const GET_AVERAGE = gql`query {
-//   getUserAvg
-// }`;
+const GET_AVERAGE = gql`query {
+  getUserAvg
+}`;
 
 
 const GeneralDisplay = () => {
  //DO NOT DELETE THE FOLLOWING COMMENTED CODE
- // const { loading, error, data } = useQuery(GET_AVERAGE);
+ const { loading, error, data } = useQuery(GET_AVERAGE);
 
  //Following code is here to mimick response from back-end
- const loading = false;
- const error = false;
- const data = 17.25;
+ // const loading = false;
+ // const error = false;
+ // const data = 17.25;
 
  const calculateColour = (carbonFootprint) => {
    if (carbonFootprint < 4) {
@@ -55,7 +54,7 @@ const GeneralDisplay = () => {
    <View>
      {(loading) ? (
        <View style={ styles.messageContainer }>
-         <Text>Your data is loading</Text>
+        <ActivityIndicator/>
        </View>
      ) : ((error) ? (
        <View style={ styles.messageContainer }>
@@ -68,7 +67,7 @@ const GeneralDisplay = () => {
            style={ styles.image }
          />
          <View style={ [ styles.scoreContainer ]}>
-           <Text style={ styles.score }>{data} units</Text>
+           <Text style={ styles.score }>{data.getUserAvg} units</Text>
            <Tooltip
                popover={<Text style={ styles.tooltipContent }>This score corresponds to the average carbon footprint of
                 all the items you have added to your history since you have started using Foodprint.</Text>}

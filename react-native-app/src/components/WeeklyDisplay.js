@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {ActivityIndicator, StyleSheet, Text, View} from 'react-native';
 import { heightPercentageToDP as percentageHeight, widthPercentageToDP as percentageWidth} from 'react-native-responsive-screen';
 import {VictoryAxis, VictoryBar, VictoryChart, VictoryLegend, VictoryLine, VictoryStack} from 'victory-native';
 import React from 'react';
@@ -139,7 +139,7 @@ const WeeklyDisplay = ({ timeDifference }) => {
  <View style={ styles.componentContainer }>
    {(averageLoading || compositionLoading) ? (
      <View style={ styles.graphContainer }>
-       <Text>Your data is loading</Text>
+      <ActivityIndicator/>
      </View>
    ) : ((averageError || compositionError) ? (
      <View style={ styles.graphContainer }>

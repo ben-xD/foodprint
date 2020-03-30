@@ -1,96 +1,93 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {ActivityIndicator, StyleSheet, Text, View} from 'react-native';
 import { heightPercentageToDP as percentageHeight, widthPercentageToDP as percentageWidth} from 'react-native-responsive-screen';
 import {VictoryAxis, VictoryBar, VictoryChart, VictoryLegend, VictoryLine, VictoryStack} from 'victory-native';
 import React from 'react';
 import {Tooltip} from 'react-native-elements';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 //DO NOT DELETE THE FOLLOWING COMMENTED CODE
-// import gql from 'graphql-tag';
-// import {useQuery} from '@apollo/react-hooks';
+import gql from 'graphql-tag';
+import {useQuery} from '@apollo/react-hooks';
 
 //DO NOT DELETE THE FOLLOWING COMMENTED CODE
-// const GET_AVERAGE = gql`query {
-//   getPeriodAvg(timezone: $timezone, resolution:MONTH) {
-//     periodNumber
-//     avgCarbonFootprint
-//   }
-// }`;
+const GET_AVERAGE = gql`query($timezone: Int!) {
+  getPeriodAvg(timezone: $timezone, resolution:MONTH)
+}`;
 
 //DO NOT DELETE THE FOLLOWING COMMENTED CODE
-// const GET_COMPOSITION = gql`query {
-//   reportByCategory(timezone: $timezone, resolution:MONTH) {
-//      plantBased {
-//       periodNumber
-//       avgCarbonFootprint
-//     }
-//      fish {
-//       periodNumber
-//       avgCarbonFootprint
-//     }
-//     meat {
-//       periodNumber
-//       avgCarbonFootprint
-//     }
-//     eggsAndDairy {
-//       periodNumber
-//       avgCarbonFootprint
-//     }
-//    }
-//  }`;
+const GET_COMPOSITION = gql`query($timezone: Int!) {
+  reportByCategory(timezone: $timezone, resolution:MONTH) {
+     plantBased {
+      periodNumber
+      avgCarbonFootprint
+    }
+     fish {
+      periodNumber
+      avgCarbonFootprint
+    }
+    meat {
+      periodNumber
+      avgCarbonFootprint
+    }
+    eggsAndDairy {
+      periodNumber
+      avgCarbonFootprint
+    }
+   }
+ }`;
 
 
 const MonthlyDisplay = ({ timeDifference }) => {
 
  //DO NOT DELETE THE FOLLOWING COMMENTED CODE
- // const { loading: averageLoading, error: averageError, data: averageData } = useQuery(GET_AVERAGE, {
- //  variables: { timeDifference },
- // });
- // const { loading: compositionLoading, error: compositionError, data: compositionData } = useQuery(GET_COMPOSITION, {
- //  variables: { timeDifference },
- // });
+ const { loading: averageLoading, error: averageError, data: averageData } = useQuery(GET_AVERAGE, {
+  variables: { timezone: timeDifference },
+ });
+ const { loading: compositionLoading, error: compositionError, data: compositionData } = useQuery(GET_COMPOSITION, {
+  variables: { timezone: timeDifference },
+ });
 
  //Following code is here to mimick response from back-end
- const averageLoading = false;
- const averageError = false;
- const averageData = { getPeriodAvg: 64};
- const compositionLoading = false;
- const compositionError = false;
- const compositionData = {
-  reportByCategory: {
-   plantBased: [
-    { 'periodNumber': 0, 'avgCarbonFootprint': 13.50 },
-    { 'periodNumber': -1, 'avgCarbonFootprint': 19.00 },
-    { 'periodNumber': -2, 'avgCarbonFootprint': 16.50 },
-    { 'periodNumber': -3, 'avgCarbonFootprint': 14.25 },
-    { 'periodNumber': -4, 'avgCarbonFootprint': 13.00 },
-    { 'periodNumber': -5, 'avgCarbonFootprint': 16.50 },
-   ],
-   fish: [
-    { 'periodNumber': 0, 'avgCarbonFootprint': 13.50 },
-    { 'periodNumber': -1, 'avgCarbonFootprint': 13.00 },
-    { 'periodNumber': -2, 'avgCarbonFootprint': 16.50 },
-    { 'periodNumber': -3, 'avgCarbonFootprint': 19.00 },
-    { 'periodNumber': -4, 'avgCarbonFootprint': 14.25 },
-    { 'periodNumber': -5, 'avgCarbonFootprint': 13.00 },
-   ],
-   meat: [
-    { 'periodNumber': 0, 'avgCarbonFootprint': 13.50 },
-    { 'periodNumber': -1, 'avgCarbonFootprint': 16.50 },
-    { 'periodNumber': -2, 'avgCarbonFootprint': 19.00 },
-    { 'periodNumber': -3, 'avgCarbonFootprint': 13.00 },
-    { 'periodNumber': -4, 'avgCarbonFootprint': 14.25 },
-    { 'periodNumber': -5, 'avgCarbonFootprint': 16.50 },
-   ],
-   eggsAndDairy: [
-    { 'periodNumber': 0, 'avgCarbonFootprint': 13.50 },
-    { 'periodNumber': -1, 'avgCarbonFootprint': 16.5 },
-    { 'periodNumber': -2, 'avgCarbonFootprint': 19 },
-    { 'periodNumber': -3, 'avgCarbonFootprint': 13 },
-    { 'periodNumber': -4, 'avgCarbonFootprint': 14.25 },
-    { 'periodNumber': -5, 'avgCarbonFootprint': 13 },
-   ],
-  },
- };
+ // const averageLoading = false;
+ // const averageError = false;
+ // const averageData = { getPeriodAvg: 64};
+ // const compositionLoading = false;
+ // const compositionError = false;
+ // const compositionData = {
+ //  reportByCategory: {
+ //   plantBased: [
+ //    { 'periodNumber': 0, 'avgCarbonFootprint': 13.50 },
+ //    { 'periodNumber': -1, 'avgCarbonFootprint': 19.00 },
+ //    { 'periodNumber': -2, 'avgCarbonFootprint': 16.50 },
+ //    { 'periodNumber': -3, 'avgCarbonFootprint': 14.25 },
+ //    { 'periodNumber': -4, 'avgCarbonFootprint': 13.00 },
+ //    { 'periodNumber': -5, 'avgCarbonFootprint': 16.50 },
+ //   ],
+ //   fish: [
+ //    { 'periodNumber': 0, 'avgCarbonFootprint': 13.50 },
+ //    { 'periodNumber': -1, 'avgCarbonFootprint': 13.00 },
+ //    { 'periodNumber': -2, 'avgCarbonFootprint': 16.50 },
+ //    { 'periodNumber': -3, 'avgCarbonFootprint': 19.00 },
+ //    { 'periodNumber': -4, 'avgCarbonFootprint': 14.25 },
+ //    { 'periodNumber': -5, 'avgCarbonFootprint': 13.00 },
+ //   ],
+ //   meat: [
+ //    { 'periodNumber': 0, 'avgCarbonFootprint': 13.50 },
+ //    { 'periodNumber': -1, 'avgCarbonFootprint': 16.50 },
+ //    { 'periodNumber': -2, 'avgCarbonFootprint': 19.00 },
+ //    { 'periodNumber': -3, 'avgCarbonFootprint': 13.00 },
+ //    { 'periodNumber': -4, 'avgCarbonFootprint': 14.25 },
+ //    { 'periodNumber': -5, 'avgCarbonFootprint': 16.50 },
+ //   ],
+ //   eggsAndDairy: [
+ //    { 'periodNumber': 0, 'avgCarbonFootprint': 13.50 },
+ //    { 'periodNumber': -1, 'avgCarbonFootprint': 16.5 },
+ //    { 'periodNumber': -2, 'avgCarbonFootprint': 19 },
+ //    { 'periodNumber': -3, 'avgCarbonFootprint': 13 },
+ //    { 'periodNumber': -4, 'avgCarbonFootprint': 14.25 },
+ //    { 'periodNumber': -5, 'avgCarbonFootprint': 13 },
+ //   ],
+ //  },
+ // };
 
 
  // This months's carbon footprint
@@ -145,7 +142,7 @@ const MonthlyDisplay = ({ timeDifference }) => {
    <View style={ styles.componentContainer }>
      {(averageLoading || compositionLoading) ? (
        <View style={ styles.graphContainer }>
-         <Text>Your data is loading</Text>
+        <ActivityIndicator/>
        </View>
      ) : ((averageError || compositionError) ? (
        <View style={ styles.graphContainer }>
