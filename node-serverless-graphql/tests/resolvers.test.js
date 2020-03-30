@@ -1,6 +1,5 @@
 const resolvers = require('../resolvers');
 const rice_image = require('../carbon-footprint/tests/rice_image');
-const context = require('../context');
 const VisionAPI = require('../datasources/vision');
 const visionCredentials = require('../credentials/carbon-7fbf76411514.json');
 const  { createStore } = require('../utils');
@@ -18,22 +17,6 @@ const dataSources = {
   conceptAPI: new ConceptAPI(),
   userHistAPI: new userHistAPI(store),
 };
-
-
-// const mockDataSources = {
-//   carbonAPI: {
-//     searchData: jest.fn()
-//   },
-//   userHistAPI: {
-//       insert_in_DB: jest.fn(),
-//       avg_co2_for_user: jest.fn(),
-//       weekly_average_cf: jest.fn(),
-//       weekly_cf_composition: jest.fn(),
-//       monthly_average_cf: jest.fn(),
-//       monthly_cf_composition: jest.fn(),
-//   }, 
-//   user: {id: "mock"},
-// }
 
 const CATEGORY_WITH_DATA = 
     [{"avgCarbonFootprint": 10, "periodNumber": 0}, 
@@ -53,7 +36,7 @@ const CATEGORY_EMPTY =
 
 const user = {uid: "x"};
 
-describe('real dataSources (no mocking)', () => {
+describe('testing resolvers', () => {
   test('getCarbonFootprintFromName: Simple test with an item in the database (rice)', async () => {
     jest.setTimeout(30000);
     const name = 'rice';
@@ -70,79 +53,106 @@ describe('real dataSources (no mocking)', () => {
     expect(actual).toEqual(expected);
   });
 
+  test('postUserHistoryEntry', async () => {
+      jest.setTimeout(30000);
+
+      jest.spyOn(dataSources.userHistAPI, 'insert_in_DB').mockImplementation((user, item) => {
+          if (item == 'mock' &&  user == 'x'){
+              return true;
+          }
+          return false;
+      });
+
+      const res = await resolvers.Mutation.postUserHistoryEntry(null, 'mock',  {dataSources, user});
+
+      expect(res).toEqual(true);
+
+  });
+
   test('Query: not used for anything yet, mandatory for GraphQL', async () => {
     resolvers.Query._();
   });
 
-})
+  test('Average co2 of all products for user x is 2.28 (rounded up)', async () => {
+      jest.setTimeout(30000);
+      jest.spyOn(dataSources.userHistAPI, 'avg_co2_for_user').mockImplementation(() =>
+          2.28);
+      let actual = await resolvers.Query.getUserAvg(null, {dataSources, user});
+      const expected = 2.28;
+      expect(actual).toEqual(expected);
+  });
 
-describe('mocked dataSources', () => {
-  test('postUserHistoryEntry', async () => {
-    jest.setTimeout(30000);
+  test('Average co2 of all products for user x over last 6 weeks is 3.12 (rounded up)', async () => {
+      jest.setTimeout(30000);
+      jest.spyOn(dataSources.userHistAPI, 'weekly_average_cf').mockImplementation(() =>
+          3.12);
+      const timezone = 0;
+      const resolution = 0
+      let actual = await resolvers.Query.getPeriodAvg(null, {timezone, resolution}, {dataSources, user});
+      const expected = 3.12;
+      expect(actual).toEqual(expected);
+  });
 
-    jest.spyOn(dataSources.userHistAPI, 'insert_in_DB').mockImplementation((user, item) => {
-      if (item == 'mock' &&  user == 'x'){
-        return true;
-      }
-      return false;
-    });
-    
-    const res = await resolvers.Mutation.postUserHistoryEntry(null, 'mock',  {dataSources, user});
-
-    expect(res).toEqual(true);
-
+  test('Average co2 of all products for user x over last 6 months is 1.34 (rounded up)', async () => {
+      jest.setTimeout(30000);
+      jest.spyOn(dataSources.userHistAPI, 'monthly_average_cf').mockImplementation(() =>
+          1.34);
+      const timezone = 0;
+      const resolution = 1
+      let actual = await resolvers.Query.getPeriodAvg(null, {timezone, resolution}, {dataSources, user});
+      const expected = 1.34;
+      expect(actual).toEqual(expected);
   });
 
   test('reportByCategory: weekly report', async () => {
-    jest.setTimeout(30000);
+      jest.setTimeout(30000);
 
-    jest.spyOn(dataSources.userHistAPI, 'weekly_cf_composition').mockImplementation(() => {
-        return (
-          {
-            "plantBased": CATEGORY_WITH_DATA, 
-            "fish": CATEGORY_WITH_DATA, 
-            "meat": CATEGORY_EMPTY, 
-            "eggsAndDairy": CATEGORY_EMPTY
-          }
-        )
+      jest.spyOn(dataSources.userHistAPI, 'weekly_cf_composition').mockImplementation(() => {
+          return (
+              {
+                  "plantBased": CATEGORY_WITH_DATA,
+                  "fish": CATEGORY_WITH_DATA,
+                  "meat": CATEGORY_EMPTY,
+                  "eggsAndDairy": CATEGORY_EMPTY
+              }
+          )
       });
-    
-    const res = await resolvers.Query.reportByCategory(null, {timezone: 0, resolution: 'WEEKLY'},  {dataSources, user});
-    
-    expect(res).toEqual(
-      {
-        "plantBased": CATEGORY_WITH_DATA, 
-        "fish": CATEGORY_WITH_DATA, 
-        "meat": CATEGORY_EMPTY, 
-        "eggsAndDairy": CATEGORY_EMPTY
-      }
-    )
+
+      const res = await resolvers.Query.reportByCategory(null, {timezone: 0, resolution: 0},  {dataSources, user});
+
+      expect(res).toEqual(
+          {
+              "plantBased": CATEGORY_WITH_DATA,
+              "fish": CATEGORY_WITH_DATA,
+              "meat": CATEGORY_EMPTY,
+              "eggsAndDairy": CATEGORY_EMPTY
+          }
+      )
   });
 
   test('reportByCategory: monthly report', async () => {
-    jest.setTimeout(30000);
+      jest.setTimeout(30000);
 
-    jest.spyOn(dataSources.userHistAPI, 'monthly_cf_composition').mockImplementation(() => {
-        return (
-          {
-            "plantBased": CATEGORY_WITH_DATA, 
-            "fish": CATEGORY_WITH_DATA, 
-            "meat": CATEGORY_EMPTY, 
-            "eggsAndDairy": CATEGORY_EMPTY
-          }
-        )
+      jest.spyOn(dataSources.userHistAPI, 'monthly_cf_composition').mockImplementation(() => {
+          return (
+              {
+                  "plantBased": CATEGORY_WITH_DATA,
+                  "fish": CATEGORY_WITH_DATA,
+                  "meat": CATEGORY_EMPTY,
+                  "eggsAndDairy": CATEGORY_EMPTY
+              }
+          )
       });
-    
-    const res = await resolvers.Query.reportByCategory(null, {timezone: 0, resolution: 'MONTHLY'},  {dataSources, user});
-    
-    expect(res).toEqual(
-      {
-        "plantBased": CATEGORY_WITH_DATA, 
-        "fish": CATEGORY_WITH_DATA, 
-        "meat": CATEGORY_EMPTY, 
-        "eggsAndDairy": CATEGORY_EMPTY
-      }
-      )
-    });
 
-})
+      const res = await resolvers.Query.reportByCategory(null, {timezone: 0, resolution: 1},  {dataSources, user});
+
+      expect(res).toEqual(
+          {
+              "plantBased": CATEGORY_WITH_DATA,
+              "fish": CATEGORY_WITH_DATA,
+              "meat": CATEGORY_EMPTY,
+              "eggsAndDairy": CATEGORY_EMPTY
+          })
+  });
+
+});

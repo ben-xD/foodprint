@@ -30,32 +30,79 @@ const CATEGORY_EMPTY =
     {"avgCarbonFootprint": 0, "periodNumber": -4}, 
     {"avgCarbonFootprint": 0, "periodNumber": -5}]
 
-describe('Real user history database', () => {
+describe('User history database (mocked dataSources)', () => {
 
-    // test('Average co2 of all products for user test_user is 0.62 (rounded up)', async () => {
-    //     jest.setTimeout(10000);
-    //     const user = 'test_user';
-    //     const expected = 0.62;
-    //     expect.assertions(1);
-    //     const res = await userHistAPI.avg_co2_for_user(carbonAPI, user);
-    //     console.log('res', res);
-    //     const actual = res;
-    //     expect(actual).toEqual(expected);
-    // });
+    test('Average co2 of all products for user x is 2.28 (rounded up)', async () => {
+        jest.setTimeout(30000);
+        // Mock up unreliable functions
+        jest.spyOn(userHistAPI, 'get_all_user_data').mockReturnValue(
+            [{item: 'rice'}, {item: 'potato'}, {item: 'orange'}]);
+        jest.spyOn(carbonAPI, 'searchData').mockReturnValueOnce(
+            { carbonpkilo: '1.14' });
+        jest.spyOn(carbonAPI, 'searchData').mockReturnValueOnce(
+            { carbonpkilo: '2.2' });
+        jest.spyOn(carbonAPI, 'searchData').mockReturnValueOnce(
+            { carbonpkilo: '3.5' });
 
-    test('Average co2 of all products for a user that has no products saved in db should be 0', async () => {
-        jest.setTimeout(10000);
-        const user = 'non_user';
-        const expected = 0;
-        expect.assertions(1);
-        const res = await userHistAPI.avg_co2_for_user(carbonAPI, user);
-        console.log('res', res);
-        const actual = res;
+        const user = 'x';
+        let actual = await userHistAPI.avg_co2_for_user(carbonAPI, user);
+        const expected = 2.28;
         expect(actual).toEqual(expected);
     });
-});
 
-describe('User history database (mocked dataSources)', () => {
+    test('Calculate the weekly average co2', async () => {
+        jest.setTimeout(30000);
+        // Mock up unreliable functions:
+        // Mock the items returned for each of the 6 weeks (same for every week)
+        jest.spyOn(userHistAPI, 'get_week_i_data').mockReturnValue(
+            [{item: 'orange'}]);
+        // Mock the co2 values returned for each element in each week (6 in total)
+        jest.spyOn(carbonAPI, 'searchData').mockReturnValueOnce(
+            {carbonpkilo: '1.2'});
+        jest.spyOn(carbonAPI, 'searchData').mockReturnValueOnce(
+            {carbonpkilo: '2.1'});
+        jest.spyOn(carbonAPI, 'searchData').mockReturnValueOnce(
+            {carbonpkilo: '0.4'});
+        jest.spyOn(carbonAPI, 'searchData').mockReturnValueOnce(
+            {carbonpkilo: '1.2'});
+        jest.spyOn(carbonAPI, 'searchData').mockReturnValueOnce(
+            {carbonpkilo: '0.4'});
+        jest.spyOn(carbonAPI, 'searchData').mockReturnValueOnce(
+            {carbonpkilo: '3'});
+
+        const timezone = 0;
+        const user = 'x';
+        let actual = await userHistAPI.weekly_average_cf(carbonAPI, user, timezone);
+        const expected = 1.06;
+        expect(actual).toEqual(expected);
+    });
+
+    test('Calculate the monthy average co2', async () => {
+        jest.setTimeout(30000);
+        // Mock up unreliable functions:
+        // Mock the items returned for each of the 6 months (same for every month)
+        jest.spyOn(userHistAPI, 'get_month_i_data').mockReturnValue(
+            [{item: 'orange'}]);
+        // Mock the co2 values returned for each element in each month (6 in total)
+        jest.spyOn(carbonAPI, 'searchData').mockReturnValueOnce(
+            {carbonpkilo: '3.2'});
+        jest.spyOn(carbonAPI, 'searchData').mockReturnValueOnce(
+            {carbonpkilo: '1.1'});
+        jest.spyOn(carbonAPI, 'searchData').mockReturnValueOnce(
+            {carbonpkilo: '0.1'});
+        jest.spyOn(carbonAPI, 'searchData').mockReturnValueOnce(
+            {carbonpkilo: '3.8'});
+        jest.spyOn(carbonAPI, 'searchData').mockReturnValueOnce(
+            {carbonpkilo: '3.1'});
+        jest.spyOn(carbonAPI, 'searchData').mockReturnValueOnce(
+            {carbonpkilo: '0.5'});
+
+        const timezone = 0;
+        const user = 'x';
+        let actual = await userHistAPI.monthly_average_cf(carbonAPI, user, timezone);
+        const expected = 2.24;
+        expect(actual).toEqual(expected);
+    });
 
     test('Get weekly_cf_composition', async () => {
         jest.setTimeout(10000);
@@ -124,4 +171,5 @@ describe('User history database (mocked dataSources)', () => {
         const actual = res;
         expect(actual).toEqual(expected);
     });
+
 });
