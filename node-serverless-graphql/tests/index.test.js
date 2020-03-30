@@ -55,7 +55,10 @@ const POST_PICTURE_MUTATION = gql`
     }
 `;
 
+
 describe('Real dataSources with mocked user', () => {
+
+jest.setTimeout(30000);
 
   it('postPicture: fetches carbon footprint of image with orange that is classified as citrus', async () => {
     const file = {base64: orange_image};

@@ -18,6 +18,24 @@ Object {
 }
 `;
 
+exports[`Real dataSources with mocked user postCorrection: fetches carbon footprint of orange 2`] = `
+Object {
+  "data": Object {
+    "postCorrection": Object {
+      "carbonFootprintPerKg": 0.5,
+      "name": "orange",
+    },
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;
+
 exports[`Real dataSources with mocked user postPicture: fetches carbon footprint of image with orange that is classified as citrus 1`] = `
 Object {
   "data": Object {
