@@ -2,8 +2,10 @@
 // https://jestjs.io/docs/en/configuration.html
 
 module.exports = {
-  setupFiles: ['./jest.setup.js',
-    './node_modules/react-native-gesture-handler/jestSetup.js'],
+  setupFiles: [
+    './jest.setup.js',
+    './node_modules/react-native-gesture-handler/jestSetup.js',
+  ],
   preset: '@testing-library/react-native',
 
   // All imported modules in your tests should be mocked automatically
@@ -174,9 +176,9 @@ module.exports = {
   // transform: undefined,
 
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
-  // transformIgnorePatterns: [
-  //   "/node_modules/"
-  // ],
+  transformIgnorePatterns: [
+    // '/node_modules/(?!victory-native).+\\.js$',
+  ],
 
   // An array of regexp pattern strings that are matched against all modules before the module loader will automatically return a mock for them
   // unmockedModulePathPatterns: undefined,

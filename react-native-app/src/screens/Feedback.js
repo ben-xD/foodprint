@@ -6,6 +6,7 @@ import { useMutation } from '@apollo/react-hooks';
 import { Rating, Button } from 'react-native-elements';
 import { widthPercentageToDP as percentageWidth, heightPercentageToDP as percentageHeight } from 'react-native-responsive-screen';
 import { ScrollView } from 'react-native-gesture-handler';
+import Snackbar from 'react-native-snackbar';
 
 // GraphQL schema for picture posting mutation
 const POST_PICTURE_MUTATION = gql`
@@ -38,7 +39,7 @@ const Feedback = ({ route, navigation }) => {
   const [postBarcodeMutation, { loading: barcodeLoading, error: barcodeError, data: barcodeData }] = useMutation(POST_BARCODE_MUTATION);
   const [postUserHistoryEntryMutation, { loading: historyLoading, error: historyError, data: historyData }] = useMutation(Post_User_History_Entry);
 
-  // When component is loaded and provided with a file or barcode, make a request
+  // make relevant request when component is loaded AND provided with either file or barcode
   useEffect(() => {
     const { file, barcode } = route.params;
     if (file) {
@@ -53,7 +54,10 @@ const Feedback = ({ route, navigation }) => {
     if (!pictureError && !barcodeError) {
       return;
     }
-    console.warn('Picture or barcode error!');
+    Snackbar.show({
+      text: 'Oops, something went wrong :(',
+      duration: Snackbar.LENGTH_SHORT,
+    });
   }, [pictureError, barcodeError]);
 
   useEffect(() => {
@@ -130,7 +134,9 @@ const Feedback = ({ route, navigation }) => {
       <ActivityIndicator />
     </View > :
     // todo fix this, no meal yet thing
-    !meal ? <Text>No meal yet</Text> :
+    !meal ? <View>
+      <Text>Oops, something went wrong.</Text>
+    </View> :
       <View style={styles.container}>
         <ScrollView style={styles.scrollView}>
           <View style={styles.body}>
@@ -161,11 +167,7 @@ const Feedback = ({ route, navigation }) => {
               buttonStyle={styles.greenButtonStyle}
               titleStyle={styles.buttonText}
               title="Add to history"
-              onPress={() => {
-                addToHistory(meal.description);
-                alert("Sent item to to user history (backend)... Dashboard to be implemented!");
-                navigation.navigate('Your Foodprint');
-              }}
+              onPress={() => { alert("'Add to history' not implemented!"); navigation.navigate('Your Foodprint'); }}
             />
           </View>
         </ScrollView>
