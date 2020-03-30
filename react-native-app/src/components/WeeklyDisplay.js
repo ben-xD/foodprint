@@ -1,12 +1,13 @@
 import {ActivityIndicator, StyleSheet, Text, View} from 'react-native';
 import { heightPercentageToDP as percentageHeight, widthPercentageToDP as percentageWidth} from 'react-native-responsive-screen';
 import {VictoryAxis, VictoryBar, VictoryChart, VictoryLegend, VictoryLine, VictoryStack} from 'victory-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Tooltip} from 'react-native-elements';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 //DO NOT DELETE THE FOLLOWING COMMENTED CODE
 import gql from 'graphql-tag';
 import {useQuery} from '@apollo/react-hooks';
+import AsyncStorage from "@react-native-community/async-storage";
 
 //DO NOT DELETE THE FOLLOWING COMMENTED CODE
 const GET_AVERAGE = gql`query($timezone: Int!) {
@@ -39,10 +40,10 @@ const GET_COMPOSITION = gql`query($timezone: Int!) {
 const WeeklyDisplay = ({ timeDifference }) => {
 
  //DO NOT DELETE THE FOLLOWING COMMENTED CODE
- const { loading: averageLoading, error: averageError, data: averageData } = useQuery(GET_AVERAGE, {
+ let { loading: averageLoading, error: averageError, data: averageData } = useQuery(GET_AVERAGE, {
   variables: { timezone: timeDifference },
  });
- const { loading: compositionLoading, error: compositionError, data: compositionData } = useQuery(GET_COMPOSITION, {
+ let { loading: compositionLoading, error: compositionError, data: compositionData } = useQuery(GET_COMPOSITION, {
   variables: { timezone: timeDifference },
  });
 
@@ -88,6 +89,41 @@ const WeeklyDisplay = ({ timeDifference }) => {
  //     ],
  //  },
  // };
+
+ // const saveWeeklyData = async (weeklyAverage, weeklyComposition) => {
+ //  try {
+ //   await AsyncStorage.setItem('weeklyAverage', weeklyAverage);
+ //   await AsyncStorage.setItem('weeklyComposition', weeklyComposition);
+ //  } catch (e) {
+ //   console.log('Error saving generalScore' + e);
+ //  }
+ // };
+ //
+ // const getWeeklyDataCache = async () => {
+ //  try {
+ //   const retrievedAverage = await AsyncStorage.getItem('weeklyAverage');
+ //   averageData = JSON.parse(retrievedAverage);
+ //   const retrievedComposition = await AsyncStorage.getItem('weeklyComposition');
+ //   averageData = JSON.parse(retrievedComposition);
+ //  } catch (e) {
+ //   console.log('Error retrieving generalScore' + e);
+ //  }
+ // }
+ //
+ // useEffect(() => {
+ //      if (data) {
+ //       saveWeeklyData(JSON.stringify(averageData.getPeriodAvg), JSON.stringify(compositionData.reportByCategory));
+ //      }
+ //     }
+ // );
+ //
+ // useEffect(() => {
+ //      if (error) {
+ //       getWeeklyDataCache();
+ //      }
+ //     }
+ // );
+
 
 
  // This week's carbon footprint

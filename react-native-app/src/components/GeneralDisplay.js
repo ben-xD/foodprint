@@ -1,12 +1,13 @@
 import {heightPercentageToDP as percentageHeight, widthPercentageToDP as percentageWidth} from 'react-native-responsive-screen';
 import {VictoryPie} from 'victory-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {ActivityIndicator, Image, StyleSheet, Text, View} from 'react-native';
 import { Tooltip } from 'react-native-elements';
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 //DO NOT DELETE THE FOLLOWING COMMENTED CODE
 import gql from 'graphql-tag';
 import {useQuery} from '@apollo/react-hooks';
+import AsyncStorage from '@react-native-community/async-storage';
 
 
 //DO NOT DELETE THE FOLLOWING COMMENTED CODE
@@ -17,7 +18,7 @@ const GET_AVERAGE = gql`query {
 
 const GeneralDisplay = () => {
  //DO NOT DELETE THE FOLLOWING COMMENTED CODE
- const { loading, error, data } = useQuery(GET_AVERAGE);
+ let { loading, error, data } = useQuery(GET_AVERAGE);
 
  //Following code is here to mimick response from back-end
  // const loading = false;
@@ -50,17 +51,50 @@ const GeneralDisplay = () => {
    return require('../images/crying-smiley.png');
  };
 
+ const saveGeneralScore = async (value) => {
+  try {
+   await AsyncStorage.setItem('generalScore', value);
+  } catch (e) {
+   console.log('Error saving generalScore' + e);
+  }
+ };
+
+ const getGeneralScoreCache = async () => {
+  try {
+   const retrievedValue = await AsyncStorage.getItem('generalScore');
+   data = JSON.parse(retrievedValue);
+  } catch (e) {
+   console.log('Error retrieving generalScore' + e);
+  }
+ }
+
+ useEffect(() => {
+   if (data) {
+      saveGeneralScore(JSON.stringify(data.getUserAvg));
+     }
+   }
+ );
+
+ useEffect(() => {
+  if (error) {
+   getGeneralScoreCache();
+  }
+ }
+ );
+
  return (
    <View>
      {(loading) ? (
        <View style={ styles.messageContainer }>
         <ActivityIndicator/>
        </View>
-     ) : ((error) ? (
-       <View style={ styles.messageContainer }>
-         <Text>An error has occurred</Text>
-       </View>
-     ) : (
+     ) :
+     //     ((error) ? (
+     //   <View style={ styles.messageContainer }>
+     //     <Text>An error has occurred</Text>
+     //   </View>
+     // ) :
+             (
        <View style={ styles.graphContainer }>
          <Image
            source={calculateSmiley(data)}
@@ -88,7 +122,7 @@ const GeneralDisplay = () => {
            height={percentageHeight('40%')}
          />
        </View>
-     ))}
+     )}
    </View>
  );
 };
