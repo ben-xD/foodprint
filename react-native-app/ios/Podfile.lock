@@ -350,6 +350,8 @@ PODS:
     - React
   - RNScreens (2.4.0):
     - React
+  - RNSnackbar (2.2.0):
+    - React
   - RNSVG (11.0.1):
     - React
   - RNVectorIcons (6.6.0):
@@ -400,6 +402,7 @@ DEPENDENCIES:
   - "RNGoogleSignin (from `../node_modules/@react-native-community/google-signin`)"
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
+  - RNSnackbar (from `../node_modules/react-native-snackbar`)
   - RNSVG (from `../node_modules/react-native-svg`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
@@ -504,6 +507,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../node_modules/react-native-screens"
+  RNSnackbar:
+    :path: "../node_modules/react-native-snackbar"
   RNSVG:
     :path: "../node_modules/react-native-svg"
   RNVectorIcons:
@@ -569,6 +574,7 @@ SPEC CHECKSUMS:
   RNGoogleSignin: a00f87261ea13df9a5cea8deafa6927d6f2c3562
   RNReanimated: 031fe8d9ea93c2bd689a40f05320ef9d96f74d7f
   RNScreens: b5c0e1b2b04512919e78bd3898e144a157ce2363
+  RNSnackbar: 2924764545b779c3dd130f875cd481d4162a6f3b
   RNSVG: 67f1f12dae2cef6ed59a42cae74a6b8f5a9e7b46
   RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
