@@ -5,89 +5,89 @@ import React from 'react';
 import {Tooltip} from 'react-native-elements';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 //DO NOT DELETE THE FOLLOWING COMMENTED CODE
-// import gql from 'graphql-tag';
-// import {useQuery} from '@apollo/react-hooks';
+import gql from 'graphql-tag';
+import {useQuery} from '@apollo/react-hooks';
 
 //DO NOT DELETE THE FOLLOWING COMMENTED CODE
-// const GET_AVERAGE = gql`query {
-//   getPeriodAvg(timezone: $timezone, resolution:WEEK)
-// }`;
+const GET_AVERAGE = gql`query($timezone: Int!) {
+  getPeriodAvg(timezone: $timezone, resolution:WEEK)
+}`;
 
 //DO NOT DELETE THE FOLLOWING COMMENTED CODE
-// const GET_COMPOSITION = gql`query {
-//   reportByCategory(timezone: $timezone, resolution:WEEK) {
-//      plantBased {
-//       periodNumber
-//       avgCarbonFootprint
-//     }
-//      fish {
-//       periodNumber
-//       avgCarbonFootprint
-//     }
-//     meat {
-//       periodNumber
-//       avgCarbonFootprint
-//     }
-//     eggsAndDairy {
-//       periodNumber
-//       avgCarbonFootprint
-//     }
-//    }
-//  }`;
+const GET_COMPOSITION = gql`query($timezone: Int!) {
+  reportByCategory(timezone: $timezone, resolution:WEEK) {
+     plantBased {
+      periodNumber
+      avgCarbonFootprint
+    }
+     fish {
+      periodNumber
+      avgCarbonFootprint
+    }
+    meat {
+      periodNumber
+      avgCarbonFootprint
+    }
+    eggsAndDairy {
+      periodNumber
+      avgCarbonFootprint
+    }
+   }
+ }`;
 
 
 const WeeklyDisplay = ({ timeDifference }) => {
 
  //DO NOT DELETE THE FOLLOWING COMMENTED CODE
- // const { loading: averageLoading, error: averageError, data: averageData } = useQuery(GET_AVERAGE, {
- //  variables: { timeDifference },
- // });
- // const { loading: compositionLoading, error: compositionError, data: compositionData } = useQuery(GET_COMPOSITION, {
- //  variables: { timeDifference },
- // });
+ const { loading: averageLoading, error: averageError, data: averageData } = useQuery(GET_AVERAGE, {
+  variables: { timezone: timeDifference },
+ });
+ const { loading: compositionLoading, error: compositionError, data: compositionData } = useQuery(GET_COMPOSITION, {
+  variables: { timezone: timeDifference },
+ });
 
  //Following code is here to mimick response from back-end
- const averageLoading = false;
- const averageError = false;
- const averageData = { getPeriodAvg: 13.4};
- const compositionLoading = false;
- const compositionError = false;
- const compositionData = {
-  reportByCategory: {
-     plantBased: [
-        { 'periodNumber': 0, 'avgCarbonFootprint': 3.8 },
-        { 'periodNumber': -1, 'avgCarbonFootprint': 2.7 },
-        { 'periodNumber': -2, 'avgCarbonFootprint': 3.3 },
-        { 'periodNumber': -3, 'avgCarbonFootprint': 2.85 },
-        { 'periodNumber': -4, 'avgCarbonFootprint': 2.6 },
-        { 'periodNumber': -5, 'avgCarbonFootprint': 3.3 },
-     ],
-     fish: [
-        { 'periodNumber': 0, 'avgCarbonFootprint': 3.8 },
-        { 'periodNumber': -1, 'avgCarbonFootprint': 2.6 },
-        { 'periodNumber': -2, 'avgCarbonFootprint': 3.3 },
-        { 'periodNumber': -3, 'avgCarbonFootprint': 2.7 },
-        { 'periodNumber': -4, 'avgCarbonFootprint': 2.85 },
-        { 'periodNumber': -5, 'avgCarbonFootprint': 2.6 },
-     ],
-     meat: [
-        { 'periodNumber': 0, 'avgCarbonFootprint': 3.8 },
-        { 'periodNumber': -1, 'avgCarbonFootprint': 3.3 },
-        { 'periodNumber': -2, 'avgCarbonFootprint': 2.85 },
-        { 'periodNumber': -3, 'avgCarbonFootprint': 2.6 },
-        { 'periodNumber': -4, 'avgCarbonFootprint': 2.7 },
-        { 'periodNumber': -5, 'avgCarbonFootprint': 3.3 },
-     ],
-     eggsAndDairy: [
-        { 'periodNumber': 0, 'avgCarbonFootprint': 3.8 },
-        { 'periodNumber': -1, 'avgCarbonFootprint': 3.3 },
-        { 'periodNumber': -2, 'avgCarbonFootprint': 2.85 },
-        { 'periodNumber': -3, 'avgCarbonFootprint': 2.6 },
-        { 'periodNumber': -4, 'avgCarbonFootprint': 2.7 },
-        { 'periodNumber': -5, 'avgCarbonFootprint': 2.6 },
-     ],
-  },
- };
+ // const averageLoading = false;
+ // const averageError = false;
+ // const averageData = { getPeriodAvg: 13.4};
+ // const compositionLoading = false;
+ // const compositionError = false;
+ // const compositionData = {
+ //  reportByCategory: {
+ //     plantBased: [
+ //        { 'periodNumber': 0, 'avgCarbonFootprint': 3.8 },
+ //        { 'periodNumber': -1, 'avgCarbonFootprint': 2.7 },
+ //        { 'periodNumber': -2, 'avgCarbonFootprint': 3.3 },
+ //        { 'periodNumber': -3, 'avgCarbonFootprint': 2.85 },
+ //        { 'periodNumber': -4, 'avgCarbonFootprint': 2.6 },
+ //        { 'periodNumber': -5, 'avgCarbonFootprint': 3.3 },
+ //     ],
+ //     fish: [
+ //        { 'periodNumber': 0, 'avgCarbonFootprint': 3.8 },
+ //        { 'periodNumber': -1, 'avgCarbonFootprint': 2.6 },
+ //        { 'periodNumber': -2, 'avgCarbonFootprint': 3.3 },
+ //        { 'periodNumber': -3, 'avgCarbonFootprint': 2.7 },
+ //        { 'periodNumber': -4, 'avgCarbonFootprint': 2.85 },
+ //        { 'periodNumber': -5, 'avgCarbonFootprint': 2.6 },
+ //     ],
+ //     meat: [
+ //        { 'periodNumber': 0, 'avgCarbonFootprint': 3.8 },
+ //        { 'periodNumber': -1, 'avgCarbonFootprint': 3.3 },
+ //        { 'periodNumber': -2, 'avgCarbonFootprint': 2.85 },
+ //        { 'periodNumber': -3, 'avgCarbonFootprint': 2.6 },
+ //        { 'periodNumber': -4, 'avgCarbonFootprint': 2.7 },
+ //        { 'periodNumber': -5, 'avgCarbonFootprint': 3.3 },
+ //     ],
+ //     eggsAndDairy: [
+ //        { 'periodNumber': 0, 'avgCarbonFootprint': 3.8 },
+ //        { 'periodNumber': -1, 'avgCarbonFootprint': 3.3 },
+ //        { 'periodNumber': -2, 'avgCarbonFootprint': 2.85 },
+ //        { 'periodNumber': -3, 'avgCarbonFootprint': 2.6 },
+ //        { 'periodNumber': -4, 'avgCarbonFootprint': 2.7 },
+ //        { 'periodNumber': -5, 'avgCarbonFootprint': 2.6 },
+ //     ],
+ //  },
+ // };
 
 
  // This week's carbon footprint
