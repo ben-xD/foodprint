@@ -16,7 +16,7 @@ const resolvers = {
       console.log(uid);
       let avg_co2;
       try {
-        avg_co2 = dataSources.userHistAPI.avg_co2_for_user(dataSources.carbonAPI, uid);
+        avg_co2 = await dataSources.userHistAPI.avg_co2_for_user(dataSources.carbonAPI, uid);
         return avg_co2;
       } catch (err) {
         console.log(err);
@@ -35,12 +35,12 @@ const resolvers = {
         if (resolution === "WEEKLY"){
           console.log(("Returning weekly average co2 last 6 weeks for user "));
           console.log(uid);
-          avg = dataSources.userHistAPI.weekly_average_cf(dataSources.carbonAPI, uid, timezone);
+          avg = await dataSources.userHistAPI.weekly_average_cf(dataSources.carbonAPI, uid, timezone);
           return avg;
         } else if (resolution === "MONTHLY"){
           console.log(("Returning monthly average co2 last 6 months for user "));
           console.log(uid);
-          avg = dataSources.userHistAPI.monthly_average_cf(dataSources.carbonAPI, uid, timezone);
+          avg = await dataSources.userHistAPI.monthly_average_cf(dataSources.carbonAPI, uid, timezone);
           return avg;
         }
       } catch (err) {
@@ -60,12 +60,12 @@ const resolvers = {
         if (resolution === "WEEKLY"){
           console.log(("Returning categorised information on co2 for the last 6 weeks for user "));
           console.log(uid);
-          res = dataSources.userHistAPI.weekly_cf_composition(dataSources.carbonAPI, uid, timezone);
+          res = await dataSources.userHistAPI.weekly_cf_composition(dataSources.carbonAPI, uid, timezone);
           return res;
         } else if (resolution === "MONTHLY"){
           console.log(("Returning categorised information on co2 last 6 months for user "));
           console.log(uid);
-          res = dataSources.userHistAPI.monthly_cf_composition(dataSources.carbonAPI, uid, timezone);
+          res = await dataSources.userHistAPI.monthly_cf_composition(dataSources.carbonAPI, uid, timezone);
           return res;
         }
       } catch (err) {
