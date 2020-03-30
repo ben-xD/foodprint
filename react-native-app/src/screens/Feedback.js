@@ -167,7 +167,11 @@ const Feedback = ({ route, navigation }) => {
               buttonStyle={styles.greenButtonStyle}
               titleStyle={styles.buttonText}
               title="Add to history"
-              onPress={() => { alert("'Add to history' not implemented!"); navigation.navigate('Your Foodprint'); }}
+              onPress={() => {
+                addToHistory(meal.description);
+                console.log("Sent item to to user history...");
+                navigation.navigate('Your Foodprint');
+              }}
             />
           </View>
         </ScrollView>
