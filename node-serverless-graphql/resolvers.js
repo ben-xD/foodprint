@@ -5,7 +5,7 @@ const resolvers = {
   Query: {
     _: () => {
     },
-    getUserAvg: async (parent, context) => {
+    getUserAvg: async (parent, {}, context) => {
       if (!context.user) {
         // Throw a 403 error because token was invalid or missing in context.js
         throw new Error('You must be logged in.');

@@ -77,7 +77,7 @@ describe('testing resolvers', () => {
       jest.setTimeout(30000);
       jest.spyOn(dataSources.userHistAPI, 'avg_co2_for_user').mockImplementation(() =>
           2.28);
-      let actual = await resolvers.Query.getUserAvg(null, {dataSources, user});
+      let actual = await resolvers.Query.getUserAvg(null, {}, {dataSources, user});
       const expected = 2.28;
       expect(actual).toEqual(expected);
   });
