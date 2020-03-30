@@ -13,7 +13,7 @@ const getCarbonFootprintFromBarcode = async (dataSources, barcode) => {
     if(data.products === undefined || data.products.length == 0){
         console.log('This barcode has no product information');
         return {
-            item: 'No product information in the barcode',
+            item: undefined,
             carbonFootprintPerKg: undefined,
         };
     }

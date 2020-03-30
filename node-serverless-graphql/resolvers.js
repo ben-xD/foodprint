@@ -80,7 +80,8 @@ const resolvers = {
       console.log({ dataSources, user, parent });
       const image = new Buffer(file.base64, 'base64'); // Decode base64 of "file" to image
       console.log('Received picture');
-      const { item, carbonFootprintPerKg } = await getCarbonFootprintFromImage(context.dataSources, image);
+      let { item, carbonFootprintPerKg } = await getCarbonFootprintFromImage(context.dataSources, image);
+      if (!item) item = "unknown";
       const response = {
         name: item,
         carbonFootprintPerKg,
@@ -92,7 +93,8 @@ const resolvers = {
       const { dataSources, user } = context
       console.log({ dataSources, user, parent });
       console.log(`Received barcode: ${barcode}`);
-      const { item, carbonFootprintPerKg } = await getCarbonFootprintFromBarcode(dataSources, barcode);
+      let { item, carbonFootprintPerKg } = await getCarbonFootprintFromBarcode(dataSources, barcode);
+      if (!item) item = 'unknown';
       const response = {
         name: item,
         carbonFootprintPerKg,
@@ -103,7 +105,8 @@ const resolvers = {
     postCorrection: async (parent, { name }, context) => {
       const { dataSources, user } = context
       console.log({ 'Received correction': name });
-      const { item, carbonFootprintPerKg } = await getCarbonFootprintFromName(dataSources, name);
+      let { item, carbonFootprintPerKg } = await getCarbonFootprintFromName(dataSources, name);
+      if (!carbonFootprintPerKg) carbonFootprintPerKg = -1;
       const response = {
         name: item,
         carbonFootprintPerKg,

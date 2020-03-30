@@ -53,37 +53,43 @@ const Feedback = ({ route, navigation }) => {
     if (!pictureError && !barcodeError) {
       return;
     }
-    // TODO set error, and display.
-    console.warn('Error!');
+    console.warn('Picture or barcode error!');
   }, [pictureError, barcodeError]);
 
   useEffect(() => {
-    if (pictureError) {
-      console.warn({ pictureError });
-    }
-    // console.log({ pictureData, pictureLoading, pictureError });
     if (pictureData) {
-      setMeal({
-        uri: route.params.uri,
-        score: pictureData.postPicture.carbonFootprintPerKg,
-        description: pictureData.postPicture.name,
-      });
+      console.log(pictureData)
+      if (pictureData.postPicture.name == 'unknown') {
+        // If unknown name from picture, go to error correction screen
+        setMeal({
+          ...meal,
+          uri: route.params.uri,
+        });
+        navigation.navigate('Correction', { meal, setMeal })
+      } else {
+        // Otherwise, display feedback
+        setMeal({
+          uri: route.params.uri,
+          score: pictureData.postPicture.carbonFootprintPerKg,
+          description: pictureData.postPicture.name,
+        });
+      }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pictureData]);
 
   useEffect(() => {
-    if (barcodeError) {
-      console.warn({ barcodeError });
-    }
-    // console.log({ barcodeData, barcodeLoading, barcodeError });
     if (barcodeData) {
-      setMeal({
-        score: barcodeData.postBarcode.carbonFootprintPerKg,
-        description: barcodeData.postBarcode.name,
-      });
+      if (barcodeData.postBarcode.name == 'unknown') {
+        // If unknown name from barcode, go to error correction screen
+        navigation.navigate('Correction', { meal, setMeal })
+      } else {
+        setMeal({
+          ...meal,
+          score: barcodeData.postBarcode.carbonFootprintPerKg,
+          description: barcodeData.postBarcode.name,
+        });
+      }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [barcodeData]);
 
   // Add item to user history
@@ -141,7 +147,7 @@ const Feedback = ({ route, navigation }) => {
               type="star" // Optionally customisible
               imageSize={percentageWidth('7%')}
             />
-            <Text style={styles.score}>{meal.score} kg of CO2 eq/kg</Text>
+            <Text style={styles.score}>{meal.score.toFixed(1)} kg of CO2 eq/kg</Text>
           </View>
           <View style={styles.buttonContainer}>
             <Button
@@ -188,7 +194,12 @@ const styles = StyleSheet.create({
     marginTop: percentageHeight('2%'),
     marginBottom: percentageHeight('2%'),
   },
-  description: { fontSize: percentageWidth('8%'), marginTop: percentageHeight('1%'), marginBottom: percentageHeight('1%') },
+  description: {
+    textTransform: 'capitalize',
+    fontSize: percentageWidth('8%'),
+    marginTop: percentageHeight('1%'),
+    marginBottom: percentageHeight('1%')
+  },
   score: { fontSize: percentageWidth('5%'), margin: percentageWidth('2%') },
   buttonContainer: { flex: 1, flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center' },
   redButtonStyle: { backgroundColor: 'gray', width: percentageWidth('45%') },
