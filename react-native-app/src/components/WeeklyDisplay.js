@@ -47,6 +47,40 @@ const WeeklyDisplay = ({ timeDifference }) => {
     variables: { timezone: timeDifference },
   });
 
+  const saveWeeklyData = async (weeklyAverage, weeklyComposition) => {
+    try {
+      await AsyncStorage.setItem('weeklyAverage', weeklyAverage);
+      await AsyncStorage.setItem('weeklyComposition', weeklyComposition);
+    } catch (e) {
+      console.log('Error saving weekly data' + e);
+    }
+  };
+
+  const getWeeklyDataCache = async () => {
+    try {
+      const retrievedAverage = await AsyncStorage.getItem('weeklyAverage');
+      averageData.getPeriodAvg = JSON.parse(retrievedAverage);
+      const retrievedComposition = await AsyncStorage.getItem('weeklyComposition');
+      compositionData.reportByCategory = JSON.parse(retrievedComposition);
+    } catch (e) {
+      console.log('Error retrieving weekly data' + e);
+    }
+  }
+
+  useEffect(() => {
+        if (averageData && compositionData) {
+          saveWeeklyData(JSON.stringify(averageData.getPeriodAvg),JSON.stringify(compositionData.reportByCategory));
+        }
+      }
+  );
+
+  useEffect(() => {
+        if (averageError || compositionError) {
+          getWeeklyDataCache();
+        }
+      }
+  );
+
   // This week's carbon footprint
   const sum = () => {
     if (compositionLoading || compositionError) { return 0; }
@@ -98,10 +132,10 @@ const WeeklyDisplay = ({ timeDifference }) => {
         <View style={styles.graphContainer}>
           <ActivityIndicator />
         </View>
-      ) : ((averageError || compositionError) ? (
-        <View style={styles.graphContainer}>
-          <Text>An error has occurred</Text>
-        </View>
+      // ) : ((averageError || compositionError) ? (
+      //   <View style={styles.graphContainer}>
+      //     <Text>An error has occurred</Text>
+      //   </View>
       ) : (
           <View style={styles.contentContainer}>
             <View style={styles.scoreContainer}>
@@ -154,7 +188,7 @@ const WeeklyDisplay = ({ timeDifference }) => {
               </VictoryChart>
             </View>
           </View>
-        ))}
+        )}
     </View>
   );
 };

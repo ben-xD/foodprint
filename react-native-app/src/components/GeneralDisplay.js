@@ -20,11 +20,6 @@ const GeneralDisplay = () => {
   //DO NOT DELETE THE FOLLOWING COMMENTED CODE
   let { loading, error, data } = useQuery(GET_INDEFINITE_AVERAGE);
 
-  //Following code is here to mimick response from back-end
-  // const loading = false;
-  // const error = false;
-  // const data = 17.25;
-
   const calculateColour = (carbonFootprint) => {
     if (carbonFootprint < 4) {
       return 'forestgreen';
@@ -62,7 +57,7 @@ const GeneralDisplay = () => {
  const getGeneralScoreCache = async () => {
   try {
    const retrievedValue = await AsyncStorage.getItem('generalScore');
-   data = JSON.parse(retrievedValue);
+   data.getUserAvg = JSON.parse(retrievedValue);
   } catch (e) {
    console.log('Error retrieving generalScore' + e);
   }
@@ -88,13 +83,11 @@ const GeneralDisplay = () => {
        <View style={ styles.messageContainer }>
         <ActivityIndicator/>
        </View>
-     ) :
-     //     ((error) ? (
+     // ) : ((error) ? (
      //   <View style={ styles.messageContainer }>
      //     <Text>An error has occurred</Text>
      //   </View>
-     // ) :
-             (
+     ) : (
        <View style={ styles.graphContainer }>
          <Image
            source={calculateSmiley(data)}
@@ -122,7 +115,7 @@ const GeneralDisplay = () => {
               height={percentageHeight('40%')}
             />
           </View>
-        ))}
+        )}
     </View>
   );
 };

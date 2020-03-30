@@ -1,12 +1,13 @@
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { heightPercentageToDP as percentageHeight, widthPercentageToDP as percentageWidth } from 'react-native-responsive-screen';
 import { VictoryAxis, VictoryBar, VictoryChart, VictoryLegend, VictoryLine, VictoryStack } from 'victory-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import { Tooltip } from 'react-native-elements';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 //DO NOT DELETE THE FOLLOWING COMMENTED CODE
 import gql from 'graphql-tag';
 import { useQuery } from '@apollo/react-hooks';
+import AsyncStorage from "@react-native-community/async-storage";
 
 //DO NOT DELETE THE FOLLOWING COMMENTED CODE
 export const GET_MONTHLY_AVERAGE = gql`query($timezone: Int!) {
@@ -45,6 +46,40 @@ const MonthlyDisplay = ({ timeDifference }) => {
   const { loading: compositionLoading, error: compositionError, data: compositionData } = useQuery(GET_MONTHLY_COMPOSITION, {
     variables: { timezone: timeDifference },
   });
+
+  const saveMonthlyData = async (monthlyAverage, monthlyComposition) => {
+    try {
+      await AsyncStorage.setItem('monthlyAverage', monthlyAverage);
+      await AsyncStorage.setItem('monthlyComposition', monthlyComposition);
+    } catch (e) {
+      console.log('Error saving monthly data' + e);
+    }
+  };
+
+  const getMonthlyDataCache = async () => {
+    try {
+      const retrievedAverage = await AsyncStorage.getItem('weeklyAverage');
+      averageData.getPeriodAvg = JSON.parse(retrievedAverage);
+      const retrievedComposition = await AsyncStorage.getItem('weeklyComposition');
+      compositionData.reportByCategory = JSON.parse(retrievedComposition);
+    } catch (e) {
+      console.log('Error retrieving monthly data' + e);
+    }
+  }
+
+  useEffect(() => {
+        if (averageData && compositionData) {
+          saveMonthlyData(JSON.stringify(averageData.getPeriodAvg),JSON.stringify(compositionData.reportByCategory));
+        }
+      }
+  );
+
+  useEffect(() => {
+        if (averageError || compositionError) {
+          getMonthlyDataCache();
+        }
+      }
+  );
 
   // This months's carbon footprint
   const sum = () => {
