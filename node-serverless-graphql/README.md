@@ -20,6 +20,7 @@ Set-up (You need to be authenticated with a 'service account user' to deploy to 
   - Restart your terminal
 - `cd node-serverless-graphql` if not in the folder already.
 - Run `gcloud auth activate-service-account --key-file credentials/carbonfootprint-serverless.json`
+- Set the project to this one, using `gcloud config set project carbon-footprint-2020`
 - To debug and read the logs for the server, you need your permission on Google account. Send your gmail account to Ben, and ask him to add you. You can then search for `cloud functions` at [Google Console](https://console.developers.google.com/)
 
 Every time you want to deploy to gcloud, replacing the old instance:
