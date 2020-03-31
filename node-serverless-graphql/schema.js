@@ -18,10 +18,10 @@ const typeDefs = gql`
         deviceOrientation: Int
     }
 
-#    enum ReportResolution {
-#        WEEK
-#        MONTH
-#    }
+    enum ReportResolution {
+        WEEK
+        MONTH
+    }
 
     type TimeReport {
         periodNumber: Int # week/month number starting with current period of 0, previous -1 etc.
@@ -38,8 +38,8 @@ const typeDefs = gql`
     type Query {
         _: String
         getUserAvg: Float
-        getPeriodAvg(timezone: Int!, resolution: Int!): Float
-        reportByCategory(timezone: Int!, resolution: Int!): CategoryReport
+        getPeriodAvg(timezone: Int!, resolution: ReportResolution!): Float
+        reportByCategory(timezone: Int!, resolution: ReportResolution!): CategoryReport
     }
 
     type Mutation {

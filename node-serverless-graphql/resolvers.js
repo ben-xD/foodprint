@@ -32,12 +32,12 @@ const resolvers = {
       const uid = user.uid;
       let avg;
       try{
-        if (resolution === 0){
+        if (resolution === 'WEEK'){
           console.log(("Returning weekly average co2 last 6 weeks for user "));
           console.log(uid);
           avg = await dataSources.userHistAPI.weekly_average_cf(dataSources.carbonAPI, uid, timezone);
           return avg;
-        } else if (resolution === 1){
+        } else if (resolution === 'MONTH'){
           console.log(("Returning monthly average co2 last 6 months for user "));
           console.log(uid);
           avg = await dataSources.userHistAPI.monthly_average_cf(dataSources.carbonAPI, uid, timezone);
@@ -57,12 +57,12 @@ const resolvers = {
       const uid = user.uid;
       let res;
       try{
-        if (resolution === 0){
+        if (resolution === 'WEEK'){
           console.log(("Returning categorised information on co2 for the last 6 weeks for user "));
           console.log(uid);
           res = await dataSources.userHistAPI.weekly_cf_composition(dataSources.carbonAPI, uid, timezone);
           return res;
-        } else if (resolution === 1){
+        } else if (resolution === 'MONTH'){
           console.log(("Returning categorised information on co2 last 6 months for user "));
           console.log(uid);
           res = await dataSources.userHistAPI.monthly_cf_composition(dataSources.carbonAPI, uid, timezone);
