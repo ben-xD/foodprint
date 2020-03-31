@@ -18,20 +18,20 @@ const dataSources = {
   userHistAPI: new userHistAPI(store),
 };
 
-const CATEGORY_WITH_DATA = 
-    [{"avgCarbonFootprint": 10, "periodNumber": 0}, 
-    {"avgCarbonFootprint": 10, "periodNumber": -1}, 
-    {"avgCarbonFootprint": 10, "periodNumber": -2}, 
-    {"avgCarbonFootprint": 10, "periodNumber": -3}, 
-    {"avgCarbonFootprint": 10, "periodNumber": -4}, 
+const CATEGORY_WITH_DATA =
+    [{"avgCarbonFootprint": 10, "periodNumber": 0},
+    {"avgCarbonFootprint": 10, "periodNumber": -1},
+    {"avgCarbonFootprint": 10, "periodNumber": -2},
+    {"avgCarbonFootprint": 10, "periodNumber": -3},
+    {"avgCarbonFootprint": 10, "periodNumber": -4},
     {"avgCarbonFootprint": 10, "periodNumber": -5}];
 
-const CATEGORY_EMPTY = 
-    [{"avgCarbonFootprint": 0, "periodNumber": 0}, 
-    {"avgCarbonFootprint": 0, "periodNumber": -1}, 
-    {"avgCarbonFootprint": 0, "periodNumber": -2}, 
-    {"avgCarbonFootprint": 0, "periodNumber": -3}, 
-    {"avgCarbonFootprint": 0, "periodNumber": -4}, 
+const CATEGORY_EMPTY =
+    [{"avgCarbonFootprint": 0, "periodNumber": 0},
+    {"avgCarbonFootprint": 0, "periodNumber": -1},
+    {"avgCarbonFootprint": 0, "periodNumber": -2},
+    {"avgCarbonFootprint": 0, "periodNumber": -3},
+    {"avgCarbonFootprint": 0, "periodNumber": -4},
     {"avgCarbonFootprint": 0, "periodNumber": -5}]
 
 const user = {uid: "x"};
@@ -87,7 +87,7 @@ describe('testing resolvers', () => {
       jest.spyOn(dataSources.userHistAPI, 'weekly_average_cf').mockImplementation(() =>
           3.12);
       const timezone = 0;
-      const resolution = 0
+      const resolution = 'WEEK';
       let actual = await resolvers.Query.getPeriodAvg(null, {timezone, resolution}, {dataSources, user});
       const expected = 3.12;
       expect(actual).toEqual(expected);
@@ -98,7 +98,7 @@ describe('testing resolvers', () => {
       jest.spyOn(dataSources.userHistAPI, 'monthly_average_cf').mockImplementation(() =>
           1.34);
       const timezone = 0;
-      const resolution = 1
+      const resolution = 'MONTH';
       let actual = await resolvers.Query.getPeriodAvg(null, {timezone, resolution}, {dataSources, user});
       const expected = 1.34;
       expect(actual).toEqual(expected);
@@ -118,7 +118,7 @@ describe('testing resolvers', () => {
           )
       });
 
-      const res = await resolvers.Query.reportByCategory(null, {timezone: 0, resolution: 0},  {dataSources, user});
+      const res = await resolvers.Query.reportByCategory(null, {timezone: 0, resolution: 'WEEK'},  {dataSources, user});
 
       expect(res).toEqual(
           {
@@ -144,7 +144,7 @@ describe('testing resolvers', () => {
           )
       });
 
-      const res = await resolvers.Query.reportByCategory(null, {timezone: 0, resolution: 1},  {dataSources, user});
+      const res = await resolvers.Query.reportByCategory(null, {timezone: 0, resolution: 'MONTH'},  {dataSources, user});
 
       expect(res).toEqual(
           {
