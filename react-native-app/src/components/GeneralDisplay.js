@@ -20,6 +20,10 @@ const GeneralDisplay = () => {
   //DO NOT DELETE THE FOLLOWING COMMENTED CODE
   let { loading, error, data } = useQuery(GET_INDEFINITE_AVERAGE);
 
+  // let loading = false;
+  // let error = true;
+  // let data = null;
+
   const [resolved, setResolved] = useState(false);
   const [localData, setData] = useState(null);
 
@@ -70,9 +74,8 @@ const GeneralDisplay = () => {
  useEffect(() => {
    if (data) {
       saveGeneralScore(JSON.stringify(data));
-      setData(data);
      }
- }, [data]);
+ });
 
  useEffect(() => {
    if (error) {
@@ -83,7 +86,7 @@ const GeneralDisplay = () => {
  const whichData = () => {
   if (data) return data;
   return localData;
- }
+ };
 
  return (
    <View>
@@ -91,10 +94,6 @@ const GeneralDisplay = () => {
        <View style={ styles.messageContainer }>
         <ActivityIndicator/>
        </View>
-     // ) : ((error) ? (
-     //   <View style={ styles.messageContainer }>
-     //     <Text>An error has occurred</Text>
-     //   </View>
      ) : (
        <View style={ styles.graphContainer }>
          <Image

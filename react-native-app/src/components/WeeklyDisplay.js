@@ -1,7 +1,7 @@
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { heightPercentageToDP as percentageHeight, widthPercentageToDP as percentageWidth } from 'react-native-responsive-screen';
 import { VictoryAxis, VictoryBar, VictoryChart, VictoryLegend, VictoryLine, VictoryStack } from 'victory-native';
-import React, { useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import { Tooltip } from 'react-native-elements';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 //DO NOT DELETE THE FOLLOWING COMMENTED CODE
@@ -40,12 +40,24 @@ export const GET_WEEKLY_COMPOSITION = gql`query($timezone: Int!) {
 const WeeklyDisplay = ({ timeDifference }) => {
 
   //DO NOT DELETE THE FOLLOWING COMMENTED CODE
-  let { loading: averageLoading, error: averageError, data: averageData } = useQuery(GET_WEEKLY_AVERAGE, {
-    variables: { timezone: timeDifference },
-  });
-  let { loading: compositionLoading, error: compositionError, data: compositionData } = useQuery(GET_WEEKLY_COMPOSITION, {
-    variables: { timezone: timeDifference },
-  });
+  // let { loading: averageLoading, error: averageError, data: averageData } = useQuery(GET_WEEKLY_AVERAGE, {
+  //   variables: { timezone: timeDifference },
+  // });
+  // let { loading: compositionLoading, error: compositionError, data: compositionData } = useQuery(GET_WEEKLY_COMPOSITION, {
+  //   variables: { timezone: timeDifference },
+  // });
+
+  let averageLoading = false;
+  let compositionLoading = false;
+  let averageError = true;
+  let compositionError = true;
+  let averageData = null;
+  let compositionData = null;
+
+  const [resolved, setResolved] = useState(false);
+  const [localAvgData, setAvgData] = useState(null);
+  const [localCompData, setCompData] = useState(null);
+
 
   const saveWeeklyData = async (weeklyAverage, weeklyComposition) => {
     try {
@@ -57,52 +69,82 @@ const WeeklyDisplay = ({ timeDifference }) => {
   };
 
 
+  const retrieveData = async () => {
+    try {
+      const retrievedAvgData = await AsyncStorage.getItem('weeklyAverage');
+      setAvgData(JSON.parse(retrievedAvgData));
+      const retrievedCompData = await AsyncStorage.getItem('weeklyComposition');
+      setCompData(JSON.parse(retrievedCompData));
+    } catch (e) {
+      console.log('Error retrieving generalScore' + e);
+    }
+    setResolved(true);
+  };
+
+
   useEffect(() => {
-        if (averageData && compositionData) {
-          saveWeeklyData(JSON.stringify(averageData.getPeriodAvg),JSON.stringify(compositionData.reportByCategory));
-        }
-      }
-  );
+     if (averageData && compositionData) {
+        saveWeeklyData(JSON.stringify(averageData),JSON.stringify(compositionData));
+     }
+  });
+
+
+  useEffect(() => {
+    if (averageError || compositionError) {
+      retrieveData();
+    }
+  });
+
+  const whichAvgData = () => {
+    if (averageData) return averageData;
+    return localAvgData;
+  };
+
+  const whichCompData = () => {
+    if (compositionData) return compositionData;
+    return localCompData;
+  };
 
 
   // This week's carbon footprint
   const sum = () => {
+
     if (compositionLoading || compositionError) { return 0; }
 
     let thisWeek = 0;
     let lastWeek = 0;
+    const compData = whichCompData();
 
-    for (let i = 0; i < compositionData.reportByCategory.plantBased.length; i++) {
+    for (let i = 0; i < compData.reportByCategory.plantBased.length; i++) {
 
-      if (compositionData.reportByCategory.plantBased[i].periodNumber === 0) {
-        thisWeek += compositionData.reportByCategory.plantBased[i].avgCarbonFootprint;
-      } else if (compositionData.reportByCategory.plantBased[i].periodNumber === -1) {
-        lastWeek += compositionData.reportByCategory.plantBased[i].avgCarbonFootprint;
+      if (compData.reportByCategory.plantBased[i].periodNumber === 0) {
+        thisWeek += compData.reportByCategory.plantBased[i].avgCarbonFootprint;
+      } else if (compData.reportByCategory.plantBased[i].periodNumber === -1) {
+        lastWeek += compData.reportByCategory.plantBased[i].avgCarbonFootprint;
       }
 
-      if (compositionData.reportByCategory.eggsAndDairy[i].periodNumber === 0) {
-        thisWeek += compositionData.reportByCategory.eggsAndDairy[i].avgCarbonFootprint;
-      } else if (compositionData.reportByCategory.eggsAndDairy[i].periodNumber === -1) {
-        lastWeek += compositionData.reportByCategory.eggsAndDairy[i].avgCarbonFootprint;
+      if (compData.reportByCategory.eggsAndDairy[i].periodNumber === 0) {
+        thisWeek += compData.reportByCategory.eggsAndDairy[i].avgCarbonFootprint;
+      } else if (compData.reportByCategory.eggsAndDairy[i].periodNumber === -1) {
+        lastWeek += compData.reportByCategory.eggsAndDairy[i].avgCarbonFootprint;
       }
 
-      if (compositionData.reportByCategory.fish[i].periodNumber === 0) {
-        thisWeek += compositionData.reportByCategory.fish[i].avgCarbonFootprint;
-      } else if (compositionData.reportByCategory.fish[i].periodNumber === -1) {
-        lastWeek += compositionData.reportByCategory.fish[i].avgCarbonFootprint;
+      if (compData.reportByCategory.fish[i].periodNumber === 0) {
+        thisWeek += compData.reportByCategory.fish[i].avgCarbonFootprint;
+      } else if (compData.reportByCategory.fish[i].periodNumber === -1) {
+        lastWeek += compData.reportByCategory.fish[i].avgCarbonFootprint;
       }
 
-      if (compositionData.reportByCategory.meat[i].periodNumber === 0) {
-        thisWeek += compositionData.reportByCategory.meat[i].avgCarbonFootprint;
-      } else if (compositionData.reportByCategory.meat[i].periodNumber === -1) {
-        lastWeek += compositionData.reportByCategory.meat[i].avgCarbonFootprint;
+      if (compData.reportByCategory.meat[i].periodNumber === 0) {
+        thisWeek += compData.reportByCategory.meat[i].avgCarbonFootprint;
+      } else if (compData.reportByCategory.meat[i].periodNumber === -1) {
+        lastWeek += compData.reportByCategory.meat[i].avgCarbonFootprint;
       }
     }
     return [thisWeek, lastWeek];
   };
 
   const changeSinceLastWeek = () => {
-    if (compositionLoading || compositionError) { return 0; }
     const value = sum();
     return (((value[0] - value[1]) * 100) / value[0]);
   };
@@ -112,14 +154,14 @@ const WeeklyDisplay = ({ timeDifference }) => {
 
   return (
     <View style={styles.componentContainer}>
-      {(averageLoading || compositionLoading) ? (
+      {(averageLoading || compositionLoading || ((averageError || compositionError) && !resolved)) ? (
         <View style={styles.graphContainer}>
           <ActivityIndicator />
         </View>
-      ) : ((averageError || compositionError) ? (
-        <View style={styles.graphContainer}>
-          <Text>An error has occurred</Text>
-        </View>
+      // ) : ((averageError || compositionError) ? (
+      //   <View style={styles.graphContainer}>
+      //     <Text>An error has occurred</Text>
+      //   </View>
       ) : (
           <View style={styles.contentContainer}>
             <View style={styles.scoreContainer}>
@@ -147,10 +189,10 @@ const WeeklyDisplay = ({ timeDifference }) => {
                 <VictoryAxis dependentAxis orientation="left" offsetX={percentageWidth('15%')} label="Carbon footprint" />
                 <VictoryAxis label="Week" domain={[-5, 0.01]} tickFormat={(t) => (t === 0) ? 'Now' : ('s' + t)} />
                 <VictoryStack colorScale={['olivedrab', 'gold', 'skyblue', 'firebrick']}>
-                  <VictoryBar data={compositionData.reportByCategory.plantBased} sortKey="periodNumber" x="periodNumber" y="avgCarbonFootprint" />
-                  <VictoryBar data={compositionData.reportByCategory.eggsAndDairy} sortKey="periodNumber" x="periodNumber" y="avgCarbonFootprint" />
-                  <VictoryBar data={compositionData.reportByCategory.fish} sortKey="periodNumber" x="periodNumber" y="avgCarbonFootprint" />
-                  <VictoryBar data={compositionData.reportByCategory.meat} sortKey="periodNumber" x="periodNumber" y="avgCarbonFootprint" />
+                  <VictoryBar data={whichCompData().reportByCategory.plantBased} sortKey="periodNumber" x="periodNumber" y="avgCarbonFootprint" />
+                  <VictoryBar data={whichCompData().reportByCategory.eggsAndDairy} sortKey="periodNumber" x="periodNumber" y="avgCarbonFootprint" />
+                  <VictoryBar data={whichCompData().reportByCategory.fish} sortKey="periodNumber" x="periodNumber" y="avgCarbonFootprint" />
+                  <VictoryBar data={whichCompData().reportByCategory.meat} sortKey="periodNumber" x="periodNumber" y="avgCarbonFootprint" />
                 </VictoryStack>
                 <VictoryLegend
                   data={[{ name: 'Plant' }, { name: 'Eggs & Dairy' }, { name: 'Fish' }, { name: 'Meat' }]}
@@ -162,17 +204,17 @@ const WeeklyDisplay = ({ timeDifference }) => {
                   y={percentageHeight('40%')}
                 />
                 <VictoryLine data={[
-                  { x: 0, y: averageData.getPeriodAvg },
-                  { x: -1, y: averageData.getPeriodAvg },
-                  { x: -2, y: averageData.getPeriodAvg },
-                  { x: -3, y: averageData.getPeriodAvg },
-                  { x: -4, y: averageData.getPeriodAvg },
-                  { x: -5, y: averageData.getPeriodAvg },
+                  { x: 0, y: whichAvgData().getPeriodAvg },
+                  { x: -1, y: whichAvgData().getPeriodAvg },
+                  { x: -2, y: whichAvgData().getPeriodAvg },
+                  { x: -3, y: whichAvgData().getPeriodAvg },
+                  { x: -4, y: whichAvgData().getPeriodAvg },
+                  { x: -5, y: whichAvgData().getPeriodAvg },
                 ]} />
               </VictoryChart>
             </View>
           </View>
-        ))}
+        )}
     </View>
   );
 };
