@@ -20,10 +20,6 @@ const GeneralDisplay = () => {
   //DO NOT DELETE THE FOLLOWING COMMENTED CODE
   let { loading, error, data } = useQuery(GET_INDEFINITE_AVERAGE);
 
- // let loading = false;
- // let error = true;
- // let data = null;
-
   const calculateColour = (carbonFootprint) => {
     if (carbonFootprint < 4) {
       return 'forestgreen';
@@ -58,17 +54,6 @@ const GeneralDisplay = () => {
   }
  };
 
- const getGeneralScore = async () => {
-  if (error) {
-   try {
-    JSON.parse(await AsyncStorage.getItem('generalScore')).getUserAvg;
-   } catch (e) {
-    console.log('Error retrieving generalScore' + e);
-   }
-  } else if (data) {
-   data.getUserAvg;
-  }
- };
 
  useEffect(() => {
    if (data) {
@@ -77,12 +62,6 @@ const GeneralDisplay = () => {
    }
  );
 
- // useEffect(() => {
- //  if (error) {
- //   getGeneralScore();
- //  }
- // }
- // );
 
  return (
    <View>
@@ -90,14 +69,14 @@ const GeneralDisplay = () => {
        <View style={ styles.messageContainer }>
         <ActivityIndicator/>
        </View>
-     // ) : ((error) ? (
-     //   <View style={ styles.messageContainer }>
-     //     <Text>An error has occurred</Text>
-     //   </View>
+     ) : ((error) ? (
+       <View style={ styles.messageContainer }>
+         <Text>An error has occurred</Text>
+       </View>
      ) : (
        <View style={ styles.graphContainer }>
          <Image
-           source={calculateSmiley(data)}
+           source={calculateSmiley(data.getUserAvg)}
            style={ styles.image }
          />
          <View style={ [ styles.scoreContainer ]}>
@@ -113,16 +92,16 @@ const GeneralDisplay = () => {
               </Tooltip>
             </View>
             <VictoryPie
-              data={[{ x: ' ', y: data }, { x: ' ', y: 26.7 - data }]}
+              data={[{ x: ' ', y: data.getUserAvg }, { x: ' ', y: 26.7 - data.getUserAvg }]}
               standalone={true}
-              colorScale={[calculateColour(data), 'transparent']}
+              colorScale={[calculateColour(data.getUserAvg), 'transparent']}
               startAngle={-90}
               endAngle={90}
               innerRadius={percentageHeight('16%')}
               height={percentageHeight('40%')}
             />
           </View>
-        )}
+        ))}
     </View>
   );
 };
