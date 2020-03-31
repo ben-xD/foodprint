@@ -1,6 +1,6 @@
 import { heightPercentageToDP as percentageHeight, widthPercentageToDP as percentageWidth } from 'react-native-responsive-screen';
 import { VictoryPie } from 'victory-native';
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ActivityIndicator, Image, StyleSheet, Text, View } from 'react-native';
 import { Tooltip } from 'react-native-elements';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -19,6 +19,9 @@ export const GET_INDEFINITE_AVERAGE = gql`query {
 const GeneralDisplay = () => {
   //DO NOT DELETE THE FOLLOWING COMMENTED CODE
   let { loading, error, data } = useQuery(GET_INDEFINITE_AVERAGE);
+
+  const [resolved, setResolved] = useState(false);
+  const [localData, setData] = useState(null);
 
   const calculateColour = (carbonFootprint) => {
     if (carbonFootprint < 4) {
@@ -54,33 +57,52 @@ const GeneralDisplay = () => {
   }
  };
 
+ const retrieveData = async () => {
+  try {
+    const retrievedData = await AsyncStorage.getItem('generalScore');
+    setData(JSON.parse(retrievedData));
+  } catch (e) {
+    console.log('Error retrieving generalScore' + e);
+  }
+  setResolved(true);
+ };
 
  useEffect(() => {
    if (data) {
       saveGeneralScore(JSON.stringify(data));
+      setData(data);
      }
-   }
- );
+ }, [data]);
 
+ useEffect(() => {
+   if (error) {
+     retrieveData();
+   }
+});
+
+ const whichData = () => {
+  if (data) return data;
+  return localData;
+ }
 
  return (
    <View>
-     {(loading) ? (
+     {(loading || (error && !resolved)) ? (
        <View style={ styles.messageContainer }>
         <ActivityIndicator/>
        </View>
-     ) : ((error) ? (
-       <View style={ styles.messageContainer }>
-         <Text>An error has occurred</Text>
-       </View>
+     // ) : ((error) ? (
+     //   <View style={ styles.messageContainer }>
+     //     <Text>An error has occurred</Text>
+     //   </View>
      ) : (
        <View style={ styles.graphContainer }>
          <Image
-           source={calculateSmiley(data.getUserAvg)}
+           source={calculateSmiley(whichData().getUserAvg)}
            style={ styles.image }
          />
          <View style={ [ styles.scoreContainer ]}>
-           <Text style={ styles.score }>{Math.round(data.getUserAvg)} units</Text>
+           <Text style={ styles.score }>{Math.round(whichData().getUserAvg)} units</Text>
            <Tooltip
                popover={<Text style={ styles.tooltipContent }>This score corresponds to the average carbon footprint of
                 all the items you have added to your history since you have started using Foodprint.</Text>}
@@ -92,16 +114,16 @@ const GeneralDisplay = () => {
               </Tooltip>
             </View>
             <VictoryPie
-              data={[{ x: ' ', y: data.getUserAvg }, { x: ' ', y: 26.7 - data.getUserAvg }]}
+              data={[{ x: ' ', y: whichData().getUserAvg }, { x: ' ', y: 26.7 - whichData().getUserAvg }]}
               standalone={true}
-              colorScale={[calculateColour(data.getUserAvg), 'transparent']}
+              colorScale={[calculateColour(whichData().getUserAvg), 'transparent']}
               startAngle={-90}
               endAngle={90}
               innerRadius={percentageHeight('16%')}
               height={percentageHeight('40%')}
             />
           </View>
-        ))}
+        )}
     </View>
   );
 };
