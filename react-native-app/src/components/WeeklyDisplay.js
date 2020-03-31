@@ -139,7 +139,7 @@ const WeeklyDisplay = ({ timeDifference }) => {
       ) : (
           <View style={styles.contentContainer}>
             <View style={styles.scoreContainer}>
-              <Text style={styles.score}>{sum()[0]} units this week</Text>
+              <Text style={styles.score}>{Math.round(sum()[0])} units this week</Text>
               <Text style={styles.comparison}>{weekSign}{Math.round(changeSinceLastWeek())}% compared{'\n'}to last week</Text>
               <Tooltip
                 popover={<Text style={styles.tooltipContent}>These scores correspond to your carbon footprint this week,

@@ -142,7 +142,7 @@ const MonthlyDisplay = ({ timeDifference }) => {
       ) : (
           <View style={styles.contentContainer}>
             <View style={styles.scoreContainer}>
-              <Text style={styles.score}>{sum()[0]} units this month</Text>
+              <Text style={styles.score}>{Math.round(sum()[0])} units this month</Text>
               <Text style={styles.comparison}>{monthSign}{Math.round(changeSinceLastMonth())}% compared{'\n'}to last month</Text>
               <Tooltip
                 popover={<Text style={styles.tooltipContent}>These scores correspond to your carbon footprint this

@@ -61,14 +61,14 @@ const GeneralDisplay = () => {
  const getGeneralScore = async () => {
   if (error) {
    try {
-    const retrievedValue = await AsyncStorage.getItem('generalScore');
-    data = JSON.parse(retrievedValue);
+    JSON.parse(await AsyncStorage.getItem('generalScore')).getUserAvg;
    } catch (e) {
     console.log('Error retrieving generalScore' + e);
    }
+  } else if (data) {
+   data.getUserAvg;
   }
-  return data;
- }
+ };
 
  useEffect(() => {
    if (data) {
@@ -101,7 +101,7 @@ const GeneralDisplay = () => {
            style={ styles.image }
          />
          <View style={ [ styles.scoreContainer ]}>
-           <Text style={ styles.score }>{getGeneralScore().getUserAvg} units</Text>
+           <Text style={ styles.score }>{Math.round(data.getUserAvg)} units</Text>
            <Tooltip
                popover={<Text style={ styles.tooltipContent }>This score corresponds to the average carbon footprint of
                 all the items you have added to your history since you have started using Foodprint.</Text>}
