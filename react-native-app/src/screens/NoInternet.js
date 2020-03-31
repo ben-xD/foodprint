@@ -6,7 +6,7 @@ const NoInternet = () => {
   return (
     <View style={styles.container}>
       <View style={styles.titleContainer}>
-        <Text h3 style={styles.title}>No Internet connection...</Text>
+        <Text h3 style={styles.title}>Oops.</Text>
       </View>
       <View style={styles.body}>
         <Image
@@ -15,8 +15,7 @@ const NoInternet = () => {
         />
       </View>
       <View style={styles.messageContainer}>
-        <Text style={styles.message}>Turn off flight mode, move to a different location, or
-            change mobile phone provider...</Text>
+        <Text style={styles.message}>You're not connected to the internet.</Text>
       </View>
     </View>
   );

@@ -28,7 +28,7 @@ exports[`NoInternet matches previous snapshot 1`] = `
         }
       }
     >
-      No Internet connection...
+      Oops.
     </Text>
   </View>
   <View
@@ -71,7 +71,7 @@ exports[`NoInternet matches previous snapshot 1`] = `
         }
       }
     >
-      Turn off flight mode, move to a different location, or change mobile phone provider...
+      You're not connected to the internet.
     </Text>
   </View>
 </View>

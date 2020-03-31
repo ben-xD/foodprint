@@ -1,7 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Feedback matches previous snapshot 1`] = `
-<Text>
-  No meal yet
-</Text>
+<View>
+  <Text>
+    Oops, something went wrong.
+  </Text>
+</View>
 `;
