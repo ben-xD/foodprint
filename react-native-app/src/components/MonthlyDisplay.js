@@ -7,7 +7,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 //DO NOT DELETE THE FOLLOWING COMMENTED CODE
 import gql from 'graphql-tag';
 import { useQuery } from '@apollo/react-hooks';
-import AsyncStorage from "@react-native-community/async-storage";
+import AsyncStorage from '@react-native-community/async-storage';
 
 //DO NOT DELETE THE FOLLOWING COMMENTED CODE
 export const GET_MONTHLY_AVERAGE = gql`query($timezone: Int!) {
@@ -56,27 +56,10 @@ const MonthlyDisplay = ({ timeDifference }) => {
     }
   };
 
-  const getMonthlyDataCache = async () => {
-    try {
-      const retrievedAverage = await AsyncStorage.getItem('weeklyAverage');
-      averageData.getPeriodAvg = JSON.parse(retrievedAverage);
-      const retrievedComposition = await AsyncStorage.getItem('weeklyComposition');
-      compositionData.reportByCategory = JSON.parse(retrievedComposition);
-    } catch (e) {
-      console.log('Error retrieving monthly data' + e);
-    }
-  }
 
   useEffect(() => {
         if (averageData && compositionData) {
           saveMonthlyData(JSON.stringify(averageData.getPeriodAvg),JSON.stringify(compositionData.reportByCategory));
-        }
-      }
-  );
-
-  useEffect(() => {
-        if (averageError || compositionError) {
-          getMonthlyDataCache();
         }
       }
   );
