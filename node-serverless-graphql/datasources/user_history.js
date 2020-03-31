@@ -20,7 +20,7 @@ class userHistAPI {
           throw err;
         }
         itemList = items;
-      }).exec();
+      }).maxTime(1000000).exec();
 
       return {
         item: itemList.item,
@@ -61,6 +61,10 @@ class userHistAPI {
   async avg_co2_for_user(carbonAPI, user) {
 
     const user_data = await this.get_all_user_data(user);
+    console.log(user_data);
+    if(user_data == undefined){
+      return null;
+    }
     let average = await this.average_data(carbonAPI, user_data);
     return average;
 
@@ -74,8 +78,11 @@ class userHistAPI {
     for (let i = 1; i < this.NUMBER_OF_WEEKS_RETURNED; i++){
       // Get data for every week:
       let week_i_data = await this.get_week_i_data(user, timezone, i);
-      let week_cf = await this.average_data(carbonAPI, week_i_data);
-      sum = sum + week_cf;
+      let week_cf = 0
+      if(week_i_data != undefined){
+        week_cf = await this.average_data(carbonAPI, week_i_data);
+        sum = sum + week_cf;
+      }
     }
 
     let average = +(sum/(this.NUMBER_OF_WEEKS_RETURNED - 1)).toFixed(2); // -1 because the current week is not taken into account
@@ -90,6 +97,7 @@ class userHistAPI {
 
     for (let i = 0; i < this.NUMBER_OF_WEEKS_RETURNED; i++){
       const week_i_data = await this.get_week_i_data(user, timezone, i);
+      if(week_i_data == undefined){ continue;}
       table = await this.sum_period_data_to_table(carbonAPI, week_i_data, i, table);
     }
     console.log(table);
@@ -100,12 +108,14 @@ class userHistAPI {
   async monthly_average_cf (carbonAPI, user, timezone) {
 
     let sum = 0;
-
     for (let i = 1; i < this.NUMBER_OF_WEEKS_RETURNED; i++){
       // Get data for every week:
       let month_i_data = await this.get_month_i_data(user, timezone, i);
-      let month_cf= await this.average_data(carbonAPI, month_i_data);
-      sum = sum + month_cf;
+      let month_cf = 0
+      if(month_i_data != undefined){
+        month_cf= await this.average_data(carbonAPI, month_i_data);
+        sum = sum + month_cf;
+      }
     }
 
     let average = +(sum/(this.NUMBER_OF_MONTHS_RETURNED - 1)).toFixed(2); // -1 because the current week is not taken into account
@@ -140,7 +150,7 @@ class userHistAPI {
           throw err;
         }
         user_data = items;
-      }).exec();
+      }).maxTime(1000000).exec();
 
       return user_data;
 

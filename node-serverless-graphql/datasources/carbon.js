@@ -31,7 +31,7 @@ class CarbonAPI {
           throw err;
         }
         itemList = items;
-      }).exec();
+      }).maxTime(100000).exec();
 
       return {
         carbonpkilo: itemList.carbonpkilo,
