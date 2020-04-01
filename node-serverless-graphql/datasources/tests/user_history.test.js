@@ -6,27 +6,27 @@ let userHistAPI = new UserHistAPI(store);
 let carbonAPI = new CarbonAPI(store);
 const mockDataSources = {
     carbonAPI: {
-      searchData: jest.fn()
+        getCfOneItem: jest.fn()
     },
     userHistAPI: {
         get_month_i_data: jest.fn(),
         get_week_i_data: jest.fn(),
     }
   }
-const CATEGORY_WITH_DATA = 
-    [{"avgCarbonFootprint": 10, "periodNumber": 0}, 
-    {"avgCarbonFootprint": 10, "periodNumber": -1}, 
-    {"avgCarbonFootprint": 10, "periodNumber": -2}, 
-    {"avgCarbonFootprint": 10, "periodNumber": -3}, 
-    {"avgCarbonFootprint": 10, "periodNumber": -4}, 
+const CATEGORY_WITH_DATA =
+    [{"avgCarbonFootprint": 10, "periodNumber": 0},
+    {"avgCarbonFootprint": 10, "periodNumber": -1},
+    {"avgCarbonFootprint": 10, "periodNumber": -2},
+    {"avgCarbonFootprint": 10, "periodNumber": -3},
+    {"avgCarbonFootprint": 10, "periodNumber": -4},
     {"avgCarbonFootprint": 10, "periodNumber": -5}];
 
-const CATEGORY_EMPTY = 
-    [{"avgCarbonFootprint": 0, "periodNumber": 0}, 
-    {"avgCarbonFootprint": 0, "periodNumber": -1}, 
-    {"avgCarbonFootprint": 0, "periodNumber": -2}, 
-    {"avgCarbonFootprint": 0, "periodNumber": -3}, 
-    {"avgCarbonFootprint": 0, "periodNumber": -4}, 
+const CATEGORY_EMPTY =
+    [{"avgCarbonFootprint": 0, "periodNumber": 0},
+    {"avgCarbonFootprint": 0, "periodNumber": -1},
+    {"avgCarbonFootprint": 0, "periodNumber": -2},
+    {"avgCarbonFootprint": 0, "periodNumber": -3},
+    {"avgCarbonFootprint": 0, "periodNumber": -4},
     {"avgCarbonFootprint": 0, "periodNumber": -5}]
 
 describe('User history database (mocked dataSources)', () => {
@@ -36,11 +36,11 @@ describe('User history database (mocked dataSources)', () => {
         // Mock up unreliable functions
         jest.spyOn(userHistAPI, 'get_all_user_data').mockReturnValue(
             [{item: 'rice'}, {item: 'potato'}, {item: 'orange'}]);
-        jest.spyOn(carbonAPI, 'searchData').mockReturnValueOnce(
+        jest.spyOn(carbonAPI, 'getCfOneItem').mockReturnValueOnce(
             { carbonpkilo: '1.14' });
-        jest.spyOn(carbonAPI, 'searchData').mockReturnValueOnce(
+        jest.spyOn(carbonAPI, 'getCfOneItem').mockReturnValueOnce(
             { carbonpkilo: '2.2' });
-        jest.spyOn(carbonAPI, 'searchData').mockReturnValueOnce(
+        jest.spyOn(carbonAPI, 'getCfOneItem').mockReturnValueOnce(
             { carbonpkilo: '3.5' });
 
         const user = 'x';
@@ -56,17 +56,17 @@ describe('User history database (mocked dataSources)', () => {
         jest.spyOn(userHistAPI, 'get_week_i_data').mockReturnValue(
             [{item: 'orange'}]);
         // Mock the co2 values returned for each element in each week (6 in total)
-        jest.spyOn(carbonAPI, 'searchData').mockReturnValueOnce(
+        jest.spyOn(carbonAPI, 'getCfOneItem').mockReturnValueOnce(
             {carbonpkilo: '1.2'});
-        jest.spyOn(carbonAPI, 'searchData').mockReturnValueOnce(
+        jest.spyOn(carbonAPI, 'getCfOneItem').mockReturnValueOnce(
             {carbonpkilo: '2.1'});
-        jest.spyOn(carbonAPI, 'searchData').mockReturnValueOnce(
+        jest.spyOn(carbonAPI, 'getCfOneItem').mockReturnValueOnce(
             {carbonpkilo: '0.4'});
-        jest.spyOn(carbonAPI, 'searchData').mockReturnValueOnce(
+        jest.spyOn(carbonAPI, 'getCfOneItem').mockReturnValueOnce(
             {carbonpkilo: '1.2'});
-        jest.spyOn(carbonAPI, 'searchData').mockReturnValueOnce(
+        jest.spyOn(carbonAPI, 'getCfOneItem').mockReturnValueOnce(
             {carbonpkilo: '0.4'});
-        jest.spyOn(carbonAPI, 'searchData').mockReturnValueOnce(
+        jest.spyOn(carbonAPI, 'getCfOneItem').mockReturnValueOnce(
             {carbonpkilo: '3'});
 
         const timezone = 0;
@@ -83,17 +83,17 @@ describe('User history database (mocked dataSources)', () => {
         jest.spyOn(userHistAPI, 'get_month_i_data').mockReturnValue(
             [{item: 'orange'}]);
         // Mock the co2 values returned for each element in each month (6 in total)
-        jest.spyOn(carbonAPI, 'searchData').mockReturnValueOnce(
+        jest.spyOn(carbonAPI, 'getCfOneItem').mockReturnValueOnce(
             {carbonpkilo: '3.2'});
-        jest.spyOn(carbonAPI, 'searchData').mockReturnValueOnce(
+        jest.spyOn(carbonAPI, 'getCfOneItem').mockReturnValueOnce(
             {carbonpkilo: '1.1'});
-        jest.spyOn(carbonAPI, 'searchData').mockReturnValueOnce(
+        jest.spyOn(carbonAPI, 'getCfOneItem').mockReturnValueOnce(
             {carbonpkilo: '0.1'});
-        jest.spyOn(carbonAPI, 'searchData').mockReturnValueOnce(
+        jest.spyOn(carbonAPI, 'getCfOneItem').mockReturnValueOnce(
             {carbonpkilo: '3.8'});
-        jest.spyOn(carbonAPI, 'searchData').mockReturnValueOnce(
+        jest.spyOn(carbonAPI, 'getCfOneItem').mockReturnValueOnce(
             {carbonpkilo: '3.1'});
-        jest.spyOn(carbonAPI, 'searchData').mockReturnValueOnce(
+        jest.spyOn(carbonAPI, 'getCfOneItem').mockReturnValueOnce(
             {carbonpkilo: '0.5'});
 
         const timezone = 0;
@@ -105,15 +105,15 @@ describe('User history database (mocked dataSources)', () => {
 
     test('Get weekly_cf_composition', async () => {
         jest.setTimeout(10000);
-        jest.spyOn(userHistAPI, 'get_week_i_data').mockImplementation(() => 
+        jest.spyOn(userHistAPI, 'get_week_i_data').mockImplementation(() =>
         [{ item: 'mock' }]
         );
-        mockDataSources.carbonAPI.searchData.mockReturnValue({
+        mockDataSources.carbonAPI.getCfOneItem.mockReturnValue({
             "carbonpkilo": 10,
             "categories": "1200"
           });
 
-        mockDataSources.carbonAPI.searchData.mockImplementation((item) => {
+        mockDataSources.carbonAPI.getCfOneItem.mockImplementation((item) => {
             if (item == 'mock'){
                 return {
                     "carbonpkilo": 10,
@@ -125,9 +125,9 @@ describe('User history database (mocked dataSources)', () => {
 
         const user = 'test_user';
         const expected = {
-            "plantBased": CATEGORY_WITH_DATA, 
-            "fish": CATEGORY_WITH_DATA, 
-            "meat": CATEGORY_EMPTY, 
+            "plantBased": CATEGORY_WITH_DATA,
+            "fish": CATEGORY_WITH_DATA,
+            "meat": CATEGORY_EMPTY,
             "eggsAndDairy": CATEGORY_EMPTY
         };
         expect.assertions(1);
@@ -139,15 +139,15 @@ describe('User history database (mocked dataSources)', () => {
 
     test('Get monthly_cf_composition', async () => {
         jest.setTimeout(10000);
-        jest.spyOn(userHistAPI, 'get_month_i_data').mockImplementation(() => 
+        jest.spyOn(userHistAPI, 'get_month_i_data').mockImplementation(() =>
         [{ item: 'mock' }]
         );
-        mockDataSources.carbonAPI.searchData.mockReturnValue({
+        mockDataSources.carbonAPI.getCfOneItem.mockReturnValue({
             "carbonpkilo": 10,
             "categories": "1200"
           });
 
-        mockDataSources.carbonAPI.searchData.mockImplementation((item) => {
+        mockDataSources.carbonAPI.getCfOneItem.mockImplementation((item) => {
             if (item == 'mock'){
                 return {
                     "carbonpkilo": 10,
@@ -159,9 +159,9 @@ describe('User history database (mocked dataSources)', () => {
 
         const user = 'test_user';
         const expected = {
-            "plantBased": CATEGORY_WITH_DATA, 
-            "fish": CATEGORY_WITH_DATA, 
-            "meat": CATEGORY_EMPTY, 
+            "plantBased": CATEGORY_WITH_DATA,
+            "fish": CATEGORY_WITH_DATA,
+            "meat": CATEGORY_EMPTY,
             "eggsAndDairy": CATEGORY_EMPTY
         };
         expect.assertions(1);
