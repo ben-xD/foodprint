@@ -1,6 +1,6 @@
 class CarbonAPI {
 
-  constructor( store ) {
+  constructor(store) {
     this._carbonSchema;
     this.getCfOneItem = this.getCfOneItem.bind(this);
     this.store = store
@@ -25,41 +25,31 @@ class CarbonAPI {
   async getCfOneItem(label) {
 
     let _item = null;
-    // try {
-      await this.store.carbon.findOne({ item: label }, (err, item) => {
-        if (err) {
-          console.error('CarbonAPI: failed to query for label:', label, '\nreturning {carbonpkilo:undefined, categories:undefined}');
-          throw err;
-        }
-        _item = item;
-      }).exec();
+    await this.store.carbon.findOne({item: label}, (err, item) => {
+      if (err) {
+        console.error('CarbonAPI: failed to query for label:', label);
+        throw err;
+      }
+      _item = item;
+    }).exec();
 
-      return _item;
+    return _item;
   }
 
   // labelList: list of strings
   // return: list of objects, each containing carbonpkilo and categories fields
   async getCfMultipleItems(labelList) {
 
-    let itemList;
-    try {
-      await this.store.carbon.find({ item: { $in: labelList } }, (err, items) => {
-        if (err) {
-          console.error('CarbonAPI: failed to query for labels:', labels, '\nreturning [{carbonpkilo:undefined, categories:undefined}]');
-          throw err;
-        }
-        itemList = items;
-      }).exec();
+    let _itemList = null;
+    await this.store.carbon.find({item: {$in: labelList}}, (err, itemList) => {
+      if (err) {
+        console.error('CarbonAPI: failed to query for labels:', labels);
+        throw err;
+      }
+      _itemList = itemList;
+    }).exec();
 
-      return itemList;
-
-    } catch (err) {
-      console.error('CarbonAPI: failed to query for label:', label, '\nreturning {carbonpkilo:undefined, categories:undefined}');
-      return {
-        carbonpkilo: undefined,
-        categories: undefined
-      };
-    }
+    return _itemList;
   }
 
 }
