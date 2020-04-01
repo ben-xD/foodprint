@@ -20,6 +20,7 @@ import Camera from './src/screens/Camera';
 import Feedback from './src/screens/Feedback';
 import Correction from './src/components/Correction';
 import Foodprint from './src/screens/Foodprint';
+import Recipe from "./src/screens/Recipe";
 
 const Stack = createStackNavigator();
 
@@ -85,6 +86,7 @@ const App = () => {
                   <Stack.Screen name="Feedback" component={Feedback} />
                   {/* Refactor deleteAccount into new Settings */}
                   <Stack.Screen name="Delete Account" component={DeleteAccount} />
+                  <Stack.Screen name="Recipe" component={Recipe} />
                 </>
               )
                 :

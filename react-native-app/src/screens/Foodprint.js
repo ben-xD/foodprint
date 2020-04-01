@@ -107,7 +107,7 @@ const Foodprint = ({ navigation }) => {
   };
 
   const goToRecipe = async () => {
-    navigation.navigate('Camera');
+    navigation.navigate('Recipe');
   };
 
   const getTimeDifference = () => {
@@ -299,9 +299,9 @@ const styles = StyleSheet.create({
   buttonContainer: { flexDirection: 'row', justifyContent: 'center', paddingVertical: percentageHeight('2%') },
   buttonTitle: { fontSize: percentageWidth('5%') },
   button: { width: percentageWidth('30%'), height: 45 },
-  camera: { backgroundColor: '#008000', width: 64, height: 64, position: 'absolute', bottom: 25, right: 25, borderRadius: 32, alignItems: 'center', justifyContent: 'center' },
+  camera: { backgroundColor: '#008000', width: 64, height: 64, position: 'absolute', bottom: 100, right: 25, borderRadius: 32, alignItems: 'center', justifyContent: 'center' },
   graphContainer: { height: percentageHeight('38%'), justifyContent: 'center', marginVertical: percentageHeight('2%') },
-  recipe: { backgroundColor: '#008000', width: 64, height: 64, position: 'absolute', bottom: 100, right: 25, borderRadius: 32, alignItems: 'center', justifyContent: 'center' },
+  recipe: { backgroundColor: '#008000', width: 64, height: 64, position: 'absolute', bottom: 25, right: 25, borderRadius: 32, alignItems: 'center', justifyContent: 'center' },
 });
 
 export default Foodprint;
