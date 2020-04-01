@@ -1,6 +1,7 @@
 const CarbonAPI = require('../carbon');
 const UserHistAPI = require('../user_history');
-const store = {};
+const {createStore, deleteStore} = require('../../utils');
+const store = createStore();
 
 let userHistAPI = new UserHistAPI(store);
 let carbonAPI = new CarbonAPI(store);
