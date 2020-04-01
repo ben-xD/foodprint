@@ -23,36 +23,40 @@ const dataSources = {
 const mockDataSources = {
   carbonAPI: {
     getCfOneItem: jest.fn(),
+    getCfMultipleItems: jest.fn()
   }
 }
 
 describe('getCarbonFootprintFromName (mocked dataSources)', () => {
 
   test('"rice" is a known item in the database', async () => {
-    mockDataSources.carbonAPI.getCfOneItem.mockReturnValueOnce({
+    mockDataSources.carbonAPI.getCfMultipleItems.mockReturnValueOnce([{
+      "item": "rice",
       "carbonpkilo": 1.14,
       "categories": "1000"
-    });
+    }]);
     let response = await carbon_footprint_calculation.getCarbonFootprintFromName(mockDataSources, "rice");
     expect(response).toEqual({item: "rice", carbonFootprintPerKg: 1.14});
-    expect(mockDataSources.carbonAPI.getCfOneItem).toBeCalledWith('rice');
+    expect(mockDataSources.carbonAPI.getCfMultipleItems).toBeCalledWith(['rice']);
   });
 
   test('"Some nice RICE" is converted into "rice" and footprint for "rice" is returned', async () => {
-    mockDataSources.carbonAPI.getCfOneItem.mockReturnValueOnce({
+    mockDataSources.carbonAPI.getCfMultipleItems.mockReturnValueOnce([{
+      "item": "rice",
       "carbonpkilo": 1.14,
       "categories": "1000"
-    });
+    }]);
     let response = await carbon_footprint_calculation.getCarbonFootprintFromName(mockDataSources, "Some nice RICE");
     expect(response).toEqual({item: "rice", carbonFootprintPerKg: 1.14});
-    expect(mockDataSources.carbonAPI.getCfOneItem).toBeCalledWith('rice');
+    expect(mockDataSources.carbonAPI.getCfMultipleItems).toBeCalledWith(['rice']);
   });
 
   test('"fruit" is not in the database and is returned from categorised shortlist (fruit)', async () => {
-    mockDataSources.carbonAPI.getCfOneItem.mockReturnValueOnce({
+    mockDataSources.carbonAPI.getCfMultipleItems.mockReturnValueOnce([{
+      "item": "fruit",
       "carbonpkilo": undefined,
       "categories": undefined
-    });
+    }]);
     let response = await carbon_footprint_calculation.getCarbonFootprintFromName(mockDataSources, "fruit");
     expect(response).toEqual({item: "fruit", carbonFootprintPerKg: 1.1});
   });

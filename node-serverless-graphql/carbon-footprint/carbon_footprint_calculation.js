@@ -27,20 +27,15 @@ const findCategorisedLabel = (labels) => {
 // @return CarbonFootprintReport (if a label was found in a DB) or undefined (it any label was found)
 const oneLayerSearch = async (datasources, labels) => {
 
-  for (let i = 0; i < labels.length; i += 1) {
-    nounInLabel = labels[i];
-    //if (await isConceptValid(datasources, nounInLabel)){
-    const carbonFootprintResponse = await datasources.carbonAPI.getCfOneItem(nounInLabel);
-    if (carbonFootprintResponse.carbonpkilo !== undefined) {
-        return {
-          item: nounInLabel,
-          carbonpkilo: carbonFootprintResponse.carbonpkilo,
-          categories: carbonFootprintResponse.categories
-        };
-    }
-    //}
+  const carbonFootprintResponse = await datasources.carbonAPI.getCfMultipleItems(labels);
+  if (carbonFootprintResponse.length > 0 && carbonFootprintResponse[0].carbonpkilo){
+    return {
+      item: carbonFootprintResponse[0].item,
+      carbonpkilo: carbonFootprintResponse[0].carbonpkilo,
+      categories: carbonFootprintResponse[0].categories
+    };
   }
-
+  
   const categoryResult = findCategorisedLabel(labels)
   if (categoryResult != undefined) {
     return categoryResult;
