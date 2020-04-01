@@ -9,7 +9,7 @@ const getCarbonFootprintFromBarcode = async (dataSources, barcode) => {
     if (product_name === undefined){
         return{
             item: undefined,
-            carbonpkilo: undefined,
+            carbonpkilo: null,
         };
     }
 
