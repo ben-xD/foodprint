@@ -1,28 +1,21 @@
 import { heightPercentageToDP as percentageHeight, widthPercentageToDP as percentageWidth } from 'react-native-responsive-screen';
 import { VictoryPie } from 'victory-native';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { ActivityIndicator, Image, StyleSheet, Text, View } from 'react-native';
 import { Tooltip } from 'react-native-elements';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-//DO NOT DELETE THE FOLLOWING COMMENTED CODE
-import gql from 'graphql-tag';
-import { useQuery } from '@apollo/react-hooks';
+import AsyncStorage from '@react-native-community/async-storage';
 
+const CarbonFootprintScore = ({ loading, error, data }) => {
+  //Comment the following line to test caching
 
-//DO NOT DELETE THE FOLLOWING COMMENTED CODE
-export const GET_INDEFINITE_AVERAGE = gql`query {
-  getUserAvg
-}`;
+  // Uncomment the following lines to test caching
+  // let loading = false;
+  // let error = true;
+  // let data = null;
 
-
-const GeneralDisplay = () => {
-  //DO NOT DELETE THE FOLLOWING COMMENTED CODE
-  const { loading, error, data } = useQuery(GET_INDEFINITE_AVERAGE);
-
-  //Following code is here to mimick response from back-end
-  // const loading = false;
-  // const error = false;
-  // const data = 17.25;
+  const [resolved, setResolved] = useState(false);
+  const [localData, setData] = useState(null);
 
   const calculateColour = (carbonFootprint) => {
     if (carbonFootprint < 4) {
@@ -50,24 +43,55 @@ const GeneralDisplay = () => {
     return require('../images/crying-smiley.png');
   };
 
+  const saveGeneralScore = async (value) => {
+    try {
+      await AsyncStorage.setItem('generalScore', value);
+    } catch (e) {
+      console.log('Error saving generalScore' + e);
+    }
+  };
+
+  const retrieveData = async () => {
+    try {
+      const retrievedData = await AsyncStorage.getItem('generalScore');
+      setData(JSON.parse(retrievedData));
+    } catch (e) {
+      console.log('Error retrieving generalScore' + e);
+    }
+    setResolved(true);
+  };
+
+  useEffect(() => {
+    if (data) {
+      saveGeneralScore(JSON.stringify(data));
+    }
+  });
+
+  useEffect(() => {
+    if (error) {
+      retrieveData();
+    }
+  });
+
+  const whichData = () => {
+    if (data) { return data; }
+    return localData;
+  };
+
   return (
     <View>
-      {(loading) ? (
+      {(loading || (error && !resolved)) ? (
         <View style={styles.messageContainer}>
           <ActivityIndicator />
-        </View>
-      ) : ((error) ? (
-        <View style={styles.messageContainer}>
-          <Text>An error has occurred</Text>
         </View>
       ) : (
           <View style={styles.graphContainer}>
             <Image
-              source={calculateSmiley(data)}
+              source={calculateSmiley(whichData().getUserAvg)}
               style={styles.image}
             />
-            <View style={[styles.scoreContainer]}>
-              <Text style={styles.score}>{data.getUserAvg} units</Text>
+            <View style={styles.scoreContainer}>
+              <Text style={styles.score}>{Math.round(whichData().getUserAvg)} units</Text>
               <Tooltip
                 popover={<Text style={styles.tooltipContent}>This score corresponds to the average carbon footprint of
                 all the items you have added to your history since you have started using Foodprint.</Text>}
@@ -79,16 +103,16 @@ const GeneralDisplay = () => {
               </Tooltip>
             </View>
             <VictoryPie
-              data={[{ x: ' ', y: data }, { x: ' ', y: 26.7 - data }]}
+              data={[{ x: ' ', y: whichData().getUserAvg }, { x: ' ', y: 26.7 - whichData().getUserAvg }]}
               standalone={true}
-              colorScale={[calculateColour(data), 'transparent']}
+              colorScale={[calculateColour(whichData().getUserAvg), 'transparent']}
               startAngle={-90}
               endAngle={90}
               innerRadius={percentageHeight('16%')}
               height={percentageHeight('40%')}
             />
           </View>
-        ))}
+        )}
     </View>
   );
 };
@@ -102,4 +126,4 @@ const styles = StyleSheet.create({
   score: { fontSize: percentageWidth('6%'), color: 'grey', margin: percentageWidth('1%') },
 });
 
-export default GeneralDisplay;
+export default CarbonFootprintScore;
