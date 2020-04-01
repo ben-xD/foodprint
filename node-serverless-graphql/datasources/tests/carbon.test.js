@@ -12,7 +12,7 @@ describe('Real database', () => {
     const name = 'rice';
     const expected = { carbonpkilo: 1.14, categories: '1000' };
     expect.assertions(1);
-    const res = await carbonAPI.searchData(name);
+    const res = await carbonAPI.getCfOneItem(name);
     console.log('res', res);
     const actual = res;
     expect(actual).toEqual(expected);
@@ -23,7 +23,7 @@ describe('Real database', () => {
     const name = 'definitely-not-in-the-db someRandomNoise';
     const expected = { carbonpkilo: undefined, categories: undefined };
     expect.assertions(1);
-    const res = await carbonAPI.searchData(name);
+    const res = await carbonAPI.getCfOneItem(name);
     console.log('res', res);
     const actual = res;
     expect(actual).toEqual(expected);

@@ -1,10 +1,8 @@
-const mongoose = require('mongoose');
-
 class CarbonAPI {
 
   constructor( store ) {
     this._carbonSchema;
-    this.searchData = this.searchData.bind(this);
+    this.getCfOneItem = this.getCfOneItem.bind(this);
     this.store = store
   }
 
@@ -22,7 +20,7 @@ class CarbonAPI {
   }
 
   // Search database for given label and return its carbon footprint
-  async searchData(label) {
+  async getCfOneItem(label) {
 
     let itemList;
     try {
@@ -49,3 +47,9 @@ class CarbonAPI {
 }
 
 module.exports = CarbonAPI;
+
+
+// const  { createStore, deleteStore } = require('../utils');
+// const store = createStore();
+// store.carbon.find({item: { $in: ['rice', 'orange']}}).then((res) => {console.log(res)});
+//
