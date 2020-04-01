@@ -48,11 +48,33 @@ class CarbonAPI {
     let _itemList = [];
     await this.store.carbon.find({item: {$in: labelList}}, (err, itemList) => {
       if (err) {
-        console.error('CarbonAPI: failed to query for labels:', labels);
+        console.error('CarbonAPI: failed to query for labels:', labelList);
         throw err;
       }
       _itemList = itemList;
     }).exec();
+
+    return _itemList;
+  }
+
+  // Search database for a list of labels, returning a list of objects for only those labels defined in the db
+  // The function checks that all the producs were found in the db. If one of the items wasn't found, throws an error
+  // labelList: list of strings,  without duplicates
+  // return: list of objects, each containing carbonpkilo and categories fields
+  async getCfAllMultipleItems(labelList) {
+
+    let _itemList = [];
+    await this.store.carbon.find({item: {$in: labelList}}, (err, itemList) => {
+      if (err) {
+        console.error('CarbonAPI: failed to query for labels:', labelList);
+        throw err;
+      }
+      _itemList = itemList;
+    }).exec();
+
+    if (labelList.length > _itemList.length){
+      throw new Error("CarbonAPI: only " + _itemList.length + " out of " + labelList.length + " items were found");
+    }
 
     return _itemList;
   }

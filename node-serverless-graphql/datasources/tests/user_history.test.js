@@ -1,12 +1,14 @@
 const CarbonAPI = require('../carbon');
 const UserHistAPI = require('../user_history');
-const store = {};
+const {createStore, deleteStore} = require('../../utils');
+const store = createStore();
 
 let userHistAPI = new UserHistAPI(store);
 let carbonAPI = new CarbonAPI(store);
 const mockDataSources = {
     carbonAPI: {
-        getCfOneItem: jest.fn()
+        getCfOneItem: jest.fn(),
+        getCfAllMultipleItems: jest.fn(),
     },
     userHistAPI: {
         get_month_i_data: jest.fn(),
@@ -36,12 +38,8 @@ describe('User history database (mocked dataSources)', () => {
         // Mock up unreliable functions
         jest.spyOn(userHistAPI, 'get_all_user_data').mockReturnValue(
             [{item: 'rice'}, {item: 'potato'}, {item: 'orange'}]);
-        jest.spyOn(carbonAPI, 'getCfOneItem').mockReturnValueOnce(
-            { carbonpkilo: '1.14' });
-        jest.spyOn(carbonAPI, 'getCfOneItem').mockReturnValueOnce(
-            { carbonpkilo: '2.2' });
-        jest.spyOn(carbonAPI, 'getCfOneItem').mockReturnValueOnce(
-            { carbonpkilo: '3.5' });
+        jest.spyOn(carbonAPI, 'getCfAllMultipleItems').mockReturnValue(
+            [{ carbonpkilo: "1.14" }, { carbonpkilo: "2.2" }, { carbonpkilo: "3.5" }]);
 
         const user = 'x';
         let actual = await userHistAPI.avg_co2_for_user(carbonAPI, user);
@@ -54,25 +52,16 @@ describe('User history database (mocked dataSources)', () => {
         // Mock up unreliable functions:
         // Mock the items returned for each of the 6 weeks (same for every week)
         jest.spyOn(userHistAPI, 'get_week_i_data').mockReturnValue(
-            [{item: 'orange'}]);
+            [{item: '1'}, {item: '1'}, {item: '2'}, {item: '3'}, {item: '4'}, {item: '5'}, {item: '6'}]);
         // Mock the co2 values returned for each element in each week (6 in total)
-        jest.spyOn(carbonAPI, 'getCfOneItem').mockReturnValueOnce(
-            {carbonpkilo: '1.2'});
-        jest.spyOn(carbonAPI, 'getCfOneItem').mockReturnValueOnce(
-            {carbonpkilo: '2.1'});
-        jest.spyOn(carbonAPI, 'getCfOneItem').mockReturnValueOnce(
-            {carbonpkilo: '0.4'});
-        jest.spyOn(carbonAPI, 'getCfOneItem').mockReturnValueOnce(
-            {carbonpkilo: '1.2'});
-        jest.spyOn(carbonAPI, 'getCfOneItem').mockReturnValueOnce(
-            {carbonpkilo: '0.4'});
-        jest.spyOn(carbonAPI, 'getCfOneItem').mockReturnValueOnce(
-            {carbonpkilo: '3'});
+        jest.spyOn(carbonAPI, 'getCfAllMultipleItems').mockReturnValue(
+            [{carbonpkilo: '1.2'}, {carbonpkilo: '2.1'}, {carbonpkilo: '0.4'}, {carbonpkilo: '1.2'}, 
+            {carbonpkilo: '0.4'}, {carbonpkilo: '3'}]);
 
         const timezone = 0;
         const user = 'x';
         let actual = await userHistAPI.weekly_average_cf(carbonAPI, user, timezone);
-        const expected = 1.06;
+        const expected = 1.36;
         expect(actual).toEqual(expected);
     });
 
@@ -81,25 +70,15 @@ describe('User history database (mocked dataSources)', () => {
         // Mock up unreliable functions:
         // Mock the items returned for each of the 6 months (same for every month)
         jest.spyOn(userHistAPI, 'get_month_i_data').mockReturnValue(
-            [{item: 'orange'}]);
+            [{item: 'orange'}, {item: 'orange'}, {item: 'orange'}, {item: 'orange'},{item: 'orange'}, {item: 'orange'}]);
         // Mock the co2 values returned for each element in each month (6 in total)
-        jest.spyOn(carbonAPI, 'getCfOneItem').mockReturnValueOnce(
-            {carbonpkilo: '3.2'});
-        jest.spyOn(carbonAPI, 'getCfOneItem').mockReturnValueOnce(
-            {carbonpkilo: '1.1'});
-        jest.spyOn(carbonAPI, 'getCfOneItem').mockReturnValueOnce(
-            {carbonpkilo: '0.1'});
-        jest.spyOn(carbonAPI, 'getCfOneItem').mockReturnValueOnce(
-            {carbonpkilo: '3.8'});
-        jest.spyOn(carbonAPI, 'getCfOneItem').mockReturnValueOnce(
-            {carbonpkilo: '3.1'});
-        jest.spyOn(carbonAPI, 'getCfOneItem').mockReturnValueOnce(
-            {carbonpkilo: '0.5'});
+        jest.spyOn(carbonAPI, 'getCfAllMultipleItems').mockReturnValue(
+            [{carbonpkilo: 3.2}]);
 
         const timezone = 0;
         const user = 'x';
         let actual = await userHistAPI.monthly_average_cf(carbonAPI, user, timezone);
-        const expected = 2.24;
+        const expected = 3.2;
         expect(actual).toEqual(expected);
     });
 
@@ -108,17 +87,13 @@ describe('User history database (mocked dataSources)', () => {
         jest.spyOn(userHistAPI, 'get_week_i_data').mockImplementation(() =>
         [{ item: 'mock' }]
         );
-        mockDataSources.carbonAPI.getCfOneItem.mockReturnValue({
-            "carbonpkilo": 10,
-            "categories": "1200"
-          });
-
-        mockDataSources.carbonAPI.getCfOneItem.mockImplementation((item) => {
-            if (item == 'mock'){
-                return {
-                    "carbonpkilo": 10,
-                    "categories": "1200"
-                  };
+        
+        mockDataSources.carbonAPI.getCfAllMultipleItems.mockImplementation((data) => {
+            if (data[0] == 'mock'){
+                return ([{"carbonpkilo": 20,
+                    "categories": "1200"},
+                    {"carbonpkilo": 20,
+                    "categories": "1200"}])
             }
             return "error"
         });
@@ -142,17 +117,11 @@ describe('User history database (mocked dataSources)', () => {
         jest.spyOn(userHistAPI, 'get_month_i_data').mockImplementation(() =>
         [{ item: 'mock' }]
         );
-        mockDataSources.carbonAPI.getCfOneItem.mockReturnValue({
-            "carbonpkilo": 10,
-            "categories": "1200"
-          });
-
-        mockDataSources.carbonAPI.getCfOneItem.mockImplementation((item) => {
-            if (item == 'mock'){
-                return {
-                    "carbonpkilo": 10,
-                    "categories": "1200"
-                  };
+        
+        mockDataSources.carbonAPI.getCfAllMultipleItems.mockImplementation((data) => {
+            if (data[0] == 'mock'){
+                return ([{"carbonpkilo": 20,
+                    "categories": "1200"}])
             }
             return "error"
         });

@@ -54,5 +54,22 @@ describe('getCfMultipleItems: Real database', () => {
     expect(res).toMatchObject(expected);
   });
 
+  test('Querying one item with getCfAllMultipleItems', async () => {
+    jest.setTimeout(10000);
+    const labelList = ['rice'];
+    const expected = [
+      {
+        item: 'rice',
+        carbonpkilo: 1.14,
+        categories: '1000',
+        label: 'original'
+      }
+    ];
+    expect.assertions(1);
+    const res = await carbonAPI.getCfAllMultipleItems(labelList);
+    console.log(res);
+    expect(res).toMatchObject(expected);
+  });
+
 });
 
