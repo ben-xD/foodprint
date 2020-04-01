@@ -71,7 +71,7 @@ const getCarbonFootprintFromBarcode_with_Tesco = async (dataSources, barcode) =>
             categories: result.categories,
             label: "approximated from ingredients"
         };
-        if(dataSources.carbonAPI.searchData([save_to_db.item]).carbonpkilo !== null)
+        if(dataSources.carbonAPI.getCfOneItem([save_to_db.item]).carbonpkilo !== undefined)
             await dataSources.carbonAPI.insert_in_DB(save_to_db);
     }
 

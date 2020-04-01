@@ -1,10 +1,8 @@
-const mongoose = require('mongoose');
-
 class CarbonAPI {
 
-  constructor( store ) {
+  constructor(store) {
     this._carbonSchema;
-    this.searchData = this.searchData.bind(this);
+    this.getCfOneItem = this.getCfOneItem.bind(this);
     this.store = store
   }
 
@@ -22,28 +20,41 @@ class CarbonAPI {
   }
 
   // Search database for given label and return its carbon footprint
-  async searchData(label) {
+  // label: string
+  // return: object with carbonpkilo and categories fields, return null if item not in the database
+  async getCfOneItem(label) {
 
-    let itemList;
-    try {
-      await this.store.carbon.findOne({ item: label }, (err, items) => {
-        if (err) {
-          throw err;
-        }
-        itemList = items;
-      }).maxTime(100000).exec();
-
-      return {
-        carbonpkilo: itemList.carbonpkilo,
-        categories: itemList.categories
+    let _item = null;
+    await this.store.carbon.findOne({item: label}, (err, item) => {
+      if (err) {
+        console.error('CarbonAPI: failed to query for label:', label);
+        throw err;
       }
+      _item = item;
+    }).exec();
 
-    } catch (err) {
-      return {
-        carbonpkilo: undefined,
-        categories: undefined
-      };
-    }
+    return _item;
+  }
+
+  // Search database for a list of labels, returning a list of objects for only those labels defined in the db
+  // labelList: list of strings
+  // return: list of objects, each containing carbonpkilo and categories fields
+  // If there is no input for one of the labels in labelList in the db, no object for that item is contained in the
+  // returning list
+  // So querying for ['rice', 'some-random-item'] would return a list with a single object that has values for rice
+  // Querying ['blablabla'] would return an empty list
+  async getCfMultipleItems(labelList) {
+
+    let _itemList = [];
+    await this.store.carbon.find({item: {$in: labelList}}, (err, itemList) => {
+      if (err) {
+        console.error('CarbonAPI: failed to query for labels:', labels);
+        throw err;
+      }
+      _itemList = itemList;
+    }).exec();
+
+    return _itemList;
   }
 
 }
