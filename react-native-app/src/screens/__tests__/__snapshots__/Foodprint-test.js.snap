@@ -7,7 +7,38 @@ exports[`foodprint screen with loaded results matches previous snapshot 1`] = `
     Array [
       Object {
         "request": Object {
-          "query": undefined,
+          "query": Object {
+            "definitions": Array [
+              Object {
+                "directives": Array [],
+                "kind": "OperationDefinition",
+                "name": undefined,
+                "operation": "query",
+                "selectionSet": Object {
+                  "kind": "SelectionSet",
+                  "selections": Array [
+                    Object {
+                      "alias": undefined,
+                      "arguments": Array [],
+                      "directives": Array [],
+                      "kind": "Field",
+                      "name": Object {
+                        "kind": "Name",
+                        "value": "getUserAvg",
+                      },
+                      "selectionSet": undefined,
+                    },
+                  ],
+                },
+                "variableDefinitions": Array [],
+              },
+            ],
+            "kind": "Document",
+            "loc": Object {
+              "end": 22,
+              "start": 0,
+            },
+          },
         },
         "result": Object {
           "data": Object {
@@ -17,7 +48,87 @@ exports[`foodprint screen with loaded results matches previous snapshot 1`] = `
       },
       Object {
         "request": Object {
-          "query": undefined,
+          "query": Object {
+            "definitions": Array [
+              Object {
+                "directives": Array [],
+                "kind": "OperationDefinition",
+                "name": undefined,
+                "operation": "query",
+                "selectionSet": Object {
+                  "kind": "SelectionSet",
+                  "selections": Array [
+                    Object {
+                      "alias": undefined,
+                      "arguments": Array [
+                        Object {
+                          "kind": "Argument",
+                          "name": Object {
+                            "kind": "Name",
+                            "value": "timezone",
+                          },
+                          "value": Object {
+                            "kind": "Variable",
+                            "name": Object {
+                              "kind": "Name",
+                              "value": "timezone",
+                            },
+                          },
+                        },
+                        Object {
+                          "kind": "Argument",
+                          "name": Object {
+                            "kind": "Name",
+                            "value": "resolution",
+                          },
+                          "value": Object {
+                            "kind": "EnumValue",
+                            "value": "WEEK",
+                          },
+                        },
+                      ],
+                      "directives": Array [],
+                      "kind": "Field",
+                      "name": Object {
+                        "kind": "Name",
+                        "value": "getPeriodAvg",
+                      },
+                      "selectionSet": undefined,
+                    },
+                  ],
+                },
+                "variableDefinitions": Array [
+                  Object {
+                    "defaultValue": undefined,
+                    "directives": Array [],
+                    "kind": "VariableDefinition",
+                    "type": Object {
+                      "kind": "NonNullType",
+                      "type": Object {
+                        "kind": "NamedType",
+                        "name": Object {
+                          "kind": "Name",
+                          "value": "Int",
+                        },
+                      },
+                    },
+                    "variable": Object {
+                      "kind": "Variable",
+                      "name": Object {
+                        "kind": "Name",
+                        "value": "timezone",
+                      },
+                    },
+                  },
+                ],
+              },
+            ],
+            "kind": "Document",
+            "loc": Object {
+              "end": 80,
+              "start": 0,
+            },
+          },
         },
         "result": Object {
           "getPeriodAvg": 13.4,
@@ -25,7 +136,239 @@ exports[`foodprint screen with loaded results matches previous snapshot 1`] = `
       },
       Object {
         "request": Object {
-          "query": undefined,
+          "query": Object {
+            "definitions": Array [
+              Object {
+                "directives": Array [],
+                "kind": "OperationDefinition",
+                "name": undefined,
+                "operation": "query",
+                "selectionSet": Object {
+                  "kind": "SelectionSet",
+                  "selections": Array [
+                    Object {
+                      "alias": undefined,
+                      "arguments": Array [
+                        Object {
+                          "kind": "Argument",
+                          "name": Object {
+                            "kind": "Name",
+                            "value": "timezone",
+                          },
+                          "value": Object {
+                            "kind": "Variable",
+                            "name": Object {
+                              "kind": "Name",
+                              "value": "timezone",
+                            },
+                          },
+                        },
+                        Object {
+                          "kind": "Argument",
+                          "name": Object {
+                            "kind": "Name",
+                            "value": "resolution",
+                          },
+                          "value": Object {
+                            "kind": "EnumValue",
+                            "value": "WEEK",
+                          },
+                        },
+                      ],
+                      "directives": Array [],
+                      "kind": "Field",
+                      "name": Object {
+                        "kind": "Name",
+                        "value": "reportByCategory",
+                      },
+                      "selectionSet": Object {
+                        "kind": "SelectionSet",
+                        "selections": Array [
+                          Object {
+                            "alias": undefined,
+                            "arguments": Array [],
+                            "directives": Array [],
+                            "kind": "Field",
+                            "name": Object {
+                              "kind": "Name",
+                              "value": "plantBased",
+                            },
+                            "selectionSet": Object {
+                              "kind": "SelectionSet",
+                              "selections": Array [
+                                Object {
+                                  "alias": undefined,
+                                  "arguments": Array [],
+                                  "directives": Array [],
+                                  "kind": "Field",
+                                  "name": Object {
+                                    "kind": "Name",
+                                    "value": "periodNumber",
+                                  },
+                                  "selectionSet": undefined,
+                                },
+                                Object {
+                                  "alias": undefined,
+                                  "arguments": Array [],
+                                  "directives": Array [],
+                                  "kind": "Field",
+                                  "name": Object {
+                                    "kind": "Name",
+                                    "value": "avgCarbonFootprint",
+                                  },
+                                  "selectionSet": undefined,
+                                },
+                              ],
+                            },
+                          },
+                          Object {
+                            "alias": undefined,
+                            "arguments": Array [],
+                            "directives": Array [],
+                            "kind": "Field",
+                            "name": Object {
+                              "kind": "Name",
+                              "value": "fish",
+                            },
+                            "selectionSet": Object {
+                              "kind": "SelectionSet",
+                              "selections": Array [
+                                Object {
+                                  "alias": undefined,
+                                  "arguments": Array [],
+                                  "directives": Array [],
+                                  "kind": "Field",
+                                  "name": Object {
+                                    "kind": "Name",
+                                    "value": "periodNumber",
+                                  },
+                                  "selectionSet": undefined,
+                                },
+                                Object {
+                                  "alias": undefined,
+                                  "arguments": Array [],
+                                  "directives": Array [],
+                                  "kind": "Field",
+                                  "name": Object {
+                                    "kind": "Name",
+                                    "value": "avgCarbonFootprint",
+                                  },
+                                  "selectionSet": undefined,
+                                },
+                              ],
+                            },
+                          },
+                          Object {
+                            "alias": undefined,
+                            "arguments": Array [],
+                            "directives": Array [],
+                            "kind": "Field",
+                            "name": Object {
+                              "kind": "Name",
+                              "value": "meat",
+                            },
+                            "selectionSet": Object {
+                              "kind": "SelectionSet",
+                              "selections": Array [
+                                Object {
+                                  "alias": undefined,
+                                  "arguments": Array [],
+                                  "directives": Array [],
+                                  "kind": "Field",
+                                  "name": Object {
+                                    "kind": "Name",
+                                    "value": "periodNumber",
+                                  },
+                                  "selectionSet": undefined,
+                                },
+                                Object {
+                                  "alias": undefined,
+                                  "arguments": Array [],
+                                  "directives": Array [],
+                                  "kind": "Field",
+                                  "name": Object {
+                                    "kind": "Name",
+                                    "value": "avgCarbonFootprint",
+                                  },
+                                  "selectionSet": undefined,
+                                },
+                              ],
+                            },
+                          },
+                          Object {
+                            "alias": undefined,
+                            "arguments": Array [],
+                            "directives": Array [],
+                            "kind": "Field",
+                            "name": Object {
+                              "kind": "Name",
+                              "value": "eggsAndDairy",
+                            },
+                            "selectionSet": Object {
+                              "kind": "SelectionSet",
+                              "selections": Array [
+                                Object {
+                                  "alias": undefined,
+                                  "arguments": Array [],
+                                  "directives": Array [],
+                                  "kind": "Field",
+                                  "name": Object {
+                                    "kind": "Name",
+                                    "value": "periodNumber",
+                                  },
+                                  "selectionSet": undefined,
+                                },
+                                Object {
+                                  "alias": undefined,
+                                  "arguments": Array [],
+                                  "directives": Array [],
+                                  "kind": "Field",
+                                  "name": Object {
+                                    "kind": "Name",
+                                    "value": "avgCarbonFootprint",
+                                  },
+                                  "selectionSet": undefined,
+                                },
+                              ],
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  ],
+                },
+                "variableDefinitions": Array [
+                  Object {
+                    "defaultValue": undefined,
+                    "directives": Array [],
+                    "kind": "VariableDefinition",
+                    "type": Object {
+                      "kind": "NonNullType",
+                      "type": Object {
+                        "kind": "NamedType",
+                        "name": Object {
+                          "kind": "Name",
+                          "value": "Int",
+                        },
+                      },
+                    },
+                    "variable": Object {
+                      "kind": "Variable",
+                      "name": Object {
+                        "kind": "Name",
+                        "value": "timezone",
+                      },
+                    },
+                  },
+                ],
+              },
+            ],
+            "kind": "Document",
+            "loc": Object {
+              "end": 352,
+              "start": 0,
+            },
+          },
         },
         "result": Object {
           "reportByCategory": Object {
@@ -138,7 +481,87 @@ exports[`foodprint screen with loaded results matches previous snapshot 1`] = `
       },
       Object {
         "request": Object {
-          "query": undefined,
+          "query": Object {
+            "definitions": Array [
+              Object {
+                "directives": Array [],
+                "kind": "OperationDefinition",
+                "name": undefined,
+                "operation": "query",
+                "selectionSet": Object {
+                  "kind": "SelectionSet",
+                  "selections": Array [
+                    Object {
+                      "alias": undefined,
+                      "arguments": Array [
+                        Object {
+                          "kind": "Argument",
+                          "name": Object {
+                            "kind": "Name",
+                            "value": "timezone",
+                          },
+                          "value": Object {
+                            "kind": "Variable",
+                            "name": Object {
+                              "kind": "Name",
+                              "value": "timezone",
+                            },
+                          },
+                        },
+                        Object {
+                          "kind": "Argument",
+                          "name": Object {
+                            "kind": "Name",
+                            "value": "resolution",
+                          },
+                          "value": Object {
+                            "kind": "EnumValue",
+                            "value": "MONTH",
+                          },
+                        },
+                      ],
+                      "directives": Array [],
+                      "kind": "Field",
+                      "name": Object {
+                        "kind": "Name",
+                        "value": "getPeriodAvg",
+                      },
+                      "selectionSet": undefined,
+                    },
+                  ],
+                },
+                "variableDefinitions": Array [
+                  Object {
+                    "defaultValue": undefined,
+                    "directives": Array [],
+                    "kind": "VariableDefinition",
+                    "type": Object {
+                      "kind": "NonNullType",
+                      "type": Object {
+                        "kind": "NamedType",
+                        "name": Object {
+                          "kind": "Name",
+                          "value": "Int",
+                        },
+                      },
+                    },
+                    "variable": Object {
+                      "kind": "Variable",
+                      "name": Object {
+                        "kind": "Name",
+                        "value": "timezone",
+                      },
+                    },
+                  },
+                ],
+              },
+            ],
+            "kind": "Document",
+            "loc": Object {
+              "end": 80,
+              "start": 0,
+            },
+          },
         },
         "result": Object {
           "getPeriodAvg": 64,
@@ -146,7 +569,239 @@ exports[`foodprint screen with loaded results matches previous snapshot 1`] = `
       },
       Object {
         "request": Object {
-          "query": undefined,
+          "query": Object {
+            "definitions": Array [
+              Object {
+                "directives": Array [],
+                "kind": "OperationDefinition",
+                "name": undefined,
+                "operation": "query",
+                "selectionSet": Object {
+                  "kind": "SelectionSet",
+                  "selections": Array [
+                    Object {
+                      "alias": undefined,
+                      "arguments": Array [
+                        Object {
+                          "kind": "Argument",
+                          "name": Object {
+                            "kind": "Name",
+                            "value": "timezone",
+                          },
+                          "value": Object {
+                            "kind": "Variable",
+                            "name": Object {
+                              "kind": "Name",
+                              "value": "timezone",
+                            },
+                          },
+                        },
+                        Object {
+                          "kind": "Argument",
+                          "name": Object {
+                            "kind": "Name",
+                            "value": "resolution",
+                          },
+                          "value": Object {
+                            "kind": "EnumValue",
+                            "value": "MONTH",
+                          },
+                        },
+                      ],
+                      "directives": Array [],
+                      "kind": "Field",
+                      "name": Object {
+                        "kind": "Name",
+                        "value": "reportByCategory",
+                      },
+                      "selectionSet": Object {
+                        "kind": "SelectionSet",
+                        "selections": Array [
+                          Object {
+                            "alias": undefined,
+                            "arguments": Array [],
+                            "directives": Array [],
+                            "kind": "Field",
+                            "name": Object {
+                              "kind": "Name",
+                              "value": "plantBased",
+                            },
+                            "selectionSet": Object {
+                              "kind": "SelectionSet",
+                              "selections": Array [
+                                Object {
+                                  "alias": undefined,
+                                  "arguments": Array [],
+                                  "directives": Array [],
+                                  "kind": "Field",
+                                  "name": Object {
+                                    "kind": "Name",
+                                    "value": "periodNumber",
+                                  },
+                                  "selectionSet": undefined,
+                                },
+                                Object {
+                                  "alias": undefined,
+                                  "arguments": Array [],
+                                  "directives": Array [],
+                                  "kind": "Field",
+                                  "name": Object {
+                                    "kind": "Name",
+                                    "value": "avgCarbonFootprint",
+                                  },
+                                  "selectionSet": undefined,
+                                },
+                              ],
+                            },
+                          },
+                          Object {
+                            "alias": undefined,
+                            "arguments": Array [],
+                            "directives": Array [],
+                            "kind": "Field",
+                            "name": Object {
+                              "kind": "Name",
+                              "value": "fish",
+                            },
+                            "selectionSet": Object {
+                              "kind": "SelectionSet",
+                              "selections": Array [
+                                Object {
+                                  "alias": undefined,
+                                  "arguments": Array [],
+                                  "directives": Array [],
+                                  "kind": "Field",
+                                  "name": Object {
+                                    "kind": "Name",
+                                    "value": "periodNumber",
+                                  },
+                                  "selectionSet": undefined,
+                                },
+                                Object {
+                                  "alias": undefined,
+                                  "arguments": Array [],
+                                  "directives": Array [],
+                                  "kind": "Field",
+                                  "name": Object {
+                                    "kind": "Name",
+                                    "value": "avgCarbonFootprint",
+                                  },
+                                  "selectionSet": undefined,
+                                },
+                              ],
+                            },
+                          },
+                          Object {
+                            "alias": undefined,
+                            "arguments": Array [],
+                            "directives": Array [],
+                            "kind": "Field",
+                            "name": Object {
+                              "kind": "Name",
+                              "value": "meat",
+                            },
+                            "selectionSet": Object {
+                              "kind": "SelectionSet",
+                              "selections": Array [
+                                Object {
+                                  "alias": undefined,
+                                  "arguments": Array [],
+                                  "directives": Array [],
+                                  "kind": "Field",
+                                  "name": Object {
+                                    "kind": "Name",
+                                    "value": "periodNumber",
+                                  },
+                                  "selectionSet": undefined,
+                                },
+                                Object {
+                                  "alias": undefined,
+                                  "arguments": Array [],
+                                  "directives": Array [],
+                                  "kind": "Field",
+                                  "name": Object {
+                                    "kind": "Name",
+                                    "value": "avgCarbonFootprint",
+                                  },
+                                  "selectionSet": undefined,
+                                },
+                              ],
+                            },
+                          },
+                          Object {
+                            "alias": undefined,
+                            "arguments": Array [],
+                            "directives": Array [],
+                            "kind": "Field",
+                            "name": Object {
+                              "kind": "Name",
+                              "value": "eggsAndDairy",
+                            },
+                            "selectionSet": Object {
+                              "kind": "SelectionSet",
+                              "selections": Array [
+                                Object {
+                                  "alias": undefined,
+                                  "arguments": Array [],
+                                  "directives": Array [],
+                                  "kind": "Field",
+                                  "name": Object {
+                                    "kind": "Name",
+                                    "value": "periodNumber",
+                                  },
+                                  "selectionSet": undefined,
+                                },
+                                Object {
+                                  "alias": undefined,
+                                  "arguments": Array [],
+                                  "directives": Array [],
+                                  "kind": "Field",
+                                  "name": Object {
+                                    "kind": "Name",
+                                    "value": "avgCarbonFootprint",
+                                  },
+                                  "selectionSet": undefined,
+                                },
+                              ],
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  ],
+                },
+                "variableDefinitions": Array [
+                  Object {
+                    "defaultValue": undefined,
+                    "directives": Array [],
+                    "kind": "VariableDefinition",
+                    "type": Object {
+                      "kind": "NonNullType",
+                      "type": Object {
+                        "kind": "NamedType",
+                        "name": Object {
+                          "kind": "Name",
+                          "value": "Int",
+                        },
+                      },
+                    },
+                    "variable": Object {
+                      "kind": "Variable",
+                      "name": Object {
+                        "kind": "Name",
+                        "value": "timezone",
+                      },
+                    },
+                  },
+                ],
+              },
+            ],
+            "kind": "Document",
+            "loc": Object {
+              "end": 352,
+              "start": 0,
+            },
+          },
         },
         "result": Object {
           "reportByCategory": Object {
