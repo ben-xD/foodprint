@@ -4,7 +4,7 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 import { MockedProvider } from '@apollo/react-testing';
 import App from '../App';
-import { mockedResponses } from './.mockedResponses';
+import { mockedResponses } from './mockedResponses';
 
 jest.mock('@react-native-community/google-signin');
 jest.mock('apollo-boost');

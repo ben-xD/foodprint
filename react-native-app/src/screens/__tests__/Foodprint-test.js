@@ -3,7 +3,7 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 import Foodprint from '../Foodprint';
 import { MockedProvider } from '@apollo/react-testing';
-import { mockedResponses } from '../../__tests__/.mockedResponses';
+import { mockedResponses } from '../../__tests__/mockedResponses';
 
 // Check current component against its snapshot
 test('foodprint screen with loaded results matches previous snapshot', async () => {

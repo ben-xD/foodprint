@@ -1,6 +1,3 @@
-// This file supplies mock data for network requests for tests
-// Intentional '.' in filename to prevent jest thinking this is a test
-
 import { GET_CARBON_FOODPRINT, GET_WEEKLY_AVERAGE, GET_WEEKLY_COMPOSITION, GET_MONTHLY_AVERAGE, GET_MONTHLY_COMPOSITION } from '../screens/Foodprint';
 
 export const mockedResponses = [
