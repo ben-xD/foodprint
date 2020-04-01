@@ -5,7 +5,9 @@ import React from 'react';
 import { Tooltip } from 'react-native-elements';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
+
 const WeeklyDisplay = ({ average, composition }) => {
+
   // This week's carbon footprint
   const sum = () => {
 
