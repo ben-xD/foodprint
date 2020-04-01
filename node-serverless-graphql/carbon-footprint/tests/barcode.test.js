@@ -2,7 +2,8 @@ const { getCarbonFootprintFromBarcode } = require('../barcode');
 
 const VisionAPI = require('../../datasources/vision');
 const visionCredentials = require('../../credentials/carbon-7fbf76411514.json');
-const store = {};
+const {createStore, deleteStore} = require('../../utils');
+const store = createStore();
 
 const CarbonAPI = require('../../datasources/carbon');
 const carbonAPI = new CarbonAPI(store);
