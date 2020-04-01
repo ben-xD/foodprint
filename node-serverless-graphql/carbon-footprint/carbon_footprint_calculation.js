@@ -28,7 +28,7 @@ const findCategorisedLabel = (labels) => {
 const oneLayerSearch = async (datasources, labels) => {
 
   const carbonFootprintResponse = await datasources.carbonAPI.getCfMultipleItems(labels);
-  if (carbonFootprintResponse.length > 0 && carbonFootprintResponse[0].carbonpkilo){
+  if (carbonFootprintResponse.length > 0 && carbonFootprintResponse[0].carbonpkilo!=null){
     return {
       item: carbonFootprintResponse[0].item,
       carbonpkilo: carbonFootprintResponse[0].carbonpkilo,
@@ -258,7 +258,7 @@ const getCarbonFootprintFromName = async (datasources, name) => {
       label: "approximated from product " + nextResponse.item
     };
     console.log(save_to_db);
-    if(datasources.carbonAPI.getCfOneItem([save_to_db.item]).carbonpkilo !== undefined) {
+    if(datasources.carbonAPI.getCfOneItem([save_to_db.item]) !== null) {
       datasources.carbonAPI.insert_in_DB(save_to_db);
     }
 
@@ -273,7 +273,5 @@ const getCarbonFootprintFromName = async (datasources, name) => {
     carbonFootprintPerKg: undefined,
   };
 };
-
-
 
 module.exports = { getCarbonFootprintFromImage, getCarbonFootprintFromName, singularize};
