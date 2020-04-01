@@ -1,3 +1,4 @@
+const barcode_products = require('./barcode_products');
 const axios = require('axios');
 const pluralize = require('pluralize')
 const { getCarbonFootprintFromName } = require('./carbon_footprint_calculation');
@@ -7,7 +8,39 @@ const options = {
     headers: {'Ocp-Apim-Subscription-Key': '6b9983f7c22d42e1a242b91c7b0cfe37'}
 };
 
-const getCarbonFootprintFromBarcode = async (dataSources, barcode) => {
+// @param: tescoApi_working is a boolean value. Set it to true if tescoAPI working,
+// set to false if not working.
+const getCarbonFootprintFromBarcode = async (dataSources, barcode, tescoAPI_working) => {
+
+    let result;
+    if(tescoAPI_working){
+        result =  await getCarbonFootprintFromBarcode_with_Tesco(dataSources, barcode);
+    } else {
+        result = await getCarbonFootprintFromBarcode_without_Tesco(dataSources, barcode);
+    }
+
+    return result;
+};
+
+const getCarbonFootprintFromBarcode_without_Tesco = async (dataSources, barcode) => {
+    // get the name of the product from barcode
+    const product_name = barcode_products[barcode];
+    console.log(product_name);
+
+    // check if we are able to recognise that barcode
+    if (product_name === undefined){
+        return{
+            item: null,
+            carbonFootprintPerKg: null,
+        };
+    }
+
+    let res = await getCarbonFootprintFromName(dataSources, product_name);
+    return res;
+
+};
+
+const getCarbonFootprintFromBarcode_with_Tesco = async (dataSources, barcode) => {
     //get data from the barcode
     let data = await getData(barcode);
     if(data.products === undefined || data.products.length == 0){

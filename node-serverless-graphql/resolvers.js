@@ -1,5 +1,5 @@
 const { getCarbonFootprintFromImage, getCarbonFootprintFromName } = require('./carbon-footprint/carbon_footprint_calculation');
-const { getCarbonFootprintFromBarcode } = require('./carbon-footprint/barcode_without_Tesco_API');
+const { getCarbonFootprintFromBarcode } = require('./carbon-footprint/barcode');
 
 const resolvers = {
   Query: {
@@ -93,7 +93,7 @@ const resolvers = {
       const { dataSources, user } = context
       console.log({ dataSources, user, parent });
       console.log(`Received barcode: ${barcode}`);
-      let { item, carbonFootprintPerKg } = await getCarbonFootprintFromBarcode(dataSources, barcode);
+      let { item, carbonFootprintPerKg } = await getCarbonFootprintFromBarcode(dataSources, barcode, false);
       if (!item) item = 'unknown';
       const response = {
         name: item,
