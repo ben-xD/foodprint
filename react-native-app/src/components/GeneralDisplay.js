@@ -17,9 +17,10 @@ export const GET_INDEFINITE_AVERAGE = gql`query {
 
 
 const GeneralDisplay = () => {
-  //DO NOT DELETE THE FOLLOWING COMMENTED CODE
+  //Comment the following line to test caching
   let { loading, error, data } = useQuery(GET_INDEFINITE_AVERAGE);
 
+  // Uncomment the following lines to test caching
   // let loading = false;
   // let error = true;
   // let data = null;
@@ -84,7 +85,7 @@ const GeneralDisplay = () => {
 });
 
  const whichData = () => {
-  if (data) return data;
+  if (data) {return data;}
   return localData;
  };
 
