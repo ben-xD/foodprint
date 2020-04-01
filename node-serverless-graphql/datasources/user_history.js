@@ -230,7 +230,7 @@ class userHistAPI {
     let user_co2 = 0;
     let no_of_datapoints = 0;
     for (let i = 0; i < data.length; i++){
-      let carbonResult = await carbonAPI.searchData(data[i].item);
+      let carbonResult = await carbonAPI.getCfOneItem(data[i].item);
       console.log(carbonResult.carbonpkilo);
       if(carbonResult.carbonpkilo !== undefined){
         user_co2 += Number(carbonResult.carbonpkilo);
@@ -264,7 +264,7 @@ class userHistAPI {
   // Adds the data (period_i_data) of a period i (week or month) to the compositions table
   async sum_period_data_to_table(carbonAPI, period_i_data, period, table){
     for (let i = 0; i < period_i_data.length; i++){ // For each item found
-      let carbonResult = await carbonAPI.searchData(period_i_data[i].item);
+      let carbonResult = await carbonAPI.getCfOneItem(period_i_data[i].item);
       if(carbonResult.carbonpkilo !== undefined){
         const categories = carbonResult.categories.toString();
         for (let cat = 1; cat < 5; cat ++){

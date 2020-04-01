@@ -93,7 +93,7 @@ const resolvers = {
       const { dataSources, user } = context
       console.log({ dataSources, user, parent });
       console.log(`Received barcode: ${barcode}`);
-      let { item, carbonFootprintPerKg } = await getCarbonFootprintFromBarcode(dataSources, barcode);
+      let { item, carbonFootprintPerKg } = await getCarbonFootprintFromBarcode(dataSources, barcode, false);
       if (!item) item = 'unknown';
       const response = {
         name: item,
