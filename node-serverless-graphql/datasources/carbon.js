@@ -36,11 +36,15 @@ class CarbonAPI {
     return _item;
   }
 
+  // Search database for a list of labels, returning a list of objects for only those labels defined in the db
   // labelList: list of strings
   // return: list of objects, each containing carbonpkilo and categories fields
+  // If there is no input for one of the labels in labelList in the db, no object for that item is contained in the
+  // returning list
+  // So querying for ['rice', 'some-random-item'] would return a list with a single object that has values for rice
   async getCfMultipleItems(labelList) {
 
-    let _itemList = null;
+    let _itemList = [];
     await this.store.carbon.find({item: {$in: labelList}}, (err, itemList) => {
       if (err) {
         console.error('CarbonAPI: failed to query for labels:', labels);
@@ -55,13 +59,3 @@ class CarbonAPI {
 }
 
 module.exports = CarbonAPI;
-
-
-// const  { createStore, deleteStore } = require('../utils');
-// const store = createStore();
-//
-// const carbonAPI = new CarbonAPI(store);
-// carbonAPI.getCfMultipleItems(['rice', 'orange']).then((items) => console.log(items));
-
-// store.carbon.find({item: { $in: ['rice', 'orange']}}).then((res) => {console.log(res)});
-//
