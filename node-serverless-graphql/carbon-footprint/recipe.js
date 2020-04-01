@@ -32,7 +32,16 @@ class recipeAI {
     }
 
     async getIngredients() {
-        return this.content.extendedIngredients;
+        let full_ingredients = this.content.extendedIngredients;
+        let ingredients = [];
+        for (let i = 0; i < full_ingredients.length; i++){
+            ingredients[i] = {
+                name: full_ingredients[i].name,
+                amount: full_ingredients[i].amount,
+                unit: full_ingredients[i].unit
+            }
+        }
+        return ingredients;
     }
 };
 
