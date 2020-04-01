@@ -56,7 +56,7 @@ const App = () => {
       console.log('Displaying "no internet connection" snack');
       console.log({ netInfo });
       Snackbar.show({
-        text: 'No internet connection',
+        text: 'No internet connection, using offline data',
         duration: Snackbar.LENGTH_LONG,
       });
     }

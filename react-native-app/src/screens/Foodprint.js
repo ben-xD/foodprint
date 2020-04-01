@@ -1,3 +1,6 @@
+// The following file abuses graphQL
+// TODO consider merging 4 requests into 1 (may need backend work?)
+
 import React, { useEffect, useState } from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
@@ -18,7 +21,6 @@ import gql from 'graphql-tag';
 import { useQuery } from '@apollo/react-hooks';
 import AsyncStorage from '@react-native-community/async-storage';
 
-// TODO consider merging 4 requests into 1 (may need backend work?)
 export const GET_WEEKLY_AVERAGE = gql`query($timezone: Int!) {
   getPeriodAvg(timezone: $timezone, resolution: WEEK)
 }`;
@@ -138,6 +140,10 @@ const Foodprint = ({ navigation }) => {
 
   const refetch = () => {
     setRefreshing(true);
+    setWeeklyAvg(null);
+    setWeeklyComp(null);
+    setMonthlyAvg(null);
+    setMonthlyComp(null);
     refetchWeeklyAvg();
     refetchWeelklyComp();
     refetchMonthlyAvg();
@@ -178,13 +184,13 @@ const Foodprint = ({ navigation }) => {
       }
     };
 
-    if (monthlyCompError || monthlyAvgError) {
+    if (weeklyCompError || weeklyAvgError) {
       retrieveWeeklyDataFromCache();
     }
-  }, [monthlyCompError, monthlyAvgError]);
+  }, [weeklyCompError, weeklyAvgError]);
 
   useEffect(() => {
-    const retrieveMonthlyData = async () => {
+    const retrieveMonthlyDataFromCache = async () => {
       try {
         const retrievedAvgData = await AsyncStorage.getItem('monthlyAverage');
         setMonthlyAvg(JSON.parse(retrievedAvgData));
@@ -195,10 +201,10 @@ const Foodprint = ({ navigation }) => {
       }
     };
 
-    if (weeklyCompError || weeklyAvgError) {
-      retrieveMonthlyData();
+    if (monthlyAvgError || monthlyCompError) {
+      retrieveMonthlyDataFromCache();
     }
-  }, [weeklyCompError, weeklyAvgError]);
+  }, [monthlyAvgError, monthlyCompError]);
 
   // Uncomment the following lines to test the caching
   // let monthlyAvgLoading = false;
@@ -220,7 +226,7 @@ const Foodprint = ({ navigation }) => {
   const renderFootprintChart = () => {
     if (timeSpan === 'weekly') {
       return (
-        (weeklyAvgLoading || weeklyCompLoading || ((weeklyAvgError || weeklyCompError)) || !weeklyAvg || !weeklyComp) ? (
+        (!weeklyAvg || !weeklyComp) ? (
           <View style={styles.graphContainer}>
             <ActivityIndicator />
           </View>
@@ -231,7 +237,7 @@ const Foodprint = ({ navigation }) => {
     }
     if (timeSpan === 'monthly') {
       return (
-        (monthlyAvgLoading || monthlyCompLoading || ((monthlyAvgError || monthlyCompError)) || !monthlyAvg || !monthlyComp) ? (
+        (!monthlyAvg || !monthlyComp) ? (
           <View style={styles.graphContainer}>
             <ActivityIndicator />
           </View>
