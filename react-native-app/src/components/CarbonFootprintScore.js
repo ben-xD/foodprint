@@ -4,21 +4,10 @@ import React, { useState, useEffect } from 'react';
 import { ActivityIndicator, Image, StyleSheet, Text, View } from 'react-native';
 import { Tooltip } from 'react-native-elements';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-//DO NOT DELETE THE FOLLOWING COMMENTED CODE
-import gql from 'graphql-tag';
-import { useQuery } from '@apollo/react-hooks';
 import AsyncStorage from '@react-native-community/async-storage';
 
-
-//DO NOT DELETE THE FOLLOWING COMMENTED CODE
-export const GET_INDEFINITE_AVERAGE = gql`query {
-  getUserAvg
-}`;
-
-
-const CarbonFootprintScore = () => {
+const CarbonFootprintScore = ({ loading, error, data }) => {
   //Comment the following line to test caching
-  let { loading, error, data } = useQuery(GET_INDEFINITE_AVERAGE);
 
   // Uncomment the following lines to test caching
   // let loading = false;

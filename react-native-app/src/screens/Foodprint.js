@@ -69,6 +69,10 @@ export const GET_MONTHLY_COMPOSITION = gql`query($timezone: Int!) {
    }
  }`;
 
+export const GET_CARBON_FOODPRINT = gql`query {
+  getUserAvg
+}`;
+
 const Foodprint = ({ navigation }) => {
   const [welcomeScreenIsVisible, setWelcomeScreenIsVisible] = useState(false);
   const [timeSpan, setTimeSpan] = useState('weekly');
@@ -130,13 +134,15 @@ const Foodprint = ({ navigation }) => {
     variables: { timezone: getTimeDifference() },
   });
 
+  let { loading: foodprintLoading, error: foodprintError, data: foodprintData, refetch: refetchFoodprint } = useQuery(GET_CARBON_FOODPRINT);
+
   const refetch = () => {
     setRefreshing(true);
     refetchWeeklyAvg();
     refetchWeelklyComp();
     refetchMonthlyAvg();
     refetchMonthlyComp();
-    console.log('Finished refetching');
+    refetchFoodprint();
   };
 
   useEffect(() => {
@@ -239,8 +245,7 @@ const Foodprint = ({ navigation }) => {
   return (
     <SafeAreaView>
       <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refetch} />}>
-        <CarbonFootprintScoreView />
-
+        <CarbonFootprintScoreView data={foodprintData} loading={foodprintLoading} error={foodprintError} />
         <View>
           {renderFootprintChart()}
         </View>
