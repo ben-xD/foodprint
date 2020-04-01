@@ -21,7 +21,7 @@ class CarbonAPI {
 
   // Search database for given label and return its carbon footprint
   // label: string
-  // return: object with carbonpkilo and categories fields
+  // return: object with carbonpkilo and categories fields, return null if item not in the database
   async getCfOneItem(label) {
 
     let _item = null;
@@ -42,6 +42,7 @@ class CarbonAPI {
   // If there is no input for one of the labels in labelList in the db, no object for that item is contained in the
   // returning list
   // So querying for ['rice', 'some-random-item'] would return a list with a single object that has values for rice
+  // Querying ['blablabla'] would return an empty list
   async getCfMultipleItems(labelList) {
 
     let _itemList = [];
