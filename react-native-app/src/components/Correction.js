@@ -43,11 +43,11 @@ const Correction = ({ route, navigation }) => {
 
   // Respond to changes in correction data (following correction)
   useEffect(() => {
-    if (correctionData) {
+    if (correctionData && correctionData.postCorrection.carbonFootprintPerKg != -1) {
       setMeal({
         ...meal,
         score: correctionData.postCorrection.carbonFootprintPerKg,
-        description: correctionData.postCorrection.name,
+        description: correctedName,
       });
       navigation.goBack();
     }
@@ -72,7 +72,7 @@ const Correction = ({ route, navigation }) => {
           <View style={styles.inputContainer}>
             <Input
               placeholder="Cucumber"
-              onChangeText={value => setCorrectedName(value)}
+              onChangeText={value => setCorrectedName(value.toLowerCase())}
               onSubmitEditing={handleCorrection}
             />
           </View>

@@ -27,10 +27,17 @@ const POST_BARCODE_MUTATION = gql`
   }
 `;
 
+const Post_User_History_Entry = gql`
+  mutation postUserHistoryEntry($item: String) {
+    postUserHistoryEntry(item: $item)
+  }
+`;
+
 const Feedback = ({ route, navigation }) => {
   const [meal, setMeal] = useState(null);
   const [uploadPicture, { loading: pictureLoading, data: pictureData, error: pictureError }] = useMutation(POST_PICTURE_MUTATION);
   const [postBarcodeMutation, { loading: barcodeLoading, error: barcodeError, data: barcodeData }] = useMutation(POST_BARCODE_MUTATION);
+  const [postUserHistoryEntryMutation, { loading: historyLoading, error: historyError, data: historyData }] = useMutation(Post_User_History_Entry);
 
   // make relevant request when component is loaded AND provided with either file or barcode
   useEffect(() => {
@@ -54,36 +61,50 @@ const Feedback = ({ route, navigation }) => {
   }, [pictureError, barcodeError]);
 
   useEffect(() => {
-    if (pictureError) {
-      console.warn({ pictureError });
-    }
-    // console.log({ pictureData, pictureLoading, pictureError });
     if (pictureData) {
-      setMeal({
-        uri: route.params.uri,
-        score: pictureData.postPicture.carbonFootprintPerKg,
-        description: pictureData.postPicture.name,
-      });
+      console.log(pictureData)
+      if (pictureData.postPicture.name == 'unknown') {
+        // If unknown name from picture, go to error correction screen
+        setMeal({
+          ...meal,
+          uri: route.params.uri,
+        });
+        navigation.navigate('Correction', { meal, setMeal })
+      } else {
+        // Otherwise, display feedback
+        setMeal({
+          uri: route.params.uri,
+          score: pictureData.postPicture.carbonFootprintPerKg,
+          description: pictureData.postPicture.name,
+        });
+      }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pictureData]);
 
   useEffect(() => {
-    if (barcodeError) {
-      console.warn({ barcodeError });
-    }
-    // console.log({ barcodeData, barcodeLoading, barcodeError });
     if (barcodeData) {
-      setMeal({
-        score: barcodeData.postBarcode.carbonFootprintPerKg,
-        description: barcodeData.postBarcode.name,
-      });
+      if (barcodeData.postBarcode.name == 'unknown') {
+        // If unknown name from barcode, go to error correction screen
+        navigation.navigate('Correction', { meal, setMeal })
+      } else {
+        setMeal({
+          ...meal,
+          score: barcodeData.postBarcode.carbonFootprintPerKg,
+          description: barcodeData.postBarcode.name,
+        });
+      }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [barcodeData]);
 
+  // Add item to user history
+  const addToHistory = async (item) => {
+    await postUserHistoryEntryMutation({ variables: { item } });
+  };
+
   const calculateRating = (carbonFootprint) => {
-    if (carbonFootprint < 2) {
+    if (carbonFootprint < 0) {
+      return 0;
+    } else if (carbonFootprint < 2) {
       return 5;
     } else if (carbonFootprint < 4) {
       return 4.5;
@@ -132,7 +153,7 @@ const Feedback = ({ route, navigation }) => {
               type="star" // Optionally customisible
               imageSize={percentageWidth('7%')}
             />
-            <Text style={styles.score}>{meal.score} kg of CO2 eq/kg</Text>
+            <Text style={styles.score}>{meal.score.toFixed(1)} kg of CO2 eq/kg</Text>
           </View>
           <View style={styles.buttonContainer}>
             <Button
@@ -146,7 +167,11 @@ const Feedback = ({ route, navigation }) => {
               buttonStyle={styles.greenButtonStyle}
               titleStyle={styles.buttonText}
               title="Add to history"
-              onPress={() => { alert("'Add to history' not implemented!"); navigation.navigate('Your Foodprint'); }}
+              onPress={() => {
+                addToHistory(meal.description);
+                console.log("Sent item to to user history...");
+                navigation.navigate('Your Foodprint');
+              }}
             />
           </View>
         </ScrollView>
@@ -175,7 +200,12 @@ const styles = StyleSheet.create({
     marginTop: percentageHeight('2%'),
     marginBottom: percentageHeight('2%'),
   },
-  description: { fontSize: percentageWidth('8%'), marginTop: percentageHeight('1%'), marginBottom: percentageHeight('1%') },
+  description: {
+    textTransform: 'capitalize',
+    fontSize: percentageWidth('8%'),
+    marginTop: percentageHeight('1%'),
+    marginBottom: percentageHeight('1%')
+  },
   score: { fontSize: percentageWidth('5%'), margin: percentageWidth('2%') },
   buttonContainer: { flex: 1, flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center' },
   redButtonStyle: { backgroundColor: 'gray', width: percentageWidth('45%') },
