@@ -5,9 +5,7 @@ import React from 'react';
 import { Tooltip } from 'react-native-elements';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-
 const WeeklyDisplay = ({ average, composition }) => {
-
   // This week's carbon footprint
   const sum = () => {
 
@@ -52,57 +50,57 @@ const WeeklyDisplay = ({ average, composition }) => {
 
 
   return (
-      <View style={styles.contentContainer}>
-        <View style={styles.scoreContainer}>
-          <Text style={styles.score}>{Math.round(sum()[0])} units this week</Text>
-          <Text style={styles.comparison}>{weekSign}{Math.round(changeSinceLastWeek())}% compared{'\n'}to last week</Text>
-          <Tooltip
-              popover={<Text style={styles.tooltipContent}>These scores correspond to your carbon footprint this week,
+    <View style={styles.contentContainer}>
+      <View style={styles.scoreContainer}>
+        <Text style={styles.score}>{Math.round(sum()[0])} units this week</Text>
+        <Text style={styles.comparison}>{weekSign}{Math.round(changeSinceLastWeek())}% compared{'\n'}to last week</Text>
+        <Tooltip
+          popover={<Text style={styles.tooltipContent}>These scores correspond to your carbon footprint this week,
               and how it compares to last week’s.{'\n\n'}The following graph shows your weekly carbon footprint over the
               last 6 weeks with respect to each of the following food categories: "Plant" (e.g. cereal, fruits,
               vegetables), "Eggs & Dairy", "Fish" and "Meat".{'\n\n'}Your personal average weekly carbon footprint is also
               given by the black line.</Text>}
-              backgroundColor={'green'}
-              height={percentageHeight('40%')}
-              width={percentageWidth('84%')}
-          >
-            <MaterialCommunityIcons name="help-circle" color={'grey'} size={percentageWidth('4%')} />
-          </Tooltip>
-        </View>
-        <View style={styles.graphContainer}>
-          <VictoryChart
-              padding={{ top: percentageHeight('8%'), bottom: percentageHeight('18%'), left: percentageWidth('15%'), right: percentageWidth('10%') }}
-              domainPadding={percentageWidth('5%')}
-              height={percentageHeight('50%')}
-          >
-            <VictoryAxis dependentAxis orientation="left" offsetX={percentageWidth('15%')} label="Carbon footprint" />
-            <VictoryAxis label="Week" domain={[-5, 0.01]} tickFormat={(t) => (t === 0) ? 'Now' : ('s' + t)} />
-            <VictoryStack colorScale={['olivedrab', 'gold', 'skyblue', 'firebrick']}>
-              <VictoryBar data={composition.reportByCategory.plantBased} sortKey="periodNumber" x="periodNumber" y="avgCarbonFootprint" />
-              <VictoryBar data={composition.reportByCategory.eggsAndDairy} sortKey="periodNumber" x="periodNumber" y="avgCarbonFootprint" />
-              <VictoryBar data={composition.reportByCategory.fish} sortKey="periodNumber" x="periodNumber" y="avgCarbonFootprint" />
-              <VictoryBar data={composition.reportByCategory.meat} sortKey="periodNumber" x="periodNumber" y="avgCarbonFootprint" />
-            </VictoryStack>
-            <VictoryLegend
-                data={[{ name: 'Plant' }, { name: 'Eggs & Dairy' }, { name: 'Fish' }, { name: 'Meat' }]}
-                colorScale={['olivedrab', 'gold', 'skyblue', 'firebrick']}
-                orientation="horizontal"
-                itemsPerRow={2}
-                gutter={percentageWidth('15%')}
-                x={percentageWidth('15%')}
-                y={percentageHeight('40%')}
-            />
-            <VictoryLine data={[
-                { x: 0, y: average.getPeriodAvg },
-                { x: -1, y: average.getPeriodAvg },
-                { x: -2, y: average.getPeriodAvg },
-                { x: -3, y: average.getPeriodAvg },
-                { x: -4, y: average.getPeriodAvg },
-                { x: -5, y: average.getPeriodAvg },
-                ]} />
-          </VictoryChart>
-        </View>
+          backgroundColor={'green'}
+          height={percentageHeight('40%')}
+          width={percentageWidth('84%')}
+        >
+          <MaterialCommunityIcons name="help-circle" color={'grey'} size={percentageWidth('4%')} />
+        </Tooltip>
       </View>
+      <View style={styles.graphContainer}>
+        <VictoryChart
+          padding={{ top: percentageHeight('8%'), bottom: percentageHeight('18%'), left: percentageWidth('15%'), right: percentageWidth('10%') }}
+          domainPadding={percentageWidth('5%')}
+          height={percentageHeight('50%')}
+        >
+          <VictoryAxis dependentAxis orientation="left" offsetX={percentageWidth('15%')} label="Carbon footprint" />
+          <VictoryAxis label="Week" domain={[-5, 0.01]} tickFormat={(t) => (t === 0) ? 'Now' : ('s' + t)} />
+          <VictoryStack colorScale={['olivedrab', 'gold', 'skyblue', 'firebrick']}>
+            <VictoryBar data={composition.reportByCategory.plantBased} sortKey="periodNumber" x="periodNumber" y="avgCarbonFootprint" />
+            <VictoryBar data={composition.reportByCategory.eggsAndDairy} sortKey="periodNumber" x="periodNumber" y="avgCarbonFootprint" />
+            <VictoryBar data={composition.reportByCategory.fish} sortKey="periodNumber" x="periodNumber" y="avgCarbonFootprint" />
+            <VictoryBar data={composition.reportByCategory.meat} sortKey="periodNumber" x="periodNumber" y="avgCarbonFootprint" />
+          </VictoryStack>
+          <VictoryLegend
+            data={[{ name: 'Plant' }, { name: 'Eggs & Dairy' }, { name: 'Fish' }, { name: 'Meat' }]}
+            colorScale={['olivedrab', 'gold', 'skyblue', 'firebrick']}
+            orientation="horizontal"
+            itemsPerRow={2}
+            gutter={percentageWidth('15%')}
+            x={percentageWidth('15%')}
+            y={percentageHeight('40%')}
+          />
+          <VictoryLine data={[
+            { x: 0, y: average.getPeriodAvg },
+            { x: -1, y: average.getPeriodAvg },
+            { x: -2, y: average.getPeriodAvg },
+            { x: -3, y: average.getPeriodAvg },
+            { x: -4, y: average.getPeriodAvg },
+            { x: -5, y: average.getPeriodAvg },
+          ]} />
+        </VictoryChart>
+      </View>
+    </View>
   );
 };
 

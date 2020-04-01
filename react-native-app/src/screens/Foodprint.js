@@ -1,11 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
   View,
   ScrollView,
   StyleSheet,
   SafeAreaView,
-  Text, ActivityIndicator,
+  Text, ActivityIndicator, RefreshControl,
 } from 'react-native';
 import { Button } from 'react-native-elements';
 import { widthPercentageToDP as percentageWidth, heightPercentageToDP as percentageHeight } from 'react-native-responsive-screen';
@@ -13,18 +13,16 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import WelcomeScreen from '../components/WelcomeScreen';
 import WeeklyDisplay from '../components/WeeklyDisplay';
 import MonthlyDisplay from '../components/MonthlyDisplay';
-import GeneralDisplay from '../components/GeneralDisplay';
+import CarbonFootprintScoreView from '../components/CarbonFootprintScore';
 import gql from 'graphql-tag';
 import { useQuery } from '@apollo/react-hooks';
 import AsyncStorage from '@react-native-community/async-storage';
 
-
-//DO NOT DELETE THE FOLLOWING COMMENTED CODE
+// TODO consider merging 4 requests into 1 (may need backend work?)
 export const GET_WEEKLY_AVERAGE = gql`query($timezone: Int!) {
   getPeriodAvg(timezone: $timezone, resolution: WEEK)
 }`;
 
-//DO NOT DELETE THE FOLLOWING COMMENTED CODE
 export const GET_WEEKLY_COMPOSITION = gql`query($timezone: Int!) {
   reportByCategory(timezone: $timezone, resolution: WEEK) {
      plantBased {
@@ -46,12 +44,10 @@ export const GET_WEEKLY_COMPOSITION = gql`query($timezone: Int!) {
    }
  }`;
 
-//DO NOT DELETE THE FOLLOWING COMMENTED CODE
 export const GET_MONTHLY_AVERAGE = gql`query($timezone: Int!) {
   getPeriodAvg(timezone: $timezone, resolution:MONTH)
 }`;
 
-//DO NOT DELETE THE FOLLOWING COMMENTED CODE
 export const GET_MONTHLY_COMPOSITION = gql`query($timezone: Int!) {
   reportByCategory(timezone: $timezone, resolution:MONTH) {
      plantBased {
@@ -73,19 +69,34 @@ export const GET_MONTHLY_COMPOSITION = gql`query($timezone: Int!) {
    }
  }`;
 
-
 const Foodprint = ({ navigation }) => {
-
-  const [isVisible, setVisibility] = useState(true);
+  const [welcomeScreenIsVisible, setWelcomeScreenIsVisible] = useState(false);
   const [timeSpan, setTimeSpan] = useState('weekly');
-  const [weeklyResolved, setWeeklyResolved] = useState(false);
-  const [localWeeklyAvg, setWeeklyAvg] = useState(null);
-  const [localWeeklyComp, setWeeklyComp] = useState(null);
-  const [localMonthlyAvg, setMonthlyAvg] = useState(null);
-  const [localMonthlyComp, setMonthlyComp] = useState(null);
-  const [monthlyResolved, setMonthlyResolved] = useState(false);
+  const [weeklyAvg, setWeeklyAvg] = useState(null);
+  const [weeklyComp, setWeeklyComp] = useState(null);
+  const [monthlyAvg, setMonthlyAvg] = useState(null);
+  const [monthlyComp, setMonthlyComp] = useState(null);
+  const [refreshing, setRefreshing] = useState(false);
 
-  const takePicture = async () => {
+  // show overlay when user logs in first time
+  useEffect(() => {
+    const checkIfUserIsLoggedIn = async () => {
+      try {
+        const firstTimeUser = await AsyncStorage.getItem('firstTimeUser');
+        if (firstTimeUser === null) {
+          setWelcomeScreenIsVisible(true);
+          AsyncStorage.setItem('firstTimeUser', JSON.stringify(false));
+        }
+      } catch (e) {
+        // error reading value, because it doesn't exist, so the user is new.
+        setWelcomeScreenIsVisible(true);
+        AsyncStorage.setItem('firstTimeUser', JSON.stringify(false));
+      }
+    };
+    checkIfUserIsLoggedIn();
+  }, []);
+
+  const goToCamera = async () => {
     navigation.navigate('Camera');
   };
 
@@ -96,10 +107,10 @@ const Foodprint = ({ navigation }) => {
   };
 
   // Comment the following lines to test the caching
-  const { loading: weeklyAvgLoading, error: weeklyAvgError, data: weeklyAvgData } = useQuery(GET_WEEKLY_AVERAGE, {
+  const { loading: weeklyAvgLoading, error: weeklyAvgError, data: weeklyAvgData, refetch: refetchWeeklyAvg } = useQuery(GET_WEEKLY_AVERAGE, {
     variables: { timezone: getTimeDifference() },
   });
-  const { loading: weeklyCompLoading, error: weeklyCompError, data: weeklyCompData } = useQuery(GET_WEEKLY_COMPOSITION, {
+  const { loading: weeklyCompLoading, error: weeklyCompError, data: weeklyCompData, refetch: refetchWeelklyComp } = useQuery(GET_WEEKLY_COMPOSITION, {
     variables: { timezone: getTimeDifference() },
   });
 
@@ -112,12 +123,76 @@ const Foodprint = ({ navigation }) => {
   // let weeklyCompData = null;
 
   // Comment the following lines to test the caching
-  const { loading: monthlyAvgLoading, error: monthlyAvgError, data: monthlyAvgData } = useQuery(GET_MONTHLY_AVERAGE, {
+  const { loading: monthlyAvgLoading, error: monthlyAvgError, data: monthlyAvgData, refetch: refetchMonthlyAvg } = useQuery(GET_MONTHLY_AVERAGE, {
     variables: { timezone: getTimeDifference() },
   });
-  const { loading: monthlyCompLoading, error: monthlyCompError, data: monthlyCompData } = useQuery(GET_MONTHLY_COMPOSITION, {
+  const { loading: monthlyCompLoading, error: monthlyCompError, data: monthlyCompData, refetch: refetchMonthlyComp } = useQuery(GET_MONTHLY_COMPOSITION, {
     variables: { timezone: getTimeDifference() },
   });
+
+  const refetch = () => {
+    setRefreshing(true);
+    refetchWeeklyAvg();
+    refetchWeelklyComp();
+    refetchMonthlyAvg();
+    refetchMonthlyComp();
+    console.log('Finished refetching');
+  };
+
+  useEffect(() => {
+    if (monthlyAvgData && monthlyCompData) {
+      setMonthlyAvg(monthlyAvgData);
+      setMonthlyComp(monthlyCompData);
+      console.log('Successfully received monthly data, caching locally.');
+      cacheHistoricalDataLocally('monthly', JSON.stringify(monthlyAvgData), JSON.stringify(monthlyCompData));
+      setRefreshing(false);
+    }
+  }, [monthlyAvgData, monthlyCompData]);
+
+  useEffect(() => {
+    if (weeklyAvgData && weeklyCompData) {
+      setWeeklyAvg(weeklyAvgData);
+      setWeeklyComp(weeklyCompData);
+      console.log('Successfully received weekly data, caching locally.');
+      cacheHistoricalDataLocally('weekly', JSON.stringify(weeklyAvgData), JSON.stringify(weeklyCompData));
+      setRefreshing(false);
+    }
+  }, [weeklyAvgData, weeklyCompData]);
+
+  useEffect(() => {
+    const retrieveWeeklyDataFromCache = async () => {
+      try {
+        const retrievedAvgData = await AsyncStorage.getItem('weeklyAverage');
+        setWeeklyAvg(JSON.parse(retrievedAvgData));
+        const retrievedCompData = await AsyncStorage.getItem('weeklyComposition');
+        setWeeklyComp(JSON.parse(retrievedCompData));
+      } catch (e) {
+        // TODO Sandrine, the user won't see anything if nothing is in cache, and there is a network error?
+        console.log('Error retrieving weekly data ' + e);
+      }
+    };
+
+    if (monthlyCompError || monthlyAvgError) {
+      retrieveWeeklyDataFromCache();
+    }
+  }, [monthlyCompError, monthlyAvgError]);
+
+  useEffect(() => {
+    const retrieveMonthlyData = async () => {
+      try {
+        const retrievedAvgData = await AsyncStorage.getItem('monthlyAverage');
+        setMonthlyAvg(JSON.parse(retrievedAvgData));
+        const retrievedCompData = await AsyncStorage.getItem('monthlyComposition');
+        setMonthlyComp(JSON.parse(retrievedCompData));
+      } catch (e) {
+        console.log('Error retrieving monthly data ' + e);
+      }
+    };
+
+    if (weeklyCompError || weeklyAvgError) {
+      retrieveMonthlyData();
+    }
+  }, [weeklyCompError, weeklyAvgError]);
 
   // Uncomment the following lines to test the caching
   // let monthlyAvgLoading = false;
@@ -127,160 +202,81 @@ const Foodprint = ({ navigation }) => {
   // let monthlyAvgData = null;
   // let monthlyCompData = null;
 
-
-  const saveWeeklyData = async (weeklyAverage, weeklyComposition) => {
+  const cacheHistoricalDataLocally = async (timeSpan, average, composition) => {
     try {
-      await AsyncStorage.setItem('weeklyAverage', weeklyAverage);
-      await AsyncStorage.setItem('weeklyComposition', weeklyComposition);
+      await AsyncStorage.setItem(`${timeSpan}Average`, average);
+      await AsyncStorage.setItem(`${timeSpan}Composition`, composition);
     } catch (e) {
-      console.log('Error saving weekly data' + e);
+      console.error(`AsyncStorage failed for ${timeSpan}`, e);
     }
   };
 
-  const saveMonthlyData = async (monthlyAverage, monthlyComposition) => {
-    try {
-      await AsyncStorage.setItem('monthlyAverage', monthlyAverage);
-      await AsyncStorage.setItem('monthlyComposition', monthlyComposition);
-    } catch (e) {
-      console.log('Error saving monthly data' + e);
+  const renderFootprintChart = () => {
+    if (timeSpan === 'weekly') {
+      return (
+        (weeklyAvgLoading || weeklyCompLoading || ((weeklyAvgError || weeklyCompError)) || !weeklyAvg || !weeklyComp) ? (
+          <View style={styles.graphContainer}>
+            <ActivityIndicator />
+          </View>
+        ) : (
+            <WeeklyDisplay average={weeklyAvg} composition={weeklyComp} />
+          )
+      );
     }
-  };
-
-
-  const retrieveWeeklyData = async () => {
-    try {
-      const retrievedAvgData = await AsyncStorage.getItem('weeklyAverage');
-      setWeeklyAvg(JSON.parse(retrievedAvgData));
-      const retrievedCompData = await AsyncStorage.getItem('weeklyComposition');
-      setWeeklyComp(JSON.parse(retrievedCompData));
-    } catch (e) {
-      console.log('Error retrieving weekly data ' + e);
+    if (timeSpan === 'monthly') {
+      return (
+        (monthlyAvgLoading || monthlyCompLoading || ((monthlyAvgError || monthlyCompError)) || !monthlyAvg || !monthlyComp) ? (
+          <View style={styles.graphContainer}>
+            <ActivityIndicator />
+          </View>
+        ) : (
+            <MonthlyDisplay average={monthlyAvg} composition={monthlyComp} />
+          )
+      );
     }
-    setWeeklyResolved(true);
-  };
-
-  const retrieveMonthlyData = async () => {
-    try {
-      const retrievedAvgData = await AsyncStorage.getItem('monthlyAverage');
-      setMonthlyAvg(JSON.parse(retrievedAvgData));
-      const retrievedCompData = await AsyncStorage.getItem('monthlyComposition');
-      setMonthlyComp(JSON.parse(retrievedCompData));
-    } catch (e) {
-      console.log('Error retrieving monthly data ' + e);
-    }
-    setMonthlyResolved(true);
-  };
-
-
-  useEffect(() => {
-    if (weeklyAvgData && weeklyCompData) {
-      saveWeeklyData(JSON.stringify(weeklyAvgData),JSON.stringify(weeklyCompData));
-    }
-  });
-
-  useEffect(() => {
-    if (monthlyAvgData && monthlyCompData) {
-      saveMonthlyData(JSON.stringify(monthlyAvgData),JSON.stringify(monthlyCompData));
-    }
-  });
-
-
-  useEffect(() => {
-    if (weeklyAvgError || weeklyCompError) {
-      retrieveWeeklyData();
-    }
-    if (monthlyAvgError || monthlyCompError) {
-      retrieveMonthlyData();
-    }
-  });
-
-  const whichWeeklyAvg = () => {
-    if (weeklyAvgData) {return weeklyAvgData;}
-    return localWeeklyAvg;
-  };
-
-  const whichWeeklyComp = () => {
-    if (weeklyCompData) {return weeklyCompData;}
-    return localWeeklyComp;
-  };
-
-  const whichMonthlyAvg = () => {
-    if (monthlyAvgData) {return monthlyAvgData;}
-    return localMonthlyAvg;
-  };
-
-  const whichMonthlyComp = () => {
-    if (monthlyCompData) {return monthlyCompData;}
-    return localMonthlyComp;
   };
 
   return (
     <SafeAreaView>
-      <ScrollView>
+      <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refetch} />}>
+        <CarbonFootprintScoreView />
 
-        {/*General carbon footprint score*/}
         <View>
-          <GeneralDisplay/>
+          {renderFootprintChart()}
         </View>
-
-        {/*Monthly vs Weekly buttons*/}
-        <View style={ styles.buttonContainer }>
+        <View style={styles.buttonContainer}>
           <Button
             title="Weekly"
-            titleStyle={ styles.buttonTitle }
-            buttonStyle={ [ styles.button, {backgroundColor: ((timeSpan === 'weekly') ? 'green' : 'grey')} ] }
+            titleStyle={styles.buttonTitle}
+            buttonStyle={[styles.button, { backgroundColor: ((timeSpan === 'weekly') ? 'green' : 'grey') }]}
             containerStyle={{ paddingHorizontal: percentageWidth('2%') }}
             onPress={() => setTimeSpan('weekly')}
           />
           <Button
             title="Monthly"
-            titleStyle={ styles.buttonTitle }
-            buttonStyle={ [ styles.button, {backgroundColor: ((timeSpan === 'monthly') ? 'green' : 'grey')}] }
+            titleStyle={styles.buttonTitle}
+            buttonStyle={[styles.button, { backgroundColor: ((timeSpan === 'monthly') ? 'green' : 'grey') }]}
             containerStyle={{ paddingHorizontal: percentageWidth('2%') }}
             onPress={() => setTimeSpan('monthly')}
           />
         </View>
-
-        {/*Monthly or weekly carbon footprint composition display*/}
-        <View>
-          {(timeSpan === 'weekly') ? (
-            (weeklyAvgLoading || weeklyCompLoading || ((weeklyAvgError || weeklyCompError) && !weeklyResolved)) ? (
-              <View style={ styles.graphContainer }>
-                <ActivityIndicator/>
-              </View>
-            ) : (
-              <WeeklyDisplay average={whichWeeklyAvg()} composition={whichWeeklyComp()}/>
-              )
-          ) : (
-            (monthlyAvgLoading || monthlyCompLoading || ((monthlyAvgError || monthlyCompError) && !monthlyResolved)) ? (
-              <View style={ styles.graphContainer }>
-                <ActivityIndicator/>
-              </View>
-            ) : (
-                <MonthlyDisplay average={whichMonthlyAvg()} composition={whichMonthlyComp()}/>
-                )
-            )}
-        </View>
-        <View style={ styles.footnote }>
-          <Text style={{ fontSize:percentageWidth('3%')}}>The carbon footprint displayed in this app,
-            including this page, are given in kilograms of CO2 per kilogram of food. The weight of any food item is
+        <View style={styles.footnote}>
+          <Text style={{ fontSize: percentageWidth('3%') }}>The carbon footprint displayed in this app,
+          including this page, are given in kilograms of CO2 per kilogram of food. The weight of any food item is
             systematically normalised to 1kg to get to this result.</Text>
         </View>
-        <WelcomeScreen setVisibility={setVisibility} isVisible={isVisible}/>
+        <WelcomeScreen setVisibility={setWelcomeScreenIsVisible} isVisible={welcomeScreenIsVisible} />
       </ScrollView>
-
-      {/*Camera button*/}
-      <TouchableOpacity onPress={takePicture} containerStyle={ styles.camera }>
+      <TouchableOpacity onPress={goToCamera} containerStyle={styles.camera}>
         <MaterialCommunityIcons name="camera" color={'white'} size={28} />
       </TouchableOpacity>
-      {/* <FAB buttonColor="#008000" iconTextColor="#FFFFFF" onClickAction={takePicture} visible={true} iconTextComponent={} /> */}
     </SafeAreaView >
   );
 };
 
 const styles = StyleSheet.create({
   score: { fontSize: percentageWidth('6%'), color: 'grey' },
-  footnote: { margin:percentageWidth('5%'), marginTop:percentageHeight('7%'), marginBottom:percentageHeight('15%') },
+  footnote: { margin: percentageWidth('5%'), marginTop: percentageHeight('7%'), marginBottom: percentageHeight('15%') },
   buttonContainer: { flexDirection: 'row', justifyContent: 'center', paddingVertical: percentageHeight('2%') },
   buttonTitle: { fontSize: percentageWidth('5%') },
   button: { width: percentageWidth('30%'), height: 45 },

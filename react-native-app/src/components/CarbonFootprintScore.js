@@ -16,7 +16,7 @@ export const GET_INDEFINITE_AVERAGE = gql`query {
 }`;
 
 
-const GeneralDisplay = () => {
+const CarbonFootprintScore = () => {
   //Comment the following line to test caching
   let { loading, error, data } = useQuery(GET_INDEFINITE_AVERAGE);
 
@@ -54,57 +54,57 @@ const GeneralDisplay = () => {
     return require('../images/crying-smiley.png');
   };
 
- const saveGeneralScore = async (value) => {
-  try {
-   await AsyncStorage.setItem('generalScore', value);
-  } catch (e) {
-   console.log('Error saving generalScore' + e);
-  }
- };
+  const saveGeneralScore = async (value) => {
+    try {
+      await AsyncStorage.setItem('generalScore', value);
+    } catch (e) {
+      console.log('Error saving generalScore' + e);
+    }
+  };
 
- const retrieveData = async () => {
-  try {
-    const retrievedData = await AsyncStorage.getItem('generalScore');
-    setData(JSON.parse(retrievedData));
-  } catch (e) {
-    console.log('Error retrieving generalScore' + e);
-  }
-  setResolved(true);
- };
+  const retrieveData = async () => {
+    try {
+      const retrievedData = await AsyncStorage.getItem('generalScore');
+      setData(JSON.parse(retrievedData));
+    } catch (e) {
+      console.log('Error retrieving generalScore' + e);
+    }
+    setResolved(true);
+  };
 
- useEffect(() => {
-   if (data) {
+  useEffect(() => {
+    if (data) {
       saveGeneralScore(JSON.stringify(data));
-     }
- });
+    }
+  });
 
- useEffect(() => {
-   if (error) {
-     retrieveData();
-   }
-});
+  useEffect(() => {
+    if (error) {
+      retrieveData();
+    }
+  });
 
- const whichData = () => {
-  if (data) {return data;}
-  return localData;
- };
+  const whichData = () => {
+    if (data) { return data; }
+    return localData;
+  };
 
- return (
-   <View>
-     {(loading || (error && !resolved)) ? (
-       <View style={ styles.messageContainer }>
-        <ActivityIndicator/>
-       </View>
-     ) : (
-       <View style={ styles.graphContainer }>
-         <Image
-           source={calculateSmiley(whichData().getUserAvg)}
-           style={ styles.image }
-         />
-         <View style={ [ styles.scoreContainer ]}>
-           <Text style={ styles.score }>{Math.round(whichData().getUserAvg)} units</Text>
-           <Tooltip
-               popover={<Text style={ styles.tooltipContent }>This score corresponds to the average carbon footprint of
+  return (
+    <View>
+      {(loading || (error && !resolved)) ? (
+        <View style={styles.messageContainer}>
+          <ActivityIndicator />
+        </View>
+      ) : (
+          <View style={styles.graphContainer}>
+            <Image
+              source={calculateSmiley(whichData().getUserAvg)}
+              style={styles.image}
+            />
+            <View style={styles.scoreContainer}>
+              <Text style={styles.score}>{Math.round(whichData().getUserAvg)} units</Text>
+              <Tooltip
+                popover={<Text style={styles.tooltipContent}>This score corresponds to the average carbon footprint of
                 all the items you have added to your history since you have started using Foodprint.</Text>}
                 backgroundColor={'green'}
                 height={percentageHeight('20%')}
@@ -137,4 +137,4 @@ const styles = StyleSheet.create({
   score: { fontSize: percentageWidth('6%'), color: 'grey', margin: percentageWidth('1%') },
 });
 
-export default GeneralDisplay;
+export default CarbonFootprintScore;

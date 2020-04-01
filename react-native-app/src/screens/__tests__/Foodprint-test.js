@@ -4,7 +4,7 @@ import renderer from 'react-test-renderer';
 import Foodprint from '../Foodprint';
 
 import { GET_WEEKLY_AVERAGE, GET_WEEKLY_COMPOSITION } from '../../components/WeeklyDisplay';
-import { GET_INDEFINITE_AVERAGE } from '../../components/GeneralDisplay';
+import { GET_INDEFINITE_AVERAGE } from '../../components/CarbonFootprintScoreView';
 import { GET_MONTHLY_COMPOSITION, GET_MONTHLY_AVERAGE } from '../../components/MonthlyDisplay';
 import { MockedProvider, wait } from '@apollo/react-testing';
 
