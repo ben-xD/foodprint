@@ -13,8 +13,8 @@ const getCarbonFootprintFromBarcode = async (dataSources, barcode) => {
     if(data.products === undefined || data.products.length == 0){
         console.log('This barcode has no product information');
         return {
-            item: undefined,
-            carbonFootprintPerKg: undefined,
+            item: null,
+            carbonFootprintPerKg: null,
         };
     }
     let product_name = cleanName(data.products[0].description);
@@ -23,7 +23,7 @@ const getCarbonFootprintFromBarcode = async (dataSources, barcode) => {
     //run getCarbonFootprintFromName (that might be very costly no?). if it returns a value that means the product
     //is in the db and thus return the value.
     let fromNameResult = await getCarbonFootprintFromName(dataSources, product_name);
-    if(fromNameResult.carbonFootprintPerKg !== undefined)
+    if(fromNameResult.carbonFootprintPerKg !== null)
         return fromNameResult;
 
     //if getCarbonFootprintFromName returns an undefined carbonFootprintPerKg, the product is not in the db yet, so sum
@@ -31,14 +31,14 @@ const getCarbonFootprintFromBarcode = async (dataSources, barcode) => {
     let result = calcCarbonFromIngredients(dataSources, data);
 
     //store the new product in the db, unless the carbonfootprintperkg is undefined
-    if (result.carbonFootprintPerKg !== undefined){
+    if (result.carbonFootprintPerKg !== null){
         let save_to_db = {
             item: result.item,
             carbonpkilo: result.carbonFootprintPerKg,
             categories: result.categories,
             label: "approximated from ingredients"
         };
-        if(dataSources.carbonAPI.searchData([save_to_db.item]).carbonpkilo !== undefined)
+        if(dataSources.carbonAPI.searchData([save_to_db.item]).carbonpkilo !== null)
             await dataSources.carbonAPI.insert_in_DB(save_to_db);
     }
 
@@ -86,7 +86,7 @@ const calcCarbonFromIngredients = async (dataSources, data) => {
     if(data.products[0].ingredients === undefined){
         return {
             item: cleanName(data.products[0].description),
-            carbonFootprintPerKg: undefined,
+            carbonFootprintPerKg: null,
         }
     }
 
@@ -96,7 +96,7 @@ const calcCarbonFromIngredients = async (dataSources, data) => {
     let carbon = await calculate_total_carbon(dataSources, ingredients);
 
     if (carbon_response.carbonFootprintPerKg === 0){
-        carbon_response.carbonFootprintPerKg = undefined;
+        carbon_response.carbonFootprintPerKg = null;
     }
 
     return {
@@ -150,7 +150,7 @@ const calculate_total_carbon = async (dataSources, ingredients) => {
         let carbonResponse = await getCarbonFootprintFromName(dataSources, ingredients[i]);
         let carbon = carbonResponse.carbonFootprintPerKg;//how do i correctly access carbonfootpirngperkd???
         let new_categories = carbonResponse.categories;
-        if(carbon != undefined) {
+        if(carbon != null) {
             total_carbon += carbon;
             categories = update_categories(categories, new_categories);
         }

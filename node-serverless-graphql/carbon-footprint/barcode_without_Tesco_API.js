@@ -4,16 +4,18 @@ const { getCarbonFootprintFromName } = require('./carbon_footprint_calculation')
 const getCarbonFootprintFromBarcode = async (dataSources, barcode) => {
     // get the name of the product from barcode
     const product_name = barcode_products[barcode];
+    console.log(product_name);
 
     // check if we are able to recognise that barcode
     if (product_name === undefined){
         return{
-            item: undefined,
-            carbonpkilo: null,
+            item: null,
+            carbonFootprintPerKg: null,
         };
     }
 
-    return getCarbonFootprintFromName(dataSources, product_name);
+    let res = await getCarbonFootprintFromName(dataSources, product_name);
+    return res;
 
 };
 
