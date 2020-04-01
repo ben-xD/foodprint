@@ -15,13 +15,13 @@ describe('Real database', () => {
     const res = await carbonAPI.getCfOneItem(name);
     console.log('res', res);
     const actual = res;
-    expect(actual).toEqual(expected);
+    expect(actual).toMatchObject(expected);
   });
 
-  test('Item that is not in the database returns undefined', async () => {
+  test('Item that is not in the database returns null', async () => {
     jest.setTimeout(10000);
     const name = 'definitely-not-in-the-db someRandomNoise';
-    const expected = { carbonpkilo: undefined, categories: undefined };
+    const expected = null;
     expect.assertions(1);
     const res = await carbonAPI.getCfOneItem(name);
     console.log('res', res);

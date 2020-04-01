@@ -24,27 +24,17 @@ class CarbonAPI {
   // return: object with carbonpkilo and categories fields
   async getCfOneItem(label) {
 
-    let itemList;
-    try {
-      await this.store.carbon.findOne({ item: label }, (err, items) => {
+    let _item = null;
+    // try {
+      await this.store.carbon.findOne({ item: label }, (err, item) => {
         if (err) {
+          console.error('CarbonAPI: failed to query for label:', label, '\nreturning {carbonpkilo:undefined, categories:undefined}');
           throw err;
         }
-        itemList = items;
+        _item = item;
       }).exec();
 
-      return {
-        carbonpkilo: itemList.carbonpkilo,
-        categories: itemList.categories
-      }
-
-    } catch (err) {
-      console.error('CarbonAPI: failed to query for label:', label, '\nreturning {carbonpkilo:undefined, categories:undefined}');
-      return {
-        carbonpkilo: undefined,
-        categories: undefined
-      };
-    }
+      return _item;
   }
 
   // labelList: list of strings
@@ -77,11 +67,11 @@ class CarbonAPI {
 module.exports = CarbonAPI;
 
 
-const  { createStore, deleteStore } = require('../utils');
-const store = createStore();
-
-const carbonAPI = new CarbonAPI(store);
-carbonAPI.getCfMultipleItems(['rice', 'orange']).then((items) => console.log(items));
+// const  { createStore, deleteStore } = require('../utils');
+// const store = createStore();
+//
+// const carbonAPI = new CarbonAPI(store);
+// carbonAPI.getCfMultipleItems(['rice', 'orange']).then((items) => console.log(items));
 
 // store.carbon.find({item: { $in: ['rice', 'orange']}}).then((res) => {console.log(res)});
 //
