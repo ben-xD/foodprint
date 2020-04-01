@@ -8,7 +8,7 @@ class CarbonAPI {
 
   async insert_in_DB(new_data) {
 
-    console.log(store.carbon.collection);
+    //console.log(store.carbon.collection);
     await this.store.carbon.collection.insert(new_data, function (err, docs) {
       if (err) {
         return console.error(err);

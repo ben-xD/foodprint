@@ -62,6 +62,12 @@ const getCarbonFootprintFromBarcode_with_Tesco = async (dataSources, barcode) =>
     //if getCarbonFootprintFromName returns an undefined carbonFootprintPerKg, the product is not in the db yet, so sum
     //up the ingredients to get the carbon footprint.
     let result = calcCarbonFromIngredients(dataSources, data);
+    if(result.carbonFootprintPerKg === 0){
+        return{
+            item: null,
+            carbonFootprintPerKg: null
+        };
+    }
 
     //store the new product in the db, unless the carbonfootprintperkg is undefined
     if (result.carbonFootprintPerKg !== null){
@@ -69,7 +75,7 @@ const getCarbonFootprintFromBarcode_with_Tesco = async (dataSources, barcode) =>
             item: result.item,
             carbonpkilo: result.carbonFootprintPerKg,
             categories: result.categories,
-            label: "approximated from ingredients"
+            label: "approximated from ingredients (from barcode)"
         };
         if(dataSources.carbonAPI.getCfOneItem([save_to_db.item]).carbonpkilo !== undefined)
             await dataSources.carbonAPI.insert_in_DB(save_to_db);
@@ -181,9 +187,9 @@ const calculate_total_carbon = async (dataSources, ingredients) => {
     for(let i = 0; i < ingredients.length && i < 5; i++){
         console.log(ingredients[i]);
         let carbonResponse = await getCarbonFootprintFromName(dataSources, ingredients[i]);
-        let carbon = carbonResponse.carbonFootprintPerKg;//how do i correctly access carbonfootpirngperkd???
-        let new_categories = carbonResponse.categories;
-        if(carbon != null) {
+        if(carbonResponse != null) {
+            let carbon = carbonResponse.carbonFootprintPerKg;//how do i correctly access carbonfootpirngperkd???
+            let new_categories = carbonResponse.categories;
             total_carbon += carbon;
             categories = update_categories(categories, new_categories);
         }
