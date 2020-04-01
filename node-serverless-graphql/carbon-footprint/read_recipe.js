@@ -12,8 +12,8 @@ const URL = "https://api.spoonacular.com/recipes/extract?url=" + webURL + "&apiK
 console.log(URL);
 axios.get(URL, config)
 .then((response)  => {
-  console.log(response.data.extendedIngredients);
-  console.log(response.data.extendedIngredients[0].measures); // to access the measures of an ingredient
+  console.log(response.data.title);
+  //console.log(response.data.extendedIngredients[0].measures); // to access the measures of an ingredient
 })    
 .catch(e => {
   console.log('Error: ', e.response.data)
