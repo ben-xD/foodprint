@@ -78,6 +78,7 @@ const update_categories = async (categories, new_categories) => {
     return categories;
 };
 
+module.exports = { getCarbonFootprintFromRecipe };
 
 // const VisionAPI = require('../datasources/vision');
 // const visionCredentials = require('../credentials/carbon-7fbf76411514.json');
