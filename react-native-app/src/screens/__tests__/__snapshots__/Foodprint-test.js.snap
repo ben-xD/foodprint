@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Loaded foodprint results screen matches previous snapshot 1`] = `
+exports[`foodprint screen with loaded results matches previous snapshot 1`] = `
 <MockedProvider
   addTypename={false}
   mocks={
@@ -125,7 +125,7 @@ exports[`Loaded foodprint results screen matches previous snapshot 1`] = `
             ],
             "kind": "Document",
             "loc": Object {
-              "end": 79,
+              "end": 80,
               "start": 0,
             },
           },
@@ -365,7 +365,7 @@ exports[`Loaded foodprint results screen matches previous snapshot 1`] = `
             ],
             "kind": "Document",
             "loc": Object {
-              "end": 351,
+              "end": 352,
               "start": 0,
             },
           },

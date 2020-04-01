@@ -6,6 +6,7 @@ import { StyleSheet } from 'react-native';
 import { useNetInfo } from '@react-native-community/netinfo';
 import { useEffect } from 'react';
 import Snackbar from 'react-native-snackbar';
+import { BackHandler } from 'react-native';
 
 const Camera = ({ navigation }) => {
   const netInfo = useNetInfo();
@@ -15,13 +16,17 @@ const Camera = ({ navigation }) => {
   useEffect(() => {
     if (netInfo.details !== null && !netInfo.isConnected) {
       Snackbar.show({
-        text: 'No internet connection',
+        text: 'No internet connection, you can\'t do this! 🤣',
         duration: Snackbar.LENGTH_INDEFINITE,
       });
     } else if (netInfo.isConnected) {
       Snackbar.dismiss();
     }
   }, [netInfo]);
+
+  BackHandler.addEventListener('hardwareBackPress', () => {
+    Snackbar.dismiss();
+  });
 
   const takePictureHandler = async (camera) => {
     setCameraIsReady(false);
