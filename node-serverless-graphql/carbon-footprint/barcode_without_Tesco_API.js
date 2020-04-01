@@ -17,6 +17,4 @@ const getCarbonFootprintFromBarcode = async (dataSources, barcode) => {
 
 };
 
-module.exports = {
-    getCarbonFootprintFromBarcode
-};
+module.exports = { getCarbonFootprintFromBarcode };
