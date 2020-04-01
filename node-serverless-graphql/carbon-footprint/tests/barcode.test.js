@@ -2,8 +2,7 @@ const { getCarbonFootprintFromBarcode } = require('../barcode_without_Tesco_API'
 
 const VisionAPI = require('../../datasources/vision');
 const visionCredentials = require('../../credentials/carbon-7fbf76411514.json');
-const  { createStore } = require('../../utils');
-const store = createStore();
+const store = {};
 
 const CarbonAPI = require('../../datasources/carbon');
 const carbonAPI = new CarbonAPI(store);
