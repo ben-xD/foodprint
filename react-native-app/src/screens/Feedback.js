@@ -63,20 +63,19 @@ const Feedback = ({ route, navigation }) => {
   useEffect(() => {
     if (pictureData) {
       console.log(pictureData)
-      if (pictureData.postPicture.name == 'unknown') {
-        // If unknown name from picture, go to error correction screen
+      if (pictureData.postPicture.name && pictureData.postPicture.carbonFootprintPerKg) {
+        // If a name was found for the picture, display it
         setMeal({
-          ...meal,
+          uri: route.params.uri,
+          score: pictureData.postPicture.carbonFootprintPerKg.toFixed(1),
+          description: pictureData.postPicture.name,
+        });
+      } else {
+        // Otherwise, go to error correction screen
+        setMeal({
           uri: route.params.uri,
         });
         navigation.navigate('Correction', { meal, setMeal })
-      } else {
-        // Otherwise, display feedback
-        setMeal({
-          uri: route.params.uri,
-          score: pictureData.postPicture.carbonFootprintPerKg,
-          description: pictureData.postPicture.name,
-        });
       }
     }
   }, [pictureData]);
@@ -153,7 +152,7 @@ const Feedback = ({ route, navigation }) => {
               type="star" // Optionally customisible
               imageSize={percentageWidth('7%')}
             />
-            <Text style={styles.score}>{meal.score.toFixed(1)} kg of CO2 eq/kg</Text>
+            <Text style={styles.score}>{meal.score} kg of CO2 eq/kg</Text>
           </View>
           <View style={styles.buttonContainer}>
             <Button

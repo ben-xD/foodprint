@@ -40,8 +40,8 @@ class CarbonAPI {
 
     } catch (err) {
       return {
-        carbonpkilo: undefined,
-        categories: undefined
+        carbonpkilo: null,
+        categories: null
       };
     }
   }

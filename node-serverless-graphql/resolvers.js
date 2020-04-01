@@ -80,8 +80,7 @@ const resolvers = {
       console.log({ dataSources, user, parent });
       const image = new Buffer(file.base64, 'base64'); // Decode base64 of "file" to image
       console.log('Received picture');
-      let { item, carbonFootprintPerKg } = await getCarbonFootprintFromImage(context.dataSources, image);
-      if (!item) item = "unknown";
+      const { item, carbonFootprintPerKg } = await getCarbonFootprintFromImage(context.dataSources, image);
       const response = {
         name: item,
         carbonFootprintPerKg,

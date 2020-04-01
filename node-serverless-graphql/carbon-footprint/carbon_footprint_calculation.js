@@ -5,7 +5,7 @@ const MAX_LENGTH_OF_NEXT_LAYER = 5;
 
 
 // Function that tries to find a label in the DB of categories (cotaining items like fruit, meat, ...)
-// @return CarbonFootprintReport (if found) or undefined (if not found)
+// @return CarbonFootprintReport (if found) or null (if not found)
 const findCategorisedLabel = (labels) => {
   for (let i = 0; i < labels.length; i += 1) {
     let carbonFootprintResponse = catergorisedCarbonValues[labels[i]];
@@ -17,21 +17,21 @@ const findCategorisedLabel = (labels) => {
       };
     }
   }
-  return undefined;
+  return null;
 };
 
 
 // For each valid label in a list of labels (aka layer), this function tries to find it in the DB. If none of the labels
 // are found in the DB, then it tries to find one in the DB of categories.
 // Note that  the search is made in order (the labels are already ordered by prediction confidence by Google Vision API).
-// @return CarbonFootprintReport (if a label was found in a DB) or undefined (it any label was found)
+// @return CarbonFootprintReport (if a label was found in a DB) or null (it any label was found)
 const oneLayerSearch = async (datasources, labels) => {
 
   for (let i = 0; i < labels.length; i += 1) {
     nounInLabel = labels[i];
     //if (await isConceptValid(datasources, nounInLabel)){
     const carbonFootprintResponse = await datasources.carbonAPI.searchData(nounInLabel);
-    if (carbonFootprintResponse.carbonpkilo !== undefined) {
+    if (carbonFootprintResponse.carbonpkilo !== null) {
         return {
           item: nounInLabel,
           carbonpkilo: carbonFootprintResponse.carbonpkilo,
@@ -42,12 +42,12 @@ const oneLayerSearch = async (datasources, labels) => {
   }
 
   const categoryResult = findCategorisedLabel(labels)
-  if (categoryResult != undefined) {
+  if (categoryResult != null) {
     return categoryResult;
   }
   return {
-    item: undefined,
-    carbonpkilo: undefined,
+    item: null,
+    carbonpkilo: null,
   };
 };
 
@@ -184,7 +184,7 @@ const removeDuplicates = (labels) => {
 // 2. Tries to find a label in the DB or in the categories DB (oneLayerSearch)
 // 3. Finds the related concepts to the name (getNextLayer)
 // 4. Tries to find a related concept in the DB or in the categories DB (oneLayerSearch)
-// @return CarbonFootprintReport (carbonFootprintPerKg is undefined if all the searches failed)
+// @return CarbonFootprintReport (carbonFootprintPerKg is null if all the searches failed)
 
 const getCarbonFootprintFromImage = async (datasources, image) => {
   // Get image labels from Google Vision API
@@ -215,7 +215,7 @@ const getCarbonFootprintFromImage = async (datasources, image) => {
 
   return {
     item: imageLabels[0],
-    carbonFootprintPerKg: undefined,
+    carbonFootprintPerKg: null,
   };
 };
 
@@ -228,7 +228,7 @@ const getCarbonFootprintFromImage = async (datasources, image) => {
 // 1. Tries to find the name in the DB or in the categories DB (oneLayerSearch)
 // 2. Finds the related concepts to the name (getNextLayer)
 // 3. Tries to find a related concept in the DB or in the categories DB (oneLayerSearch)
-// @return CarbonFootprintReport (carbonFootprintPerKg is undefined if all the searches failed)
+// @return CarbonFootprintReport (carbonFootprintPerKg is null if all the searches failed)
 
 const getCarbonFootprintFromName = async (datasources, name) => {
   // Preprocess the name (to singular and lower case):
@@ -263,7 +263,7 @@ const getCarbonFootprintFromName = async (datasources, name) => {
       label: "approximated from product " + nextResponse.item
     };
     console.log(save_to_db);
-    if(datasources.carbonAPI.searchData([save_to_db.item]).carbonpkilo !== undefined) {
+    if(datasources.carbonAPI.searchData([save_to_db.item]).carbonpkilo !== null) {
       datasources.carbonAPI.insert_in_DB(save_to_db);
     }
 
@@ -275,7 +275,7 @@ const getCarbonFootprintFromName = async (datasources, name) => {
 
   return {
     item: name,
-    carbonFootprintPerKg: undefined,
+    carbonFootprintPerKg: null,
   };
 };
 

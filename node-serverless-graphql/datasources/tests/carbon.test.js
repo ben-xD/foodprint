@@ -21,7 +21,7 @@ describe('Real database', () => {
   test('Item that is not in the database returns undefined', async () => {
     jest.setTimeout(10000);
     const name = 'definitely-not-in-the-db someRandomNoise';
-    const expected = { carbonpkilo: undefined, categories: undefined };
+    const expected = { carbonpkilo: null, categories: null };
     expect.assertions(1);
     const res = await carbonAPI.searchData(name);
     console.log('res', res);
