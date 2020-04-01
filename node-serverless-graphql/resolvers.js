@@ -92,8 +92,7 @@ const resolvers = {
       const { dataSources, user } = context
       console.log({ dataSources, user, parent });
       console.log(`Received barcode: ${barcode}`);
-      let { item, carbonFootprintPerKg } = await getCarbonFootprintFromBarcode(dataSources, barcode);
-      if (!item) item = 'unknown';
+      const { item, carbonFootprintPerKg } = await getCarbonFootprintFromBarcode(dataSources, barcode);
       const response = {
         name: item,
         carbonFootprintPerKg,
@@ -104,8 +103,7 @@ const resolvers = {
     postCorrection: async (parent, { name }, context) => {
       const { dataSources, user } = context
       console.log({ 'Received correction': name });
-      let { item, carbonFootprintPerKg } = await getCarbonFootprintFromName(dataSources, name);
-      if (!carbonFootprintPerKg) carbonFootprintPerKg = -1;
+      const { item, carbonFootprintPerKg } = await getCarbonFootprintFromName(dataSources, name);
       const response = {
         name: item,
         carbonFootprintPerKg,
