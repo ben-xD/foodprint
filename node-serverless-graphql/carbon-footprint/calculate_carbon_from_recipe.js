@@ -1,11 +1,21 @@
 const { getCarbonFootprintFromNameUsedForRecipe } = require('./carbon_footprint_calculation');
 
 const getCarbonFootprintFromRecipe = async (dataSources, url) => {
-    await dataSources.recipeAPI.getData(url);
+    let response = await dataSources.recipeAPI.getData(url);
+
+    // If website is not a recipe website, return nulls
+    if(!response){
+        return{
+            item: null,
+            carbonFootprintPerKg: null
+        }
+    }
 
     // Extract the name of the food and ingredients
     const food_name = await dataSources.recipeAPI.getName();
+    console.log("start getting the ingredients");
     let ingredients = await dataSources.recipeAPI.getIngredients();
+    console.log("got the ingredients");
 
     // First check whether this food is already in the databse
     let result = await dataSources.carbonAPI.getCfOneItem(food_name);
@@ -17,7 +27,9 @@ const getCarbonFootprintFromRecipe = async (dataSources, url) => {
     }
 
     // If this food is not yet in the database, approximate its co2 from ingredients
+    console.log("start calculating");
     result = await calculate_total_carbon(dataSources, ingredients);
+    console.log("done calculating");
     if(result.carbonFootprintPerKg === 0){
         return {
             item: null,
@@ -37,29 +49,31 @@ const getCarbonFootprintFromRecipe = async (dataSources, url) => {
     // Finally return the caculated co2 and detected food name
     return {
         item: food_name,
-        carbonFootprintPerKg:result.carbonFootprintPerKg
+        carbonFootprintPerKg: result.carbonFootprintPerKg
     };
 
 };
 
+
+// MIGHT BE GOOD TO CHANGE THIS TO INSTEAD USE THE QUERYING MULTIPLE ITEMS AT ONCE FROM DB
 //Sums up the carbon footprint of all the ingredients within the recipe
 const calculate_total_carbon = async (dataSources, ingredients) => {
     let total_carbon = 0;
     let categories = "0000";
     for(let i = 0; i < ingredients.length; i++){
-        console.log(ingredients[i]);
+        //console.log(ingredients[i]);
         let carbonResponse = await getCarbonFootprintFromNameUsedForRecipe(dataSources, ingredients[i].name);
         let carbon = carbonResponse.carbonFootprintPerKg;//how do i correctly access carbonfootpirngperkd???
         let new_categories = carbonResponse.categories;
         if(carbon !== undefined) { //this will have to be changed to carbon
             total_carbon += carbon * ingredients[i].amount;
-            console.log(new_categories);
+            //console.log(new_categories);
             categories = await update_categories(categories, new_categories);
         }
     }
 
     return {
-        carbonFootprintPerKg: total_carbon,
+        carbonFootprintPerKg: +(total_carbon.toFixed(2)),
         categories: categories
     };
 
@@ -69,7 +83,7 @@ const calculate_total_carbon = async (dataSources, ingredients) => {
 const update_categories = async (categories, new_categories) => {
 
     for (let i = 0; i < new_categories.length; i++){
-        console.log(new_categories[i]);
+        //console.log(new_categories[i]);
         if(!categories.includes(new_categories[i])){
             categories = categories.replace("0", new_categories[i]);
         }
@@ -101,7 +115,8 @@ const dataSources = {
 
 const example = async () => {
     //const webURL = "https://www.bbcgoodfood.com/recipes/roasted-chickpea-wraps";
-    const webURL = "https://www.bbc.co.uk/news/in-pictures-52120114";
+    const webURL = "https://pinchofyum.com/vegan-crunchwrap";
+    //const webURL = "https://www.bbc.co.uk/news/in-pictures-52120114";
     let res = await getCarbonFootprintFromRecipe(dataSources, webURL);
     console.log(res);
     // let categories = "4000";
