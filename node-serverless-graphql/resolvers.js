@@ -21,7 +21,7 @@ const resolvers = {
         return avg_co2;
       } catch (err) {
         console.log(err);
-        return undefined;
+        return null;
       }
     },
     getPeriodAvg: async (parent, { timezone, resolution}, context) => {
@@ -46,7 +46,7 @@ const resolvers = {
         }
       } catch (err) {
         console.log(err);
-        return undefined;
+        return null;
       }
     },
     reportByCategory: async (parent, { timezone, resolution}, context) => {
@@ -71,7 +71,7 @@ const resolvers = {
         }
       } catch (err) {
         console.log(err);
-        return undefined;
+        return null;
       }
     },
   },
