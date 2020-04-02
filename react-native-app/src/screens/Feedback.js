@@ -172,7 +172,7 @@ const Feedback = ({ route, navigation }) => {
                 CommonActions.reset({
                   index: 1,
                   routes: [
-                    { name: 'Your Foodprint' },
+                    { name: 'Home' },
                   ],
                 })
               );
