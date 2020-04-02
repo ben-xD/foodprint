@@ -1,9 +1,9 @@
 const CarbonAPI = require('../carbon');
 
 const {createStore, deleteStore} = require('../../utils');
-const store = createStore();
+const store = createStore(); // TODO Some asynchronous action needed here
 
-let carbonAPI = new CarbonAPI(store);
+const carbonAPI = new CarbonAPI(store); // Or here...
 
 describe('getCfOneItem: Real database', () => {
 
@@ -12,8 +12,7 @@ describe('getCfOneItem: Real database', () => {
     const name = 'rice';
     const expected = {carbonpkilo: 1.14, categories: '1000'};
     expect.assertions(1);
-    const res = await carbonAPI.getCfOneItem(name);
-    const actual = res;
+    const actual = await carbonAPI.getCfOneItem(name);
     expect(actual).toMatchObject(expected);
   });
 
@@ -22,8 +21,7 @@ describe('getCfOneItem: Real database', () => {
     const name = 'definitely-not-in-the-db someRandomNoise';
     const expected = null;
     expect.assertions(1);
-    const res = await carbonAPI.getCfOneItem(name);
-    const actual = res;
+    const actual = await carbonAPI.getCfOneItem(name);
     expect(actual).toEqual(expected);
   });
 
@@ -39,8 +37,8 @@ describe('getCfMultipleItems: Real database', () => {
       {item: 'rice', carbonpkilo: 1.14, categories: '1000'}
     ];
     expect.assertions(1);
-    const res = await carbonAPI.getCfMultipleItems(labelList);
-    expect(res).toMatchObject(expected);
+    const actual = await carbonAPI.getCfMultipleItems(labelList);
+    expect(actual).toMatchObject(expected);
   });
 
   test('Querying one known item and one unkown item returns a list with values only for the known item', async () => {
@@ -50,8 +48,8 @@ describe('getCfMultipleItems: Real database', () => {
       {item: 'rice', carbonpkilo: 1.14, categories: '1000'},
     ];
     expect.assertions(1);
-    const res = await carbonAPI.getCfMultipleItems(labelList);
-    expect(res).toMatchObject(expected);
+    const actual = await carbonAPI.getCfMultipleItems(labelList);
+    expect(actual).toMatchObject(expected);
   });
 
 });

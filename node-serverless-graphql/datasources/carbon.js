@@ -8,7 +8,7 @@ class CarbonAPI {
 
   async insert_in_DB(new_data) {
 
-    console.log(store.carbon.collection);
+    console.log(this.store.carbon.collection);
     await this.store.carbon.collection.insert(new_data, function (err, docs) {
       if (err) {
         return console.error(err);
@@ -25,7 +25,7 @@ class CarbonAPI {
   async getCfOneItem(label) {
 
     let _item = null;
-    await this.store.carbon.findOne({item: label}, (err, item) => {
+    await this.store.carbon.findOne({ item: label }, (err, item) => {
       if (err) {
         console.error('CarbonAPI: failed to query for label:', label);
         throw err;
@@ -45,16 +45,8 @@ class CarbonAPI {
   // Querying ['blablabla'] would return an empty list
   async getCfMultipleItems(labelList) {
 
-    let _itemList = [];
-    await this.store.carbon.find({item: {$in: labelList}}, (err, itemList) => {
-      if (err) {
-        console.error('CarbonAPI: failed to query for labels:', labels);
-        throw err;
-      }
-      _itemList = itemList;
-    }).exec();
-
-    return _itemList;
+    const _itemList = await this.store.carbon.find({ item: { $in: labelList } });
+    return _itemList ? _itemList : [];
   }
 
 }

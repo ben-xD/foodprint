@@ -123,7 +123,7 @@ const resolvers = {
       const uid = user.uid;
       console.log({ 'user id': uid });
       try {
-        dataSources.userHistAPI.insert_in_DB({ "user_id": uid, "item": item });
+        await dataSources.userHistAPI.insert_in_DB({ "user_id": uid, "item": item });
         return true;
       } catch (err) {
         console.log(err);
