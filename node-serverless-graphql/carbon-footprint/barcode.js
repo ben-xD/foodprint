@@ -118,7 +118,7 @@ const calcCarbonFromIngredients = async (dataSources, data) => {
     //check whether the product has ingredients at all
     if (data.products[0].ingredients === undefined) {
         return {
-            item: null),
+            item: null,
             carbonFootprintPerKg: null,
         }
     }
