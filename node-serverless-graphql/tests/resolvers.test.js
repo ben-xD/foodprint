@@ -9,6 +9,7 @@ const CarbonAPI = require('../datasources/carbon');
 const carbonAPI = new CarbonAPI(store);
 const ConceptAPI = require('../datasources/concept');
 const userHistAPI = require('../datasources/user_history');
+const RecipeAPI = require('../datasources/recipe');
 
 
 const dataSources = {
@@ -16,6 +17,7 @@ const dataSources = {
   carbonAPI,
   conceptAPI: new ConceptAPI(),
   userHistAPI: new userHistAPI(store),
+  recipeAPI: new RecipeAPI(),
 };
 
 const CATEGORY_WITH_DATA =
@@ -163,5 +165,14 @@ describe('testing resolvers', () => {
               "eggsAndDairy": CATEGORY_EMPTY
           })
   });
+
+  test('Test postRecipe', async () => {
+      jest.setTimeout(10000);
+      const url = "https://www.bbcgoodfood.com/recipes/roasted-chickpea-wraps";
+      let actual = await resolvers.Mutation.postRecipe(null, {url}, {dataSources, user});
+      let expected =  {"carbonFootprintPerKg": 2.49, "name": "Roasted chickpea wraps"};
+      expect(actual).toEqual(expected);
+  });
+
 
 });

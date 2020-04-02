@@ -1,5 +1,6 @@
 const { getCarbonFootprintFromImage, getCarbonFootprintFromName } = require('./carbon-footprint/carbon_footprint_calculation');
 const { getCarbonFootprintFromBarcode } = require('./carbon-footprint/barcode');
+const { getCarbonFootprintFromRecipe } = require('./carbon-footprint/calculate_carbon_from_recipe');
 
 const resolvers = {
   Query: {
@@ -117,7 +118,7 @@ const resolvers = {
         throw new Error('You must be logged in.');
       }
 
-      const { dataSources, user } = context
+      const { dataSources, user } = context;
       console.log('Received history entry for...');
       console.log({ 'item': item });
       const uid = user.uid;
@@ -130,7 +131,21 @@ const resolvers = {
         return false;
       }
     },
-  },
+
+    postRecipe: async (parent, {url}, context) => {
+      const { dataSources, user } = context;
+      console.log({ dataSources, user, parent });
+      console.log(`Received url: ${url}`);
+      let { item, carbonFootprintPerKg } = await getCarbonFootprintFromRecipe(dataSources, url, false);
+      if (!item) item = 'unknown';
+      const response = {
+        name: item,
+        carbonFootprintPerKg,
+      };
+      console.log({ 'Returning': response });
+      return response;
+    }
+  }
 };
 
 module.exports = resolvers;
