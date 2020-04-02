@@ -3,6 +3,7 @@ const nlp = require('compromise');
 const pluralize = require('pluralize')
 const MAX_LENGTH_OF_NEXT_LAYER = 5;
 
+
 // Function that tries to find a label in the DB of categories (cotaining items like fruit, meat, ...)
 // @return CarbonFootprintReport (if found) or undefined (if not found)
 const findCategorisedLabel = (labels) => {
@@ -278,56 +279,4 @@ const getCarbonFootprintFromName = async (datasources, name) => {
   };
 };
 
-const getCarbonFootprintFromNameUsedForRecipe = async (datasources, name) => {
-  // Preprocess the name (to singular and lower case):
-  name = name.toLowerCase();
-  name = singularize(name);
-  // Set array of name only for labels:
-  let labels = [name];
-  labels = getNounsInLabels(labels);
-
-  // Attempt to find the google vision labels in the database:
-  const firstResponse = await oneLayerSearch(datasources, labels);
-  if (firstResponse.item) {
-    return {
-      item: firstResponse.item,
-      carbonFootprintPerKg: firstResponse.carbonpkilo,
-      categories: firstResponse.categories
-    };
-  }
-
-  // Call ConceptNet to create the next layer:
-  let nextLabels = await getNextLayer(datasources, labels);
-
-  // Attempt to find the next layer labels in the database:
-  const nextResponse = await oneLayerSearch(datasources, nextLabels);
-  if (nextResponse.item) {
-    console.log(nextResponse);
-
-    // Clearly, the product was not in the db previousle, therefore add it now.
-    let save_to_db = {
-      item: name,
-      carbonpkilo: nextResponse.carbonpkilo,
-      categories: nextResponse.categories, //CHNANGE HERE TO A FUNC WHICH CAN DECIDE ON THE PROPER CATEGORY!!!!
-      label: "approximated from product " + nextResponse.item
-    };
-    console.log(save_to_db);
-    if(datasources.carbonAPI.getCfOneItem([save_to_db.item]) !== null) {
-      datasources.carbonAPI.insert_in_DB(save_to_db);
-    }
-
-    return {
-      item: name,
-      carbonFootprintPerKg: nextResponse.carbonpkilo,
-      categories: firstResponse.categories
-    };
-  }
-
-  return {
-    item: name,
-    carbonFootprintPerKg: undefined,
-    categories: undefined
-  };
-};
-
-module.exports = { getCarbonFootprintFromImage, getCarbonFootprintFromName, singularize, getCarbonFootprintFromNameUsedForRecipe};
+module.exports = { getCarbonFootprintFromImage, getCarbonFootprintFromName, singularize};
