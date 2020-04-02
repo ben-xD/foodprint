@@ -3,7 +3,7 @@ const axios = require('axios');
 class RecipeAPI {
 
     constructor() {
-        this.API_KEY = '5d370d89f92e48b79a8c993005dc13ee';
+        this.API_KEY = 'b9fd756542ca4474899251f21b2fa7e8';
         this.config = {
             headers: {
                 "Content-Type": "application/json",
