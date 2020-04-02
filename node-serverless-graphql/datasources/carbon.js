@@ -63,7 +63,7 @@ class CarbonAPI {
   // return: list of objects, each containing carbonpkilo and categories fields
   async getCfAllMultipleItems(labelList) {
 
-    let _itemList = this.getCfMultipleItems(labelList);
+    let _itemList = await this.getCfMultipleItems(labelList);
 
     if (labelList.length > _itemList.length){
       throw new Error("CarbonAPI: only " + _itemList.length + " out of " + labelList.length + " items were found");
