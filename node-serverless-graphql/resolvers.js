@@ -70,21 +70,7 @@ const resolvers = {
         }
       } catch (err) {
         console.log(err);
-        const NULL_CATEGORY = [
-          {"avgCarbonFootprint": null, "periodNumber": 0},
-          {"avgCarbonFootprint": null, "periodNumber": -1},
-          {"avgCarbonFootprint": null, "periodNumber": -2},
-          {"avgCarbonFootprint": null, "periodNumber": -3},
-          {"avgCarbonFootprint": null, "periodNumber": -4},
-          {"avgCarbonFootprint": null, "periodNumber": -5}
-        ];
-        
-        return {
-          "plantBased": NULL_CATEGORY,
-          "fish": NULL_CATEGORY,
-          "meat": NULL_CATEGORY,
-          "eggsAndDairy": NULL_CATEGORY
-      };
+        return null;
       }
     },
   },
