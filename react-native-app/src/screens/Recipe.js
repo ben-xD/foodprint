@@ -1,17 +1,68 @@
 import {ActivityIndicator, Image, StyleSheet, Text, View} from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { widthPercentageToDP as percentageWidth, heightPercentageToDP as percentageHeight } from 'react-native-responsive-screen';
-import {Button, Input, Overlay} from 'react-native-elements';
+import {Button, Input } from 'react-native-elements';
 import { gql } from 'apollo-boost';
 import { useMutation } from '@apollo/react-hooks';
+import Snackbar from 'react-native-snackbar';
+import {useNetInfo} from '@react-native-community/netinfo';
 
 
-const Recipe = ( { route, navigation } ) => {
+const POST_RECIPE_MUTATION = gql`
+mutation($url: String!) {
+  postRecipe(url: $url) {
+     name
+     carbonFootprintPerKg
+  }
+}`;
+
+
+const Recipe = ( { navigation } ) => {
  const [ url, setURL ] = useState('');
+ const netInfo = useNetInfo();
+ const [postRecipe, { loading: recipeLoading, error: recipeError, data: recipeData }] = useMutation(POST_RECIPE_MUTATION);
+
 
  const handleSubmit = async () => {
-   navigation.navigate('Feedback', { url: url });
+  try {
+   await postRecipe({ variables: { url: url } });
+  } catch (err) {
+    console.warn({err});
+  }
  };
+
+ useEffect(() => {
+  if (!recipeError) {
+   return;
+  }
+  Snackbar.show({
+   text: 'Oops, something went wrong :(',
+   duration: Snackbar.LENGTH_SHORT,
+  });
+ }, [recipeError]);
+
+
+ useEffect(() => {
+  if (recipeData && recipeData.postRecipe.carbonFootprintPerKg !== null) {
+   return;
+  }
+  Snackbar.show({
+   text: "Oops, we couldn't find the carbon footprint of this recipe :(",
+   duration: Snackbar.LENGTH_SHORT,
+  });
+ }, [recipeData]);
+
+
+ useEffect(() => {
+  if (recipeData && recipeData.postRecipe.carbonFootprintPerKg != null) {
+   navigation.navigate('Feedback', { recipeMeal: {
+     uri: 'http://www.bagherra.eu/wp-content/uploads/2016/11/orionthemes-placeholder-image-1.png',
+     score: recipeData.postRecipe.carbonFootprintPerKg,
+     description: recipeData.postRecipe.name,
+    }});
+  }
+     }
+ );
 
 
  return (
@@ -28,15 +79,20 @@ const Recipe = ( { route, navigation } ) => {
            containerStyle={ styles.input }
            onChangeText = {value => setURL(value)}
        />
+      {(recipeLoading) ? (
+          <ActivityIndicator style={{ height: 45, marginVertical:percentageHeight('2%') }}/>
+      ) : (
           <Button
               title="Submit"
               buttonStyle={ styles.button }
               containerStyle={ styles.buttonContainer }
               titleStyle={ styles.buttonTitle }
               onPress={handleSubmit}
+              disabled={!netInfo.connected}
           />
+      )}
      </View>
- )
+ );
 };
 
 const styles = StyleSheet.create({
