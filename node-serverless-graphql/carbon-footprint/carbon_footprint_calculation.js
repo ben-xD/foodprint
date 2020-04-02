@@ -214,7 +214,7 @@ const getCarbonFootprintFromImage = async (dataSources, image) => {
   }
 
   return {
-    item: imageLabels[0],
+    item: null,
     carbonFootprintPerKg: null,
   };
 };
@@ -273,7 +273,7 @@ const getCarbonFootprintFromName = async (dataSources, name) => {
   }
 
   return {
-    item: name,
+    item: null,
     carbonFootprintPerKg: null,
   };
 };
