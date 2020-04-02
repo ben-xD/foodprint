@@ -82,15 +82,15 @@ const Feedback = ({ route, navigation }) => {
 
   useEffect(() => {
     if (barcodeData) {
-      if (barcodeData.postBarcode.name == 'unknown') {
-        // If unknown name from barcode, go to error correction screen
-        navigation.navigate('Correction', { meal, setMeal })
-      } else {
+      if (barcodeData.postBarcode.name && barcodeData.postBarcode.carbonFootprintPerKg) {
         setMeal({
-          ...meal,
+          // If name and footprint from barcode, set meal
           score: barcodeData.postBarcode.carbonFootprintPerKg,
           description: barcodeData.postBarcode.name,
         });
+      } else {
+        // Otherwise, go to error correction
+        navigation.navigate('Correction', { meal, setMeal })
       }
     }
   }, [barcodeData]);
