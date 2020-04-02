@@ -49,10 +49,7 @@ describe('getCarbonFootprintFromName (mocked dataSources)', () => {
   });
 
   test('"fruit" is not in the database and is returned from categorised shortlist (fruit)', async () => {
-    mockDataSources.carbonAPI.getCfOneItem.mockReturnValueOnce({
-      "carbonpkilo": undefined,
-      "categories": undefined
-    });
+    mockDataSources.carbonAPI.getCfOneItem.mockReturnValueOnce(null);
     let response = await carbon_footprint_calculation.getCarbonFootprintFromName(mockDataSources, "fruit");
     expect(response).toEqual({item: "fruit", carbonFootprintPerKg: 1.1});
   });
