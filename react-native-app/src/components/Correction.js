@@ -43,7 +43,7 @@ const Correction = ({ route, navigation }) => {
 
   // Respond to changes in correction data (following correction)
   useEffect(() => {
-    if (correctionData && correctionData.postCorrection.carbonFootprintPerKg != -1) {
+    if (correctionData && correctionData.postCorrection.carbonFootprintPerKg) {
       setMeal({
         ...meal,
         score: correctionData.postCorrection.carbonFootprintPerKg,
