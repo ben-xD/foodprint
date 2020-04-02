@@ -84,20 +84,3 @@ class RecipeAPI {
 
 
 module.exports = RecipeAPI;
-
-//const webURL = "https://www.bbcgoodfood.com/recipes/roasted-chickpea-wraps";
-//const webURL = "https://www.bbc.co.uk/news/in-pictures-52120114";
-//const webURL = "https://en.wikipedia.org/wiki/Cauchy%27s_integral_formula"
-//const webURL = "https://www.bbcgoodfood.com/recipes/chocolate-eclairs";
-// const webURL = "https://www.delfi.lv/";
-// let test = new RecipeAPI();
-//
-// const example = async () =>{
-//     let res = await test.getData(webURL);
-//     //let res = await test.convertMetrics("avocados", "2", "", "kilograms");
-//     //let res = await test.getIngredients();
-//     console.log(res);
-//
-// }
-//
-// example();

@@ -50,17 +50,15 @@ const getCarbonFootprintFromRecipe = async (dataSources, url) => {
 
 };
 
-
-// MIGHT BE GOOD TO CHANGE THIS TO INSTEAD USE THE QUERYING MULTIPLE ITEMS AT ONCE FROM DB
 //Sums up the carbon footprint of all the ingredients within the recipe
 const calculate_total_carbon = async (dataSources, ingredients) => {
     let total_carbon = 0;
     let categories = "0000";
     for(let i = 0; i < ingredients.length; i++){
         let carbonResponse = await getCarbonFootprintFromNameUsedForRecipe(dataSources, ingredients[i].name);
-        let carbon = carbonResponse.carbonFootprintPerKg;//how do i correctly access carbonfootpirngperkd???
+        let carbon = carbonResponse.carbonFootprintPerKg;
         let new_categories = carbonResponse.categories;
-        if(carbon !== undefined) { //this will have to be changed to carbon
+        if(carbon !== null) {
             total_carbon += carbon * ingredients[i].amount;
             categories = await update_categories(categories, new_categories);
         }
@@ -86,36 +84,3 @@ const update_categories = async (categories, new_categories) => {
 };
 
 module.exports = { getCarbonFootprintFromRecipe };
-//
-// const VisionAPI = require('../datasources/vision');
-// const visionCredentials = require('../credentials/carbon-7fbf76411514.json');
-// const CarbonAPI = require('../datasources/carbon');
-// const ConceptAPI = require('../datasources/concept');
-// const userHistAPI = require('../datasources/user_history');
-// const RecipeAPI = require('../datasources/recipe');
-//
-// const { createStore, deleteStore } = require('../utils');
-// const store = createStore();
-// const carbonAPI = new CarbonAPI(store);
-//
-// const dataSources = {
-//     visionAPI: new VisionAPI(visionCredentials),
-//     conceptAPI: new ConceptAPI(),
-//     carbonAPI:  carbonAPI,
-//     userHistAPI: new userHistAPI(store),
-//     recipeAPI: new RecipeAPI(),
-// };
-//
-// const example = async () => {
-//     //const webURL = "https://www.bbcgoodfood.com/recipes/roasted-chickpea-wraps";
-//     const webURL = "https://pinchofyum.com/vegan-crunchwrap";
-//     //const webURL = "https://www.bbc.co.uk/news/in-pictures-52120114";
-//     let res = await getCarbonFootprintFromRecipe(dataSources, webURL);
-//     console.log(res);
-//     // let categories = "4000";
-//     // let new_categories = "3000";
-//     // let res = await update_categories(categories, new_categories);
-//     // console.log(res);
-// };
-//
-// example();
