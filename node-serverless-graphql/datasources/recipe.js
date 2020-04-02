@@ -13,11 +13,16 @@ class RecipeAPI {
     }
 
     // Get data from API. Have to run this before getName and getIngredients.
+    // Returns true if reasons that the url is a recipe, false if not a recipe.
     async getData(webURL){
         let url = "https://api.spoonacular.com/recipes/extract?url=" + webURL + "&apiKey=" + this.API_KEY;
-        //DO SOME CHECKS IF NOTE A RECIPE WEBSITE
         let res = await axios.get(url, this.config);
+        console.log(res);
+        if(res.data.weightWatcherSmartPoints === 0 && res.data.preparationMinutes === undefined && res.data.cookingMinutes === undefined && res.data.healthScore === 0 && res.data.pricePerServing === 0){
+            return false;
+        };
         this.content = res.data;
+        return true;
     }
 
     // Method to get the name from the recipe. Have to run getData first once.
@@ -56,16 +61,19 @@ class RecipeAPI {
 
 module.exports = RecipeAPI;
 
-// const webURL = "https://www.bbcgoodfood.com/recipes/roasted-chickpea-wraps";
-// //const webURL = "https://en.wikipedia.org/wiki/Cauchy%27s_integral_formula"
-// let test = new recipeAPI();
-//
-// const example = async () =>{
-//     await test.getData(webURL);
-//     //let res = await test.convertMetrics("avocados", "2", "", "kilograms");
-//     let res = await test.getIngredients();
-//     console.log(res);
-//
-// }
-//
-// example();
+//const webURL = "https://www.bbcgoodfood.com/recipes/roasted-chickpea-wraps";
+//const webURL = "https://www.bbc.co.uk/news/in-pictures-52120114";
+//const webURL = "https://en.wikipedia.org/wiki/Cauchy%27s_integral_formula"
+//const webURL = "https://www.bbcgoodfood.com/recipes/chocolate-eclairs";
+const webURL = "https://www.delfi.lv/";
+let test = new RecipeAPI();
+
+const example = async () =>{
+    let res = await test.getData(webURL);
+    //let res = await test.convertMetrics("avocados", "2", "", "kilograms");
+    //let res = await test.getIngredients();
+    console.log(res);
+
+}
+
+example();
