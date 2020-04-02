@@ -30,8 +30,8 @@ const oneLayerSearch = async (datasources, labels) => {
   for (let i = 0; i < labels.length; i += 1) {
     nounInLabel = labels[i];
     //if (await isConceptValid(datasources, nounInLabel)){
-    const carbonFootprintResponse = await datasources.carbonAPI.searchData(nounInLabel);
-    if (carbonFootprintResponse.carbonpkilo !== null) {
+    const carbonFootprintResponse = await datasources.carbonAPI.getCfOneItem(nounInLabel);
+    if (carbonFootprintResponse !== null) {
         return {
           item: nounInLabel,
           carbonpkilo: carbonFootprintResponse.carbonpkilo,
@@ -263,7 +263,7 @@ const getCarbonFootprintFromName = async (datasources, name) => {
       label: "approximated from product " + nextResponse.item
     };
     console.log(save_to_db);
-    if(datasources.carbonAPI.searchData([save_to_db.item]).carbonpkilo !== null) {
+    if(datasources.carbonAPI.getCfOneItem([save_to_db.item]) !== null) {
       datasources.carbonAPI.insert_in_DB(save_to_db);
     }
 
@@ -278,7 +278,5 @@ const getCarbonFootprintFromName = async (datasources, name) => {
     carbonFootprintPerKg: null,
   };
 };
-
-
 
 module.exports = { getCarbonFootprintFromImage, getCarbonFootprintFromName, singularize};

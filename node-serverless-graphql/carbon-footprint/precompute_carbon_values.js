@@ -3,7 +3,7 @@ const fs = require('fs');
 const csv = require('csvtojson');
 const CarbonAPI = require('../datasources/carbon');
 const catergorisedCarbonValues = require("./categorisedCarbonValues.json");
-const {oneLayerSearch, getNextLayer} = require('./carbon_footprint_calculation'); 
+const {oneLayerSearch, getNextLayer} = require('./carbon_footprint_calculation');
 carbonAPI = new CarbonAPI();
 
 
@@ -30,7 +30,7 @@ const preCompute = async (file) => {
         let  new_item = row["Food"].toLowerCase();
         const new_category = row["Group"].toLowerCase();
 
-        let carbonFootprintPerKg = await carbonAPI.searchData(new_item);
+        let carbonFootprintPerKg = await carbonAPI.getCfOneItem(new_item);
         if (carbonFootprintPerKg === undefined){  // If in DB --> skip
 
             // If not in DB --> get_next_layer, one_layer_serach
@@ -38,7 +38,7 @@ const preCompute = async (file) => {
             console.log(next_layer);
             const response = await oneLayerSearch(carbonAPI, next_layer);
             const carbonFootprintPerKg = response.carbonpkilo;
-            
+
 
             if (carbonFootprintPerKg !== undefined){
                 const new_categories = response.categories;
@@ -49,7 +49,7 @@ const preCompute = async (file) => {
             }
 
             else if (catergorisedCarbonValues[new_category]!== undefined) {  // If  we have the category in the categorisedCarbonValues.json file
-            
+
                 let carbonFootprintPerKg = catergorisedCarbonValues[new_category][0]["carbonpkilo"];
                 let new_categories = catergorisedCarbonValues[new_category][0]["categories"];
                 let new_data = [{item: new_item, carbonpkilo: carbonFootprintPerKg, categories: new_categories, label: "approximated from product " + new_category}];
