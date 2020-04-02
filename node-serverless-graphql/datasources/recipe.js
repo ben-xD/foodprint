@@ -3,7 +3,7 @@ const axios = require('axios');
 class RecipeAPI {
 
     constructor() {
-        this.API_KEY = '0473110dff3544f5920dbd2a45c56a38';
+        this.API_KEY = '5d370d89f92e48b79a8c993005dc13ee';
         this.config = {
             headers: {
                 "Content-Type": "application/json",
@@ -85,10 +85,10 @@ class RecipeAPI {
 
 module.exports = RecipeAPI;
 
-// //const webURL = "https://www.bbcgoodfood.com/recipes/roasted-chickpea-wraps";
-// //const webURL = "https://www.bbc.co.uk/news/in-pictures-52120114";
-// //const webURL = "https://en.wikipedia.org/wiki/Cauchy%27s_integral_formula"
-// //const webURL = "https://www.bbcgoodfood.com/recipes/chocolate-eclairs";
+//const webURL = "https://www.bbcgoodfood.com/recipes/roasted-chickpea-wraps";
+//const webURL = "https://www.bbc.co.uk/news/in-pictures-52120114";
+//const webURL = "https://en.wikipedia.org/wiki/Cauchy%27s_integral_formula"
+//const webURL = "https://www.bbcgoodfood.com/recipes/chocolate-eclairs";
 // const webURL = "https://www.delfi.lv/";
 // let test = new RecipeAPI();
 //
