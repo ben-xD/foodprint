@@ -8,7 +8,7 @@ let carbonAPI = new CarbonAPI(store);
 const mockDataSources = {
     carbonAPI: {
         getCfOneItem: jest.fn(),
-        getCfAllMultipleItems: jest.fn(),
+        getCfMultipleItems: jest.fn(),
     },
     userHistAPI: {
         get_month_i_data: jest.fn(),
@@ -38,7 +38,7 @@ describe('User history database (mocked dataSources)', () => {
         // Mock up unreliable functions
         jest.spyOn(userHistAPI, 'get_all_user_data').mockReturnValue(
             [{item: 'rice'}, {item: 'potato'}, {item: 'orange'}]);
-        jest.spyOn(carbonAPI, 'getCfAllMultipleItems').mockReturnValue(
+        jest.spyOn(carbonAPI, 'getCfMultipleItems').mockReturnValue(
             [{ carbonpkilo: "1.14" }, { carbonpkilo: "2.2" }, { carbonpkilo: "3.5" }]);
 
         const user = 'x';
@@ -54,7 +54,7 @@ describe('User history database (mocked dataSources)', () => {
         jest.spyOn(userHistAPI, 'get_week_i_data').mockReturnValue(
             [{item: '1'}, {item: '1'}, {item: '2'}, {item: '3'}, {item: '4'}, {item: '5'}, {item: '6'}]);
         // Mock the co2 values returned for each element in each week (6 in total)
-        jest.spyOn(carbonAPI, 'getCfAllMultipleItems').mockReturnValue(
+        jest.spyOn(carbonAPI, 'getCfMultipleItems').mockReturnValue(
             [{carbonpkilo: '1.2'}, {carbonpkilo: '2.1'}, {carbonpkilo: '0.4'}, {carbonpkilo: '1.2'}, 
             {carbonpkilo: '0.4'}, {carbonpkilo: '3'}]);
 
@@ -72,7 +72,7 @@ describe('User history database (mocked dataSources)', () => {
         jest.spyOn(userHistAPI, 'get_month_i_data').mockReturnValue(
             [{item: 'orange'}, {item: 'orange'}, {item: 'orange'}, {item: 'orange'},{item: 'orange'}, {item: 'orange'}]);
         // Mock the co2 values returned for each element in each month (6 in total)
-        jest.spyOn(carbonAPI, 'getCfAllMultipleItems').mockReturnValue(
+        jest.spyOn(carbonAPI, 'getCfMultipleItems').mockReturnValue(
             [{carbonpkilo: 3.2}]);
 
         const timezone = 0;
@@ -88,7 +88,7 @@ describe('User history database (mocked dataSources)', () => {
         [{ item: 'mock' }]
         );
         
-        mockDataSources.carbonAPI.getCfAllMultipleItems.mockImplementation((data) => {
+        mockDataSources.carbonAPI.getCfMultipleItems.mockImplementation((data) => {
             if (data[0] == 'mock'){
                 return ([{"carbonpkilo": 20,
                     "categories": "1200"},
@@ -118,7 +118,7 @@ describe('User history database (mocked dataSources)', () => {
         [{ item: 'mock' }]
         );
         
-        mockDataSources.carbonAPI.getCfAllMultipleItems.mockImplementation((data) => {
+        mockDataSources.carbonAPI.getCfMultipleItems.mockImplementation((data) => {
             if (data[0] == 'mock'){
                 return ([{"carbonpkilo": 20,
                     "categories": "1200"}])

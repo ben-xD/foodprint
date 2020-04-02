@@ -117,7 +117,7 @@ class userHistAPI {
         sum = sum + month_cf;
       }
     }
-
+    
     let average = +(sum/(this.NUMBER_OF_MONTHS_RETURNED - 1)).toFixed(2); // -1 because the current week is not taken into account
     return average;
   };
@@ -230,7 +230,7 @@ class userHistAPI {
     }
     
     const [items, repetitions] = await this.get_items(data)
-    const carbonData = await carbonAPI.getCfAllMultipleItems(items);
+    const carbonData = await carbonAPI.getCfMultipleItems(items, true);
     if (carbonData == []){
       return null;
     }
@@ -302,7 +302,7 @@ class userHistAPI {
   // Adds the data (period_i_data) of a period i (week or month) to the compositions table
   async sum_period_data_to_table(carbonAPI, period_i_data, period, table){
     const [items, repetitions] = await this.get_items(period_i_data)
-    const carbonData = await carbonAPI.getCfAllMultipleItems(items);
+    const carbonData = await carbonAPI.getCfMultipleItems(items, true);
     for (let i = 0; i < period_i_data.length; i++){ // For each item found
       let carbonResult = carbonData[i];
       if(carbonResult.carbonpkilo !== undefined){
