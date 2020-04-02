@@ -264,7 +264,6 @@ const getCarbonFootprintFromName = async (dataSources, name) => {
   };
 };
 
-module.exports = { getCarbonFootprintFromImage, getCarbonFootprintFromName, singularize };
 // This function is being used for calcualte_carbon_from_recipe.js, it is needed b/c calcualte_carbon_from_recipe.js
 // needs to receive categories as well.
 const getCarbonFootprintFromNameUsedForRecipe = async (datasources, name) => {
@@ -276,46 +275,45 @@ const getCarbonFootprintFromNameUsedForRecipe = async (datasources, name) => {
   labels = getNounsInLabels(labels);
 
   // Attempt to find the google vision labels in the database:
-  const firstResponse = await oneLayerSearch(datasources, labels);
+  const firstResponse = await oneLayerSearch(dataSources, labels);
   if (firstResponse.item) {
     return {
       item: firstResponse.item,
       carbonFootprintPerKg: firstResponse.carbonpkilo,
-      categories: firstResponse.categories
+      categories: firstResponse.categories,
     };
   }
 
   // Call ConceptNet to create the next layer:
-  let nextLabels = await getNextLayer(datasources, labels);
+  let nextLabels = await getNextLayer(dataSources, labels);
 
   // Attempt to find the next layer labels in the database:
-  const nextResponse = await oneLayerSearch(datasources, nextLabels);
+  const nextResponse = await oneLayerSearch(dataSources, nextLabels);
   if (nextResponse.item) {
     console.log(nextResponse);
 
     // Clearly, the product was not in the db previousle, therefore add it now.
-    let save_to_db = {
+    const save_to_db = {
       item: name,
       carbonpkilo: nextResponse.carbonpkilo,
       categories: nextResponse.categories, //CHNANGE HERE TO A FUNC WHICH CAN DECIDE ON THE PROPER CATEGORY!!!!
       label: "approximated from product " + nextResponse.item
     };
-    console.log(save_to_db);
-    if(datasources.carbonAPI.getCfOneItem([save_to_db.item]) !== null) {
-      datasources.carbonAPI.insert_in_DB(save_to_db);
+    if (await dataSources.carbonAPI.getCfOneItem([save_to_db.item]) !== null) {
+      await dataSources.carbonAPI.insert_in_DB(save_to_db);
     }
 
     return {
       item: name,
       carbonFootprintPerKg: nextResponse.carbonpkilo,
-      categories: nextResponse.categories
+      categories: nextResponse.categories,
     };
   }
 
   return {
-    item: name,
-    carbonFootprintPerKg: undefined,
-    categories: null
+    item: null,
+    carbonFootprintPerKg: null,
+    categories: null,
   };
 };
 
