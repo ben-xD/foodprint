@@ -61,10 +61,10 @@ class userHistAPI {
   async avg_co2_for_user(carbonAPI, user) {
 
     const user_data = await this.get_all_user_data(user);
-    console.log(user_data);
     if(user_data == undefined){
       return null;
     }
+  
     let average = await this.average_data(carbonAPI, user_data);
     return average;
 
@@ -86,7 +86,7 @@ class userHistAPI {
     }
 
     let average = +(sum/(this.NUMBER_OF_WEEKS_RETURNED - 1)).toFixed(2); // -1 because the current week is not taken into account
-    console.log(average);
+
     return average;
   };
 
@@ -100,7 +100,7 @@ class userHistAPI {
       if(week_i_data == undefined){ continue;}
       table = await this.sum_period_data_to_table(carbonAPI, week_i_data, i, table);
     }
-    console.log(table);
+
     return table;
   };
 
@@ -117,9 +117,8 @@ class userHistAPI {
         sum = sum + month_cf;
       }
     }
-
+    
     let average = +(sum/(this.NUMBER_OF_MONTHS_RETURNED - 1)).toFixed(2); // -1 because the current week is not taken into account
-    console.log(average);
     return average;
   };
 
@@ -132,7 +131,7 @@ class userHistAPI {
       const month_i_data = await this.get_month_i_data(user, timezone, i);
       table = await this.sum_period_data_to_table(carbonAPI, month_i_data, i, table);
     }
-    console.log(table);
+
     return table;
   };
 
@@ -226,21 +225,48 @@ class userHistAPI {
 
   // Calculates the average cf of the items in data
   async average_data(carbonAPI, data){
+    if (data.length == 0){
+      return 0;
+    }
+    
+    const [items, repetitions] = await this.get_items(data)
+    const carbonData = await carbonAPI.getCfMultipleItems(items, true);
+    if (carbonData == []){
+      return null;
+    }
 
     let user_co2 = 0;
-    let no_of_datapoints = 0;
+    for (let i = 0; i < carbonData.length; i++){
+      const carbonResult = carbonData[i];
+      user_co2 += (Number(carbonResult.carbonpkilo) * repetitions[i]);
+    }
+
+    const n_items = repetitions.reduce(function(a, b){return a+b;});
+    return +(user_co2 / n_items).toFixed(2);   // "+" to avoid toFixed convert result to string
+  }
+
+
+  // takes the items from list  of user history data. The number of times an item is repeated is stored in
+  // the array of repetitions. 
+  async get_items(data){
+    let items = [];
+    let repetitions_indexes = {};
+    let repetitions = new Array(data.length).fill(1);
     for (let i = 0; i < data.length; i++){
-      let carbonResult = await carbonAPI.getCfOneItem(data[i].item);
-      console.log(carbonResult.carbonpkilo);
-      if(carbonResult.carbonpkilo !== undefined){
-        user_co2 += Number(carbonResult.carbonpkilo);
-        no_of_datapoints += 1;
+      let item = data[i].item;
+
+      if (items.includes(item)){ // if the item has appeared before
+        let index_first_item = repetitions_indexes[item];
+        repetitions[index_first_item]+=1; 
       }
+      else{ // if it is a new item
+        repetitions_indexes[item] = i;
+        items.push(item);
+      }
+
     }
-    if (no_of_datapoints > 0){
-      return +(user_co2 / no_of_datapoints).toFixed(2);   // "+" to avoid toFixed convert result to string
-    }
-    return 0
+    repetitions = repetitions.slice(0,items.length);
+    return [items, repetitions];
   }
 
   // Creates a table to store the compositions
@@ -261,16 +287,31 @@ class userHistAPI {
     return table;
   };
 
+  // Returns the number of categories in a product, given a string of categories.
+  // It assumes category strings do not contain replicates.
+  async get_number_of_categories(categories){
+    let n = 0;
+    for (let i = 0; i < categories.length; i++) {
+      if(categories.charAt(i) != "0"){
+        n += 1;
+      }
+    }
+    return n; 
+  }
+
   // Adds the data (period_i_data) of a period i (week or month) to the compositions table
   async sum_period_data_to_table(carbonAPI, period_i_data, period, table){
+    const [items, repetitions] = await this.get_items(period_i_data)
+    const carbonData = await carbonAPI.getCfMultipleItems(items, true);
     for (let i = 0; i < period_i_data.length; i++){ // For each item found
-      let carbonResult = await carbonAPI.getCfOneItem(period_i_data[i].item);
+      let carbonResult = carbonData[i];
       if(carbonResult.carbonpkilo !== undefined){
         const categories = carbonResult.categories.toString();
+        const n_categories = await this.get_number_of_categories(categories);
         for (let cat = 1; cat < 5; cat ++){
           if (categories.includes(cat)){
             let cf = +carbonResult.carbonpkilo.toFixed(2);
-            table[this.CATEGORIES[cat-1]][period]["avgCarbonFootprint"] += cf;
+            table[this.CATEGORIES[cat-1]][period]["avgCarbonFootprint"] += (cf * repetitions[i] / n_categories);
           }
         }
       }
