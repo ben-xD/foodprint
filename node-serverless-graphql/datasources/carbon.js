@@ -6,35 +6,14 @@ class CarbonAPI {
     this.store = store
   }
 
-  async insert_in_DB(new_data) {
+  async insert_in_DB(new_data) { await this.store.carbon.collection.insertOne(new_data); }
 
-    console.log(store.carbon.collection);
-    await this.store.carbon.collection.insert(new_data, function (err, docs) {
-      if (err) {
-        return console.error(err);
-      } else {
-        console.log("Document inserted into the carbon collection");
-        return true;
-      }
-    });
-  }
-
-  // Search database for given label and return its carbon footprint
-  // label: string
-  // return: object with carbonpkilo and categories fields, return null if item not in the database
-  async getCfOneItem(label) {
-
-    let _item = null;
-    await this.store.carbon.findOne({item: label}, (err, item) => {
-      if (err) {
-        console.error('CarbonAPI: failed to query for label:', label);
-        throw err;
-      }
-      _item = item;
-    }).exec();
-
-    return _item;
-  }
+  /**
+   * Search database for given label and return its carbon footprint
+   * @param {string} label 
+   * @returns {JSON} with carbonpkilo and categories fields, return null if item not in the database
+   */
+  async getCfOneItem(label) { return await this.store.carbon.findOne({ item: label }); }
 
   // Search database for a list of labels, returning a list of objects for only those labels defined in the db
   // labelList: list of strings
@@ -47,31 +26,22 @@ class CarbonAPI {
   // Querying ['blablabla'] would return an empty list
   async getCfMultipleItems(labelList, checkAll = false) {
 
-    if (checkAll && await this.containsNonStrings(labelList)){
+    if (checkAll && await this.containsNonStrings(labelList)) {
       throw new Error("CarbonAPI: getCfMultipleItems shoudn't be used with regular expresions if checkAll is enabled");
     }
 
-    let _itemList = [];
-    await this.store.carbon.find({item: {$in: labelList}}, (err, itemList) => {
-      if (err) {
-        console.error('CarbonAPI: failed to query for labels:', labelList);
-        throw err;
-      }
-      _itemList = itemList;
-    }).exec();
+    const _itemList = await this.store.carbon.find({ item: { $in: labelList } });
 
-    if (checkAll && labelList.length > _itemList.length){
+    if (checkAll && labelList.length > _itemList.length) {
       throw new Error("CarbonAPI: only " + _itemList.length + " out of " + labelList.length + " items were found");
     }
 
     return _itemList;
   }
 
-  async containsNonStrings(labelList){
-    for( let i = 0; i < labelList.length; i++) {
-      if(typeof(labelList[i]) != "string"){
-        return true;
-      }
+  async containsNonStrings(labelList) {
+    for (let i = 0; i < labelList.length; i++) {
+      if (typeof (labelList[i]) != "string") return true;
     }
     return false;
   }

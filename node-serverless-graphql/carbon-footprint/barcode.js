@@ -5,7 +5,7 @@ const { getCarbonFootprintFromName } = require('./carbon_footprint_calculation')
 
 //contains the key to query the Tesco API
 const options = {
-    headers: {'Ocp-Apim-Subscription-Key': '6b9983f7c22d42e1a242b91c7b0cfe37'}
+    headers: { 'Ocp-Apim-Subscription-Key': '6b9983f7c22d42e1a242b91c7b0cfe37' }
 };
 
 // @param: tescoApi_working is a boolean value. Set it to true if tescoAPI working,
@@ -13,8 +13,8 @@ const options = {
 const getCarbonFootprintFromBarcode = async (dataSources, barcode, tescoAPI_working) => {
 
     let result;
-    if(tescoAPI_working){
-        result =  await getCarbonFootprintFromBarcode_with_Tesco(dataSources, barcode);
+    if (tescoAPI_working) {
+        result = await getCarbonFootprintFromBarcode_with_Tesco(dataSources, barcode);
     } else {
         result = await getCarbonFootprintFromBarcode_without_Tesco(dataSources, barcode);
     }
@@ -28,14 +28,14 @@ const getCarbonFootprintFromBarcode_without_Tesco = async (dataSources, barcode)
     console.log(product_name);
 
     // check if we are able to recognise that barcode
-    if (product_name === undefined){
-        return{
+    if (product_name === undefined) {
+        return {
             item: null,
             carbonFootprintPerKg: null,
         };
     }
 
-    let res = await getCarbonFootprintFromName(dataSources, product_name);
+    const res = await getCarbonFootprintFromName(dataSources, product_name);
     return res;
 
 };
@@ -43,7 +43,7 @@ const getCarbonFootprintFromBarcode_without_Tesco = async (dataSources, barcode)
 const getCarbonFootprintFromBarcode_with_Tesco = async (dataSources, barcode) => {
     //get data from the barcode
     let data = await getData(barcode);
-    if(data.products === undefined || data.products.length == 0){
+    if (data.products === undefined || data.products.length == 0) {
         console.log('This barcode has no product information');
         return {
             item: null,
@@ -56,22 +56,25 @@ const getCarbonFootprintFromBarcode_with_Tesco = async (dataSources, barcode) =>
     //run getCarbonFootprintFromName (that might be very costly no?). if it returns a value that means the product
     //is in the db and thus return the value.
     let fromNameResult = await getCarbonFootprintFromName(dataSources, product_name);
-    if(fromNameResult.carbonFootprintPerKg !== null)
+    if (fromNameResult.carbonFootprintPerKg !== null)
         return fromNameResult;
 
     //if getCarbonFootprintFromName returns an undefined carbonFootprintPerKg, the product is not in the db yet, so sum
     //up the ingredients to get the carbon footprint.
     let result = calcCarbonFromIngredients(dataSources, data);
+    if(result.carbonFootprintPerKg === null){
+        result.item = null;
+    }
 
     //store the new product in the db, unless the carbonfootprintperkg is undefined
-    if (result.carbonFootprintPerKg !== null){
+    if (result.carbonFootprintPerKg !== null) {
         let save_to_db = {
             item: result.item,
             carbonpkilo: result.carbonFootprintPerKg,
             categories: result.categories,
             label: "approximated from ingredients"
         };
-        if(dataSources.carbonAPI.getCfOneItem([save_to_db.item]).carbonpkilo !== undefined)
+        if (await dataSources.carbonAPI.getCfOneItem([save_to_db.item]).carbonpkilo !== undefined)
             await dataSources.carbonAPI.insert_in_DB(save_to_db);
     }
 
@@ -79,9 +82,6 @@ const getCarbonFootprintFromBarcode_with_Tesco = async (dataSources, barcode) =>
         item: result.item,
         carbonFootprintPerKg: result.carbonFootprintPerKg
     };
-
-
-    return result;
 
 };
 
@@ -116,9 +116,9 @@ const cleanName = (name) => {
 //isnt in the database either.
 const calcCarbonFromIngredients = async (dataSources, data) => {
     //check whether the product has ingredients at all
-    if(data.products[0].ingredients === undefined){
+    if (data.products[0].ingredients === undefined) {
         return {
-            item: cleanName(data.products[0].description),
+            item: null,
             carbonFootprintPerKg: null,
         }
     }
@@ -128,7 +128,7 @@ const calcCarbonFromIngredients = async (dataSources, data) => {
     console.log(ingredients);
     let carbon = await calculate_total_carbon(dataSources, ingredients);
 
-    if (carbon_response.carbonFootprintPerKg === 0){
+    if (carbon_response.carbonFootprintPerKg === 0) {
         carbon_response.carbonFootprintPerKg = null;
     }
 
@@ -155,11 +155,11 @@ const getIngredientList = (data) => {
 //Returns a 'clean' array of ingredients from an unformatted string of ingredients
 const delete_junk = (ingredients_raw) => {
     //deletes everything between []
-    ingredients_raw = ingredients_raw.replace(/\[.*?\]/g, '' );
+    ingredients_raw = ingredients_raw.replace(/\[.*?\]/g, '');
     //deletes everything between ()
-    ingredients_raw = ingredients_raw.replace(/\(.*?\)/g, '' );
+    ingredients_raw = ingredients_raw.replace(/\(.*?\)/g, '');
     //deletes everything between <>
-    ingredients_raw = ingredients_raw.replace(/\<.*?\>/g, '' );
+    ingredients_raw = ingredients_raw.replace(/\<.*?\>/g, '');
     //deletes INGREDIENTS:
     ingredients_raw = ingredients_raw.replace('INGREDIENTS: ', ''); //for some reason this wont work on tiramisu
     ingredients_raw = ingredients_raw.replace('INGREDIENTS: ', ''); //for some reason this will work on tiramisu, but not on paella
@@ -178,12 +178,12 @@ const delete_junk = (ingredients_raw) => {
 const calculate_total_carbon = async (dataSources, ingredients) => {
     let total_carbon = 0;
     let categories = "0000"
-    for(let i = 0; i < ingredients.length && i < 5; i++){
+    for (let i = 0; i < ingredients.length && i < 5; i++) {
         console.log(ingredients[i]);
         let carbonResponse = await getCarbonFootprintFromName(dataSources, ingredients[i]);
         let carbon = carbonResponse.carbonFootprintPerKg;//how do i correctly access carbonfootpirngperkd???
         let new_categories = carbonResponse.categories;
-        if(carbon != null) {
+        if (carbon != null) {
             total_carbon += carbon;
             categories = update_categories(categories, new_categories);
         }
@@ -199,8 +199,8 @@ const calculate_total_carbon = async (dataSources, ingredients) => {
 //Function which updates the status of the categories of a product
 const update_categories = async (categories, new_categories) => {
 
-    for (let i = 0; i < new_categories.length; i++){
-        if(!categories.includes(new_categories[i])){
+    for (let i = 0; i < new_categories.length; i++) {
+        if (!categories.includes(new_categories[i])) {
             categories = categories.replace("0", new_categories[i]);
         }
     }
@@ -229,5 +229,5 @@ const update_categories = async (categories, new_categories) => {
 
 
 module.exports = {
-  getCarbonFootprintFromBarcode
+    getCarbonFootprintFromBarcode
 }
