@@ -9,6 +9,7 @@ const CarbonAPI = require('../datasources/carbon');
 const carbonAPI = new CarbonAPI(store);
 const ConceptAPI = require('../datasources/concept');
 const userHistAPI = require('../datasources/user_history');
+const RecipeAPI = require('../datasources/recipe');
 
 
 const dataSources = {
@@ -16,6 +17,7 @@ const dataSources = {
   carbonAPI,
   conceptAPI: new ConceptAPI(),
   userHistAPI: new userHistAPI(store),
+  recipeAPI: new RecipeAPI(),
 };
 
 const CATEGORY_WITH_DATA =
@@ -53,7 +55,16 @@ describe('testing resolvers', () => {
     expect(actual).toEqual(expected);
   });
 
-  test('postUserHistoryEntry', async () => {
+  test('get co2 of tiramisu (we have stored the barcode in json file), which should be 0.65', async () => {
+      jest.setTimeout(30000);
+      const barcode = "85053274";
+      const actual = await resolvers.Mutation.postBarcode(null,{barcode}, {dataSources, user});
+      const expected = {name: 'tiramisu', carbonFootprintPerKg: 0.65};
+      expect(actual).toEqual(expected);
+  });
+
+
+    test('postUserHistoryEntry', async () => {
       jest.setTimeout(30000);
 
       jest.spyOn(dataSources.userHistAPI, 'insert_in_DB').mockImplementation((user, item) => {
@@ -154,5 +165,14 @@ describe('testing resolvers', () => {
               "eggsAndDairy": CATEGORY_EMPTY
           })
   });
+
+  test('Test postRecipe', async () => {
+      jest.setTimeout(10000);
+      const url = "https://www.bbcgoodfood.com/recipes/roasted-chickpea-wraps";
+      let actual = await resolvers.Mutation.postRecipe(null, {url}, {dataSources, user});
+      let expected =  {"carbonFootprintPerKg": 2.49, "name": "Roasted chickpea wraps"};
+      expect(actual).toEqual(expected);
+  });
+
 
 });

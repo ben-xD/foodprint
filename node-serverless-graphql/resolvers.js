@@ -1,5 +1,6 @@
 const { getCarbonFootprintFromImage, getCarbonFootprintFromName } = require('./carbon-footprint/carbon_footprint_calculation');
 const { getCarbonFootprintFromBarcode } = require('./carbon-footprint/barcode');
+const { getCarbonFootprintFromRecipe } = require('./carbon-footprint/calculate_carbon_from_recipe');
 
 const resolvers = {
   Query: {
@@ -20,7 +21,7 @@ const resolvers = {
         return avg_co2;
       } catch (err) {
         console.log(err);
-        return undefined;
+        return null;
       }
     },
     getPeriodAvg: async (parent, { timezone, resolution}, context) => {
@@ -45,7 +46,7 @@ const resolvers = {
         }
       } catch (err) {
         console.log(err);
-        return undefined;
+        return null;
       }
     },
     reportByCategory: async (parent, { timezone, resolution}, context) => {
@@ -70,7 +71,7 @@ const resolvers = {
         }
       } catch (err) {
         console.log(err);
-        return undefined;
+        return null;
       }
     },
   },
@@ -80,8 +81,7 @@ const resolvers = {
       console.log({ dataSources, user, parent });
       const image = new Buffer(file.base64, 'base64'); // Decode base64 of "file" to image
       console.log('Received picture');
-      let { item, carbonFootprintPerKg } = await getCarbonFootprintFromImage(context.dataSources, image);
-      if (!item) item = "unknown";
+      const { item, carbonFootprintPerKg } = await getCarbonFootprintFromImage(context.dataSources, image);
       const response = {
         name: item,
         carbonFootprintPerKg,
@@ -93,8 +93,7 @@ const resolvers = {
       const { dataSources, user } = context
       console.log({ dataSources, user, parent });
       console.log(`Received barcode: ${barcode}`);
-      let { item, carbonFootprintPerKg } = await getCarbonFootprintFromBarcode(dataSources, barcode);
-      if (!item) item = 'unknown';
+      const { item, carbonFootprintPerKg } = await getCarbonFootprintFromBarcode(dataSources, barcode, false);
       const response = {
         name: item,
         carbonFootprintPerKg,
@@ -105,8 +104,7 @@ const resolvers = {
     postCorrection: async (parent, { name }, context) => {
       const { dataSources, user } = context
       console.log({ 'Received correction': name });
-      let { item, carbonFootprintPerKg } = await getCarbonFootprintFromName(dataSources, name);
-      if (!carbonFootprintPerKg) carbonFootprintPerKg = -1;
+      const { item, carbonFootprintPerKg } = await getCarbonFootprintFromName(dataSources, name);
       const response = {
         name: item,
         carbonFootprintPerKg,
@@ -120,20 +118,34 @@ const resolvers = {
         throw new Error('You must be logged in.');
       }
 
-      const { dataSources, user } = context
+      const { dataSources, user } = context;
       console.log('Received history entry for...');
       console.log({ 'item': item });
       const uid = user.uid;
       console.log({ 'user id': uid });
       try {
-        dataSources.userHistAPI.insert_in_DB({ "user_id": uid, "item": item });
+        await dataSources.userHistAPI.insert_in_DB({ "user_id": uid, "item": item });
         return true;
       } catch (err) {
         console.log(err);
         return false;
       }
     },
-  },
+
+    postRecipe: async (parent, {url}, context) => {
+      const { dataSources, user } = context;
+      console.log({ dataSources, user, parent });
+      console.log(`Received url: ${url}`);
+      let { item, carbonFootprintPerKg } = await getCarbonFootprintFromRecipe(dataSources, url, false);
+      if (!item) item = 'unknown';
+      const response = {
+        name: item,
+        carbonFootprintPerKg,
+      };
+      console.log({ 'Returning': response });
+      return response;
+    }
+  }
 };
 
 module.exports = resolvers;

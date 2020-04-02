@@ -21,6 +21,11 @@ import gql from 'graphql-tag';
 import { useQuery } from '@apollo/react-hooks';
 import AsyncStorage from '@react-native-community/async-storage';
 
+const UNIT_INFORMATION =
+  'The carbon footprint displayed in this app, including this page, ' +
+  'are given in kilograms of CO2 per kilogram of food. The weight of ' +
+  'any food item is systematically normalised to 1kg to get to this result.';
+
 export const GET_WEEKLY_AVERAGE = gql`query($timezone: Int!) {
   getPeriodAvg(timezone: $timezone, resolution: WEEK)
 }`;
@@ -276,9 +281,7 @@ const Foodprint = ({ navigation }) => {
           />
         </View>
         <View style={styles.footnote}>
-          <Text style={{ fontSize: percentageWidth('3%') }}>The carbon footprint displayed in this app,
-          including this page, are given in kilograms of CO2 per kilogram of food. The weight of any food item is
-            systematically normalised to 1kg to get to this result.</Text>
+          <Text style={{ fontSize: percentageWidth('3%') }}>{UNIT_INFORMATION}</Text>
         </View>
         <WelcomeScreen setVisibility={setWelcomeScreenIsVisible} isVisible={welcomeScreenIsVisible} />
       </ScrollView>

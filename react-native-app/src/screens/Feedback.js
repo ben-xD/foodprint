@@ -7,6 +7,7 @@ import { Rating, Button } from 'react-native-elements';
 import { widthPercentageToDP as percentageWidth, heightPercentageToDP as percentageHeight } from 'react-native-responsive-screen';
 import { ScrollView } from 'react-native-gesture-handler';
 import Snackbar from 'react-native-snackbar';
+import { CommonActions } from '@react-navigation/native';
 
 // GraphQL schema for picture posting mutation
 const POST_PICTURE_MUTATION = gql`
@@ -64,30 +65,29 @@ const Feedback = ({ route, navigation }) => {
 
   useEffect(() => {
     if (pictureData) {
-      console.log(pictureData)
-      if (pictureData.postPicture.name == 'unknown') {
-        // If unknown name from picture, go to error correction screen
-        setMeal({
-          ...meal,
-          uri: route.params.uri,
-        });
-        navigation.navigate('Correction', { meal, setMeal })
-      } else {
-        // Otherwise, display feedback
+      if (pictureData.postPicture.name && pictureData.postPicture.carbonFootprintPerKg) {
+        // If a name was found for the picture, display it
         setMeal({
           uri: route.params.uri,
-          score: pictureData.postPicture.carbonFootprintPerKg,
+          score: pictureData.postPicture.carbonFootprintPerKg.toFixed(1),
           description: pictureData.postPicture.name,
         });
+      } else {
+        // Otherwise, go to error correction screen
+        setMeal({
+          uri: route.params.uri,
+        });
+        navigation.navigate('Correction', { meal, setMeal });
       }
     }
-  }, [meal, navigation, pictureData, route.params.uri]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [navigation, pictureData, route.params.uri]);
 
   useEffect(() => {
     if (barcodeData) {
-      if (barcodeData.postBarcode.name == 'unknown') {
+      if (barcodeData.postBarcode.name && barcodeData.postBarcode.carbonFootprintPerKg) {
         // If unknown name from barcode, go to error correction screen
-        navigation.navigate('Correction', { meal, setMeal })
+        navigation.navigate('Correction', { meal, setMeal });
       } else {
         setMeal({
           ...meal,
@@ -96,7 +96,8 @@ const Feedback = ({ route, navigation }) => {
         });
       }
     }
-  }, [barcodeData, meal, navigation]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [barcodeData, navigation]);
 
   // Add item to user history
   const addToHistory = async (item) => {
@@ -131,53 +132,57 @@ const Feedback = ({ route, navigation }) => {
     }
   };
 
-  return (pictureLoading || barcodeLoading ) ?
+  return pictureLoading || barcodeLoading || !meal ?
     <View style={styles.loading}>
       <ActivityIndicator />
     </View > :
-    // todo fix this, no meal yet thing
-    !meal ? <View>
-      <Text>Oops, something went wrong.</Text>
-    </View> :
-      <View style={styles.container}>
-        <ScrollView style={styles.scrollView}>
-          <View style={styles.body}>
-            {meal.uri == null ? <></> :
-              <Image
-                style={styles.image}
-                source={{ uri: meal.uri }}
-              />
-            }
-            <Text style={styles.description}>{meal.description}</Text>
-            <Rating
-              readonly
-              startingValue={calculateRating(meal.score)}
-              type="star" // Optionally customisible
-              imageSize={percentageWidth('7%')}
+    <View style={styles.container}>
+      <ScrollView style={styles.scrollView}>
+        <View style={styles.body}>
+          {meal.uri == null ? <></> :
+            <Image
+              style={styles.image}
+              source={{ uri: meal.uri }}
             />
-            <Text style={styles.score}>{meal.score.toFixed(1)} kg of CO2 eq/kg</Text>
-          </View>
-          <View style={styles.buttonContainer}>
-            <Button
-              buttonStyle={styles.redButtonStyle}
-              titleStyle={styles.buttonText}
-              title="Wrong item"
-              // TODO don't pass setMeal, and don't call Post correction in correction. Do it in Feedback instead.
-              onPress={() => navigation.navigate('Correction', { meal, setMeal })}
-            />
-            <Button
-              buttonStyle={styles.greenButtonStyle}
-              titleStyle={styles.buttonText}
-              title="Add to history"
-              onPress={() => {
-                addToHistory(meal.description);
-                console.log("Sent item to to user history...");
-                navigation.navigate('Your Foodprint');
-              }}
-            />
-          </View>
-        </ScrollView>
-      </View>;
+          }
+          <Text style={styles.description}>{meal.description}</Text>
+          <Rating
+            readonly
+            startingValue={calculateRating(meal.score)}
+            type="star" // Optionally customisible
+            imageSize={percentageWidth('7%')}
+          />
+          <Text style={styles.score}>{meal.score} kg of CO2 eq/kg</Text>
+        </View>
+        <View style={styles.buttonContainer}>
+          <Button
+            buttonStyle={styles.redButtonStyle}
+            titleStyle={styles.buttonText}
+            title="Wrong item"
+            // TODO don't pass setMeal, and don't call Post correction in correction. Do it in Feedback instead.
+            onPress={() => navigation.navigate('Correction', { meal, setMeal })}
+          />
+          <Button
+            buttonStyle={styles.greenButtonStyle}
+            titleStyle={styles.buttonText}
+            title="Add to history"
+            onPress={() => {
+              addToHistory(meal.description);
+              console.log('Sent item to to user history...');
+              // Reset navigation, so user go back (hardware back press) to current screen
+              navigation.dispatch(
+                CommonActions.reset({
+                  index: 1,
+                  routes: [
+                    { name: 'Home' },
+                  ],
+                })
+              );
+            }}
+          />
+        </View>
+      </ScrollView>
+    </View>;
 };
 
 const styles = StyleSheet.create({
@@ -206,7 +211,7 @@ const styles = StyleSheet.create({
     textTransform: 'capitalize',
     fontSize: percentageWidth('8%'),
     marginTop: percentageHeight('1%'),
-    marginBottom: percentageHeight('1%')
+    marginBottom: percentageHeight('1%'),
   },
   score: { fontSize: percentageWidth('5%'), margin: percentageWidth('2%') },
   buttonContainer: { flex: 1, flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center' },
