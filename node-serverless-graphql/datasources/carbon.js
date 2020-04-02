@@ -63,14 +63,7 @@ class CarbonAPI {
   // return: list of objects, each containing carbonpkilo and categories fields
   async getCfAllMultipleItems(labelList) {
 
-    let _itemList = [];
-    await this.store.carbon.find({item: {$in: labelList}}, (err, itemList) => {
-      if (err) {
-        console.error('CarbonAPI: failed to query for labels:', labelList);
-        throw err;
-      }
-      _itemList = itemList;
-    }).exec();
+    let _itemList = this.getCfMultipleItems(labelList);
 
     if (labelList.length > _itemList.length){
       throw new Error("CarbonAPI: only " + _itemList.length + " out of " + labelList.length + " items were found");
