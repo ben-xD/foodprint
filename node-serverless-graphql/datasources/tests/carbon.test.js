@@ -1,6 +1,6 @@
 const CarbonAPI = require('../carbon');
 
-const {createStore, deleteStore} = require('../../utils');
+const { createStore, deleteStore } = require('../../utils');
 const store = createStore(); // TODO Some asynchronous action needed here
 
 const carbonAPI = new CarbonAPI(store); // Or here...
@@ -10,7 +10,7 @@ describe('getCfOneItem: Real database', () => {
   test('Carbon footprint of rice is 1.14 and category is 1000', async () => {
     jest.setTimeout(10000);
     const name = 'rice';
-    const expected = {carbonpkilo: 1.14, categories: '1000'};
+    const expected = { carbonpkilo: 1.14, categories: '1000' };
     expect.assertions(1);
     const actual = await carbonAPI.getCfOneItem(name);
     expect(actual).toMatchObject(expected);
@@ -33,11 +33,12 @@ describe('getCfMultipleItems: Real database', () => {
     jest.setTimeout(10000);
     const labelList = ['orange', 'rice'];
     const expected = [
-      {item: 'orange', carbonpkilo: 0.5, categories: '1000'},
-      {item: 'rice', carbonpkilo: 1.14, categories: '1000'}
+      { item: 'orange', carbonpkilo: 0.5, categories: '1000' },
+      { item: 'rice', carbonpkilo: 1.14, categories: '1000' }
     ];
     expect.assertions(1);
     const actual = await carbonAPI.getCfMultipleItems(labelList);
+    if (actual) actual.sort((a, b) => {return a.item.localeCompare(b.item);})
     expect(actual).toMatchObject(expected);
   });
 
@@ -45,7 +46,7 @@ describe('getCfMultipleItems: Real database', () => {
     jest.setTimeout(10000);
     const labelList = ['rice', 'some-veryRanDOOMiteeem:P'];
     const expected = [
-      {item: 'rice', carbonpkilo: 1.14, categories: '1000'},
+      { item: 'rice', carbonpkilo: 1.14, categories: '1000' },
     ];
     expect.assertions(1);
     const actual = await carbonAPI.getCfMultipleItems(labelList);

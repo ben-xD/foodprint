@@ -33,7 +33,7 @@ describe('getCarbonFootprintFromName (mocked dataSources)', () => {
       "carbonpkilo": 1.14,
       "categories": "1000"
     });
-    let response = await carbon_footprint_calculation.getCarbonFootprintFromName(mockDataSources, "rice");
+    const response = await carbon_footprint_calculation.getCarbonFootprintFromName(mockDataSources, "rice");
     expect(response).toEqual({item: "rice", carbonFootprintPerKg: 1.14});
     expect(mockDataSources.carbonAPI.getCfOneItem).toBeCalledWith('rice');
   });
@@ -43,14 +43,14 @@ describe('getCarbonFootprintFromName (mocked dataSources)', () => {
       "carbonpkilo": 1.14,
       "categories": "1000"
     });
-    let response = await carbon_footprint_calculation.getCarbonFootprintFromName(mockDataSources, "Some nice RICE");
+    const response = await carbon_footprint_calculation.getCarbonFootprintFromName(mockDataSources, "Some nice RICE");
     expect(response).toEqual({item: "rice", carbonFootprintPerKg: 1.14});
     expect(mockDataSources.carbonAPI.getCfOneItem).toBeCalledWith('rice');
   });
 
   test('"fruit" is not in the database and is returned from categorised shortlist (fruit)', async () => {
     mockDataSources.carbonAPI.getCfOneItem.mockReturnValueOnce(null);
-    let response = await carbon_footprint_calculation.getCarbonFootprintFromName(mockDataSources, "fruit");
+    const response = await carbon_footprint_calculation.getCarbonFootprintFromName(mockDataSources, "fruit");
     expect(response).toEqual({item: "fruit", carbonFootprintPerKg: 1.1});
   });
 
@@ -62,7 +62,7 @@ describe('getCarbonFootprintFromImage (no mocking)', () => {
   test('getCarbonFootprintFromImage: rice image (shallow layer search)', async () => {
     jest.setTimeout(30000);
     const image_buffer = new Buffer(rice_image, 'base64');
-    let response = await carbon_footprint_calculation.getCarbonFootprintFromImage(dataSources, image_buffer);
+    const response = await carbon_footprint_calculation.getCarbonFootprintFromImage(dataSources, image_buffer);
     expect(response).toEqual({item: "rice", carbonFootprintPerKg: 1.14});
   });
 

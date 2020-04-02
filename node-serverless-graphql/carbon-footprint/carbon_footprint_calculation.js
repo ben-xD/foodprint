@@ -81,15 +81,6 @@ const getLabelsFromResponse = (conceptResponse) => {
   return labels;
 };
 
-//  Deletes the adjetives in a string
-const getNounInString = (label) => {
-  if (label.split(" ").length <= 1) {
-    return label;
-  }
-  let nounsArray = nlp(label).nouns().out('array');
-  return nounsArray;
-}
-
 const splitLabelInWords = (label) => {
   let labelSplit = label.split(" ");
 
@@ -256,7 +247,7 @@ const getCarbonFootprintFromName = async (dataSources, name) => {
     console.log(nextResponse);
 
     // Clearly, the product was not in the db previousle, therefore add it now.
-    let save_to_db = {
+    const save_to_db = {
       item: name,
       carbonpkilo: nextResponse.carbonpkilo,
       categories: nextResponse.categories, //CHNANGE HERE TO A FUNC WHICH CAN DECIDE ON THE PROPER CATEGORY!!!!
