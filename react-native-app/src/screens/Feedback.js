@@ -33,32 +33,43 @@ const Post_User_History_Entry = gql`
   }
 `;
 
+const POST_RECIPE_MUTATION = gql`
+mutation($url: String!) {
+  postRecipe(url: $url) {
+     name
+     carbonFootprintPerKg
+  }
+}`;
+
 const Feedback = ({ route, navigation }) => {
   const [meal, setMeal] = useState(null);
   const [uploadPicture, { loading: pictureLoading, data: pictureData, error: pictureError }] = useMutation(POST_PICTURE_MUTATION);
   const [postBarcodeMutation, { loading: barcodeLoading, error: barcodeError, data: barcodeData }] = useMutation(POST_BARCODE_MUTATION);
   const [postUserHistoryEntryMutation, { loading: historyLoading, error: historyError, data: historyData }] = useMutation(Post_User_History_Entry);
+  const [postRecipe, { loading: recipeLoading, error: recipeError, data: recipeData }] = useMutation(POST_RECIPE_MUTATION);
 
   // make relevant request when component is loaded AND provided with either file or barcode
   useEffect(() => {
-    const { file, barcode } = route.params;
+    const { file, barcode, url } = route.params;
     if (file) {
       uploadPicture({ variables: { file } });
     } else if (barcode) {
       postBarcodeMutation({ variables: { barcode } });
+    } else if (url) {
+      postRecipe({ variables: { url } });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    if (!pictureError && !barcodeError) {
+    if (!pictureError && !barcodeError && !recipeError) {
       return;
     }
     Snackbar.show({
       text: 'Oops, something went wrong :(',
       duration: Snackbar.LENGTH_SHORT,
     });
-  }, [pictureError, barcodeError]);
+  }, [pictureError, barcodeError, recipeError]);
 
   useEffect(() => {
     if (pictureData) {
@@ -96,6 +107,22 @@ const Feedback = ({ route, navigation }) => {
     }
   }, [barcodeData]);
 
+
+  useEffect(() => {
+    if (recipeData) {
+      if (recipeData.postRecipe.carbonFootprintPerKg == null) {
+        // If null carbon footprint from recipe, go back to recipe screen
+        navigation.navigate('Recipe');
+      } else {
+        setMeal({
+          ...meal,
+          score: recipeData.postRecipe.carbonFootprintPerKg,
+          description: recipeData.postRecipe.name,
+        });
+      }
+    }
+  }, [recipeData]);
+
   // Add item to user history
   const addToHistory = async (item) => {
     await postUserHistoryEntryMutation({ variables: { item } });
@@ -129,7 +156,7 @@ const Feedback = ({ route, navigation }) => {
     }
   };
 
-  return pictureLoading || barcodeLoading ?
+  return (pictureLoading || barcodeLoading || recipeLoading) ?
     <View style={styles.loading}>
       <ActivityIndicator />
     </View > :

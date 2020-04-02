@@ -1,24 +1,40 @@
-import {Image, StyleSheet, Text, View} from "react-native";
-import React from "react";
+import {ActivityIndicator, Image, StyleSheet, Text, View} from 'react-native';
+import React, { useState, useEffect } from 'react';
 import { widthPercentageToDP as percentageWidth, heightPercentageToDP as percentageHeight } from 'react-native-responsive-screen';
-import {Button, Input} from "react-native-elements";
+import {Button, Input, Overlay} from 'react-native-elements';
+import { gql } from 'apollo-boost';
+import { useMutation } from '@apollo/react-hooks';
 
 
-const Recipe = ( {navigation} ) => {
+const Recipe = ( { route, navigation } ) => {
+ const [ url, setURL ] = useState('');
+
+ const handleSubmit = async () => {
+   navigation.navigate('Feedback', { url: url });
+ };
+
+
  return (
      <View style={ styles.container }>
        <Image
           source={require('../images/full-smiley.png')}
           style={ styles.image }
        />
-       <Text style={ styles.text }>Want to know the carbon foodprint of a meal you want to cook? Paste the URL of the recipe in the following field!</Text>
-       <Input containerStyle={ styles.input }/>
-       <Button
-           title="Submit"
-           buttonStyle={ styles.button }
-           containerStyle={ styles.buttonContainer }
-           titleStyle={ styles.buttonTitle }
+       <Text style={ styles.text }>
+         Want to know the carbon footprint of a meal you want to cook? Paste the URL of the
+         recipe in the following field!
+       </Text>
+       <Input
+           containerStyle={ styles.input }
+           onChangeText = {value => setURL(value)}
        />
+          <Button
+              title="Submit"
+              buttonStyle={ styles.button }
+              containerStyle={ styles.buttonContainer }
+              titleStyle={ styles.buttonTitle }
+              onPress={handleSubmit}
+          />
      </View>
  )
 };
