@@ -5,6 +5,21 @@ class userHistAPI {
   constructor(store) {
     this._hystorySchema;
     this.searchData = this.searchData.bind(this);
+    this.insert_in_DB = this.insert_in_DB.bind(this);
+    this.avg_co2_for_user = this.avg_co2_for_user.bind(this);
+    this.weekly_average_cf = this.weekly_average_cf.bind(this);
+    this.weekly_cf_composition = this.weekly_cf_composition.bind(this);
+    this.monthly_average_cf = this.monthly_average_cf.bind(this);
+    this.monthly_cf_composition = this.monthly_cf_composition.bind(this);
+    this.get_all_user_data = this.get_all_user_data.bind(this);
+    this.get_week_i_data = this.get_week_i_data.bind(this);
+    this.get_month_i_data = this.get_month_i_data.bind(this);
+    this.convert_date = this.convert_date.bind(this);
+    this.average_data = this.average_data.bind(this);
+    this.get_items = this.get_items.bind(this);
+    this.create_cf_composition_table = this.create_cf_composition_table.bind(this);
+    this.get_number_of_categories = this.get_number_of_categories.bind(this);
+    this.sum_period_data_to_table = this.sum_period_data_to_table.bind(this);
     this.store = store;
     this.NUMBER_OF_WEEKS_RETURNED = 6;
     this.NUMBER_OF_MONTHS_RETURNED = 6;
