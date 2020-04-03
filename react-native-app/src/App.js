@@ -40,8 +40,15 @@ const client = new ApolloClient({
   },
 });
 
-const App = () => {
+const App = (props) => {
   const netInfo = useNetInfo();
+
+  useEffect(() => {
+    console.log({ props })
+    if (props && props["android.intent.extra.TEXT"]) {
+      console.log(`Got a url!: ${props["android.intent.extra.TEXT"]}`)
+    }
+  }, [])
 
   useEffect(() => {
     // Configure firebase logins
