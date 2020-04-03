@@ -1,6 +1,3 @@
-// The following file abuses graphQL
-// TODO consider merging 4 requests into 1 (may need backend work?)
-
 import React, { useEffect, useState } from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
