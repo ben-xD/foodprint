@@ -42,13 +42,7 @@ const client = new ApolloClient({
 
 const App = (props) => {
   const netInfo = useNetInfo();
-
-  useEffect(() => {
-    console.log({ props })
-    if (props && props["android.intent.extra.TEXT"]) {
-      console.log(`Got a url!: ${props["android.intent.extra.TEXT"]}`)
-    }
-  }, [])
+  const recipeUrl = props ? props["android.intent.extra.TEXT"] : null;
 
   useEffect(() => {
     // Configure firebase logins
@@ -56,6 +50,7 @@ const App = (props) => {
       scopes: [], // Add scopes here, like Google drive, calendar, etc.
       webClientId: Config.WEB_CLIENT_ID,
     });
+    console.log({ recipeUrl })
   }, []);
 
   useEffect(() => {
@@ -70,7 +65,7 @@ const App = (props) => {
   }, [netInfo]);
 
   const [state, dispatch] = React.useReducer(reducer, initialState);
-  const authContext = React.useMemo(() => createActionCreators(dispatch), [dispatch]);
+  const authContext = React.useMemo(() => createActionCreators(dispatch), []);
   React.useMemo(() => authContext.restoreTokenFromLocalStorage(), [authContext]);
 
   const renderScreens = () => {
@@ -83,7 +78,7 @@ const App = (props) => {
           <Stack.Screen name="Correction" component={Correction} />
           <Stack.Screen name="Feedback" component={Feedback} />
           <Stack.Screen name="Delete Account" component={DeleteAccount} />
-         <Stack.Screen name="Recipe" component={Recipe} />
+          <Stack.Screen name="Recipe" component={Recipe} />
         </>
       );
     } else {

@@ -191,7 +191,7 @@ const Foodprint = ({ navigation }) => {
       <TouchableOpacity onPress={goToCamera} containerStyle={styles.camera}>
         <MaterialCommunityIcons name="camera" color={'white'} size={28} />
       </TouchableOpacity>
-      <TouchableOpacity onPress={goToRecipe} containerStyle={ styles.recipe }>
+      <TouchableOpacity onPress={goToRecipe} containerStyle={styles.recipe}>
         <MaterialCommunityIcons name="receipt" color={'white'} size={28} />
       </TouchableOpacity>
       {/* <FAB buttonColor="#008000" iconTextColor="#FFFFFF" onClickAction={takePicture} visible={true} iconTextComponent={} /> */}
