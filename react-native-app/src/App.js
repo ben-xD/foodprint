@@ -20,7 +20,6 @@ import Camera from './screens/Camera';
 import Feedback from './screens/Feedback';
 import Correction from './components/Correction';
 import Foodprint from './screens/Foodprint';
-import { Linking } from 'react-native';
 
 const Stack = createStackNavigator();
 
@@ -40,16 +39,17 @@ const client = new ApolloClient({
   },
 });
 
-const App = () => {
+const App = (props) => {
   const netInfo = useNetInfo();
 
   useEffect(() => {
-    const getUrlAsync = async () => {
-      const url = await Linking.getInitialURL()
-      console.log(url)
+    console.log({ props })
+    if (props && props["android.intent.extra.TEXT"]) {
+      console.log(`Got a url!: ${props["android.intent.extra.TEXT"]}`)
     }
+  }, [])
 
-    getUrlAsync()
+  useEffect(() => {
     // Configure firebase logins
     GoogleSignin.configure({
       scopes: [], // Add scopes here, like Google drive, calendar, etc.
