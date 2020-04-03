@@ -43,13 +43,12 @@ const Recipe = ( { navigation } ) => {
 
 
  useEffect(() => {
-  if (recipeData && recipeData.postRecipe.carbonFootprintPerKg !== null) {
-   return;
+  if (recipeData && recipeData.postRecipe.carbonFootprintPerKg === null) {
+   Snackbar.show({
+    text: "Oops, we couldn't find the carbon footprint of this recipe :(",
+    duration: Snackbar.LENGTH_SHORT,
+   });
   }
-  Snackbar.show({
-   text: "Oops, we couldn't find the carbon footprint of this recipe :(",
-   duration: Snackbar.LENGTH_SHORT,
-  });
  }, [recipeData]);
 
 
@@ -88,7 +87,7 @@ const Recipe = ( { navigation } ) => {
               containerStyle={ styles.buttonContainer }
               titleStyle={ styles.buttonTitle }
               onPress={handleSubmit}
-              disabled={!netInfo.connected}
+              // disabled={!netInfo.connected}
           />
       )}
      </View>
