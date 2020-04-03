@@ -20,6 +20,7 @@ import Camera from './screens/Camera';
 import Feedback from './screens/Feedback';
 import Correction from './components/Correction';
 import Foodprint from './screens/Foodprint';
+import { Linking } from 'react-native';
 
 const Stack = createStackNavigator();
 
@@ -43,6 +44,12 @@ const App = () => {
   const netInfo = useNetInfo();
 
   useEffect(() => {
+    const getUrlAsync = async () => {
+      const url = await Linking.getInitialURL()
+      console.log(url)
+    }
+
+    getUrlAsync()
     // Configure firebase logins
     GoogleSignin.configure({
       scopes: [], // Add scopes here, like Google drive, calendar, etc.
