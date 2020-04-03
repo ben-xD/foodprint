@@ -1,9 +1,19 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Feedback matches previous snapshot 1`] = `
-<View>
-  <Text>
-    Oops, something went wrong.
-  </Text>
+<View
+  style={
+    Object {
+      "height": "100%",
+      "justifyContent": "center",
+    }
+  }
+>
+  <ActivityIndicator
+    animating={true}
+    color="#999999"
+    hidesWhenStopped={true}
+    size="small"
+  />
 </View>
 `;

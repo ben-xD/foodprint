@@ -30,7 +30,7 @@ const Camera = ({ navigation }) => {
 
   const takePictureHandler = async (camera) => {
     setCameraIsReady(false);
-    const options = { quality: 0.5, base64: true };
+    const options = { quality: 0.5, base64: true, width: 200 };
     const image = await camera.takePictureAsync(options);
     navigation.navigate('Feedback', { file: image, uri: image.uri, loading: true });
     setCameraIsReady(true);
