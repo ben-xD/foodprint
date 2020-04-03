@@ -42,11 +42,13 @@ const Feedback = ({ route, navigation }) => {
 
   // make relevant request when component is loaded AND provided with either file or barcode
   useEffect(() => {
-    const { file, barcode } = route.params;
+    const { file, barcode, recipeMeal } = route.params;
     if (file) {
       uploadPicture({ variables: { file } });
     } else if (barcode) {
       postBarcodeMutation({ variables: { barcode } });
+    } else if (recipeMeal) {
+      setMeal(recipeMeal);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

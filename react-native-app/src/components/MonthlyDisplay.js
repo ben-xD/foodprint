@@ -79,7 +79,7 @@ const MonthlyDisplay = ({ average, composition }) => {
                 height={percentageHeight('50%')}
               >
                 <VictoryAxis dependentAxis orientation="left" offsetX={percentageWidth('15%')} label="Carbon footprint" />
-                <VictoryAxis label="Month" domain={[-5, 0.01]} tickFormat={(t) => ((month + t) >= 0) ? monthList[month + t] : monthList[month + t + 12]} />
+                <VictoryAxis crossAxis={false} label="Month" domain={[-5, 0.01]} tickFormat={(t) => ((month + t) >= 0) ? monthList[month + t] : monthList[month + t + 12]} />
                 <VictoryStack colorScale={['olivedrab', 'gold', 'skyblue', 'firebrick']}>
                   <VictoryBar data={composition.plantBased} sortKey="periodNumber" x="periodNumber" y="avgCarbonFootprint" />
                   <VictoryBar data={composition.eggsAndDairy} sortKey="periodNumber" x="periodNumber" y="avgCarbonFootprint" />

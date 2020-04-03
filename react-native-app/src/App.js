@@ -20,6 +20,7 @@ import Camera from './screens/Camera';
 import Feedback from './screens/Feedback';
 import Correction from './components/Correction';
 import Foodprint from './screens/Foodprint';
+import Recipe from './screens/Recipe';
 
 const Stack = createStackNavigator();
 
@@ -39,8 +40,9 @@ const client = new ApolloClient({
   },
 });
 
-const App = () => {
+const App = (props) => {
   const netInfo = useNetInfo();
+  const recipeUrl = props ? props["android.intent.extra.TEXT"] : null;
 
   useEffect(() => {
     // Configure firebase logins
@@ -48,6 +50,7 @@ const App = () => {
       scopes: [], // Add scopes here, like Google drive, calendar, etc.
       webClientId: Config.WEB_CLIENT_ID,
     });
+    console.log({ recipeUrl })
   }, []);
 
   useEffect(() => {
@@ -62,7 +65,7 @@ const App = () => {
   }, [netInfo]);
 
   const [state, dispatch] = React.useReducer(reducer, initialState);
-  const authContext = React.useMemo(() => createActionCreators(dispatch), [dispatch]);
+  const authContext = React.useMemo(() => createActionCreators(dispatch), []);
   React.useMemo(() => authContext.restoreTokenFromLocalStorage(), [authContext]);
 
   const renderScreens = () => {
@@ -75,6 +78,7 @@ const App = () => {
           <Stack.Screen name="Correction" component={Correction} />
           <Stack.Screen name="Feedback" component={Feedback} />
           <Stack.Screen name="Delete Account" component={DeleteAccount} />
+          <Stack.Screen name="Recipe" component={Recipe} />
         </>
       );
     } else {

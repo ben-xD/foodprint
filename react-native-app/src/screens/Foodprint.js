@@ -78,6 +78,10 @@ const Foodprint = ({ navigation }) => {
     navigation.navigate('Camera');
   };
 
+  const goToRecipe = async () => {
+    navigation.navigate('Recipe');
+  };
+
   const getTimeDifference = () => {
     const date = new Date();
     const timeDifference = date.getTimezoneOffset();
@@ -187,6 +191,10 @@ const Foodprint = ({ navigation }) => {
       <TouchableOpacity onPress={goToCamera} containerStyle={styles.camera}>
         <MaterialCommunityIcons name="camera" color={'white'} size={28} />
       </TouchableOpacity>
+      <TouchableOpacity onPress={goToRecipe} containerStyle={styles.recipe}>
+        <MaterialCommunityIcons name="receipt" color={'white'} size={28} />
+      </TouchableOpacity>
+      {/* <FAB buttonColor="#008000" iconTextColor="#FFFFFF" onClickAction={takePicture} visible={true} iconTextComponent={} /> */}
     </SafeAreaView >
   );
 };
@@ -197,8 +205,9 @@ const styles = StyleSheet.create({
   buttonContainer: { flexDirection: 'row', justifyContent: 'center', paddingVertical: percentageHeight('2%') },
   buttonTitle: { fontSize: percentageWidth('5%') },
   button: { width: percentageWidth('30%'), height: 45 },
-  camera: { backgroundColor: '#008000', width: 64, height: 64, position: 'absolute', bottom: 25, right: 25, borderRadius: 32, alignItems: 'center', justifyContent: 'center' },
+  camera: { backgroundColor: '#008000', width: 64, height: 64, position: 'absolute', bottom: 100, right: 25, borderRadius: 32, alignItems: 'center', justifyContent: 'center' },
   graphContainer: { height: percentageHeight('38%'), justifyContent: 'center', marginVertical: percentageHeight('2%') },
+  recipe: { backgroundColor: '#008000', width: 64, height: 64, position: 'absolute', bottom: 25, right: 25, borderRadius: 32, alignItems: 'center', justifyContent: 'center' },
 });
 
 export default Foodprint;
