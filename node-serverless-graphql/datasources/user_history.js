@@ -28,7 +28,7 @@ class userHistAPI {
 
   async searchData(user_id) {
 
-    const itemList = this.store.userHist.findOne();
+    const itemList = this.store.userHist.findOne({user_id: user_id});
     return itemList ?
       {
         item: itemList.item,
