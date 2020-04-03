@@ -1,5 +1,4 @@
 import React from 'react';
-
 import Foodprint, { GET_USER_HISTORY_REPORT } from '../Foodprint';
 import { MockedProvider } from '@apollo/react-testing';
 // renderer should be imported after react-native (implicitly by Foodprint) 
@@ -91,7 +90,6 @@ const mockedResponses = [
     }
   }
 ];
-
 
 // Check current component against its snapshot
 test('foodprint screen with loaded results matches previous snapshot', async () => {

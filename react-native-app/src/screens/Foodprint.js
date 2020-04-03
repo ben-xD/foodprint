@@ -23,7 +23,7 @@ const UNIT_INFORMATION =
   'are given in kilograms of CO2 per kilogram of food. The weight of ' +
   'any food item is systematically normalised to 1kg to get to this result.';
 
-const GET_USER_HISTORY_REPORT = gql`
+export const GET_USER_HISTORY_REPORT = gql`
   query GetUserHistoryReport ($timezone: Int!, $resolutions: [ReportResolution!]!) {
     getUserHistoryReport (timezone: $timezone, resolutions: $resolutions) {
       userAvg
