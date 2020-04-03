@@ -10,6 +10,7 @@ const visionCredentials = require('./credentials/carbon-7fbf76411514.json');
 const CarbonAPI = require('./datasources/carbon');
 const ConceptAPI = require('./datasources/concept');
 const userHistAPI = require('./datasources/user_history');
+const RecipeAPI = require('./datasources/recipe');
 
 // Using $GOOGLE_APPLICATION_CREDENTIALS, which should be set, see `README.md`
 admin.initializeApp({
@@ -25,6 +26,7 @@ const dataSources = () => ({
   conceptAPI: new ConceptAPI(),
   carbonAPI:  carbonAPI,
   userHistAPI: new userHistAPI(store),
+  recipeAPI: new RecipeAPI(),
 });
 
 const server = new ApolloServer({

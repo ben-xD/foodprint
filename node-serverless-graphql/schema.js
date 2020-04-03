@@ -47,6 +47,7 @@ const typeDefs = gql`
         postBarcode(barcode: String!): ProductFootprint
         postCorrection(name: String!): ProductFootprint
         postUserHistoryEntry(item: String): Boolean
+        postRecipe(url: String!): ProductFootprint
     }
 `;
 

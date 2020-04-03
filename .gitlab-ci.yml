@@ -1,0 +1,33 @@
+image: node:10
+
+stages:
+  - build
+  - test
+  - deploy
+
+test_backend:
+  stage: test
+  only:
+    - master
+  script:
+    - cd node-serverless-graphql
+    - npm install
+    - npm test
+
+test_frontend:
+  stage: test
+  only:
+    - master
+  script:
+    - cd react-native-app
+    - npm install
+    - npm test
+
+deploy:
+  stage: deploy
+  only:
+    - master
+  script:
+    - npm install
+    - cd node-serverless-graphql
+    - npm run deploy
