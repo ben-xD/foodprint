@@ -20,7 +20,7 @@ test_frontend:
 
 deploy:
   image: google/cloud-sdk:287.0.0
-  stage: test
+  stage: deploy
   when: manual
   only:
     - master
