@@ -35,11 +35,14 @@ const typeDefs = gql`
         eggsAndDairy: [TimeReport]
     }
 
+    type UserHistoryReport {
+        userAvg: Float
+        periodAvgs: [Float]
+        categoryReports: [CategoryReport]
+    }
+
     type Query {
-        _: String
-        getUserAvg: Float
-        getPeriodAvg(timezone: Int!, resolution: ReportResolution!): Float
-        reportByCategory(timezone: Int!, resolution: ReportResolution!): CategoryReport
+        getUserHistoryReport(timezone: Int!, resolutions: [ReportResolution!]!): UserHistoryReport
     }
 
     type Mutation {

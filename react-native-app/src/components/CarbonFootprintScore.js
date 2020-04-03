@@ -62,8 +62,8 @@ const CarbonFootprintScore = ({ loading, error, data }) => {
   };
 
   useEffect(() => {
-    if (data) {
-      saveGeneralScore(JSON.stringify(data));
+    if (data && data.getUserHistoryReport.userAvg) {
+      saveGeneralScore(JSON.stringify(data.getUserHistoryReport.userAvg));
     }
   });
 
@@ -74,7 +74,7 @@ const CarbonFootprintScore = ({ loading, error, data }) => {
   });
 
   const whichData = () => {
-    if (data) { return data; }
+    if (data && data.getUserHistoryReport.userAvg) { return data.getUserHistoryReport.userAvg; }
     return localData;
   };
 
@@ -87,11 +87,11 @@ const CarbonFootprintScore = ({ loading, error, data }) => {
       ) : (
           <View style={styles.graphContainer}>
             <Image
-              source={calculateSmiley(whichData().getUserAvg)}
+              source={calculateSmiley(whichData())}
               style={styles.image}
             />
             <View style={styles.scoreContainer}>
-              <Text style={styles.score}>{Math.round(whichData().getUserAvg)} units</Text>
+              <Text style={styles.score}>{Math.round(whichData())} units</Text>
               <Tooltip
                 popover={<Text style={styles.tooltipContent}>This score corresponds to the average carbon footprint of
                 all the items you have added to your history since you have started using Foodprint.</Text>}
@@ -103,9 +103,9 @@ const CarbonFootprintScore = ({ loading, error, data }) => {
               </Tooltip>
             </View>
             <VictoryPie
-              data={[{ x: ' ', y: whichData().getUserAvg }, { x: ' ', y: 26.7 - whichData().getUserAvg }]}
+              data={[{ x: ' ', y: whichData() }, { x: ' ', y: 26.7 - whichData() }]}
               standalone={true}
-              colorScale={[calculateColour(whichData().getUserAvg), 'transparent']}
+              colorScale={[calculateColour(whichData()), 'transparent']}
               startAngle={-90}
               endAngle={90}
               innerRadius={percentageHeight('16%')}
