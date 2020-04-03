@@ -2,7 +2,7 @@ const { getCarbonFootprintFromBarcode } = require('../barcode');
 
 const VisionAPI = require('../../datasources/vision');
 const visionCredentials = require('../../credentials/carbon-7fbf76411514.json');
-const {createStore, deleteStore} = require('../../utils');
+const { createStore, deleteStore } = require('../../utils');
 const store = createStore();
 
 const CarbonAPI = require('../../datasources/carbon');
@@ -24,7 +24,7 @@ describe('testing barcode without Tesco API', () => {
     jest.setTimeout(30000);
     const barcode = "85053274";
     const actual = await getCarbonFootprintFromBarcode(dataSources, barcode, false);
-    const expected = {item: 'tiramisu', carbonFootprintPerKg: 0.65};
+    const expected = { item: 'tiramisu', carbonFootprintPerKg: 0.65 };
     expect(actual).toEqual(expected);
   });
 
@@ -32,11 +32,11 @@ describe('testing barcode without Tesco API', () => {
     jest.setTimeout(30000);
     const barcode = "0000000";
     const actual = await getCarbonFootprintFromBarcode(dataSources, barcode, false);
-    const expected = {item: null, carbonFootprintPerKg: null};
+    const expected = { item: null, carbonFootprintPerKg: null };
     expect(actual).toEqual(expected);
   });
-
 });
+
 // // before testing this make sure to add 'Oranges Each' to the db
 // test('getCarbonFootprintFromBarcode: barcode of a product that is already in the database', async () => {
 //   const oranges_each_barcode = '50501316';
@@ -72,3 +72,7 @@ describe('testing barcode without Tesco API', () => {
 //     expect(response).toEqual({ item: 'Tesco Tiramisu 2X85g', carbonFootprintPerKg: xxx }); // change carbonperkg here
 //     // might have changed from tessco tiramisu to just tiramisu
 //   });
+
+afterAll(() => {
+  deleteStore();
+});

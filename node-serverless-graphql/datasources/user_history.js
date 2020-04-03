@@ -24,7 +24,6 @@ class userHistAPI {
 
       return {
         item: itemList.item,
-        item: itemList.item,
         time_stamp: itemList.time_stamp
       }
 

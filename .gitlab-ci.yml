@@ -1,0 +1,31 @@
+image: node:10
+
+stages:
+  - test
+  - deploy
+
+test_backend:
+  stage: test
+  script:
+    - cd node-serverless-graphql
+    - npm install
+    - npm test
+
+test_frontend:
+  stage: test
+  script:
+    - cd react-native-app
+    - npm install
+    - npm test
+
+deploy:
+  image: gcr.io/google.com/cloudsdktool/cloud-sdk:287.0.0
+  stage: test
+  when: manual
+  only:
+    - master
+  script:
+    - cd node-serverless-graphql
+    - gcloud auth activate-service-account --key-file credentials/carbonfootprint-serverless.json
+    - gcloud config set project carbon-footprint-2020
+    - npm run deploy

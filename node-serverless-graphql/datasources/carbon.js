@@ -10,7 +10,7 @@ class CarbonAPI {
 
   /**
    * Search database for given label and return its carbon footprint
-   * @param {string} label 
+   * @param {string} label
    * @returns {JSON} with carbonpkilo and categories fields, return null if item not in the database
    */
   async getCfOneItem(label) { return await this.store.carbon.findOne({ item: label }); }

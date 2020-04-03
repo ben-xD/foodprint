@@ -1,12 +1,15 @@
+// End to end tests and big integration tests go here.
+// Other tests can be found in their respective folders, alongside the implementations.
 import React from 'react';
-
-import Foodprint, { GET_CARBON_FOODPRINT, GET_WEEKLY_AVERAGE, GET_WEEKLY_COMPOSITION, GET_MONTHLY_AVERAGE, GET_MONTHLY_COMPOSITION } from '../Foodprint';
 import { MockedProvider } from '@apollo/react-testing';
-// renderer should be imported after react-native (implicitly by Foodprint) 
-// according to https://formidable.com/open-source/victory/docs/native/
+import { GET_CARBON_FOODPRINT, GET_WEEKLY_AVERAGE, GET_WEEKLY_COMPOSITION, GET_MONTHLY_AVERAGE, GET_MONTHLY_COMPOSITION } from '../screens/Foodprint';
+import App from '../App';
 import renderer from 'react-test-renderer';
 
-const mockedResponses = [
+jest.mock('@react-native-community/google-signin');
+jest.mock('apollo-boost');
+
+export const mockedResponses = [
   {
     request: {
       query: GET_CARBON_FOODPRINT,
@@ -112,46 +115,11 @@ const mockedResponses = [
 ];
 
 
-// Check current component against its snapshot
-test('foodprint screen with loaded results matches previous snapshot', async () => {
-  const mockedNavigation = {
-    setOptions: jest.fn(),
-  };
-
-  let component;
+it('App renders correctly', () => {
+  let app;
   renderer.act(() => {
-    component = <MockedProvider mocks={mockedResponses} addTypename={false}>
-      <Foodprint navigation={mockedNavigation} />
+    app = <MockedProvider mocks={mockedResponses} addTypename={false}>
+      <App />
     </MockedProvider>;
   });
-
-  expect(component).toMatchSnapshot();
 });
-
-// test('foodprint screen caches all responses', async () => {
-//   const mockedNavigation = {
-//     setOptions: jest.fn(),
-//   };
-
-//   let component;
-//   renderer.act(() => {
-//     component = <MockedProvider mocks={mocks} addTypename={false}>
-//       <Foodprint navigation={mockedNavigation} />
-//     </MockedProvider>;
-//   });
-
-//   await wait(0);
-
-//   // UI's are hard to test and we currently cannot ensure the useEffect hooks are triggered in a test.
-//   // They are usually triggered based on state change events, but we cannot change the state directly in a test.
-//   // Instead, we mock the response from the network, which currently does not trigger useEffect hooks.
-//   expect(AsyncStorage.setItem).toHaveBeenCalled();
-//   expect(AsyncStorage.setItem).toBeCalledWith('monthlyAverage');
-//   expect(AsyncStorage.setItem).toBeCalledWith('monthlyComposition');
-//   expect(AsyncStorage.setItem).toBeCalledWith('weeklyAverage');
-//   expect(AsyncStorage.setItem).toBeCalledWith('weeklyComposition');
-// });
-
-// test('foodprint screen loads from cache when no internet connection', async () => {
-
-// })

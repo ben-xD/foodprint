@@ -56,7 +56,6 @@ describe('getCarbonFootprintFromName (mocked dataSources)', () => {
     const response = await carbon_footprint_calculation.getCarbonFootprintFromName(mockDataSources, "fruit");
     expect(response).toEqual({ item: "fruit", carbonFootprintPerKg: 1.1 });
   });
-
 });
 
 
@@ -68,5 +67,8 @@ describe('getCarbonFootprintFromImage (no mocking)', () => {
     const response = await carbon_footprint_calculation.getCarbonFootprintFromImage(dataSources, image_buffer);
     expect(response).toEqual({ item: "rice", carbonFootprintPerKg: 1.14 });
   });
+});
 
-})
+afterAll(() => {
+  deleteStore();
+});

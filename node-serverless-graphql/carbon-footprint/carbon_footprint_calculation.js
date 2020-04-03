@@ -264,4 +264,57 @@ const getCarbonFootprintFromName = async (dataSources, name) => {
   };
 };
 
-module.exports = { getCarbonFootprintFromImage, getCarbonFootprintFromName, singularize };
+// This function is being used for calcualte_carbon_from_recipe.js, it is needed b/c calcualte_carbon_from_recipe.js
+// needs to receive categories as well.
+const getCarbonFootprintFromNameUsedForRecipe = async (dataSources, name) => {
+  // Preprocess the name (to singular and lower case):
+  name = name.toLowerCase();
+  name = singularize(name);
+  // Set array of name only for labels:
+  let labels = [name];
+  labels = getNounsInLabels(labels);
+
+  // Attempt to find the google vision labels in the database:
+  const firstResponse = await oneLayerSearch(dataSources, labels);
+  if (firstResponse.item) {
+    return {
+      item: firstResponse.item,
+      carbonFootprintPerKg: firstResponse.carbonpkilo,
+      categories: firstResponse.categories,
+    };
+  }
+
+  // Call ConceptNet to create the next layer:
+  let nextLabels = await getNextLayer(dataSources, labels);
+
+  // Attempt to find the next layer labels in the database:
+  const nextResponse = await oneLayerSearch(dataSources, nextLabels);
+  if (nextResponse.item) {
+    console.log(nextResponse);
+
+    // Clearly, the product was not in the db previousle, therefore add it now.
+    const save_to_db = {
+      item: name,
+      carbonpkilo: nextResponse.carbonpkilo,
+      categories: nextResponse.categories, //CHNANGE HERE TO A FUNC WHICH CAN DECIDE ON THE PROPER CATEGORY!!!!
+      label: "approximated from product " + nextResponse.item
+    };
+    if (await dataSources.carbonAPI.getCfOneItem([save_to_db.item]) !== null) {
+      await dataSources.carbonAPI.insert_in_DB(save_to_db);
+    }
+
+    return {
+      item: name,
+      carbonFootprintPerKg: nextResponse.carbonpkilo,
+      categories: nextResponse.categories,
+    };
+  }
+
+  return {
+    item: null,
+    carbonFootprintPerKg: null,
+    categories: null,
+  };
+};
+
+module.exports = { getCarbonFootprintFromImage, getCarbonFootprintFromName, singularize, getCarbonFootprintFromNameUsedForRecipe};
