@@ -1,7 +1,6 @@
 image: node:10
 
 stages:
-  - build
   - test
   - deploy
 
@@ -20,10 +19,13 @@ test_frontend:
     - npm test
 
 deploy:
+  image: google/cloud-sdk:287.0.0
   stage: deploy
+  when: manual
   only:
     - master
   script:
-    - npm install
     - cd node-serverless-graphql
+    - gcloud auth activate-service-account --key-file credentials/carbonfootprint-serverless.json
+    - gcloud config set project carbon-footprint-2020
     - npm run deploy
