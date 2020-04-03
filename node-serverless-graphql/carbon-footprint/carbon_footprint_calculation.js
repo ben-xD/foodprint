@@ -266,7 +266,7 @@ const getCarbonFootprintFromName = async (dataSources, name) => {
 
 // This function is being used for calcualte_carbon_from_recipe.js, it is needed b/c calcualte_carbon_from_recipe.js
 // needs to receive categories as well.
-const getCarbonFootprintFromNameUsedForRecipe = async (datasources, name) => {
+const getCarbonFootprintFromNameUsedForRecipe = async (dataSources, name) => {
   // Preprocess the name (to singular and lower case):
   name = name.toLowerCase();
   name = singularize(name);
