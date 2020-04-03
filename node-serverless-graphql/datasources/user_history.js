@@ -52,7 +52,7 @@ class userHistAPI {
   async avg_co2_for_user(carbonAPI, user) {
 
     const user_data = await this.get_all_user_data(user);
-    if (user_data == undefined) {
+    if (user_data === undefined) {
       return null;
     }
 
@@ -88,7 +88,7 @@ class userHistAPI {
 
     for (let i = 0; i < this.NUMBER_OF_WEEKS_RETURNED; i++) {
       const week_i_data = await this.get_week_i_data(user, timezone, i);
-      if (week_i_data == undefined) {
+      if (week_i_data === undefined) {
         continue;
       }
       table = await this.sum_period_data_to_table(carbonAPI, week_i_data, i, table);
@@ -222,13 +222,13 @@ class userHistAPI {
 
   // Calculates the average cf of the items in data
   async average_data(carbonAPI, data) {
-    if (data.length == 0) {
+    if (data.length === 0) {
       return 0;
     }
 
     const [items, repetitions] = await this.get_items(data)
     const carbonData = await carbonAPI.getCfMultipleItems(items, true);
-    if (carbonData == []) {
+    if (carbonData === []) {
       return null;
     }
 
