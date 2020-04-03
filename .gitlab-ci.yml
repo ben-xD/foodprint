@@ -7,6 +7,8 @@ stages:
 
 test_backend:
   stage: test
+  only:
+    - master
   script:
     - cd node-serverless-graphql
     - npm install
@@ -14,6 +16,8 @@ test_backend:
 
 test_frontend:
   stage: test
+  only:
+    - master
   script:
     - cd react-native-app
     - npm install
@@ -21,6 +25,8 @@ test_frontend:
 
 deploy:
   stage: deploy
+  only:
+    - master
   script:
     - npm install
     - cd node-serverless-graphql
