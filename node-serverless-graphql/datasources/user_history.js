@@ -120,7 +120,7 @@ class userHistAPI {
       // Get data for every week:
       let month_i_data = await this.get_month_i_data(user, timezone, i);
       let month_cf = 0
-      if (month_i_data != undefined) {
+      if (month_i_data !== undefined) {
         month_cf = await this.average_data(carbonAPI, month_i_data);
         sum = sum + month_cf;
       }
@@ -150,21 +150,7 @@ class userHistAPI {
   // Search database for all products consumed by a user
   async get_all_user_data(user) {
 
-    let user_data;
-    try {
-      await this.store.userHist.find({user_id: user}, (err, items) => {
-        if (err) {
-          throw err;
-        }
-        user_data = items;
-      }).maxTime(1000000).exec();
-
-      return user_data;
-
-    } catch (err) {
-      console.log(err);
-      return undefined;
-    }
+    return await this.store.userHist.find({user_id: user});
 
   }
 
