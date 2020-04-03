@@ -168,6 +168,24 @@ describe('testing resolvers', () => {
 
   test('Test postRecipe', async () => {
       jest.setTimeout(10000);
+      // Mock up functions that call recipeAPI
+      jest.spyOn(dataSources.recipeAPI, 'getData').mockReturnValueOnce(true);
+      jest.spyOn(dataSources.recipeAPI, 'getName').mockReturnValueOnce("Roasted chickpea wraps");
+      jest.spyOn(dataSources.recipeAPI, 'getIngredients').mockReturnValueOnce([
+              { name: 'chickpeas', amount: 0 },
+              { name: 'olive oil', amount: 0.01 },
+              { name: 'ground cumin', amount: 0 },
+              { name: 'smoked paprika', amount: 0 },
+              { name: 'avocados', amount: 0.4 },
+              { name: 'juice of lime', amount: 0.03 },
+              { name: 'coriander', amount: 0 },
+              { name: 'corn tortillas', amount: 0.21 },
+              { name: 'iceberg lettuce', amount: 0.32 },
+              { name: 'natural yogurt', amount: 0.15 },
+              { name: 'roasted red peppers', amount: 0.48 }
+          ]
+      );
+
       const url = "https://www.bbcgoodfood.com/recipes/roasted-chickpea-wraps";
       let actual = await resolvers.Mutation.postRecipe(null, {url}, {dataSources, user});
       let expected =  {"carbonFootprintPerKg": 2.49, "name": "Roasted chickpea wraps"};
