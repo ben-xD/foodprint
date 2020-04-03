@@ -43,6 +43,7 @@ const resolvers = {
           categoryReports.push(monthlyReport);
         }
         response.categoryReports = categoryReports;
+        console.log({ 'Returning': response });
         return response;
       } catch (err) {
         console.log(err);

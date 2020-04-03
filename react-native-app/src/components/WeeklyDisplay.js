@@ -14,30 +14,30 @@ const WeeklyDisplay = ({ average, composition }) => {
     let thisWeek = 0;
     let lastWeek = 0;
 
-    for (let i = 0; i < composition.reportByCategory.plantBased.length; i++) {
+    for (let i = 0; i < composition.plantBased.length; i++) {
 
-      if (composition.reportByCategory.plantBased[i].periodNumber === 0) {
-        thisWeek += composition.reportByCategory.plantBased[i].avgCarbonFootprint;
-      } else if (composition.reportByCategory.plantBased[i].periodNumber === -1) {
-        lastWeek += composition.reportByCategory.plantBased[i].avgCarbonFootprint;
+      if (composition.plantBased[i].periodNumber === 0) {
+        thisWeek += composition.plantBased[i].avgCarbonFootprint;
+      } else if (composition.plantBased[i].periodNumber === -1) {
+        lastWeek += composition.plantBased[i].avgCarbonFootprint;
       }
 
-      if (composition.reportByCategory.eggsAndDairy[i].periodNumber === 0) {
-        thisWeek += composition.reportByCategory.eggsAndDairy[i].avgCarbonFootprint;
-      } else if (composition.reportByCategory.eggsAndDairy[i].periodNumber === -1) {
-        lastWeek += composition.reportByCategory.eggsAndDairy[i].avgCarbonFootprint;
+      if (composition.eggsAndDairy[i].periodNumber === 0) {
+        thisWeek += composition.eggsAndDairy[i].avgCarbonFootprint;
+      } else if (composition.eggsAndDairy[i].periodNumber === -1) {
+        lastWeek += composition.eggsAndDairy[i].avgCarbonFootprint;
       }
 
-      if (composition.reportByCategory.fish[i].periodNumber === 0) {
-        thisWeek += composition.reportByCategory.fish[i].avgCarbonFootprint;
-      } else if (composition.reportByCategory.fish[i].periodNumber === -1) {
-        lastWeek += composition.reportByCategory.fish[i].avgCarbonFootprint;
+      if (composition.fish[i].periodNumber === 0) {
+        thisWeek += composition.fish[i].avgCarbonFootprint;
+      } else if (composition.fish[i].periodNumber === -1) {
+        lastWeek += composition.fish[i].avgCarbonFootprint;
       }
 
-      if (composition.reportByCategory.meat[i].periodNumber === 0) {
-        thisWeek += composition.reportByCategory.meat[i].avgCarbonFootprint;
-      } else if (composition.reportByCategory.meat[i].periodNumber === -1) {
-        lastWeek += composition.reportByCategory.meat[i].avgCarbonFootprint;
+      if (composition.meat[i].periodNumber === 0) {
+        thisWeek += composition.meat[i].avgCarbonFootprint;
+      } else if (composition.meat[i].periodNumber === -1) {
+        lastWeek += composition.meat[i].avgCarbonFootprint;
       }
     }
     return [thisWeek, lastWeek];
@@ -78,10 +78,10 @@ const WeeklyDisplay = ({ average, composition }) => {
           <VictoryAxis dependentAxis orientation="left" offsetX={percentageWidth('15%')} label="Carbon footprint" />
           <VictoryAxis label="Week" domain={[-5, 0.01]} tickFormat={(t) => (t === 0) ? 'Now' : ('s' + t)} />
           <VictoryStack colorScale={['olivedrab', 'gold', 'skyblue', 'firebrick']}>
-            <VictoryBar data={composition.reportByCategory.plantBased} sortKey="periodNumber" x="periodNumber" y="avgCarbonFootprint" />
-            <VictoryBar data={composition.reportByCategory.eggsAndDairy} sortKey="periodNumber" x="periodNumber" y="avgCarbonFootprint" />
-            <VictoryBar data={composition.reportByCategory.fish} sortKey="periodNumber" x="periodNumber" y="avgCarbonFootprint" />
-            <VictoryBar data={composition.reportByCategory.meat} sortKey="periodNumber" x="periodNumber" y="avgCarbonFootprint" />
+            <VictoryBar data={composition.plantBased} sortKey="periodNumber" x="periodNumber" y="avgCarbonFootprint" />
+            <VictoryBar data={composition.eggsAndDairy} sortKey="periodNumber" x="periodNumber" y="avgCarbonFootprint" />
+            <VictoryBar data={composition.fish} sortKey="periodNumber" x="periodNumber" y="avgCarbonFootprint" />
+            <VictoryBar data={composition.meat} sortKey="periodNumber" x="periodNumber" y="avgCarbonFootprint" />
           </VictoryStack>
           <VictoryLegend
             data={[{ name: 'Plant' }, { name: 'Eggs & Dairy' }, { name: 'Fish' }, { name: 'Meat' }]}
@@ -93,12 +93,12 @@ const WeeklyDisplay = ({ average, composition }) => {
             y={percentageHeight('40%')}
           />
           <VictoryLine data={[
-            { x: 0, y: average.getPeriodAvg },
-            { x: -1, y: average.getPeriodAvg },
-            { x: -2, y: average.getPeriodAvg },
-            { x: -3, y: average.getPeriodAvg },
-            { x: -4, y: average.getPeriodAvg },
-            { x: -5, y: average.getPeriodAvg },
+            { x: 0, y: average },
+            { x: -1, y: average },
+            { x: -2, y: average },
+            { x: -3, y: average },
+            { x: -4, y: average },
+            { x: -5, y: average },
           ]} />
         </VictoryChart>
       </View>

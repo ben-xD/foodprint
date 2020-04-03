@@ -26,67 +26,37 @@ const UNIT_INFORMATION =
   'are given in kilograms of CO2 per kilogram of food. The weight of ' +
   'any food item is systematically normalised to 1kg to get to this result.';
 
-export const GET_WEEKLY_AVERAGE = gql`query($timezone: Int!) {
-  getPeriodAvg(timezone: $timezone, resolution: WEEK)
-}`;
-
-export const GET_WEEKLY_COMPOSITION = gql`query($timezone: Int!) {
-  reportByCategory(timezone: $timezone, resolution: WEEK) {
-     plantBased {
-      periodNumber
-      avgCarbonFootprint
+const GET_USER_HISTORY_REPORT = gql`
+  query GetUserHistoryReport ($timezone: Int!, $resolutions: [ReportResolution!]!) {
+    getUserHistoryReport (timezone: $timezone, resolutions: $resolutions) {
+      userAvg
+      periodAvgs
+      categoryReports {
+        plantBased {
+          periodNumber
+          avgCarbonFootprint
+        }
+        fish {
+          periodNumber
+          avgCarbonFootprint
+        }
+        meat {
+          periodNumber
+          avgCarbonFootprint
+        }
+        eggsAndDairy {
+          periodNumber
+          avgCarbonFootprint
+        }
+      }
     }
-     fish {
-      periodNumber
-      avgCarbonFootprint
-    }
-    meat {
-      periodNumber
-      avgCarbonFootprint
-    }
-    eggsAndDairy {
-      periodNumber
-      avgCarbonFootprint
-    }
-   }
- }`;
-
-export const GET_MONTHLY_AVERAGE = gql`query($timezone: Int!) {
-  getPeriodAvg(timezone: $timezone, resolution:MONTH)
-}`;
-
-export const GET_MONTHLY_COMPOSITION = gql`query($timezone: Int!) {
-  reportByCategory(timezone: $timezone, resolution:MONTH) {
-     plantBased {
-      periodNumber
-      avgCarbonFootprint
-    }
-     fish {
-      periodNumber
-      avgCarbonFootprint
-    }
-    meat {
-      periodNumber
-      avgCarbonFootprint
-    }
-    eggsAndDairy {
-      periodNumber
-      avgCarbonFootprint
-    }
-   }
- }`;
-
-export const GET_CARBON_FOODPRINT = gql`query {
-  getUserAvg
-}`;
+  }
+`;
 
 const Foodprint = ({ navigation }) => {
   const [welcomeScreenIsVisible, setWelcomeScreenIsVisible] = useState(false);
   const [timeSpan, setTimeSpan] = useState('weekly');
-  const [weeklyAvg, setWeeklyAvg] = useState(null);
-  const [weeklyComp, setWeeklyComp] = useState(null);
-  const [monthlyAvg, setMonthlyAvg] = useState(null);
-  const [monthlyComp, setMonthlyComp] = useState(null);
+  const [historyReport, setHistoryReport] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
 
   // show overlay when user logs in first time
@@ -118,136 +88,72 @@ const Foodprint = ({ navigation }) => {
   };
 
   // Comment the following lines to test the caching
-  const { loading: weeklyAvgLoading, error: weeklyAvgError, data: weeklyAvgData, refetch: refetchWeeklyAvg } = useQuery(GET_WEEKLY_AVERAGE, {
-    variables: { timezone: getTimeDifference() },
-  });
-  const { loading: weeklyCompLoading, error: weeklyCompError, data: weeklyCompData, refetch: refetchWeelklyComp } = useQuery(GET_WEEKLY_COMPOSITION, {
-    variables: { timezone: getTimeDifference() },
+  const { loading: historyReportLoading, error: historyReportError, data: historyReportData, refetch: refetchHistoryReport } = useQuery(GET_USER_HISTORY_REPORT, {
+    variables: { timezone: getTimeDifference(), resolutions: ['WEEK', 'MONTH'] },
   });
 
   // Uncomment the following lines to test the caching
-  // let weeklyAvgLoading = false;
-  // let weeklyCompLoading = false;
-  // let weeklyAvgError = true;
-  // let weeklyCompError = true;
-  // let weeklyAvgData = null;
-  // let weeklyCompData = null;
-
-  // Comment the following lines to test the caching
-  const { loading: monthlyAvgLoading, error: monthlyAvgError, data: monthlyAvgData, refetch: refetchMonthlyAvg } = useQuery(GET_MONTHLY_AVERAGE, {
-    variables: { timezone: getTimeDifference() },
-  });
-  const { loading: monthlyCompLoading, error: monthlyCompError, data: monthlyCompData, refetch: refetchMonthlyComp } = useQuery(GET_MONTHLY_COMPOSITION, {
-    variables: { timezone: getTimeDifference() },
-  });
-
-  let { loading: foodprintLoading, error: foodprintError, data: foodprintData, refetch: refetchFoodprint } = useQuery(GET_CARBON_FOODPRINT);
+  // let historyReportLoading = false;
+  // let historyReportError = true;
+  // let historyReportData = null;
 
   const refetch = () => {
     setRefreshing(true);
-    setWeeklyAvg(null);
-    setWeeklyComp(null);
-    setMonthlyAvg(null);
-    setMonthlyComp(null);
-    refetchWeeklyAvg();
-    refetchWeelklyComp();
-    refetchMonthlyAvg();
-    refetchMonthlyComp();
-    refetchFoodprint();
+    setHistoryReport(null);
+    refetchHistoryReport();
   };
 
   useEffect(() => {
-    if (monthlyAvgData && monthlyCompData) {
-      setMonthlyAvg(monthlyAvgData);
-      setMonthlyComp(monthlyCompData);
-      console.log('Successfully received monthly data, caching locally.');
-      cacheHistoricalDataLocally('monthly', JSON.stringify(monthlyAvgData), JSON.stringify(monthlyCompData));
+    if (historyReportData && historyReportData.getUserHistoryReport) {
+      setHistoryReport(historyReportData.getUserHistoryReport);
+      console.log('Successfully received user history report data, caching locally.');
+      cacheHistoryReportLocally(historyReportData.getUserHistoryReport);
       setRefreshing(false);
     }
-  }, [monthlyAvgData, monthlyCompData]);
+  }, [historyReportData]);
 
   useEffect(() => {
-    if (weeklyAvgData && weeklyCompData) {
-      setWeeklyAvg(weeklyAvgData);
-      setWeeklyComp(weeklyCompData);
-      console.log('Successfully received weekly data, caching locally.');
-      cacheHistoricalDataLocally('weekly', JSON.stringify(weeklyAvgData), JSON.stringify(weeklyCompData));
-      setRefreshing(false);
-    }
-  }, [weeklyAvgData, weeklyCompData]);
-
-  useEffect(() => {
-    const retrieveWeeklyDataFromCache = async () => {
+    const retrieveHistoryReportDataFromCache = async () => {
       try {
-        const retrievedAvgData = await AsyncStorage.getItem('weeklyAverage');
-        setWeeklyAvg(JSON.parse(retrievedAvgData));
-        const retrievedCompData = await AsyncStorage.getItem('weeklyComposition');
-        setWeeklyComp(JSON.parse(retrievedCompData));
+        const retrievedHistoryReport = await AsyncStorage.getItem('historyReport');
+        setHistoryReport(JSON.parse(retrievedHistoryReport));
       } catch (e) {
-        // TODO Sandrine, the user won't see anything if nothing is in cache, and there is a network error?
-        console.log('Error retrieving weekly data ' + e);
+        console.log('Error retrieving user history report data:' + e);
       }
     };
-
-    if (weeklyCompError || weeklyAvgError) {
-      retrieveWeeklyDataFromCache();
+    if (historyReportError) {
+      retrieveHistoryReportDataFromCache();
     }
-  }, [weeklyCompError, weeklyAvgError]);
+  }, [historyReportError]);
 
-  useEffect(() => {
-    const retrieveMonthlyDataFromCache = async () => {
-      try {
-        const retrievedAvgData = await AsyncStorage.getItem('monthlyAverage');
-        setMonthlyAvg(JSON.parse(retrievedAvgData));
-        const retrievedCompData = await AsyncStorage.getItem('monthlyComposition');
-        setMonthlyComp(JSON.parse(retrievedCompData));
-      } catch (e) {
-        console.log('Error retrieving monthly data ' + e);
-      }
-    };
-
-    if (monthlyAvgError || monthlyCompError) {
-      retrieveMonthlyDataFromCache();
-    }
-  }, [monthlyAvgError, monthlyCompError]);
-
-  // Uncomment the following lines to test the caching
-  // let monthlyAvgLoading = false;
-  // let monthlyCompLoading = false;
-  // let monthlyAvgError = true;
-  // let monthlyCompError = true;
-  // let monthlyAvgData = null;
-  // let monthlyCompData = null;
-
-  const cacheHistoricalDataLocally = async (timeSpan, average, composition) => {
+  const cacheHistoryReportLocally = async (data) => {
     try {
-      await AsyncStorage.setItem(`${timeSpan}Average`, average);
-      await AsyncStorage.setItem(`${timeSpan}Composition`, composition);
+      await AsyncStorage.setItem(`historyReport`, JSON.stringify(data));
     } catch (e) {
-      console.error(`AsyncStorage failed for ${timeSpan}`, e);
+      console.error(`AsyncStorage failed for historyReport`, e);
     }
   };
 
   const renderFootprintChart = () => {
     if (timeSpan === 'weekly') {
       return (
-        (!weeklyAvg || !weeklyComp) ? (
+        (!historyReport) ? (
           <View style={styles.graphContainer}>
             <ActivityIndicator />
           </View>
         ) : (
-            <WeeklyDisplay average={weeklyAvg} composition={weeklyComp} />
+            <WeeklyDisplay average={historyReport.periodAvgs[0]} composition={historyReport.categoryReports[0]} />
           )
       );
     }
     if (timeSpan === 'monthly') {
       return (
-        (!monthlyAvg || !monthlyComp) ? (
+        (!historyReport) ? (
           <View style={styles.graphContainer}>
             <ActivityIndicator />
           </View>
         ) : (
-            <MonthlyDisplay average={monthlyAvg} composition={monthlyComp} />
+            <MonthlyDisplay average={historyReport.periodAvgs[1]} composition={historyReport.categoryReports[1]} />
           )
       );
     }
@@ -256,7 +162,7 @@ const Foodprint = ({ navigation }) => {
   return (
     <SafeAreaView>
       <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refetch} />}>
-        <CarbonFootprintScoreView data={foodprintData} loading={foodprintLoading} error={foodprintError} />
+        <CarbonFootprintScoreView data={historyReportData} loading={historyReportLoading} error={historyReportError} />
         <View>
           {renderFootprintChart()}
         </View>
