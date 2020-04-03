@@ -12,7 +12,7 @@ const VisionAPI = require('../datasources/vision');
 const visionCredentials = require('../credentials/carbon-7fbf76411514.json');
 const CarbonAPI = require('../datasources/carbon');
 const ConceptAPI = require('../datasources/concept');
-const  { createStore, deleteStore } = require('../utils');
+const { createStore, deleteStore } = require('../utils');
 
 
 const store = createStore();
@@ -60,17 +60,21 @@ const POST_PICTURE_MUTATION = gql`
 
 describe('Real dataSources with mocked user', () => {
 
-jest.setTimeout(30000);
+  jest.setTimeout(30000);
 
   it('postPicture: fetches carbon footprint of image with orange that is classified as citrus', async () => {
-    const file = {base64: orange_image};
-    const res = await mutate({mutation:POST_PICTURE_MUTATION,  variables: { file } });
+    const file = { base64: orange_image };
+    const res = await mutate({ mutation: POST_PICTURE_MUTATION, variables: { file } });
     expect(res).toMatchSnapshot();
   });
 
   it('postCorrection: fetches carbon footprint of orange', async () => {
-   const res = await mutate({mutation:POST_CORRECTION_MUTATION, variables: {name: 'orange'}});
-   expect(res).toMatchSnapshot();
+    const res = await mutate({ mutation: POST_CORRECTION_MUTATION, variables: { name: 'orange' } });
+    expect(res).toMatchSnapshot();
   });
 
+});
+
+afterAll(() => {
+  deleteStore();
 });
