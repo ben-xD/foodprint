@@ -136,7 +136,7 @@ const resolvers = {
       const { dataSources, user } = context;
       console.log({ dataSources, user, parent });
       console.log(`Received url: ${url}`);
-      let { item, carbonFootprintPerKg } = await getCarbonFootprintFromRecipe(dataSources, url, false);
+      let { item, carbonFootprintPerKg } = await getCarbonFootprintFromRecipe(dataSources, url);
       if (!item) item = 'unknown';
       const response = {
         name: item,
