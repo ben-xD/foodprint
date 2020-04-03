@@ -19,7 +19,7 @@ test_frontend:
     - npm test
 
 deploy:
-  image: gcr.io/google.com/cloudsdktool/cloud-sdk:latest
+  image: gcr.io/google.com/cloudsdktool/cloud-sdk:287.0.0
   stage: test
   when: manual
   only:
