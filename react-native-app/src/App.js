@@ -21,6 +21,7 @@ import Feedback from './screens/Feedback';
 import Correction from './components/Correction';
 import Foodprint from './screens/Foodprint';
 import Recipe from './screens/Recipe';
+import { Platform } from 'react-native';
 
 const Stack = createStackNavigator();
 
@@ -42,7 +43,14 @@ const client = new ApolloClient({
 
 const App = (props) => {
   const netInfo = useNetInfo();
-  const recipeUrl = props ? props["android.intent.extra.TEXT"] : null;
+
+  // null if app is started normally, but if android and opened via 
+  // specific intent-filter, then recipeUrl will be the recipeUrl from the browser
+  // TODO If this recipeUrl is present, then automatically send recipe graphQL request
+  const recipeUrl = !props ? null : Platform.select({
+    ios: null,
+    android: props["android.intent.extra.TEXT"]
+  })
 
   useEffect(() => {
     // Configure firebase logins
