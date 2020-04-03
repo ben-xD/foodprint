@@ -20,6 +20,7 @@ import Camera from './screens/Camera';
 import Feedback from './screens/Feedback';
 import Correction from './components/Correction';
 import Foodprint from './screens/Foodprint';
+import Recipe from './screens/Recipe';
 
 const Stack = createStackNavigator();
 
@@ -75,6 +76,7 @@ const App = () => {
           <Stack.Screen name="Correction" component={Correction} />
           <Stack.Screen name="Feedback" component={Feedback} />
           <Stack.Screen name="Delete Account" component={DeleteAccount} />
+         <Stack.Screen name="Recipe" component={Recipe} />
         </>
       );
     } else {

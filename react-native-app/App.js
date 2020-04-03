@@ -20,7 +20,7 @@ import Camera from './src/screens/Camera';
 import Feedback from './src/screens/Feedback';
 import Correction from './src/components/Correction';
 import Foodprint from './src/screens/Foodprint';
-import Recipe from "./src/screens/Recipe";
+import Recipe from './src/screens/Recipe';
 
 const Stack = createStackNavigator();
 

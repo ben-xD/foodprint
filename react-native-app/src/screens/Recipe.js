@@ -5,7 +5,6 @@ import {Button, Input } from 'react-native-elements';
 import { gql } from 'apollo-boost';
 import { useMutation } from '@apollo/react-hooks';
 import Snackbar from 'react-native-snackbar';
-import {useNetInfo} from '@react-native-community/netinfo';
 
 
 const POST_RECIPE_MUTATION = gql`
@@ -19,9 +18,7 @@ mutation($url: String!) {
 
 const Recipe = ( { navigation } ) => {
  const [ url, setURL ] = useState('');
- const netInfo = useNetInfo();
  const [postRecipe, { loading: recipeLoading, error: recipeError, data: recipeData }] = useMutation(POST_RECIPE_MUTATION);
-
 
  const handleSubmit = async () => {
   try {
@@ -45,7 +42,7 @@ const Recipe = ( { navigation } ) => {
  useEffect(() => {
   if (recipeData && recipeData.postRecipe.carbonFootprintPerKg === null) {
    Snackbar.show({
-    text: "Oops, we couldn't find the carbon footprint of this recipe :(",
+    text: "Oops, we couldn't find a carbon footprint from this URL :(",
     duration: Snackbar.LENGTH_SHORT,
    });
   }
@@ -58,7 +55,7 @@ const Recipe = ( { navigation } ) => {
      uri: 'http://www.bagherra.eu/wp-content/uploads/2016/11/orionthemes-placeholder-image-1.png',
      score: recipeData.postRecipe.carbonFootprintPerKg,
      description: recipeData.postRecipe.name,
-    }});
+    }, loading: false });
   }
      }
  );
@@ -79,7 +76,7 @@ const Recipe = ( { navigation } ) => {
            onChangeText = {value => setURL(value)}
        />
       {(recipeLoading) ? (
-          <ActivityIndicator style={{ height: 45, marginVertical:percentageHeight('2%') }}/>
+          <ActivityIndicator style={ styles.loading }/>
       ) : (
           <Button
               title="Submit"
@@ -87,7 +84,6 @@ const Recipe = ( { navigation } ) => {
               containerStyle={ styles.buttonContainer }
               titleStyle={ styles.buttonTitle }
               onPress={handleSubmit}
-              // disabled={!netInfo.connected}
           />
       )}
      </View>
@@ -102,6 +98,7 @@ const styles = StyleSheet.create({
    button: { backgroundColor:'green', width:percentageWidth('30%'), height:45 },
    buttonContainer: { marginVertical:percentageHeight('2%') },
    buttonTitle: { fontSize:percentageWidth('5%') },
+   loading: { height: 45, marginVertical:percentageHeight('2%') },
  });
 
 export default Recipe;
