@@ -14,22 +14,19 @@ const resolvers = {
       const response = {}
       try {
         // userAvg
-        console.log(("Packing average co2 for user"));
-        console.log(uid);
+        console.log("Packing average co2 for user", uid);
         const userAvg = await dataSources.userHistAPI.avg_co2_for_user(dataSources.carbonAPI, uid);
         response.userAvg = userAvg;
         // periodAvgs
         const periodAvgs = []
         if (resolutions.includes('WEEK')) {
           weeklyAvg = await dataSources.userHistAPI.weekly_average_cf(dataSources.carbonAPI, uid, timezone);
-          console.log(("Packing weekly average co2 last 6 weeks for user "));
-          console.log(uid);
+          console.log("Packing weekly average co2 last 6 weeks for user", uid);
           periodAvgs.push(weeklyAvg);
         }
         if (resolutions.includes('MONTH')) {
           monthlyAvg = await dataSources.userHistAPI.monthly_average_cf(dataSources.carbonAPI, uid, timezone);
-          console.log(("Packing monthly average co2 last 6 months for user "));
-          console.log(uid);
+          console.log("Packing monthly average co2 last 6 months for user", uid);
           periodAvgs.push(monthlyAvg);
         }
         response.periodAvgs = periodAvgs;
@@ -37,14 +34,12 @@ const resolvers = {
         const categoryReports = []
         if (resolutions.includes('WEEK')) {
           weeklyReport = await dataSources.userHistAPI.weekly_cf_composition(dataSources.carbonAPI, uid, timezone);
-          console.log(("Packing categorised information on co2 for the last 6 weeks for user "));
-          console.log(uid);
+          console.log("Packing categorised information on co2 for the last 6 weeks for user", uid);
           categoryReports.push(weeklyReport);
         }
         if (resolutions.includes('MONTH')) {
           monthlyReport = await dataSources.userHistAPI.monthly_cf_composition(dataSources.carbonAPI, uid, timezone);
-          console.log(("Packing categorised information on co2 last 6 months for user "));
-          console.log(uid);
+          console.log("Packing categorised information on co2 last 6 months for user", uid);
           categoryReports.push(monthlyReport);
         }
         response.categoryReports = categoryReports;
