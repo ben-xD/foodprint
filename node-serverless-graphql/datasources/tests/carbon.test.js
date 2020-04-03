@@ -38,7 +38,7 @@ describe('getCfMultipleItems: Real database', () => {
     ];
     expect.assertions(1);
     const actual = await carbonAPI.getCfMultipleItems(labelList);
-    if (actual) actual.sort((a, b) => {return a.item.localeCompare(b.item);})
+    if (actual) actual.sort((a, b) => { return a.item.localeCompare(b.item); })
     expect(actual).toMatchObject(expected);
   });
 
@@ -72,3 +72,6 @@ describe('getCfMultipleItems: Real database', () => {
 
 });
 
+afterAll(() => {
+  deleteStore();
+});
