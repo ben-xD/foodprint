@@ -1,7 +1,6 @@
 image: node:10
 
 stages:
-  - build
   - test
   - deploy
 
@@ -21,7 +20,8 @@ test_frontend:
 
 deploy:
   image: gcr.io/google.com/cloudsdktool/cloud-sdk:latest
-  stage: deploy
+  stage: test
+  when: manual
   only:
     - master
   script:
