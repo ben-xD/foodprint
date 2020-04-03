@@ -63,7 +63,6 @@ describe('testing resolvers', () => {
         expect(actual).toEqual(expected);
     });
 
-
     test('postUserHistoryEntry', async () => {
         jest.setTimeout(30000);
 
@@ -80,45 +79,27 @@ describe('testing resolvers', () => {
 
     });
 
-    test('Query: not used for anything yet, mandatory for GraphQL', async () => {
-        resolvers.Query._();
-    });
-
-    test('Average co2 of all products for user x is 2.28 (rounded up)', async () => {
+    test('getUserHistoryReport (aggregated report) for user x', async () => {
         jest.setTimeout(30000);
-        jest.spyOn(dataSources.userHistAPI, 'avg_co2_for_user').mockImplementation(() =>
-            2.28);
-        let actual = await resolvers.Query.getUserAvg(null, {}, { dataSources, user });
-        const expected = 2.28;
-        expect(actual).toEqual(expected);
-    });
-
-    test('Average co2 of all products for user x over last 6 weeks is 3.12 (rounded up)', async () => {
-        jest.setTimeout(30000);
-        jest.spyOn(dataSources.userHistAPI, 'weekly_average_cf').mockImplementation(() =>
-            3.12);
-        const timezone = 0;
-        const resolution = 'WEEK';
-        let actual = await resolvers.Query.getPeriodAvg(null, { timezone, resolution }, { dataSources, user });
-        const expected = 3.12;
-        expect(actual).toEqual(expected);
-    });
-
-    test('Average co2 of all products for user x over last 6 months is 1.34 (rounded up)', async () => {
-        jest.setTimeout(30000);
-        jest.spyOn(dataSources.userHistAPI, 'monthly_average_cf').mockImplementation(() =>
-            1.34);
-        const timezone = 0;
-        const resolution = 'MONTH';
-        let actual = await resolvers.Query.getPeriodAvg(null, { timezone, resolution }, { dataSources, user });
-        const expected = 1.34;
-        expect(actual).toEqual(expected);
-    });
-
-    test('reportByCategory: weekly report', async () => {
-        jest.setTimeout(30000);
-
-        jest.spyOn(dataSources.userHistAPI, 'weekly_cf_composition').mockImplementation(() => {
+        // Average co2 of all products for user x is 2.28 (rounded up)
+        jest.spyOn(dataSources.userHistAPI, 'avg_co2_for_user').mockImplementation(async () => 2.28);
+        // Average co2 of all products for user x over last 6 weeks is 3.12(rounded up)
+        jest.spyOn(dataSources.userHistAPI, 'weekly_average_cf').mockImplementation(async () => 3.12);
+        // Average co2 of all products for user x over last 6 months is 1.34 (rounded up)
+        jest.spyOn(dataSources.userHistAPI, 'monthly_average_cf').mockImplementation(async () => 1.34);
+        // reportByCategory: weekly report
+        jest.spyOn(dataSources.userHistAPI, 'weekly_cf_composition').mockImplementation(async () => {
+            return (
+                {
+                    "plantBased": CATEGORY_WITH_DATA,
+                    "fish": CATEGORY_WITH_DATA,
+                    "meat": CATEGORY_EMPTY,
+                    "eggsAndDairy": CATEGORY_EMPTY
+                }
+            )
+        });
+        // reportByCategory: monthly report
+        jest.spyOn(dataSources.userHistAPI, 'monthly_cf_composition').mockImplementation(async () => {
             return (
                 {
                     "plantBased": CATEGORY_WITH_DATA,
@@ -129,41 +110,29 @@ describe('testing resolvers', () => {
             )
         });
 
-        const res = await resolvers.Query.reportByCategory(null, { timezone: 0, resolution: 'WEEK' }, { dataSources, user });
-
-        expect(res).toEqual(
-            {
-                "plantBased": CATEGORY_WITH_DATA,
-                "fish": CATEGORY_WITH_DATA,
-                "meat": CATEGORY_EMPTY,
-                "eggsAndDairy": CATEGORY_EMPTY
-            }
-        )
-    });
-
-    test('reportByCategory: monthly report', async () => {
-        jest.setTimeout(30000);
-
-        jest.spyOn(dataSources.userHistAPI, 'monthly_cf_composition').mockImplementation(() => {
-            return (
+        // Compare results
+        const timezone = 0;
+        const resolutions = ['WEEK', 'MONTH'];
+        const expected = {
+            userAvg: 2.28,
+            periodAvgs: [3.12, 1.34],
+            categoryReports: [
                 {
-                    "plantBased": CATEGORY_WITH_DATA,
-                    "fish": CATEGORY_WITH_DATA,
-                    "meat": CATEGORY_EMPTY,
-                    "eggsAndDairy": CATEGORY_EMPTY
+                    plantBased: CATEGORY_WITH_DATA,
+                    fish: CATEGORY_WITH_DATA,
+                    meat: CATEGORY_EMPTY,
+                    eggsAndDairy: CATEGORY_EMPTY
+                },
+                {
+                    plantBased: CATEGORY_WITH_DATA,
+                    fish: CATEGORY_WITH_DATA,
+                    meat: CATEGORY_EMPTY,
+                    eggsAndDairy: CATEGORY_EMPTY
                 }
-            )
-        });
-
-        const res = await resolvers.Query.reportByCategory(null, { timezone: 0, resolution: 'MONTH' }, { dataSources, user });
-
-        expect(res).toEqual(
-            {
-                "plantBased": CATEGORY_WITH_DATA,
-                "fish": CATEGORY_WITH_DATA,
-                "meat": CATEGORY_EMPTY,
-                "eggsAndDairy": CATEGORY_EMPTY
-            })
+            ]
+        }
+        const actual = await resolvers.Query.getUserHistoryReport(null, { timezone, resolutions }, { dataSources, user });
+        expect(actual).toEqual(expected);
     });
 
     test('Test postRecipe', async () => {
@@ -192,7 +161,6 @@ describe('testing resolvers', () => {
         expect(actual).toEqual(expected);
     });
 });
-
 
 afterAll(() => {
     deleteStore();
