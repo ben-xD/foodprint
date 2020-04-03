@@ -11,9 +11,6 @@ const resolvers = {
       }
       const { dataSources, user } = context;
       const uid = user.uid;
-      // // For local (dummy) testing
-      // const {dataSources} = context;
-      // const uid = "test_user";
       const response = {}
       try {
         // userAvg
