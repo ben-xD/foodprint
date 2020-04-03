@@ -3,6 +3,10 @@ class CarbonAPI {
   constructor(store) {
     this._carbonSchema;
     this.getCfOneItem = this.getCfOneItem.bind(this);
+    this.getCfMultipleItems = this.getCfMultipleItems.bind(this);
+    this.insert_in_DB = this.insert_in_DB.bind(this);
+    this.getCfMultipleItems = this.getCfMultipleItems.bind(this);
+    this.containsNonStrings = this.containsNonStrings.bind(this);
     this.store = store
   }
 
@@ -17,8 +21,8 @@ class CarbonAPI {
 
   // Search database for a list of labels, returning a list of objects for only those labels defined in the db
   // labelList: list of strings
-  // checkAll: If true, the function checks that all the producs were found in the db. If one of the items wasn't found, throws an error. 
-  // Note that if checkAll = true, then labelList should be list of strings (without regular expressions) and  without duplicates 
+  // checkAll: If true, the function checks that all the producs were found in the db. If one of the items wasn't found, throws an error.
+  // Note that if checkAll = true, then labelList should be list of strings (without regular expressions) and  without duplicates
   // return: list of objects, each containing carbonpkilo and categories fields
   // If there is no input for one of the labels in labelList in the db, no object for that item is contained in the
   // returning list
