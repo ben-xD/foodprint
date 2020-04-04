@@ -21,7 +21,9 @@ class RecipeAPI {
 
         // Try all keys
         let i = 0;
-        while (res === undefined && i < this.API_KEYS.length){
+        while (res === undefined && i < this.API_KEYS.length) {
+            console.log(this.API_KEYS.length);
+            console.log(this.API_KEYS[i]);
             res = await this.query_api(this.API_KEYS[i], url);
             i += 1;
         };
@@ -85,11 +87,11 @@ class RecipeAPI {
 
     async query_api(API_key, url){
         // add the key to the url
-        let full_url = url + "&apiKey=" + this.API_KEY;
+        let full_url = url + "&apiKey=" + API_key;
         let res = undefined;
 
         // query spoonacular API with the provided key
-        await axios.get(url, this.config)
+        await axios.get(full_url, this.config)
             .then((response)  => {
                 res = response;
             })
