@@ -22,8 +22,6 @@ class RecipeAPI {
         // Try all keys
         let i = 0;
         while (res === undefined && i < this.API_KEYS.length) {
-            console.log(this.API_KEYS.length);
-            console.log(this.API_KEYS[i]);
             res = await this.query_api(this.API_KEYS[i], url);
             i += 1;
         };
