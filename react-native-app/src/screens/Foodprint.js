@@ -19,7 +19,7 @@ import { useQuery } from '@apollo/react-hooks';
 import AsyncStorage from '@react-native-community/async-storage';
 import WelcomeScreen from '../components/WelcomeScreen';
 import { FloatingAction } from 'react-native-floating-action';
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect, useIsFocused } from '@react-navigation/native';
 
 const UNIT_INFORMATION =
   'The carbon footprint displayed in this app, including this page, ' +
@@ -57,6 +57,7 @@ const Foodprint = ({ navigation, route }) => {
   const [introductoryOverlayVisible, setIntroductoryOverlayVisible] = useState(false);
   const [timeSpan, setTimeSpan] = useState('weekly');
   const [historyReport, setHistoryReport] = useState(null);
+  const isFocused = useIsFocused();
   const [refreshing, setRefreshing] = useState(false);
 
   const floatingActionButtons = [
@@ -102,6 +103,8 @@ const Foodprint = ({ navigation, route }) => {
       showOverlayIfNewUser(); // show overlay if showIntroductoryOverlay param set
     }
   }, [refetch, route]));
+
+
 
   const refetch = useCallback(() => {
     console.log('Refetching data.');
@@ -224,6 +227,7 @@ const Foodprint = ({ navigation, route }) => {
         </View>
       </ScrollView>
       <FloatingAction
+        visible={isFocused}
         actions={floatingActionButtons}
         color={'#008000'}
         onPressItem={name => {

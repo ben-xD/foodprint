@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ActivityIndicator, Image } from 'react-native';
+import { View, Text, ActivityIndicator, Image, SafeAreaView } from 'react-native';
 import { gql } from 'apollo-boost';
 import { StyleSheet } from 'react-native';
 import { useMutation } from '@apollo/react-hooks';
@@ -7,7 +7,7 @@ import { Rating, Button } from 'react-native-elements';
 import { widthPercentageToDP as percentageWidth, heightPercentageToDP as percentageHeight } from 'react-native-responsive-screen';
 import { ScrollView } from 'react-native-gesture-handler';
 import Snackbar from 'react-native-snackbar';
-import { CommonActions } from '@react-navigation/native';
+import { StackActions } from '@react-navigation/native';
 
 // GraphQL schema for picture posting mutation
 const POST_PICTURE_MUTATION = gql`
@@ -136,7 +136,7 @@ const Feedback = ({ route, navigation }) => {
     <View style={styles.loading}>
       <ActivityIndicator />
     </View > :
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>
         <View style={styles.body}>
           {meal.uri == null ? <></> :
@@ -168,29 +168,13 @@ const Feedback = ({ route, navigation }) => {
             title="Add to history"
             onPress={() => {
               addToHistory(meal.description);
-              console.log('Sent item to to user history...');
-              // Reset navigation, so user can't go back (hardware back press) to current screen
-              // Make request to update?
-              navigation.dispatch(
-                CommonActions.reset({
-                  index: 1,
-                  routes: [
-                    {
-                      name: 'Home',
-                    },
-                    {
-                      name: 'Your Foodprint',
-                      params: { refresh: true },
-                    },
-                  ],
-
-                })
-              );
+              console.log('Sent item to user history...');
+              navigation.dispatch(StackActions.pop(2));
             }}
           />
         </View>
       </ScrollView>
-    </View>;
+    </SafeAreaView>;
 };
 
 const styles = StyleSheet.create({
