@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
   View,
   ScrollView,
@@ -12,7 +11,6 @@ import {
   widthPercentageToDP as percentageWidth,
   heightPercentageToDP as percentageHeight,
 } from 'react-native-responsive-screen';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import WeeklyDisplay from '../components/WeeklyDisplay';
 import MonthlyDisplay from '../components/MonthlyDisplay';
 import CarbonFootprintScore from '../components/CarbonFootprintScore';
@@ -20,6 +18,8 @@ import gql from 'graphql-tag';
 import { useQuery } from '@apollo/react-hooks';
 import AsyncStorage from '@react-native-community/async-storage';
 import WelcomeScreen from '../components/WelcomeScreen';
+import { FloatingAction } from 'react-native-floating-action';
+import { useFocusEffect } from '@react-navigation/native';
 
 const UNIT_INFORMATION =
   'The carbon footprint displayed in this app, including this page, ' +
@@ -59,31 +59,49 @@ const Foodprint = ({ navigation, route }) => {
   const [historyReport, setHistoryReport] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
 
-  // If user hasn't seen introductory flow, then show them
+  const floatingActionButtons = [
+    {
+      text: 'Scan food or barcode',
+      name: 'camera',
+      color: '#008000',
+      icon: require('../images/camera.png'),
+    },
+    {
+      text: 'Add recipe',
+      name: 'recipe',
+      color: '#008000',
+      icon: require('../images/receipt.png'),
+    },
+  ];
+
+  const showOverlayIfNewUser = async () => {
+    try {
+      const userHasSeenOverlayPreviously = await AsyncStorage.getItem('introductoryOverlaySeen');
+      console.log({ userHasSeenOverlayPreviously });
+      if (userHasSeenOverlayPreviously) {
+        return;
+      }
+    } catch (e) { } // If value does not exist in storage, ignore the error.
+
+    // Show overlay
+    AsyncStorage.setItem('introductoryOverlaySeen', JSON.stringify(true));
+    setIntroductoryOverlayVisible(true);
+  };
+
   useEffect(() => {
-    const showOverlayIfNewUser = async () => {
-      try {
-        const userHasSeenOverlayPreviously = await AsyncStorage.getItem('introductoryOverlaySeen');
-        console.log({ userHasSeenOverlayPreviously });
-        if (userHasSeenOverlayPreviously) {
-          return;
-        }
-      } catch (e) { } // If value does not exist in storage, ignore the error.
-
-      // Show overlay
-      AsyncStorage.setItem('introductoryOverlaySeen', JSON.stringify(true));
-      setIntroductoryOverlayVisible(true);
-    };
-
     showOverlayIfNewUser();
   }, []);
 
-  useEffect(() => {
-    // If navigated to this screen with refresh param, then refresh data.
+  // Occurs everytime the screen if focused
+  useFocusEffect(useCallback(() => {
     if (route.params && route.params.refresh) {
-      refetch();
+      refetch(); // refetch data if refresh param set
     }
-  }, [refetch, route]);
+
+    if (route.params && route.params.showIntroductoryOverlay) {
+      showOverlayIfNewUser(); // show overlay if showIntroductoryOverlay param set
+    }
+  }, [refetch, route]));
 
   const refetch = useCallback(() => {
     console.log('Refetching data.');
@@ -180,7 +198,6 @@ const Foodprint = ({ navigation, route }) => {
 
   return (
     <SafeAreaView>
-      <WelcomeScreen setVisibility={setIntroductoryOverlayVisible} isVisible={introductoryOverlayVisible} />
       <ScrollView style={{ height: '100%' }} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refetch} />}>
         <CarbonFootprintScore historyReport={historyReport} loading={historyReportLoading} error={historyReportError} />
         <View>
@@ -206,12 +223,19 @@ const Foodprint = ({ navigation, route }) => {
           <Text style={{ fontSize: 12 }}>{UNIT_INFORMATION}</Text>
         </View>
       </ScrollView>
-      <TouchableOpacity onPress={goToCamera} containerStyle={styles.camera}>
-        <MaterialCommunityIcons name="camera" color={'white'} size={28} />
-      </TouchableOpacity>
-      <TouchableOpacity onPress={goToRecipe} containerStyle={styles.recipe}>
-        <MaterialCommunityIcons name="receipt" color={'white'} size={28} />
-      </TouchableOpacity>
+      <FloatingAction
+        actions={floatingActionButtons}
+        color={'#008000'}
+        onPressItem={name => {
+          if (name === 'camera') {
+            goToCamera();
+          } else if (name === 'recipe') {
+            goToRecipe();
+          }
+          console.log(`selected button: ${name}`);
+        }}
+      />
+      <WelcomeScreen setVisibility={setIntroductoryOverlayVisible} isVisible={introductoryOverlayVisible} />
     </SafeAreaView >
   );
 };

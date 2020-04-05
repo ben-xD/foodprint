@@ -7,18 +7,27 @@ import { Linking } from 'react-native';
 import { useState } from 'react';
 import { ListItem, Text } from 'react-native-elements';
 import { StyleSheet } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const Settings = ({ navigation }) => {
   const [errors, setErrors] = useState([]);
   const { signOut } = useContext(AuthContext);
 
   const openEmail = () => {
-    Linking.openURL('mailto:ben@fresla.co?subject=Foodprint%20%20Support').catch(
+    Linking.openURL('mailto:ben@fresla.co?subject=Foodprint%20Support').catch(
       err => {
         console.warn(err);
         setErrors(['Unable to open mail app, do you have one set?']);
       },
     );
+  };
+
+  const launchWalkthrough = () => {
+    AsyncStorage.removeItem('introductionSeen');
+    AsyncStorage.removeItem('introductoryOverlaySeen');
+    navigation.navigate('Your Foodprint', {
+      showIntroductoryOverlay: true,
+    });
   };
 
   return (
@@ -30,8 +39,14 @@ const Settings = ({ navigation }) => {
       <View style={styles.listContainer}>
         <ListItem
           containerStyle={styles.buttonContainer}
-          title="Email us"
+          title="Start walkthrough"
           topDivider
+          bottomDivider
+          onPress={launchWalkthrough}
+        />
+        <ListItem
+          containerStyle={styles.buttonContainer}
+          title="Email us"
           bottomDivider
           onPress={openEmail}
         />
