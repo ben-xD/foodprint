@@ -70,7 +70,7 @@ const SignupOrRegister = ({ navigation }) => {
           </View>
         </View>
       </View>
-      <View style={styles.skipButtonContainer}>
+      {/* <View style={styles.skipButtonContainer}>
         <Button
           disabled={isPressed}
           title="Skip login"
@@ -78,7 +78,7 @@ const SignupOrRegister = ({ navigation }) => {
           onPress={handleSignInAnonymously}
           type="clear"
         />
-      </View>
+      </View> */}
     </SafeAreaView >
   );
 };

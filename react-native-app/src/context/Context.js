@@ -84,8 +84,9 @@ export const createActionCreators = (dispatch) => ({
     dispatch({ type: 'SIGN_IN', token });
   },
   signOut: () => {
-    AsyncStorage.removeItem('userIsLoggedIn');
+    // Empty local storage
     auth().signOut();
+    AsyncStorage.clear(); // userIsLoggedIn, historyReport, etc.
     dispatch({ type: 'SIGN_OUT' });
   },
   signUp: async (email, password) => {

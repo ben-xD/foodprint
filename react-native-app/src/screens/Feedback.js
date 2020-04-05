@@ -28,7 +28,7 @@ const POST_BARCODE_MUTATION = gql`
   }
 `;
 
-const Post_User_History_Entry = gql`
+const POST_USER_HISTORY_ENTRY = gql`
   mutation postUserHistoryEntry($item: String) {
     postUserHistoryEntry(item: $item)
   }
@@ -38,7 +38,7 @@ const Feedback = ({ route, navigation }) => {
   const [meal, setMeal] = useState(null);
   const [uploadPicture, { loading: pictureLoading, data: pictureData, error: pictureError }] = useMutation(POST_PICTURE_MUTATION);
   const [postBarcodeMutation, { loading: barcodeLoading, error: barcodeError, data: barcodeData }] = useMutation(POST_BARCODE_MUTATION);
-  const [postUserHistoryEntryMutation, { loading: historyLoading, error: historyError, data: historyData }] = useMutation(Post_User_History_Entry);
+  const [postUserHistoryEntryMutation, { loading: historyLoading, error: historyError, data: historyData }] = useMutation(POST_USER_HISTORY_ENTRY);
 
   // make relevant request when component is loaded AND provided with either file or barcode
   useEffect(() => {
@@ -169,13 +169,21 @@ const Feedback = ({ route, navigation }) => {
             onPress={() => {
               addToHistory(meal.description);
               console.log('Sent item to to user history...');
-              // Reset navigation, so user go back (hardware back press) to current screen
+              // Reset navigation, so user can't go back (hardware back press) to current screen
+              // Make request to update?
               navigation.dispatch(
                 CommonActions.reset({
                   index: 1,
                   routes: [
-                    { name: 'Home' },
+                    {
+                      name: 'Home',
+                    },
+                    {
+                      name: 'Your Foodprint',
+                      params: { refresh: true },
+                    },
                   ],
+
                 })
               );
             }}
