@@ -285,56 +285,5 @@ exports[`SignupOrRegister matches previous snapshot 1`] = `
       </View>
     </View>
   </View>
-  <View
-    style={
-      Object {
-        "bottom": 66.5,
-        "position": "absolute",
-      }
-    }
-  >
-    <View
-      style={
-        Object {
-          "borderRadius": 3,
-        }
-      }
-    >
-      <TouchableOpacity
-        activeOpacity={0.3}
-        disabled={false}
-        onPress={[Function]}
-      >
-        <View
-          style={
-            Object {
-              "alignItems": "center",
-              "backgroundColor": "transparent",
-              "borderColor": "#2089dc",
-              "borderRadius": 3,
-              "borderWidth": 0,
-              "flexDirection": "row",
-              "justifyContent": "center",
-              "padding": 8,
-            }
-          }
-        >
-          <Text
-            style={
-              Object {
-                "color": "grey",
-                "fontSize": 37.5,
-                "paddingBottom": 1,
-                "paddingTop": 2,
-                "textAlign": "center",
-              }
-            }
-          >
-            Skip login
-          </Text>
-        </View>
-      </TouchableOpacity>
-    </View>
-  </View>
 </SafeAreaView>
 `;
