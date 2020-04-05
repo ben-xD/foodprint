@@ -85,17 +85,19 @@ describe('User history database (mocked dataSources)', () => {
     test('Get weekly_cf_composition', async () => {
         jest.setTimeout(10000);
         jest.spyOn(userHistAPI, 'get_week_i_data').mockImplementation(() =>
-            [{ item: 'mock' }]
+            [{ item: 'rice' }, { item: 'orange' }]
         );
 
-        mockDataSources.carbonAPI.getCfMultipleItems.mockImplementation((data) => {
-            if (data[0] == 'mock') {
+        mockDataSources.carbonAPI.getCfMultipleItems.mockImplementation((data, boolean) => {
+            if (data[0] == 'rice') {
                 return ([{
-                    "carbonpkilo": 20,
+                    "item": "rice",
+                    "carbonpkilo": 10,
                     "categories": "1200"
                 },
                 {
-                    "carbonpkilo": 20,
+                    "item": "orange",
+                    "carbonpkilo": 10,
                     "categories": "1200"
                 }])
             }

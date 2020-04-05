@@ -302,7 +302,7 @@ class userHistAPI {
   async sum_period_data_to_table(carbonAPI, period_i_data, period, table) {
     const [items, repetitions] = await this.get_items(period_i_data)
     const carbonData = await carbonAPI.getCfMultipleItems(items, true);
-    for (let i = 0; i < period_i_data.length; i++) { // For each item found
+    for (let i = 0; i < carbonData.length; i++){ // For each item found
       let carbonResult = carbonData[i];
       if (carbonResult.carbonpkilo !== undefined) {
         const categories = carbonResult.categories.toString();
