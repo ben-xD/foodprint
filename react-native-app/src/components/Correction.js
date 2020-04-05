@@ -1,12 +1,13 @@
 import { Image, View, ActivityIndicator } from 'react-native';
 import { Input, Text } from 'react-native-elements';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 import { gql } from 'apollo-boost';
 import { useMutation } from '@apollo/react-hooks';
 import { StyleSheet } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { widthPercentageToDP as percentageWidth, heightPercentageToDP as percentageHeight } from 'react-native-responsive-screen';
+import Snackbar from 'react-native-snackbar';
 
 
 // GraphQL schema for correction mutation
@@ -24,21 +25,21 @@ const Correction = ({ route, navigation }) => {
   const [correctedName, setCorrectedName] = useState('');
   const [postCorrection, { loading: correctionLoading, error: correctionError, data: correctionData }] = useMutation(POST_CORRECTION_MUTATION);
 
-  // Handle correction from input field
-  const handleCorrection = async () => {
-    try {
-      await postCorrection({ variables: { name: correctedName } });
-    } catch (err) {
-      console.warn({ err });
-    }
-  };
+  const postCorrectionHandler = async () => await postCorrection({ variables: { name: correctedName } });
 
   useEffect(() => {
-    if (!correctionError) {
-      return;
+    if (correctionError) {
+      Snackbar.show({
+        text: 'Something went wrong.',
+        duration: Snackbar.LENGTH_INDEFINITE,
+        action: {
+          text: 'RETRY',
+          textColor: 'red',
+          onPress: postCorrectionHandler,
+        },
+      });
     }
-    // TODO show error to user
-    console.warn('Error in correction request');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [correctionError]);
 
   // Respond to changes in correction data (following correction)
@@ -72,8 +73,9 @@ const Correction = ({ route, navigation }) => {
           <View style={styles.inputContainer}>
             <Input
               placeholder="Cucumber"
+              autoFocus
               onChangeText={value => setCorrectedName(value.toLowerCase())}
-              onSubmitEditing={handleCorrection}
+              onSubmitEditing={postCorrectionHandler}
             />
           </View>
           <View style={styles.subtitleContainer}>
