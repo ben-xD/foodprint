@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import {
   View,
   ScrollView,
@@ -8,15 +7,19 @@ import {
   Text, ActivityIndicator, RefreshControl,
 } from 'react-native';
 import { Button } from 'react-native-elements';
-import { widthPercentageToDP as percentageWidth, heightPercentageToDP as percentageHeight } from 'react-native-responsive-screen';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import WelcomeScreen from '../components/WelcomeScreen';
+import {
+  widthPercentageToDP as percentageWidth,
+  heightPercentageToDP as percentageHeight,
+} from 'react-native-responsive-screen';
 import WeeklyDisplay from '../components/WeeklyDisplay';
 import MonthlyDisplay from '../components/MonthlyDisplay';
-import CarbonFootprintScoreView from '../components/CarbonFootprintScore';
+import CarbonFootprintScore from '../components/CarbonFootprintScore';
 import gql from 'graphql-tag';
 import { useQuery } from '@apollo/react-hooks';
 import AsyncStorage from '@react-native-community/async-storage';
+import WelcomeScreen from '../components/WelcomeScreen';
+import { FloatingAction } from 'react-native-floating-action';
+import { useFocusEffect, useIsFocused } from '@react-navigation/native';
 
 const UNIT_INFORMATION =
   'The carbon footprint displayed in this app, including this page, ' +
@@ -50,29 +53,64 @@ export const GET_USER_HISTORY_REPORT = gql`
   }
 `;
 
-const Foodprint = ({ navigation }) => {
-  const [welcomeScreenIsVisible, setWelcomeScreenIsVisible] = useState(false);
+const Foodprint = ({ navigation, route }) => {
+  const [introductoryOverlayVisible, setIntroductoryOverlayVisible] = useState(false);
   const [timeSpan, setTimeSpan] = useState('weekly');
   const [historyReport, setHistoryReport] = useState(null);
+  const isFocused = useIsFocused();
   const [refreshing, setRefreshing] = useState(false);
 
-  // show overlay when user logs in first time
-  useEffect(() => {
-    const checkIfUserIsLoggedIn = async () => {
-      try {
-        const firstTimeUser = await AsyncStorage.getItem('firstTimeUser');
-        if (firstTimeUser === null) {
-          setWelcomeScreenIsVisible(true);
-          AsyncStorage.setItem('firstTimeUser', JSON.stringify(false));
-        }
-      } catch (e) {
-        // error reading value, because it doesn't exist, so the user is new.
-        setWelcomeScreenIsVisible(true);
-        AsyncStorage.setItem('firstTimeUser', JSON.stringify(false));
+  const floatingActionButtons = [
+    {
+      text: 'Scan food or barcode',
+      name: 'camera',
+      color: '#008000',
+      icon: require('../images/camera.png'),
+    },
+    {
+      text: 'Add recipe',
+      name: 'recipe',
+      color: '#008000',
+      icon: require('../images/receipt.png'),
+    },
+  ];
+
+  const showOverlayIfNewUser = async () => {
+    try {
+      const userHasSeenOverlayPreviously = await AsyncStorage.getItem('introductoryOverlaySeen');
+      console.log({ userHasSeenOverlayPreviously });
+      if (userHasSeenOverlayPreviously) {
+        return;
       }
-    };
-    checkIfUserIsLoggedIn();
+    } catch (e) { } // If value does not exist in storage, an error occurs, keep going.
+    AsyncStorage.setItem('introductoryOverlaySeen', JSON.stringify(true));
+    setIntroductoryOverlayVisible(true);
+  };
+
+  useEffect(() => {
+    showOverlayIfNewUser();
   }, []);
+
+  // Occurs everytime the screen if focused
+  useFocusEffect(useCallback(() => {
+    if (route.params && route.params.refresh) {
+      refetch(); // refetch data if refresh param set
+    }
+
+    if (route.params && route.params.showIntroductoryOverlay) {
+      showOverlayIfNewUser(); // show overlay if showIntroductoryOverlay param set
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [route]));
+
+
+
+  const refetch = () => {
+    console.log('Refetching data.');
+    setRefreshing(true);
+    setHistoryReport(null);
+    refetchHistoryReport();
+  };
 
   const goToCamera = async () => {
     navigation.navigate('Camera');
@@ -82,36 +120,33 @@ const Foodprint = ({ navigation }) => {
     navigation.navigate('Recipe');
   };
 
-  const getTimeDifference = () => {
+  // useMemo will recalculate only if dependencies change,
+  // and since it was given none, it won't be recomputed.
+  const timezoneOffsetInHours = useMemo(() => {
     const date = new Date();
-    const timeDifference = date.getTimezoneOffset();
-    return (timeDifference / 60);
-  };
+    const timeOffsetInMinutes = date.getTimezoneOffset();
+    return timeOffsetInMinutes / 60;
+  }, []);
 
-  // Comment the following lines to test the caching
-  const { loading: historyReportLoading, error: historyReportError, data: historyReportData, refetch: refetchHistoryReport } = useQuery(GET_USER_HISTORY_REPORT, {
-    variables: { timezone: getTimeDifference(), resolutions: ['WEEK', 'MONTH'] },
+  const {
+    loading: historyReportLoading,
+    error: historyReportError,
+    data: historyReportData,
+    refetch: refetchHistoryReport,
+    networkStatus,
+  } = useQuery(GET_USER_HISTORY_REPORT, {
+    variables: { timezone: timezoneOffsetInHours, resolutions: ['WEEK', 'MONTH'] },
+    notifyOnNetworkStatusChange: true,
   });
 
-  // Uncomment the following lines to test the caching
-  // let historyReportLoading = false;
-  // let historyReportError = true;
-  // let historyReportData = null;
-
-  const refetch = () => {
-    setRefreshing(true);
-    setHistoryReport(null);
-    refetchHistoryReport();
-  };
-
   useEffect(() => {
-    if (historyReportData && historyReportData.getUserHistoryReport) {
+    if (!historyReportLoading && historyReportData && historyReportData.getUserHistoryReport) {
       setHistoryReport(historyReportData.getUserHistoryReport);
       console.log('Successfully received user history report data, caching locally.');
       cacheHistoryReportLocally(historyReportData.getUserHistoryReport);
       setRefreshing(false);
     }
-  }, [historyReportData]);
+  }, [historyReportData, historyReportLoading]);
 
   useEffect(() => {
     const retrieveHistoryReportDataFromCache = async () => {
@@ -129,16 +164,16 @@ const Foodprint = ({ navigation }) => {
 
   const cacheHistoryReportLocally = async (data) => {
     try {
-      await AsyncStorage.setItem(`historyReport`, JSON.stringify(data));
+      await AsyncStorage.setItem('historyReport', JSON.stringify(data));
     } catch (e) {
-      console.error(`AsyncStorage failed for historyReport`, e);
+      console.error('AsyncStorage failed for historyReport', e);
     }
   };
 
   const renderFootprintChart = () => {
     if (timeSpan === 'weekly') {
       return (
-        (!historyReport) ? (
+        (!historyReport || networkStatus === 4) ? (
           <View style={styles.graphContainer}>
             <ActivityIndicator />
           </View>
@@ -149,7 +184,7 @@ const Foodprint = ({ navigation }) => {
     }
     if (timeSpan === 'monthly') {
       return (
-        (!historyReport) ? (
+        (!historyReport || networkStatus === 4) ? (
           <View style={styles.graphContainer}>
             <ActivityIndicator />
           </View>
@@ -162,8 +197,8 @@ const Foodprint = ({ navigation }) => {
 
   return (
     <SafeAreaView>
-      <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refetch} />}>
-        <CarbonFootprintScoreView data={historyReportData} loading={historyReportLoading} error={historyReportError} />
+      <ScrollView style={{ height: '100%' }} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refetch} />}>
+        <CarbonFootprintScore historyReport={historyReport} loading={historyReportLoading} error={historyReportError} />
         <View>
           {renderFootprintChart()}
         </View>
@@ -184,17 +219,23 @@ const Foodprint = ({ navigation }) => {
           />
         </View>
         <View style={styles.footnote}>
-          <Text style={{ fontSize: percentageWidth('3%') }}>{UNIT_INFORMATION}</Text>
+          <Text style={{ fontSize: 12 }}>{UNIT_INFORMATION}</Text>
         </View>
-        <WelcomeScreen setVisibility={setWelcomeScreenIsVisible} isVisible={welcomeScreenIsVisible} />
       </ScrollView>
-      <TouchableOpacity onPress={goToCamera} containerStyle={styles.camera}>
-        <MaterialCommunityIcons name="camera" color={'white'} size={28} />
-      </TouchableOpacity>
-      <TouchableOpacity onPress={goToRecipe} containerStyle={styles.recipe}>
-        <MaterialCommunityIcons name="receipt" color={'white'} size={28} />
-      </TouchableOpacity>
-      {/* <FAB buttonColor="#008000" iconTextColor="#FFFFFF" onClickAction={takePicture} visible={true} iconTextComponent={} /> */}
+      <FloatingAction
+        visible={isFocused}
+        actions={floatingActionButtons}
+        color={'#008000'}
+        onPressItem={name => {
+          if (name === 'camera') {
+            goToCamera();
+          } else if (name === 'recipe') {
+            goToRecipe();
+          }
+          console.log(`selected button: ${name}`);
+        }}
+      />
+      <WelcomeScreen setVisibility={setIntroductoryOverlayVisible} isVisible={introductoryOverlayVisible} />
     </SafeAreaView >
   );
 };

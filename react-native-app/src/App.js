@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Login from './screens/Login';
@@ -21,7 +21,7 @@ import Feedback from './screens/Feedback';
 import Correction from './components/Correction';
 import Foodprint from './screens/Foodprint';
 import Recipe from './screens/Recipe';
-import { Platform } from 'react-native';
+import { Platform, Keyboard } from 'react-native';
 
 const Stack = createStackNavigator();
 
@@ -43,14 +43,15 @@ const client = new ApolloClient({
 
 const App = (props) => {
   const netInfo = useNetInfo();
+  const [firstTimeUser, setFirstTimeUser] = useState(false);
 
-  // null if app is started normally, but if android and opened via 
+  // null if app is started normally, but if android and opened via
   // specific intent-filter, then recipeUrl will be the recipeUrl from the browser
   // TODO If this recipeUrl is present, then automatically send recipe graphQL request
   const recipeUrl = !props ? null : Platform.select({
     ios: null,
-    android: props["android.intent.extra.TEXT"]
-  })
+    android: props['android.intent.extra.TEXT'],
+  });
 
   useEffect(() => {
     // Configure firebase logins
@@ -58,7 +59,10 @@ const App = (props) => {
       scopes: [], // Add scopes here, like Google drive, calendar, etc.
       webClientId: Config.WEB_CLIENT_ID,
     });
-    console.log({ recipeUrl })
+    console.log({ recipeUrl });
+
+    Keyboard.dismiss();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -77,6 +81,15 @@ const App = (props) => {
   React.useMemo(() => authContext.restoreTokenFromLocalStorage(), [authContext]);
 
   const renderScreens = () => {
+    // TODO add welcome flow, with next pages to introduce a new user to the app.
+    // if (state.userIsLoggedIn && firstTimeUser) {
+    //   return (
+    //     <>
+    //       <Stack.Screen name="Introduction" component={WelcomeScreen} ></Stack.Screen>
+    //     </>
+    //   );
+    // }
+
     if (state.userIsLoggedIn) {
       return (
         <>
