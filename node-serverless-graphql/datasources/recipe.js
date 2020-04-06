@@ -3,28 +3,27 @@ const axios = require('axios');
 class RecipeAPI {
 
     constructor() {
-        this.API_KEYS = ['9efd88836fa1476fa23dfd873e490e2e', '5d370d89f92e48b79a8c993005dc13ee',
-            '154716f9a0af4751ad49538178fef94f', '0473110dff3544f5920dbd2a45c56a38'];
-        this.config = {
-            headers: {
-                "Content-Type": "application/json",
-            }
+        this.headers = {
+            "content-type":"application/octet-stream",
+            "x-rapidapi-host":"spoonacular-recipe-food-nutrition-v1.p.rapidapi.com",
+            "x-rapidapi-key":"59dedbad60msh8562405bdf32460p1fdbeajsn16fb6904af87"
         };
         this.content;
     }
 
     // Get data from API. Have to run this before getName and getIngredients.
     // Returns true if reasons that the url is a recipe, false if not a recipe.
-    async getData(webURL){
-        let url = "https://api.spoonacular.com/recipes/extract?url=" + webURL;
+    async getDataFromLink(webURL){
+        let url = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/extract";
         let res = undefined;
-
-        // Try all keys
-        let i = 0;
-        while (res === undefined && i < this.API_KEYS.length) {
-            res = await this.query_api(this.API_KEYS[i], url);
-            i += 1;
+        let params = {
+            "forceExtraction":"true",
+            "url": webURL
         };
+
+        // Query the API
+        res = await this.query_api(url, params);
+        console.log(res.data.readyInMinutes);
 
         // in case of errors (e.g. exceeded number of requests).
         if(res === undefined){
@@ -32,19 +31,19 @@ class RecipeAPI {
         }
 
         // Check if website is a recipe link
-        if(res.data.weightWatcherSmartPoints === 0 && res.data.preparationMinutes === undefined && res.data.cookingMinutes === undefined && res.data.healthScore === 0 && res.data.pricePerServing === 0){
+        if(res.data.weightWatcherSmartPoints === 0 && res.data.preparationMinutes === undefined && res.data.cookingMinutes === undefined && res.data.healthScore === 0 && res.data.pricePerServing === 0 && (res.data.readyInMinutes === 0 || res.data.readyInMinutes === undefined)){
             return false;
         };
         this.content = res.data;
         return true;
     }
 
-    // Method to get the name from the recipe. Have to run getData first once.
+    // Method to get the name from the recipe. Have to run getDataFromLink first once.
     async getName() {
         return this.content.title;
     }
 
-    // Method to get ingredients from the recipe. Have to run getData first once.
+    // Method to get ingredients from the recipe. Have to run getDataFromLink first once.
     async getIngredients() {
         let full_ingredients = this.content.extendedIngredients;
         let ingredients = [];
@@ -66,30 +65,36 @@ class RecipeAPI {
     //        targetUnitL the metric in which you wish to convert the amount
     //@return: amount of ingredient in targetUnit metric
     async convertMetrics(ingredientName, sourceAmount, sourceUnit, targetUnit) {
-        let url = "https://api.spoonacular.com/recipes/convert?ingredientName=" + ingredientName + "&sourceAmount=" + sourceAmount + "&sourceUnit=" + sourceUnit + "&targetUnit=" + targetUnit;
+        let url = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/convert";
         let res = undefined;
-
-        // Try all keys
-        let i = 0;
-        while (res === undefined && i < this.API_KEYS.length){
-            res = await this.query_api(this.API_KEYS[i], url);
-            i += 1;
+        let params = {
+            "sourceUnit": sourceUnit,
+            "sourceAmount": sourceAmount,
+            "ingredientName": ingredientName,
+            "targetUnit": targetUnit
         };
 
+        // Query API
+        res = await this.query_api(url, params);
+
         // in case of errors (e.g. exceeded number of requests).
-        if(res === undefined){
+        if(res === undefined) {
             return null;
         }
         return res.data.targetAmount;
     }
 
-    async query_api(API_key, url){
-        // add the key to the url
-        let full_url = url + "&apiKey=" + API_key;
+    // Method to query the API
+    // @param url: the url needed to make a request via AXIOS
+    // @param params: parameters that a request takes
+    async query_api(url, params){
         let res = undefined;
 
         // query spoonacular API with the provided key
-        await axios.get(full_url, this.config)
+        await axios({"method":"GET",
+            "url": url,
+            "headers": this.headers,
+            "params": params})
             .then((response)  => {
                 res = response;
             })
@@ -102,5 +107,13 @@ class RecipeAPI {
     }
 };
 
-
 module.exports = RecipeAPI;
+
+let test = new RecipeAPI();
+
+const example = async () =>{
+    let res = await test.getDataFromLink("https://www.bbc.co.uk/news/in-pictures-52120114");
+    console.log(res);
+}
+
+example();
