@@ -1,8 +1,6 @@
-const mongoose = require('mongoose');
-
 class userHistAPI {
   constructor(store) {
-    this._hystorySchema;
+    this.store = store;
     this.searchData = this.searchData.bind(this);
     this.insert_in_DB = this.insert_in_DB.bind(this);
     this.avg_co2_for_user = this.avg_co2_for_user.bind(this);
@@ -19,7 +17,6 @@ class userHistAPI {
     this.create_cf_composition_table = this.create_cf_composition_table.bind(this);
     this.get_number_of_categories = this.get_number_of_categories.bind(this);
     this.sum_period_data_to_table = this.sum_period_data_to_table.bind(this);
-    this.store = store;
     this.NUMBER_OF_WEEKS_RETURNED = 6;
     this.NUMBER_OF_MONTHS_RETURNED = 6;
     this.CATEGORIES = ['plantBased', 'fish', 'meat', 'eggsAndDairy'];
@@ -42,8 +39,8 @@ class userHistAPI {
   // #################################################################################
   //                               Functions used in resolvers
   // #################################################################################
-  static async deleteUserData(user_id) {
-    this.store.deleteMany({ user_id }, (err) => {
+  async deleteUserData(user_id) {
+    this.store.userHist.deleteMany({ user_id }, (err) => {
       if (err) {
         // TODO: What errors are even possible?
         console.warn(err);
