@@ -93,17 +93,11 @@ const Foodprint = ({ navigation, route }) => {
 
   // Occurs everytime the screen if focused
   useFocusEffect(useCallback(() => {
-    if (route.params && route.params.refresh) {
-      refetch(); // refetch data if refresh param set
-    }
-
     if (route.params && route.params.showIntroductoryOverlay) {
       showOverlayIfNewUser(); // show overlay if showIntroductoryOverlay param set
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [route]));
-
-
 
   const refetch = () => {
     console.log('Refetching data.');

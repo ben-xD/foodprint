@@ -5,14 +5,13 @@ import Login from './screens/Login';
 import Signup from './screens/Signup';
 import SignupOrRegister from './screens/SignupOrRegister';
 import { ApolloProvider } from '@apollo/react-hooks';
-import ApolloClient from 'apollo-boost';
+import client from './Client.js';
 import Loading from './screens/Loading';
 import BottomTabBar from './containers/BottomTabBar';
 import { createActionCreators, reducer, initialState } from './context/Context';
 import Config from 'react-native-config';
 import { GoogleSignin } from '@react-native-community/google-signin';
 import { useNetInfo } from '@react-native-community/netinfo';
-import auth from '@react-native-firebase/auth';
 import AuthContext from './context/AuthContext';
 import DeleteAccount from './screens/DeleteAccount';
 import Snackbar from 'react-native-snackbar';
@@ -25,25 +24,9 @@ import { Platform, Keyboard } from 'react-native';
 
 const Stack = createStackNavigator();
 
-const client = new ApolloClient({
-  uri: Config.SERVER_URL,
-  request: async (operation) => {
-    if (!auth().currentUser) {
-      return;
-    }
-    // Following refreshes the token automatically if needed:
-    const token = await auth().currentUser.getIdToken();
-    operation.setContext({
-      headers: {
-        authorization: token ? `Bearer ${token}` : '',
-      },
-    });
-  },
-});
-
 const App = (props) => {
   const netInfo = useNetInfo();
-  const [firstTimeUser, setFirstTimeUser] = useState(false);
+  // const [firstTimeUser, setFirstTimeUser] = useState(false);
 
   // null if app is started normally, but if android and opened via
   // specific intent-filter, then recipeUrl will be the recipeUrl from the browser

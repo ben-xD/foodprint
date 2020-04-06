@@ -8,6 +8,7 @@ import { widthPercentageToDP as percentageWidth, heightPercentageToDP as percent
 import { ScrollView } from 'react-native-gesture-handler';
 import Snackbar from 'react-native-snackbar';
 import { StackActions } from '@react-navigation/native';
+import client from '../Client';
 
 // GraphQL schema for picture posting mutation
 const POST_PICTURE_MUTATION = gql`
@@ -44,6 +45,8 @@ const Feedback = ({ route, navigation }) => {
   useEffect(() => {
     const { file, barcode, recipeMeal } = route.params;
     if (file) {
+      console.log({ file });
+      console.log(typeof (file));
       uploadPicture({ variables: { file } });
     } else if (barcode) {
       postBarcodeMutation({ variables: { barcode } });
@@ -168,7 +171,8 @@ const Feedback = ({ route, navigation }) => {
             title="Add to history"
             onPress={() => {
               addToHistory(meal.description);
-              console.log('Sent item to user history...');
+              console.log('Saving to user history.');
+              client.resetStore();
               navigation.dispatch(StackActions.pop(2));
             }}
           />
