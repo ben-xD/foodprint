@@ -22,7 +22,7 @@ describe('Real Recipe API', () => {
         expect(actual).toEqual(expected);
     });
 
-    test('return false for a wesbite with recipe in it', async () =>{
+    test('return false for a wesbite with no recipe in it', async () =>{
         jest.setTimeout(10000);
         const webURL = "https://www.bbc.co.uk/news/in-pictures-52120114";
         const actual = await recipeAPI.getDataFromLink(webURL);

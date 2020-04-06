@@ -23,6 +23,7 @@ class RecipeAPI {
 
         // Query the API
         res = await this.query_api(url, params);
+        console.log(res.data.readyInMinutes);
 
         // in case of errors (e.g. exceeded number of requests).
         if(res === undefined){
@@ -30,7 +31,7 @@ class RecipeAPI {
         }
 
         // Check if website is a recipe link
-        if(res.data.weightWatcherSmartPoints === 0 && res.data.preparationMinutes === undefined && res.data.cookingMinutes === undefined && res.data.healthScore === 0 && res.data.pricePerServing === 0 && res.data.readyInMinutes === 0){
+        if(res.data.weightWatcherSmartPoints === 0 && res.data.preparationMinutes === undefined && res.data.cookingMinutes === undefined && res.data.healthScore === 0 && res.data.pricePerServing === 0 && (res.data.readyInMinutes === 0 || res.data.readyInMinutes === undefined)){
             return false;
         };
         this.content = res.data;
@@ -106,5 +107,13 @@ class RecipeAPI {
     }
 };
 
-
 module.exports = RecipeAPI;
+
+let test = new RecipeAPI();
+
+const example = async () =>{
+    let res = await test.getDataFromLink("https://www.bbc.co.uk/news/in-pictures-52120114");
+    console.log(res);
+}
+
+example();
