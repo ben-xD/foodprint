@@ -48,10 +48,10 @@ const Correction = ({ route, navigation }) => {
         ...meal,
         score: correctionData.postCorrection.carbonFootprintPerKg,
         description: correctedName,
+        item: correctionData.postCorrection.name // Item returned from back-end
       });
       navigation.goBack();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [correctionData]);
 
   return correctionLoading ?

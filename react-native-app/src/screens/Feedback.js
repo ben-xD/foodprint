@@ -50,7 +50,6 @@ const Feedback = ({ route, navigation }) => {
     } else if (recipeMeal) {
       setMeal(recipeMeal);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -80,7 +79,6 @@ const Feedback = ({ route, navigation }) => {
         navigation.navigate('Correction', { meal, setMeal });
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigation, pictureData, route.params.uri]);
 
   useEffect(() => {
@@ -90,13 +88,11 @@ const Feedback = ({ route, navigation }) => {
         navigation.navigate('Correction', { meal, setMeal });
       } else {
         setMeal({
-          ...meal,
           score: barcodeData.postBarcode.carbonFootprintPerKg,
           description: barcodeData.postBarcode.name,
         });
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [barcodeData, navigation]);
 
   // Add item to user history
@@ -159,7 +155,6 @@ const Feedback = ({ route, navigation }) => {
             buttonStyle={styles.redButtonStyle}
             titleStyle={styles.buttonText}
             title="Wrong item"
-            // TODO don't pass setMeal, and don't call Post correction in correction. Do it in Feedback instead.
             onPress={() => navigation.navigate('Correction', { meal, setMeal })}
           />
           <Button
@@ -167,8 +162,7 @@ const Feedback = ({ route, navigation }) => {
             titleStyle={styles.buttonText}
             title="Add to history"
             onPress={() => {
-              addToHistory(meal.description);
-              console.log('Sent item to to user history...');
+              addToHistory(meal.item ? meal.item : meal.description);
               // Reset navigation, so user go back (hardware back press) to current screen
               navigation.dispatch(
                 CommonActions.reset({
