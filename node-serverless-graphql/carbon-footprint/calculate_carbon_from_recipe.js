@@ -1,7 +1,13 @@
 const { getCarbonFootprintFromNameUsedForRecipe } = require('./carbon_footprint_calculation');
 
-const getCarbonFootprintFromRecipe = async (dataSources, url) => {
-    let response = await dataSources.recipeAPI.getDataFromLink(url);
+const getCarbonFootprintFromRecipe = async (dataSources, name) => {
+    let response;
+    // if the name is a url, call getDataFromLink, else call getDataFromName
+    if(name.includes("http")){
+        response = await dataSources.recipeAPI.getDataFromLink(name);
+    } else {
+        response = await dataSources.recipeAPI.getDataFromName(name);
+    }
 
     // If website is not a recipe website, return nulls
     if(!response){
@@ -11,9 +17,10 @@ const getCarbonFootprintFromRecipe = async (dataSources, url) => {
         }
     }
 
-    // Extract the name of the food and ingredients
+    // Extract the name of the food, ingredients and url
     const food_name = await dataSources.recipeAPI.getName();
     let ingredients = await dataSources.recipeAPI.getIngredients();
+    let sourceUrl = await dataSources.recipeAPI.getUrl();
 
     // First check whether this food is already in the databse
     let result = await dataSources.carbonAPI.getCfOneItem(food_name);

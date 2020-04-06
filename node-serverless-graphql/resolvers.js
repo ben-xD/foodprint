@@ -108,11 +108,11 @@ const resolvers = {
       }
     },
 
-    postRecipe: async (parent, {url}, context) => {
+    postRecipe: async (parent, {name}, context) => {
       const { dataSources, user } = context;
       console.log({ dataSources, user, parent });
-      console.log(`Received url: ${url}`);
-      let { item, carbonFootprintPerKg } = await getCarbonFootprintFromRecipe(dataSources, url);
+      console.log(`Received url: ${name}`);
+      let { item, carbonFootprintPerKg } = await getCarbonFootprintFromRecipe(dataSources, name);
       if (!item) item = 'unknown';
       const response = {
         name: item,
