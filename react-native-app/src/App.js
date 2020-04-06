@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Login from './screens/Login';
@@ -42,7 +42,8 @@ const App = (props) => {
       scopes: [], // Add scopes here, like Google drive, calendar, etc.
       webClientId: Config.WEB_CLIENT_ID,
     });
-    console.log({ recipeUrl });
+
+    console.log({ props });
 
     Keyboard.dismiss();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -76,13 +77,14 @@ const App = (props) => {
     if (state.userIsLoggedIn) {
       return (
         <>
+          {recipeUrl ? (<Stack.Screen name="Recipe" component={Recipe} initialParams={{ recipeUrl }} />) : <></>}
           <Stack.Screen name="Home" component={BottomTabBar} />
           <Stack.Screen name="Your Foodprint" component={Foodprint} />
           <Stack.Screen name="Camera" component={Camera} />
           <Stack.Screen name="Correction" component={Correction} />
-          <Stack.Screen name="Feedback" component={Feedback} />
+          <Stack.Screen name="Feedback" component={Feedback} initialParams={{ client }} />
           <Stack.Screen name="Delete Account" component={DeleteAccount} />
-          <Stack.Screen name="Recipe" component={Recipe} />
+          {!recipeUrl ? (<Stack.Screen name="Recipe" component={Recipe} initialParams={{ recipeUrl }} />) : <></>}
         </>
       );
     } else {

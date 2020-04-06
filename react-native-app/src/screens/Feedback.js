@@ -7,8 +7,7 @@ import { Rating, Button } from 'react-native-elements';
 import { widthPercentageToDP as percentageWidth, heightPercentageToDP as percentageHeight } from 'react-native-responsive-screen';
 import { ScrollView } from 'react-native-gesture-handler';
 import Snackbar from 'react-native-snackbar';
-import { StackActions } from '@react-navigation/native';
-import client from '../Client';
+import { CommonActions } from '@react-navigation/native';
 
 // GraphQL schema for picture posting mutation
 const POST_PICTURE_MUTATION = gql`
@@ -168,11 +167,23 @@ const Feedback = ({ route, navigation }) => {
             buttonStyle={styles.greenButtonStyle}
             titleStyle={styles.buttonText}
             title="Add to history"
-            onPress={() => {
-              addToHistory(meal.description);
+            onPress={async () => {
               console.log('Saving to user history.');
-              client.resetStore();
-              navigation.dispatch(StackActions.pop(2));
+              await addToHistory(meal.description);
+              route.params.client.resetStore();
+              // navigation.dispatch(StackActions.pop(2));
+              console.log('Sent item to to user history...');
+              // Reset navigation, so user can't go back (hardware back press) to current screen
+              // Make request to update?
+              navigation.dispatch(
+                CommonActions.reset({
+                  index: 1,
+                  routes: [
+                    { name: 'Home' },
+                  ],
+
+                })
+              );
             }}
           />
         </View>
