@@ -52,19 +52,18 @@ const resolvers = {
     },
   },
   Mutation: {
-    deleteData: async (parent, { file }, context) => {
+    deleteData: async (parent, payload, context) => {
       if (!context.user) {
         // Throw a 403 error because token was invalid or missing in context.js
         throw new Error('You must be logged in.');
       }
       const { dataSources, user } = context;
       const { uid } = user;
-      console.log({ 'user id': uid });
       try {
-        await dataSources.userHistAPI.insert_in_DB({ user_id: uid, item });
+        await dataSources.userHistAPI.deleteUserData(uid);
         return true;
       } catch (err) {
-        console.log(err);
+        console.error(err);
         return false;
       }
     },

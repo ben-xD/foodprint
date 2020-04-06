@@ -1,3 +1,5 @@
+const mongoose = require('mongoose');
+
 class userHistAPI {
   constructor(store) {
     this.store = store;
@@ -39,12 +41,17 @@ class userHistAPI {
   // #################################################################################
   //                               Functions used in resolvers
   // #################################################################################
-  async deleteUserData(user_id) {
-    this.store.userHist.deleteMany({ user_id }, (err) => {
-      if (err) {
-        // TODO: What errors are even possible?
-        console.warn(err);
-      }
+  deleteUserData(userId) {
+    console.log(`Deleting user_id: ${userId}`);
+    return new Promise((resolve, reject) => {
+      this.store.userHist.deleteMany({ user_id: userId }, (err) => {
+        if (err) {
+          reject(err);
+        } else {
+          console.log('Finished');
+          resolve();
+        }
+      });
     });
   }
 
@@ -56,7 +63,7 @@ class userHistAPI {
     // add the timestamp to new_data:
     new_data.time_stamp = new Date();
 
-    await this.store.userHist.collection.insert(new_data, (err, docs) => {
+    this.store.userHist.collection.insert(new_data, (err, docs) => {
       if (err) {
         return console.error(err);
       }
@@ -238,16 +245,16 @@ class userHistAPI {
   // the array of repetitions.
   async get_items(data) {
     const items = [];
-    const repetitions_indexes = {};
+    const repetitionsIndexes = {};
     let repetitions = new Array(data.length).fill(1);
-    for (let i = 0; i < data.length; i++) {
+    for (let i = 0; i < data.length; i += 1) {
       const { item } = data[i];
 
       if (items.includes(item)) { // if the item has appeared before
-        const index_first_item = repetitions_indexes[item];
+        const index_first_item = repetitionsIndexes[item];
         repetitions[index_first_item] += 1;
       } else { // if it is a new item
-        repetitions_indexes[item] = i;
+        repetitionsIndexes[item] = i;
         items.push(item);
       }
     }
