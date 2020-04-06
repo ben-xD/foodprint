@@ -82,9 +82,7 @@ const Foodprint = ({ navigation, route }) => {
       if (userHasSeenOverlayPreviously) {
         return;
       }
-    } catch (e) { } // If value does not exist in storage, ignore the error.
-
-    // Show overlay
+    } catch (e) { } // If value does not exist in storage, an error occurs, keep going.
     AsyncStorage.setItem('introductoryOverlaySeen', JSON.stringify(true));
     setIntroductoryOverlayVisible(true);
   };
@@ -102,17 +100,17 @@ const Foodprint = ({ navigation, route }) => {
     if (route.params && route.params.showIntroductoryOverlay) {
       showOverlayIfNewUser(); // show overlay if showIntroductoryOverlay param set
     }
-  }, [refetch, route]));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [route]));
 
 
 
-  const refetch = useCallback(() => {
+  const refetch = () => {
     console.log('Refetching data.');
     setRefreshing(true);
     setHistoryReport(null);
     refetchHistoryReport();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  };
 
   const goToCamera = async () => {
     navigation.navigate('Camera');
@@ -135,22 +133,20 @@ const Foodprint = ({ navigation, route }) => {
     error: historyReportError,
     data: historyReportData,
     refetch: refetchHistoryReport,
+    networkStatus,
   } = useQuery(GET_USER_HISTORY_REPORT, {
     variables: { timezone: timezoneOffsetInHours, resolutions: ['WEEK', 'MONTH'] },
+    notifyOnNetworkStatusChange: true,
   });
 
   useEffect(() => {
-    if (historyReportData && historyReportData.getUserHistoryReport) {
+    if (!historyReportLoading && historyReportData && historyReportData.getUserHistoryReport) {
       setHistoryReport(historyReportData.getUserHistoryReport);
       console.log('Successfully received user history report data, caching locally.');
       cacheHistoryReportLocally(historyReportData.getUserHistoryReport);
-    } else if (historyReportData) {
-      // TODO why is the historyReportData.getUserHistoryReport null?
-      console.log('No history, showing user no history.');
+      setRefreshing(false);
     }
-    setRefreshing(false);
-    console.log({ historyReportData });
-  }, [historyReportData]);
+  }, [historyReportData, historyReportLoading]);
 
   useEffect(() => {
     const retrieveHistoryReportDataFromCache = async () => {
@@ -177,7 +173,7 @@ const Foodprint = ({ navigation, route }) => {
   const renderFootprintChart = () => {
     if (timeSpan === 'weekly') {
       return (
-        (!historyReport) ? (
+        (!historyReport || networkStatus === 4) ? (
           <View style={styles.graphContainer}>
             <ActivityIndicator />
           </View>
@@ -188,7 +184,7 @@ const Foodprint = ({ navigation, route }) => {
     }
     if (timeSpan === 'monthly') {
       return (
-        (!historyReport) ? (
+        (!historyReport || networkStatus === 4) ? (
           <View style={styles.graphContainer}>
             <ActivityIndicator />
           </View>
