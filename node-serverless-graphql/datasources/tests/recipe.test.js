@@ -17,7 +17,7 @@ describe('Real Recipe API', () => {
     test('return true for a wesbite with recipe in it', async () =>{
         jest.setTimeout(10000);
         const webURL = "https://www.bbcgoodfood.com/recipes/roasted-chickpea-wraps";
-        const actual = await recipeAPI.getData(webURL);
+        const actual = await recipeAPI.getDataFromLink(webURL);
         const expected = true;
         expect(actual).toEqual(expected);
     });
@@ -25,7 +25,7 @@ describe('Real Recipe API', () => {
     test('return false for a wesbite with recipe in it', async () =>{
         jest.setTimeout(10000);
         const webURL = "https://www.bbc.co.uk/news/in-pictures-52120114";
-        const actual = await recipeAPI.getData(webURL);
+        const actual = await recipeAPI.getDataFromLink(webURL);
         const expected = false;
         expect(actual).toEqual(expected);
     });
