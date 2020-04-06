@@ -47,7 +47,7 @@ const CarbonFootprintScore = ({ loading, error, historyReport }) => {
 
   return (
     <View>
-      {loading || error || !historyReport?.userAvg ? (
+      {loading || error || !historyReport ? (
         <View style={styles.loadingContainer}>
           <ActivityIndicator />
         </View>
