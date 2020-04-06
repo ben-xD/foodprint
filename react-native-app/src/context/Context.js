@@ -7,6 +7,10 @@ import client from '../Client';
 
 import { YellowBox } from 'react-native';
 
+// We ignore this warning because we want to pass a camera buffer object
+// This prevents persisting the state (after app restart) of the navigation at the next view
+// We don't need to persist the Feedback screen.
+// The user will have to take another picture to get to the feedback screen
 YellowBox.ignoreWarnings([
   'Non-serializable values were found in the navigation state',
 ]);
@@ -120,15 +124,15 @@ export const createActionCreators = (dispatch) => ({
     dispatch({ type: 'SIGN_IN', token });
   },
   deleteAccount: async () => {
-    // try {
-    //   await auth().currentUser.delete();
-    // } catch (e) {
-    //   // make user login again:
-    //   console.warn(e);
-    // }
+    try {
+      await auth().signInAnonymously();
+      await auth().currentUser.delete();
+    } catch (e) {
+      // make user login again:
+      console.warn(e);
+    }
     client.clearStore();
     AsyncStorage.clear(); // userIsLoggedIn, historyReport, etc.
     dispatch({ type: 'SIGN_OUT' });
-    // TODO If storing user data, need to call backend to search and delete all user data.
   },
 });

@@ -162,7 +162,6 @@ const Feedback = ({ route, navigation }) => {
             buttonStyle={styles.redButtonStyle}
             titleStyle={styles.buttonText}
             title="Wrong item"
-            // TODO don't pass setMeal, and don't call Post correction in correction. Do it in Feedback instead.
             onPress={() => navigation.navigate('Correction', { meal, setMeal })}
           />
           <Button
