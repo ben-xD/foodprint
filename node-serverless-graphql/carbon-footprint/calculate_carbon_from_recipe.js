@@ -13,7 +13,10 @@ const getCarbonFootprintFromRecipe = async (dataSources, name) => {
     if(!response){
         return{
             item: null,
-            carbonFootprintPerKg: null
+            carbonFootprintPerKg: null,
+            imageUrl: null,
+            ingredients: null,
+            sourceUrl: null
         }
     }
 
@@ -21,44 +24,55 @@ const getCarbonFootprintFromRecipe = async (dataSources, name) => {
     const food_name = await dataSources.recipeAPI.getName();
     let ingredients = await dataSources.recipeAPI.getIngredients();
     let sourceUrl = await dataSources.recipeAPI.getUrl();
+    let imageUrl = await dataSources.recipeAPI.getImageUrl();
 
     // First check whether this food is already in the databse
-    let result = await dataSources.carbonAPI.getCfOneItem(food_name);
-    if(result !== null){
-        return{
-            item: result.item,
-            carbonFootprintPerKg: result.carbonpkilo
-        };
-    }
+    // let result = await dataSources.carbonAPI.getCfOneItem(food_name);
+    // if(result !== null){
+    //     return{
+    //         item: result.item,
+    //         carbonFootprintPerKg: result.carbonpkilo
+    //     };
+    // }
 
     // If this food is not yet in the database, approximate its co2 from ingredients
-    result = await calculate_total_carbon(dataSources, ingredients);
+    let ingredients_cf = [] // list to store the ingredients, amount and total cf
+    result = await calculate_total_carbon(dataSources, ingredients, ingredients_cf);
     if(result.carbonFootprintPerKg === 0){
         return {
             item: null,
-            carbonFootprintPerKg: null
+            carbonFootprintPerKg: null,
+            imageUrl: imageUrl,
+            ingredients: ingredients_cf,
+            sourceUrl: sourceUrl
         }
     }
 
-    // Clearly, now the food is not yet in database and the approximated co2 is not 0, therefore add to db
+    // Add the recipe to the DB if it was not already there
     let save_to_db = {
         item: food_name,
         carbonpkilo: result.carbonFootprintPerKg,
         categories: result.categories,
         label: "approximated from ingredients (from recipe)"
     };
-    await dataSources.carbonAPI.insert_in_DB(save_to_db);
+
+    try {
+        await dataSources.carbonAPI.insert_in_DB(save_to_db);
+    }  catch(e) {console.log("recipe already in db")};
 
     // Finally return the caculated co2 and detected food name
     return {
         item: food_name,
-        carbonFootprintPerKg: result.carbonFootprintPerKg
+        carbonFootprintPerKg: result.carbonFootprintPerKg,
+        imageUrl: imageUrl,
+        ingredients: ingredients_cf,
+        sourceUrl: sourceUrl
     };
 
 };
 
 //Sums up the carbon footprint of all the ingredients within the recipe
-const calculate_total_carbon = async (dataSources, ingredients) => {
+const calculate_total_carbon = async (dataSources, ingredients, ingredients_cf) => {
     let total_carbon = 0;
     let categories = "0000";
     for(let i = 0; i < ingredients.length; i++){
@@ -69,6 +83,11 @@ const calculate_total_carbon = async (dataSources, ingredients) => {
             total_carbon += carbon * ingredients[i].amount;
             categories = await update_categories(categories, new_categories);
         }
+        ingredients_cf.push({
+            "ingredient": ingredients[i].name,
+            "amountKg": ingredients[i].amount,
+            "carbonFootprintPerKg": carbon,
+        });
     }
 
     return {

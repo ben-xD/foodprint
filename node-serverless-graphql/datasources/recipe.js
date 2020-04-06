@@ -86,6 +86,11 @@ class RecipeAPI {
         return this.content.title;
     }
 
+    // Method to get the url of the main image of the recope. Have to run getDataFromLink or getDataFromName first once.
+    async getImageUrl() {
+        return this.content.image;
+    }
+
     // Method to get ingredients from the recipe. Have to run getDataFromLink or getDataFromName first once.
     async getIngredients() {
         let full_ingredients = this.content.extendedIngredients;

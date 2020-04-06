@@ -144,21 +144,29 @@ describe('testing resolvers', () => {
             { name: 'chickpeas', amount: 0 },
             { name: 'olive oil', amount: 0.01 },
             { name: 'ground cumin', amount: 0 },
-            { name: 'smoked paprika', amount: 0 },
-            { name: 'avocados', amount: 0.4 },
-            { name: 'juice of lime', amount: 0.03 },
-            { name: 'coriander', amount: 0 },
-            { name: 'corn tortillas', amount: 0.21 },
-            { name: 'iceberg lettuce', amount: 0.32 },
-            { name: 'natural yogurt', amount: 0.15 },
-            { name: 'roasted red peppers', amount: 0.48 }
+            { name: 'smoked paprika', amount: 0 }
         ]
         );
+        jest.spyOn(dataSources.recipeAPI, 'getImageUrl').mockReturnValueOnce("https://mock_url");
         jest.spyOn(dataSources.recipeAPI, 'getUrl').mockReturnValueOnce("https://www.bbcgoodfood.com/recipes/roasted-chickpea-wraps");
+        jest.spyOn(dataSources.carbonAPI, 'getCfMultipleItems').mockReturnValueOnce([{item: "chickpeas", carbonpkilo: 0.73, categories: "1000"}]);
+        jest.spyOn(dataSources.carbonAPI, 'getCfMultipleItems').mockReturnValueOnce([{item: "olive oil", carbonpkilo: 1.63, categories: "1000"}]);
+        jest.spyOn(dataSources.carbonAPI, 'getCfMultipleItems').mockReturnValueOnce([{item: "ground cumin", carbonpkilo: null, categories: "1000"}]);
+        jest.spyOn(dataSources.carbonAPI, 'getCfMultipleItems').mockReturnValueOnce([{item: "smoked paprika", carbonpkilo: null, categories: "1000"}]);
 
         const name = "https://www.bbcgoodfood.com/recipes/roasted-chickpea-wraps";
         let actual = await resolvers.Mutation.postRecipe(null, { name }, { dataSources, user });
-        let expected = { "carbonFootprintPerKg": 2.49, "name": "Roasted chickpea wraps" };
+        let expected = { "carbonFootprintPerKg": 0.02, 
+                        "imageUrl": "https://mock_url",
+                        "name": "Roasted chickpea wraps", 
+                        "sourceUrl": "https://www.bbcgoodfood.com/recipes/roasted-chickpea-wraps",
+                        "ingredients": [
+                            { amountKg: 0, carbonFootprintPerKg: 0.73, ingredient: "chickpeas"},
+                            { amountKg: 0.01, carbonFootprintPerKg: 1.63, ingredient: "olive oil"},
+                            { amountKg: 0, carbonFootprintPerKg: null, ingredient: "ground cumin"},
+                            { amountKg: 0, carbonFootprintPerKg: null, ingredient: "smoked paprika"}
+                        ]
+                    };
         expect(actual).toEqual(expected);
     });
 
@@ -180,9 +188,35 @@ describe('testing resolvers', () => {
             ]
         );
         jest.spyOn(dataSources.recipeAPI, 'getUrl').mockReturnValueOnce("https://www.simplyrecipes.com/recipes/mushroom_risotto/");
+        jest.spyOn(dataSources.recipeAPI, 'getImageUrl').mockReturnValueOnce("https://mock_url");
+        jest.spyOn(dataSources.carbonAPI, 'getCfMultipleItems').mockReturnValueOnce([{item: "butter", carbonpkilo: 11.92, categories: "1000"}]);
+        jest.spyOn(dataSources.carbonAPI, 'getCfMultipleItems').mockReturnValueOnce([{item: "oyster mushrooms", carbonpkilo: 0.73, categories: "1000"}]);
+        jest.spyOn(dataSources.carbonAPI, 'getCfMultipleItems').mockReturnValueOnce([{item: "brandy", carbonpkilo: 1.65, categories: "1000"}]);
+        jest.spyOn(dataSources.carbonAPI, 'getCfMultipleItems').mockReturnValueOnce([{item: "chiken stock", carbonpkilo: 5.05, categories: "1000"}]);
+        jest.spyOn(dataSources.carbonAPI, 'getCfMultipleItems').mockReturnValueOnce([{item: "shallots", carbonpkilo: 0.39, categories: "1000"}]);
+        jest.spyOn(dataSources.carbonAPI, 'getCfMultipleItems').mockReturnValueOnce([{item: "arborio rice", carbonpkilo: 1.14, categories: "1000"}]);
+        jest.spyOn(dataSources.carbonAPI, 'getCfMultipleItems').mockReturnValueOnce([{item: "parmesan cheese", carbonpkilo: 9.78, categories: "1000"}]);
+        jest.spyOn(dataSources.carbonAPI, 'getCfMultipleItems').mockReturnValueOnce([{item: "salt and pepper", carbonpkilo: 2, categories: "1000"}]);
+        jest.spyOn(dataSources.carbonAPI, 'getCfMultipleItems').mockReturnValueOnce([{item: "fresh parsley", carbonpkilo: null, categories: "1000"}]);
+
         const name = "mushroom risotto";
         let actual = await resolvers.Mutation.postRecipe(null, { name }, { dataSources, user });
-        let expected = { "carbonFootprintPerKg": 7.53, "name": "Mushroom Risotto" };
+        let expected = { "carbonFootprintPerKg": 7.53, 
+                        "imageUrl": "https://mock_url",
+                        "name": "Mushroom Risotto",
+                        "sourceUrl": "https://www.simplyrecipes.com/recipes/mushroom_risotto/",
+                        "ingredients": [
+                            { ingredient: 'butter', amountKg: 0.03, carbonFootprintPerKg: 11.92 },
+                            { ingredient: 'oyster mushrooms', amountKg: 0.17, carbonFootprintPerKg: 0.73 },
+                            { ingredient: 'brandy', amountKg: 0.16, carbonFootprintPerKg: 1.65 },
+                            { ingredient: 'chicken stock', amountKg: 1.2, carbonFootprintPerKg: 5.05 },
+                            { ingredient: 'shallots', amountKg: 0.08, carbonFootprintPerKg: 0.39 },
+                            { ingredient: 'arborio rice', amountKg: 0.35, carbonFootprintPerKg: 1.14 },
+                            { ingredient: 'parmesan cheese', amountKg: 0.03, carbonFootprintPerKg: 9.78 },
+                            { ingredient: 'salt and pepper', amountKg: 0, carbonFootprintPerKg: 2 },
+                            { ingredient: 'fresh parsley', amountKg: 0.01, carbonFootprintPerKg: null }
+                          ]
+                        };
         expect(actual).toEqual(expected);
     });
 
