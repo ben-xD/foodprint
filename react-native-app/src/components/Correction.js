@@ -1,6 +1,6 @@
 import { Image, View, ActivityIndicator } from 'react-native';
 import { Input, Text } from 'react-native-elements';
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { gql } from 'apollo-boost';
 import { useMutation } from '@apollo/react-hooks';

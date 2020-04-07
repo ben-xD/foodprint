@@ -3,13 +3,13 @@ const admin = require('firebase-admin');
 const typeDefs = require('./schema.js');
 const resolvers = require('./resolvers.js');
 const context = require('./context');
-const  { createStore, deleteStore } = require('./utils');
+const { createStore, deleteStore } = require('./utils');
 
 const VisionAPI = require('./datasources/vision');
 const visionCredentials = require('./credentials/carbon-7fbf76411514.json');
 const CarbonAPI = require('./datasources/carbon');
 const ConceptAPI = require('./datasources/concept');
-const userHistAPI = require('./datasources/user_history');
+const UserHistAPI = require('./datasources/user_history');
 const RecipeAPI = require('./datasources/recipe');
 
 // Using $GOOGLE_APPLICATION_CREDENTIALS, which should be set, see `README.md`
@@ -24,8 +24,8 @@ const carbonAPI = new CarbonAPI(store);
 const dataSources = () => ({
   visionAPI: new VisionAPI(visionCredentials),
   conceptAPI: new ConceptAPI(),
-  carbonAPI:  carbonAPI,
-  userHistAPI: new userHistAPI(store),
+  carbonAPI,
+  userHistAPI: new UserHistAPI(store),
   recipeAPI: new RecipeAPI(),
 });
 
@@ -35,7 +35,7 @@ const server = new ApolloServer({
   dataSources,
   context,
   playground: true,
-  introspection: true
+  introspection: true,
 });
 
 exports.handler = server.createHandler({
