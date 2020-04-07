@@ -155,12 +155,10 @@ const Feedback = ({ route, navigation }) => {
             type="star" // Optionally customisible
             imageSize={percentageWidth('7%')}
           />
-          <Text style={styles.score}>{meal.score} kg of CO2 eq/kg</Text>
+          <Text style={styles.score}>{meal.score} units</Text>
           {(overlayInfo) ? (
-              <Button title="More information about this number" type="clear" onPress={setVisibility(true)}/>
-          ) : (
-              <Text/>
-          )
+              <Button title="More information about this number" type="clear" onPress={() => setVisibility(true)} />
+          ) : <></>
           }
         </View>
         <View style={styles.buttonContainer}>
@@ -181,17 +179,25 @@ const Feedback = ({ route, navigation }) => {
               navigation.dispatch(StackActions.pop(2));
             }}
           />
-          <Overlay isVisible={isVisible} onBackdropPress={setVisibility(false)}>
-            <ScrollView>
-              <Text>The carbon footprint of this recipe was obtained from the following ingredients:</Text>
-              <FlatList data={overlayInfo.ingredients} renderItem={({item}) => <Text>{item.amountKg}kg of
-                {item.ingredient}: {item.carbonFootprintPerKg} units</Text>}/>
-              <Text>This list of ingredients was obtained from the following webpage:</Text>
-              <Text style={{ color:'blue' }} onPress={() => Linking.openURL(overlayInfo.recipeUrl)}>{overlayInfo.recipeUrl}</Text>
-            </ScrollView>
-          </Overlay>
         </View>
       </ScrollView>
+      {(overlayInfo) ? (
+          <Overlay isVisible={isVisible} onBackdropPress={() => setVisibility(false)}>
+            <SafeAreaView style={ styles.overlayContainer }>
+              <Text style={ styles.overlayText }>The carbon footprint of this recipe was obtained from the following ingredients:</Text>
+              <FlatList
+                  data={overlayInfo.ingredients}
+                  style={ styles.overlayList }
+                  renderItem={({item}) => (item.carbonFootprintPerKg && item.amountKg > 0) ? (
+                      <Text style={ styles.overlayText }>- {item.amountKg}kg of {item.ingredient}: {item.carbonFootprintPerKg} units</Text>
+                  ) : <></>}
+              />
+              <Text style={ styles.overlayText }>This list of ingredients was obtained from the following webpage:{'\n'}</Text>
+              <Text style={ styles.overlayHyperlink } onPress={() => Linking.openURL(overlayInfo.recipeUrl)}>{overlayInfo.recipeUrl}</Text>
+            </SafeAreaView>
+          </Overlay>
+      ) : <></>
+      }
     </SafeAreaView>;
 };
 
@@ -222,6 +228,21 @@ const styles = StyleSheet.create({
     fontSize: percentageWidth('8%'),
     marginTop: percentageHeight('1%'),
     marginBottom: percentageHeight('1%'),
+  },
+  overlayContainer: {
+    marginTop: percentageHeight('5%'),
+    marginHorizontal: percentageWidth('3%'),
+  },
+  overlayText: {
+    fontSize: percentageWidth('4%'),
+  },
+  overlayList: {
+    fontSize: percentageWidth('4%'),
+    marginVertical: percentageHeight('4%')
+  },
+  overlayHyperlink: {
+    fontSize: percentageWidth('4%'),
+    color:'blue',
   },
   score: { fontSize: percentageWidth('5%'), margin: percentageWidth('2%') },
   buttonContainer: { flex: 1, flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center' },

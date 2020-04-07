@@ -8,7 +8,7 @@ import Snackbar from 'react-native-snackbar';
 
 const POST_RECIPE_MUTATION = gql`
 mutation($input: String!) {
-  postRecipe(input: input) {
+  postRecipe(name: $input) {
      name
      carbonFootprintPerKg
      imageUrl
