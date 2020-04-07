@@ -67,7 +67,7 @@ const Recipe = ({ navigation, route }) => {
     if (recipeData && recipeData.postRecipe.carbonFootprintPerKg != null) {
       navigation.navigate('Feedback', {
         recipeMeal: {
-          uri: recipeData.postRecipe.imageURL,
+          uri: recipeData.postRecipe.imageUrl,
           score: recipeData.postRecipe.carbonFootprintPerKg,
           description: recipeData.postRecipe.name,
         }, extraInfo: {

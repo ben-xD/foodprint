@@ -210,6 +210,7 @@ const Feedback = ({ route, navigation }) => {
                       <Text style={ styles.overlayText }>- {item.amountKg} kg of {item.ingredient}:
                         <Text style={{ fontWeight:'bold', color: getColourFromCarbonFootprint(item.carbonFootprintPerKg) }}> {(item.amountKg * item.carbonFootprintPerKg).toFixed(2)}</Text> units</Text>
                   ) : <></>}
+                  keyExtractor={(item,index) => index.toString()}
               />
               <Text style={ styles.overlayText }>To see the full recipe, click on the following link:{'\n'}</Text>
               <Text style={ styles.overlayHyperlink } onPress={() => Linking.openURL(overlayInfo.recipeUrl)}>{overlayInfo.recipeUrl}</Text>
@@ -246,6 +247,7 @@ const styles = StyleSheet.create({
   },
   description: {
     textTransform: 'capitalize',
+    textAlign: 'center',
     fontSize: percentageWidth('8%'),
     marginTop: percentageHeight('1%'),
     marginBottom: percentageHeight('1%'),
