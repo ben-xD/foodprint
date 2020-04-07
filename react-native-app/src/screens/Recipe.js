@@ -87,7 +87,7 @@ const Recipe = ({ navigation, route }) => {
         style={styles.image}
       />
       <Text style={styles.text}>
-        Want to know the carbon footprint of a meal you want to cook? Paste the URL of the
+        Want to know the carbon footprint of a meal you want to cook? Write the name or paste the URL of the
         recipe in the following field!
        </Text>
       <Input
