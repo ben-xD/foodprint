@@ -68,6 +68,11 @@ const resolvers = {
       }
     },
     postPicture: async (parent, { file }, context) => {
+      if (!context.user) {
+        // Throw a 403 error because token was invalid or missing in context.js
+        throw new Error('You must be logged in.');
+      }
+
       const { dataSources, user } = context;
       console.log({ dataSources, user, parent });
       const image = new Buffer(file.base64, 'base64'); // Decode base64 of "file" to image
@@ -81,6 +86,11 @@ const resolvers = {
       return response;
     },
     postBarcode: async (parent, { barcode }, context) => {
+      if (!context.user) {
+        // Throw a 403 error because token was invalid or missing in context.js
+        throw new Error('You must be logged in.');
+      }
+
       const { dataSources, user } = context;
       console.log({ dataSources, user, parent });
       console.log(`Received barcode: ${barcode}`);
@@ -93,6 +103,11 @@ const resolvers = {
       return response;
     },
     postCorrection: async (parent, { name }, context) => {
+      if (!context.user) {
+        // Throw a 403 error because token was invalid or missing in context.js
+        throw new Error('You must be logged in.');
+      }
+
       const { dataSources, user } = context;
       console.log({ 'Received correction': name });
       const { item, carbonFootprintPerKg } = await getCarbonFootprintFromName(dataSources, name);
@@ -124,6 +139,11 @@ const resolvers = {
     },
 
     postRecipe: async (parent, { url }, context) => {
+      if (!context.user) {
+        // Throw a 403 error because token was invalid or missing in context.js
+        throw new Error('You must be logged in.');
+      }
+
       const { dataSources, user } = context;
       console.log({ dataSources, user, parent });
       console.log(`Received url: ${url}`);
