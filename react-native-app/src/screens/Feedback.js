@@ -170,11 +170,10 @@ const Feedback = ({ route, navigation }) => {
             onPress={async () => {
               console.log('Saving to user history.');
               await addToHistory(meal.description);
+              // Reset client store after modifying user history
               route.params.client.resetStore();
-              // navigation.dispatch(StackActions.pop(2));
               console.log('Sent item to to user history...');
-              // Reset navigation, so user can't go back (hardware back press) to current screen
-              // Make request to update?
+              // Reset navigation, so user can't 'hardware back press' to this screen
               navigation.dispatch(
                 CommonActions.reset({
                   index: 1,
