@@ -188,12 +188,13 @@ const Feedback = ({ route, navigation }) => {
               <FlatList
                   data={overlayInfo.ingredients}
                   style={ styles.overlayList }
-                  renderItem={({item}) => (item.carbonFootprintPerKg && item.amountKg > 0) ? (
-                      <Text style={ styles.overlayText }>- {item.amountKg}kg of {item.ingredient}: {item.carbonFootprintPerKg} units</Text>
+                  renderItem={({item}) => (item.carbonFootprintPerKg && item.amountKg*item.carbonFootprintPerKg >= 0.01) ? (
+                      <Text style={ styles.overlayText }>- {item.amountKg}kg of {item.ingredient}: {(item.amountKg * item.carbonFootprintPerKg).toFixed(2)} units</Text>
                   ) : <></>}
               />
-              <Text style={ styles.overlayText }>This list of ingredients was obtained from the following webpage:{'\n'}</Text>
+              <Text style={ styles.overlayText }>To see the full recipe, click on the following link:{'\n'}</Text>
               <Text style={ styles.overlayHyperlink } onPress={() => Linking.openURL(overlayInfo.recipeUrl)}>{overlayInfo.recipeUrl}</Text>
+              <Text style={ styles.overlayFootnote }>Note: Ingredients used in very small quantity, which have a negligeable carbon footprint, or which were unknown to our database are not shown. </Text>
             </SafeAreaView>
           </Overlay>
       ) : <></>
@@ -243,6 +244,10 @@ const styles = StyleSheet.create({
   overlayHyperlink: {
     fontSize: percentageWidth('4%'),
     color:'blue',
+  },
+  overlayFootnote: {
+    fontSize: percentageWidth('3%'),
+    marginTop: percentageHeight('5%')
   },
   score: { fontSize: percentageWidth('5%'), margin: percentageWidth('2%') },
   buttonContainer: { flex: 1, flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center' },
