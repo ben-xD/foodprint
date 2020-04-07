@@ -52,8 +52,7 @@ const Feedback = ({ route, navigation }) => {
     } else if (recipeMeal) {
       setMeal(recipeMeal);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [postBarcodeMutation, route.params, uploadPicture]);
 
   useEffect(() => {
     if (!pictureError && !barcodeError) {
@@ -82,8 +81,7 @@ const Feedback = ({ route, navigation }) => {
         navigation.navigate('Correction', { meal, setMeal });
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [navigation, pictureData, route.params.uri]);
+  }, [meal, navigation, pictureData, route.params.uri]);
 
   useEffect(() => {
     if (barcodeData) {
@@ -92,14 +90,12 @@ const Feedback = ({ route, navigation }) => {
         navigation.navigate('Correction', { meal, setMeal });
       } else {
         setMeal({
-          ...meal,
           score: barcodeData.postBarcode.carbonFootprintPerKg,
           description: barcodeData.postBarcode.name,
         });
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [barcodeData, navigation]);
+  }, [barcodeData, meal, navigation]);
 
   // Add item to user history
   const addToHistory = async (item) => {
@@ -169,7 +165,7 @@ const Feedback = ({ route, navigation }) => {
             title="Add to history"
             onPress={async () => {
               console.log('Saving to user history.');
-              await addToHistory(meal.description);
+              await addToHistory(meal.item ? meal.item : meal.description);
               // Reset client store after modifying user history
               route.params.client.resetStore();
               console.log('Sent item to to user history...');
