@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ActivityIndicator, Image, SafeAreaView } from 'react-native';
+import {View, Text, ActivityIndicator, Image, SafeAreaView, FlatList} from 'react-native';
 import { gql } from 'apollo-boost';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Linking } from 'react-native';
 import { useMutation } from '@apollo/react-hooks';
-import { Rating, Button } from 'react-native-elements';
+import {Rating, Button, Overlay} from 'react-native-elements';
 import { widthPercentageToDP as percentageWidth, heightPercentageToDP as percentageHeight } from 'react-native-responsive-screen';
 import { ScrollView } from 'react-native-gesture-handler';
 import Snackbar from 'react-native-snackbar';
@@ -36,19 +36,22 @@ const POST_USER_HISTORY_ENTRY = gql`
 
 const Feedback = ({ route, navigation }) => {
   const [meal, setMeal] = useState(null);
+  const [overlayInfo, setOverlayInfo] = useState(null);
+  const [isVisible, setVisibility] = useState(false);
   const [uploadPicture, { loading: pictureLoading, data: pictureData, error: pictureError }] = useMutation(POST_PICTURE_MUTATION);
   const [postBarcodeMutation, { loading: barcodeLoading, error: barcodeError, data: barcodeData }] = useMutation(POST_BARCODE_MUTATION);
   const [postUserHistoryEntryMutation, { loading: historyLoading, error: historyError, data: historyData }] = useMutation(POST_USER_HISTORY_ENTRY);
 
   // make relevant request when component is loaded AND provided with either file or barcode
   useEffect(() => {
-    const { file, barcode, recipeMeal } = route.params;
+    const { file, barcode, recipeMeal, extraInfo } = route.params;
     if (file) {
       uploadPicture({ variables: { file } });
     } else if (barcode) {
       postBarcodeMutation({ variables: { barcode } });
-    } else if (recipeMeal) {
+    } else if (recipeMeal && extraInfo) {
       setMeal(recipeMeal);
+      setOverlayInfo(extraInfo);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -153,6 +156,7 @@ const Feedback = ({ route, navigation }) => {
             imageSize={percentageWidth('7%')}
           />
           <Text style={styles.score}>{meal.score} kg of CO2 eq/kg</Text>
+          <Button title="More information about this number" type="clear" onPress={setVisibility(true)}/>
         </View>
         <View style={styles.buttonContainer}>
           <Button
@@ -172,6 +176,15 @@ const Feedback = ({ route, navigation }) => {
               navigation.dispatch(StackActions.pop(2));
             }}
           />
+          <Overlay isVisible={isVisible} onBackdropPress={setVisibility(false)}>
+            <ScrollView>
+              <Text>The carbon footprint of this recipe was obtained from the following ingredients:</Text>
+              <FlatList data={overlayInfo.ingredients} renderItem={({item}) => <Text>{item.amountKg}kg of
+                {item.ingredient}: {item.carbonFootprintPerKg} units</Text>}/>
+              <Text>This list of ingredients was obtained from the following webpage:</Text>
+              <Text style={{ color:'blue' }} onPress={() => Linking.openURL(overlayInfo.recipeUrl)}>{overlayInfo.recipeUrl}</Text>
+            </ScrollView>
+          </Overlay>
         </View>
       </ScrollView>
     </SafeAreaView>;

@@ -7,10 +7,17 @@ import { useMutation } from '@apollo/react-hooks';
 import Snackbar from 'react-native-snackbar';
 
 const POST_RECIPE_MUTATION = gql`
-mutation($url: String!) {
+mutation($name: String!) {
   postRecipe(url: $url) {
      name
      carbonFootprintPerKg
+     imageUrl
+     ingredients {
+        ingredient
+        amountKg
+        carbonFootprintPerKg
+     }
+     sourceUrl
   }
 }`;
 
@@ -60,10 +67,13 @@ const Recipe = ({ navigation, route }) => {
     if (recipeData && recipeData.postRecipe.carbonFootprintPerKg != null) {
       navigation.navigate('Feedback', {
         recipeMeal: {
-          uri: 'http://www.bagherra.eu/wp-content/uploads/2016/11/orionthemes-placeholder-image-1.png',
+          uri: recipeData.postRecipe.imageURL,
           score: recipeData.postRecipe.carbonFootprintPerKg,
           description: recipeData.postRecipe.name,
-        }, loading: false
+        }, extraInfo: {
+          recipeUrl: recipeData.postRecipe.sourceUrl,
+          ingredients: recipeData.postRecipe.ingredients,
+        }, loading: false,
       });
     }
   }
