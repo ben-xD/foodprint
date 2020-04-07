@@ -7,8 +7,8 @@ import { useMutation } from '@apollo/react-hooks';
 import Snackbar from 'react-native-snackbar';
 
 const POST_RECIPE_MUTATION = gql`
-mutation($name: String!) {
-  postRecipe(url: $url) {
+mutation($input: String!) {
+  postRecipe(input: input) {
      name
      carbonFootprintPerKg
      imageUrl
@@ -22,12 +22,12 @@ mutation($name: String!) {
 }`;
 
 const Recipe = ({ navigation, route }) => {
-  const [url, setURL] = useState('');
+  const [input, setInput] = useState('');
   const [postRecipe, { loading: recipeLoading, error: recipeError, data: recipeData }] = useMutation(POST_RECIPE_MUTATION);
 
   const handleSubmit = async () => {
     try {
-      await postRecipe({ variables: { url } });
+      await postRecipe({ variables: { input } });
     } catch (err) {
       console.warn({ err });
     }
@@ -92,7 +92,7 @@ const Recipe = ({ navigation, route }) => {
        </Text>
       <Input
         containerStyle={styles.input}
-        onChangeText={value => setURL(value)}
+        onChangeText={value => setInput(value)}
       />
       {(recipeLoading) ? (
         <ActivityIndicator style={styles.loading} />
