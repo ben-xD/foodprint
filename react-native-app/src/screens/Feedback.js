@@ -107,7 +107,7 @@ const Feedback = ({ route, navigation }) => {
     await postUserHistoryEntryMutation({ variables: { item } });
   };
 
-  const calculateRating = (carbonFootprint) => {
+  const getRatingFromCarbonFootprint = (carbonFootprint) => {
     if (carbonFootprint < 0) {
       return 0;
     } else if (carbonFootprint < 2) {
@@ -135,6 +135,24 @@ const Feedback = ({ route, navigation }) => {
     }
   };
 
+  const getColourFromCarbonFootprint = (carbonFootprint) => {
+    if (carbonFootprint < 0) {
+      return 'black';
+    } else if (carbonFootprint < 4) {
+      return 'forestgreen';
+    } else if (carbonFootprint < 8) {
+      return 'yellowgreen';
+    } else if (carbonFootprint < 12) {
+      return 'gold';
+    } else if (carbonFootprint < 16) {
+      return 'orange';
+    } else if (carbonFootprint < 20) {
+      return 'red';
+    } else {
+      return 'darkred';
+    }
+  };
+
   return pictureLoading || barcodeLoading || !meal ?
     <View style={styles.loading}>
       <ActivityIndicator />
@@ -151,7 +169,7 @@ const Feedback = ({ route, navigation }) => {
           <Text style={styles.description}>{meal.description}</Text>
           <Rating
             readonly
-            startingValue={calculateRating(meal.score)}
+            startingValue={getRatingFromCarbonFootprint(meal.score)}
             type="star" // Optionally customisible
             imageSize={percentageWidth('7%')}
           />
@@ -189,12 +207,14 @@ const Feedback = ({ route, navigation }) => {
                   data={overlayInfo.ingredients}
                   style={ styles.overlayList }
                   renderItem={({item}) => (item.carbonFootprintPerKg && item.amountKg*item.carbonFootprintPerKg >= 0.01) ? (
-                      <Text style={ styles.overlayText }>- {item.amountKg}kg of {item.ingredient}: {(item.amountKg * item.carbonFootprintPerKg).toFixed(2)} units</Text>
+                      <Text style={ styles.overlayText }>- {item.amountKg} kg of {item.ingredient}:
+                        <Text style={{ fontWeight:'bold', color: getColourFromCarbonFootprint(item.carbonFootprintPerKg) }}> {(item.amountKg * item.carbonFootprintPerKg).toFixed(2)}</Text> units</Text>
                   ) : <></>}
               />
               <Text style={ styles.overlayText }>To see the full recipe, click on the following link:{'\n'}</Text>
               <Text style={ styles.overlayHyperlink } onPress={() => Linking.openURL(overlayInfo.recipeUrl)}>{overlayInfo.recipeUrl}</Text>
-              <Text style={ styles.overlayFootnote }>Note: Ingredients used in very small quantity, which have a negligeable carbon footprint, or which were unknown to our database are not shown. </Text>
+              <Text style={ styles.overlayFootnote }><Text style={{fontWeight:'bold'}}>Note</Text>: Ingredients used in very small quantity, which have a
+                negligeable carbon footprint, or which were unknown to our database are not shown. </Text>
             </SafeAreaView>
           </Overlay>
       ) : <></>
