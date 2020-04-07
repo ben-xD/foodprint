@@ -156,7 +156,12 @@ const Feedback = ({ route, navigation }) => {
             imageSize={percentageWidth('7%')}
           />
           <Text style={styles.score}>{meal.score} kg of CO2 eq/kg</Text>
-          <Button title="More information about this number" type="clear" onPress={setVisibility(true)}/>
+          {(overlayInfo) ? (
+              <Button title="More information about this number" type="clear" onPress={setVisibility(true)}/>
+          ) : (
+              <Text/>
+          )
+          }
         </View>
         <View style={styles.buttonContainer}>
           <Button
