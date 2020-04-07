@@ -33,19 +33,20 @@ test('GoogleSignIn button calls SignInWithGoogle from context', async () => {
   await wait(() => expect(utils.queryByTestId('googleButton')));
 });
 
-test('Skip button calls anonymous sign in', async () => {
-  const signInAnonymously = jest.fn();
-  const authentication = {
-    signInAnonymously,
-  };
+// Skip button removed for now
+// test('Skip button calls anonymous sign in', async () => {
+//   const signInAnonymously = jest.fn();
+//   const authentication = {
+//     signInAnonymously,
+//   };
 
-  const utils = renderSignUpOrRegister(authentication);
+//   const utils = renderSignUpOrRegister(authentication);
 
-  const skipButton = utils.getByText('Skip login');
-  fireEvent.press(skipButton);
-  await wait(() => expect(utils.queryByTestId('skipButton')));
-  expect(signInAnonymously.mock.calls.length).toBe(1);
-});
+//   const skipButton = utils.getByText('Skip login');
+//   fireEvent.press(skipButton);
+//   await wait(() => expect(utils.queryByTestId('skipButton')));
+//   expect(signInAnonymously.mock.calls.length).toBe(1);
+// });
 
 // HELPERS
 // Re-use this function to render Signup, as it uses useContext. This 'mocks' that out.

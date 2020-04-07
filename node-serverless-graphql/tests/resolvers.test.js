@@ -138,7 +138,7 @@ describe('testing resolvers', () => {
     test('Test postRecipe', async () => {
         jest.setTimeout(10000);
         // Mock up functions that call recipeAPI
-        jest.spyOn(dataSources.recipeAPI, 'getData').mockReturnValueOnce(true);
+        jest.spyOn(dataSources.recipeAPI, 'getDataFromLink').mockReturnValueOnce(true);
         jest.spyOn(dataSources.recipeAPI, 'getName').mockReturnValueOnce("Roasted chickpea wraps");
         jest.spyOn(dataSources.recipeAPI, 'getIngredients').mockReturnValueOnce([
             { name: 'chickpeas', amount: 0 },

@@ -24,7 +24,7 @@ describe('getCarbonFootprintFromName (mocked dataSources)', () => {
     test('Roasted chickpea wraps has co2 2.49', async () => {
         jest.setTimeout(10000);
         // Mock up functions that call recipeAPI
-        jest.spyOn(dataSources.recipeAPI, 'getData').mockReturnValueOnce(true);
+        jest.spyOn(dataSources.recipeAPI, 'getDataFromLink').mockReturnValueOnce(true);
         jest.spyOn(dataSources.recipeAPI, 'getName').mockReturnValueOnce("Roasted chickpea wraps");
         jest.spyOn(dataSources.recipeAPI, 'getIngredients').mockReturnValueOnce([
                 { name: 'chickpeas', amount: 0 },
@@ -48,7 +48,7 @@ describe('getCarbonFootprintFromName (mocked dataSources)', () => {
 
     test('A website with no recipe should return nulls', async () => {
         jest.setTimeout(10000);
-        jest.spyOn(dataSources.recipeAPI, 'getData').mockReturnValueOnce(false);
+        jest.spyOn(dataSources.recipeAPI, 'getDataFromLink').mockReturnValueOnce(false);
         const url = "https://www.bbc.co.uk/news/in-pictures-52120114";
         let actual = await getCarbonFootprintFromRecipe(dataSources, url);
         let expected = { "carbonFootprintPerKg": null, "item": null };

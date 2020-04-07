@@ -1,7 +1,7 @@
 const { getCarbonFootprintFromNameUsedForRecipe } = require('./carbon_footprint_calculation');
 
 const getCarbonFootprintFromRecipe = async (dataSources, url) => {
-    let response = await dataSources.recipeAPI.getData(url);
+    let response = await dataSources.recipeAPI.getDataFromLink(url);
 
     // If website is not a recipe website, return nulls
     if(!response){

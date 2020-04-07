@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ActivityIndicator, Image } from 'react-native';
+import { View, Text, ActivityIndicator, Image, SafeAreaView } from 'react-native';
 import { gql } from 'apollo-boost';
 import { StyleSheet } from 'react-native';
 import { useMutation } from '@apollo/react-hooks';
@@ -7,7 +7,7 @@ import { Rating, Button } from 'react-native-elements';
 import { widthPercentageToDP as percentageWidth, heightPercentageToDP as percentageHeight } from 'react-native-responsive-screen';
 import { ScrollView } from 'react-native-gesture-handler';
 import Snackbar from 'react-native-snackbar';
-import { CommonActions } from '@react-navigation/native';
+import { StackActions } from '@react-navigation/native';
 
 // GraphQL schema for picture posting mutation
 const POST_PICTURE_MUTATION = gql`
@@ -28,7 +28,7 @@ const POST_BARCODE_MUTATION = gql`
   }
 `;
 
-const Post_User_History_Entry = gql`
+const POST_USER_HISTORY_ENTRY = gql`
   mutation postUserHistoryEntry($item: String) {
     postUserHistoryEntry(item: $item)
   }
@@ -38,7 +38,7 @@ const Feedback = ({ route, navigation }) => {
   const [meal, setMeal] = useState(null);
   const [uploadPicture, { loading: pictureLoading, data: pictureData, error: pictureError }] = useMutation(POST_PICTURE_MUTATION);
   const [postBarcodeMutation, { loading: barcodeLoading, error: barcodeError, data: barcodeData }] = useMutation(POST_BARCODE_MUTATION);
-  const [postUserHistoryEntryMutation, { loading: historyLoading, error: historyError, data: historyData }] = useMutation(Post_User_History_Entry);
+  const [postUserHistoryEntryMutation, { loading: historyLoading, error: historyError, data: historyData }] = useMutation(POST_USER_HISTORY_ENTRY);
 
   // make relevant request when component is loaded AND provided with either file or barcode
   useEffect(() => {
@@ -132,7 +132,7 @@ const Feedback = ({ route, navigation }) => {
     <View style={styles.loading}>
       <ActivityIndicator />
     </View > :
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>
         <View style={styles.body}>
           {meal.uri == null ? <></> :
@@ -163,20 +163,12 @@ const Feedback = ({ route, navigation }) => {
             title="Add to history"
             onPress={() => {
               addToHistory(meal.item ? meal.item : meal.description);
-              // Reset navigation, so user go back (hardware back press) to current screen
-              navigation.dispatch(
-                CommonActions.reset({
-                  index: 1,
-                  routes: [
-                    { name: 'Home' },
-                  ],
-                })
-              );
+              navigation.dispatch(StackActions.pop(2));
             }}
           />
         </View>
       </ScrollView>
-    </View>;
+    </SafeAreaView>;
 };
 
 const styles = StyleSheet.create({

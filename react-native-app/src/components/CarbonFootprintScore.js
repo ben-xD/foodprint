@@ -1,23 +1,13 @@
 import { heightPercentageToDP as percentageHeight, widthPercentageToDP as percentageWidth } from 'react-native-responsive-screen';
 import { VictoryPie } from 'victory-native';
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { ActivityIndicator, Image, StyleSheet, Text, View } from 'react-native';
 import { Tooltip } from 'react-native-elements';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import AsyncStorage from '@react-native-community/async-storage';
 
-const CarbonFootprintScore = ({ loading, error, data }) => {
-  //Comment the following line to test caching
+const CarbonFootprintScore = ({ loading, error, historyReport }) => {
 
-  // Uncomment the following lines to test caching
-  // let loading = false;
-  // let error = true;
-  // let data = null;
-
-  const [resolved, setResolved] = useState(false);
-  const [localData, setData] = useState(null);
-
-  const calculateColour = (carbonFootprint) => {
+  const getColorFromCarbonFootprint = (carbonFootprint) => {
     if (carbonFootprint < 4) {
       return 'forestgreen';
     } else if (carbonFootprint < 12) {
@@ -30,7 +20,7 @@ const CarbonFootprintScore = ({ loading, error, data }) => {
     return 'red';
   };
 
-  const calculateSmiley = (carbonFootprint) => {
+  const getSmileyFromCarbonFootprint = (carbonFootprint) => {
     if (carbonFootprint < 4) {
       return require('../images/sparkling-eyes-smiley.png');
     } else if (carbonFootprint < 12) {
@@ -43,69 +33,38 @@ const CarbonFootprintScore = ({ loading, error, data }) => {
     return require('../images/crying-smiley.png');
   };
 
-  const saveGeneralScore = async (value) => {
-    try {
-      await AsyncStorage.setItem('generalScore', value);
-    } catch (e) {
-      console.log('Error saving generalScore' + e);
-    }
-  };
+  const TOOLTIP_MESSAGE = 'This score corresponds to the average carbon footprint of ' +
+    'all the items you have added to your history since you have started using Foodprint.';
 
-  const retrieveData = async () => {
-    try {
-      const retrievedData = await AsyncStorage.getItem('generalScore');
-      setData(JSON.parse(retrievedData));
-    } catch (e) {
-      console.log('Error retrieving generalScore' + e);
-    }
-    setResolved(true);
-  };
-
-  useEffect(() => {
-    if (data && data.getUserHistoryReport.userAvg) {
-      saveGeneralScore(JSON.stringify(data.getUserHistoryReport.userAvg));
-    }
-  });
-
-  useEffect(() => {
-    if (error) {
-      retrieveData();
-    }
-  });
-
-  const whichData = () => {
-    if (data && data.getUserHistoryReport.userAvg) { return data.getUserHistoryReport.userAvg; }
-    return localData;
-  };
+  const renderTooltip = () => (
+    <Tooltip popover={<Text style={styles.tooltipContent}>{TOOLTIP_MESSAGE}</Text>}
+      backgroundColor={'green'}
+      height={percentageHeight('20%')}
+      width={percentageWidth('65%')}>
+      <MaterialCommunityIcons name="help-circle" color={'grey'} size={percentageWidth('4%')} />
+    </Tooltip>
+  );
 
   return (
     <View>
-      {(loading || (error && !resolved)) ? (
-        <View style={styles.messageContainer}>
+      {loading || error || !historyReport ? (
+        <View style={styles.loadingContainer}>
           <ActivityIndicator />
         </View>
       ) : (
           <View style={styles.graphContainer}>
             <Image
-              source={calculateSmiley(whichData())}
+              source={getSmileyFromCarbonFootprint(historyReport.userAvg)}
               style={styles.image}
             />
             <View style={styles.scoreContainer}>
-              <Text style={styles.score}>{Math.round(whichData())} units</Text>
-              <Tooltip
-                popover={<Text style={styles.tooltipContent}>This score corresponds to the average carbon footprint of
-                all the items you have added to your history since you have started using Foodprint.</Text>}
-                backgroundColor={'green'}
-                height={percentageHeight('20%')}
-                width={percentageWidth('65%')}
-              >
-                <MaterialCommunityIcons name="help-circle" color={'grey'} size={percentageWidth('4%')} />
-              </Tooltip>
+              <Text style={styles.score}>{Math.round(historyReport.userAvg)} units</Text>
+              {renderTooltip()}
             </View>
             <VictoryPie
-              data={[{ x: ' ', y: whichData() }, { x: ' ', y: 26.7 - whichData() }]}
+              data={[{ x: ' ', y: historyReport.userAvg }, { x: ' ', y: 26.7 - historyReport.userAvg }]}
               standalone={true}
-              colorScale={[calculateColour(whichData()), 'transparent']}
+              colorScale={[getColorFromCarbonFootprint(historyReport.userAvg), 'transparent']}
               startAngle={-90}
               endAngle={90}
               innerRadius={percentageHeight('16%')}
@@ -118,7 +77,7 @@ const CarbonFootprintScore = ({ loading, error, data }) => {
 };
 
 const styles = StyleSheet.create({
-  messageContainer: { height: percentageHeight('29%'), alignItems: 'center', justifyContent: 'center' },
+  loadingContainer: { height: percentageHeight('29%'), alignItems: 'center', justifyContent: 'center' },
   graphContainer: { height: percentageHeight('29%'), alignItems: 'center' },
   tooltipContent: { color: 'white', fontSize: percentageWidth('4%') },
   image: { height: percentageHeight('10%'), width: percentageWidth('20%'), position: 'absolute', alignSelf: 'center', marginTop: percentageHeight('12%') },
