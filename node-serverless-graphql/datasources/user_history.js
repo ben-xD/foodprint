@@ -225,7 +225,7 @@ class userHistAPI {
     }
 
     const [items, repetitions] = await this.get_items(data);
-    const carbonData = await carbonAPI.getCfMultipleItems(items, true);
+    const carbonData = await carbonAPI.getCfMultipleItems(items, true, true);
     if (carbonData === []) {
       return null;
     }
@@ -294,7 +294,7 @@ class userHistAPI {
   // Adds the data (period_i_data) of a period i (week or month) to the compositions table
   async sum_period_data_to_table(carbonAPI, period_i_data, period, table) {
     const [items, repetitions] = await this.get_items(period_i_data);
-    const carbonData = await carbonAPI.getCfMultipleItems(items, true);
+    const carbonData = await carbonAPI.getCfMultipleItems(items, true, true);
     for (let i = 0; i < carbonData.length; i++) { // For each item found
       const carbonResult = carbonData[i];
       if (carbonResult.carbonpkilo !== undefined) {

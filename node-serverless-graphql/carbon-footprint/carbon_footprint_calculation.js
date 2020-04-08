@@ -1,24 +1,6 @@
-const catergorisedCarbonValues = require("./categorisedCarbonValues.json");
 const nlp = require('compromise');
 const pluralize = require('pluralize')
 const MAX_LENGTH_OF_NEXT_LAYER = 5;
-
-
-// Function that tries to find a label in the DB of categories (cotaining items like fruit, meat, ...)
-// @return CarbonFootprintReport (if found) or null (if not found)
-const findCategorisedLabel = (labels) => {
-  for (let i = 0; i < labels.length; i += 1) {
-    let carbonFootprintResponse = catergorisedCarbonValues[labels[i]];
-    if (carbonFootprintResponse) {
-      return {
-        item: labels[i],
-        carbonpkilo: carbonFootprintResponse[0].carbonpkilo,
-        categories: carbonFootprintResponse[0].categories
-      };
-    }
-  }
-  return null;
-};
 
 
 // For each valid label in a list of labels (aka layer), this function tries to find it in the DB. If none of the labels
@@ -36,7 +18,7 @@ const oneLayerSearch = async (dataSources, labels) => {
     };
   }
 
-  const categoryResult = findCategorisedLabel(labels)
+  const categoryResult = await dataSources.carbonAPI.findCategorisedLabel(labels)
   if (categoryResult != null) {
     return categoryResult;
   }
@@ -248,9 +230,15 @@ const getCarbonFootprintFromName = async (dataSources, name) => {
       categories: nextResponse.categories, //CHNANGE HERE TO A FUNC WHICH CAN DECIDE ON THE PROPER CATEGORY!!!!
       label: "approximated from product " + nextResponse.item
     };
-    if (await dataSources.carbonAPI.getCfOneItem([save_to_db.item]) !== null) {
+    
+    try {
       await dataSources.carbonAPI.insert_in_DB(save_to_db);
-    }
+      }  catch(e) {
+      switch(e.code){
+          case 11000: console.log("Item ", name, " already in db"); break;
+          default: console.log(e)
+      }
+    };
 
     return {
       item: name,
@@ -299,9 +287,15 @@ const getCarbonFootprintFromNameUsedForRecipe = async (dataSources, name) => {
       categories: nextResponse.categories, //CHNANGE HERE TO A FUNC WHICH CAN DECIDE ON THE PROPER CATEGORY!!!!
       label: "approximated from product " + nextResponse.item
     };
-    if (await dataSources.carbonAPI.getCfOneItem([save_to_db.item]) !== null) {
+
+    try {
       await dataSources.carbonAPI.insert_in_DB(save_to_db);
-    }
+      }  catch(e) {
+      switch(e.code){
+          case 11000: console.log("Item ", name, " already in db"); break;
+          default: console.log(e)
+      }
+    };
 
     return {
       item: name,
