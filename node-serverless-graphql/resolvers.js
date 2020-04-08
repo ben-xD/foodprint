@@ -138,7 +138,7 @@ const resolvers = {
       }
     },
 
-    postRecipe: async (parent, { url }, context) => {
+    postRecipe: async (parent, {name}, context) => {
       if (!context.user) {
         // Throw a 403 error because token was invalid or missing in context.js
         throw new Error('You must be logged in.');
@@ -146,12 +146,15 @@ const resolvers = {
 
       const { dataSources, user } = context;
       console.log({ dataSources, user, parent });
-      console.log(`Received url: ${url}`);
-      let { item, carbonFootprintPerKg } = await getCarbonFootprintFromRecipe(dataSources, url);
+      console.log(`Received url: ${name}`);
+      let { item, carbonFootprintPerKg, imageUrl, ingredients, sourceUrl } = await getCarbonFootprintFromRecipe(dataSources, name);
       if (!item) item = 'unknown';
       const response = {
         name: item,
         carbonFootprintPerKg,
+        imageUrl,
+        ingredients,
+        sourceUrl
       };
       console.log({ Returning: response });
       return response;

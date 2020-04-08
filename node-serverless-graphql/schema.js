@@ -41,6 +41,20 @@ const typeDefs = gql`
         categoryReports: [CategoryReport]
     }
 
+    type RecipeReport {
+        name: String
+        carbonFootprintPerKg: Float
+        imageUrl: String
+        ingredients: [IngredientReport]
+        sourceUrl: String
+    }
+
+    type IngredientReport {
+        ingredient: String
+        amountKg: Float
+        carbonFootprintPerKg: Float
+    }
+
     type Query {
         getUserHistoryReport(timezone: Int!, resolutions: [ReportResolution!]!): UserHistoryReport
     }
@@ -50,7 +64,7 @@ const typeDefs = gql`
         postBarcode(barcode: String!): ProductFootprint
         postCorrection(name: String!): ProductFootprint
         postUserHistoryEntry(item: String): Boolean
-        postRecipe(url: String!): ProductFootprint
+        postRecipe(name: String!): RecipeReport
         deleteData: Boolean
     }
 `;
