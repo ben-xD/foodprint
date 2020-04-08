@@ -61,17 +61,15 @@ const CarbonFootprintScore = ({ loading, error, historyReport }) => {
               <Text style={styles.score}>{Math.round(historyReport.userAvg)} units</Text>
               {renderTooltip()}
             </View>
-            <View style={{ elevation: 1 }}>
-              <VictoryPie
-                data={[{ x: ' ', y: historyReport.userAvg }, { x: ' ', y: 26.7 - historyReport.userAvg }]}
-                standalone={true}
-                colorScale={[getColorFromCarbonFootprint(historyReport.userAvg), 'transparent']}
-                startAngle={-90}
-                endAngle={90}
-                innerRadius={percentageHeight('16%')}
-                height={percentageHeight('40%')}
-              />
-            </View>
+            <VictoryPie
+              data={[{ x: ' ', y: historyReport.userAvg }, { x: ' ', y: 26.7 - historyReport.userAvg }]}
+              standalone={true}
+              colorScale={[getColorFromCarbonFootprint(historyReport.userAvg), 'transparent']}
+              startAngle={-90}
+              endAngle={90}
+              innerRadius={percentageHeight('16%')}
+              height={percentageHeight('40%')}
+            />
           </View>
         )}
     </View>
@@ -83,7 +81,7 @@ const styles = StyleSheet.create({
   graphContainer: { height: percentageHeight('29%'), alignItems: 'center' },
   tooltipContent: { color: 'white', fontSize: percentageWidth('4%') },
   image: { height: percentageHeight('10%'), width: percentageWidth('20%'), position: 'absolute', alignSelf: 'center', marginTop: percentageHeight('12%') },
-  scoreContainer: { elevation: 2, position: 'absolute', alignSelf: 'center', marginTop: percentageHeight('24%'), flexDirection: 'row' },
+  scoreContainer: { position: 'absolute', alignSelf: 'center', marginTop: percentageHeight('24%'), flexDirection: 'row' },
   score: { fontSize: percentageWidth('6%'), color: 'grey', margin: percentageWidth('1%') },
 });
 
