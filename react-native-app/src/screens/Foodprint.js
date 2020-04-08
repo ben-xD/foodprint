@@ -55,7 +55,6 @@ export const GET_USER_HISTORY_REPORT = gql`
 
 const Foodprint = ({ navigation, route }) => {
   const [showErrorToUser, setErrorMessage] = useState(false);
-  const [introductoryOverlayVisible, setIntroductoryOverlayVisible] = useState(false);
   const [timeSpan, setTimeSpan] = useState(WEEKLY_TIMESPAN);
   const [historyReport, setHistoryReport] = useState(null);
   const isFocused = useIsFocused();
@@ -85,11 +84,12 @@ const Foodprint = ({ navigation, route }) => {
       }
     } catch (e) { } // If value does not exist in storage, an error occurs, keep going.
     AsyncStorage.setItem('introductoryOverlaySeen', JSON.stringify(true));
-    setIntroductoryOverlayVisible(true);
+    navigation.navigate('Onboarding');
   };
 
   useEffect(() => {
     showOverlayIfNewUser();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Occurs everytime the screen if focused
@@ -243,7 +243,7 @@ const Foodprint = ({ navigation, route }) => {
         }}
       />
 
-      <WelcomeScreen setVisibility={setIntroductoryOverlayVisible} isVisible={introductoryOverlayVisible} />
+      {/* <WelcomeScreen setVisibility={setIntroductoryOverlayVisible} isVisible={introductoryOverlayVisible} /> */}
     </SafeAreaView >
   );
 };

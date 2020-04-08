@@ -7,7 +7,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { useCallback } from 'react';
 
 const TOOLTIP_CONTENT = 'This bar chart breaks down your weekly diet into the different food categories. ' +
-  'Meat has the highest carbon footprint. The more unsustainable food you eat, the taller the bars get.';
+  'Meat has the highest carbon footprint. The more unsustainable food you eat, the taller the bars get. Don\'t aim for that :).';
 
 const WeeklyDisplay = ({ average, composition }) => {
 
