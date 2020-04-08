@@ -1,6 +1,7 @@
 package uk.orth.foodprint;
 
 import android.app.Activity;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -25,23 +26,29 @@ public class MainActivity extends ReactActivity {
     MainActivity self = this;
     return new ReactActivityDelegate(this, getMainComponentName()) {
       private Bundle props = null;
+      private Bundle newProps = null;
       
       @Override
       protected void onCreate(Bundle savedInstanceState) {
+        newProps = new Bundle();
         props = self.getIntent().getExtras();
         if (props != null) {
           for (String key: props.keySet()) {
-            Log.d("BensDebugger", key + " is a key in the bundle");
+            Log.d("FOODPRINT", key + " is a key in the bundle");
+          }
+          if (props.containsKey("android.intent.extra.TEXT")) {
+            Log.d("FOODPRINT", "recipeUrl: " + props.getString("android.intent.extra.TEXT"));
+            newProps.putString("android.intent.extra.TEXT", props.getString("android.intent.extra.TEXT"));
           }
         }  else {
-          Log.d("BensDebugger", "Props is null");
+          Log.d("FOODPRINT", "Props is null");
         }
         super.onCreate(savedInstanceState);
       }
       
       @Override
       protected Bundle getLaunchOptions() {
-        return props;
+        return newProps;
       }
       
       @Override

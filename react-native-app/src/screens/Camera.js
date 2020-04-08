@@ -32,7 +32,6 @@ const Camera = ({ navigation }) => {
     setCameraIsReady(false);
     const options = { quality: 0.5, base64: true, width: 200 };
     const image = await camera.takePictureAsync(options);
-    // TODO we shouldn't pass an image as a parameter, because it won't be stored properly. (still works though)
     navigation.navigate('Feedback', { file: image, uri: image.uri, loading: true });
     setCameraIsReady(true);
   };

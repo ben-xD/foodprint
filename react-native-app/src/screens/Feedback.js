@@ -7,7 +7,7 @@ import {Rating, Button, Overlay} from 'react-native-elements';
 import { widthPercentageToDP as percentageWidth, heightPercentageToDP as percentageHeight } from 'react-native-responsive-screen';
 import { ScrollView } from 'react-native-gesture-handler';
 import Snackbar from 'react-native-snackbar';
-import { StackActions } from '@react-navigation/native';
+import { CommonActions } from '@react-navigation/native';
 
 // GraphQL schema for picture posting mutation
 const POST_PICTURE_MUTATION = gql`
@@ -46,6 +46,8 @@ const Feedback = ({ route, navigation }) => {
   useEffect(() => {
     const { file, barcode, recipeMeal, extraInfo } = route.params;
     if (file) {
+      console.log({ file });
+      console.log(typeof (file));
       uploadPicture({ variables: { file } });
     } else if (barcode) {
       postBarcodeMutation({ variables: { barcode } });
@@ -53,7 +55,7 @@ const Feedback = ({ route, navigation }) => {
       setMeal(recipeMeal);
       setOverlayInfo(extraInfo);
     }
-  }, []);
+  }, [postBarcodeMutation, route.params, uploadPicture]);
 
   useEffect(() => {
     if (!pictureError && !barcodeError) {
@@ -82,7 +84,7 @@ const Feedback = ({ route, navigation }) => {
         navigation.navigate('Correction', { meal, setMeal });
       }
     }
-  }, [navigation, pictureData, route.params.uri]);
+  }, [meal, navigation, pictureData, route.params.uri]);
 
   useEffect(() => {
     if (barcodeData) {
@@ -96,7 +98,7 @@ const Feedback = ({ route, navigation }) => {
         });
       }
     }
-  }, [barcodeData, navigation]);
+  }, [barcodeData, meal, navigation]);
 
   // Add item to user history
   const addToHistory = async (item) => {
@@ -186,9 +188,22 @@ const Feedback = ({ route, navigation }) => {
             buttonStyle={styles.greenButtonStyle}
             titleStyle={styles.buttonText}
             title="Add to history"
-            onPress={() => {
-              addToHistory(meal.item ? meal.item : meal.description);
-              navigation.dispatch(StackActions.pop(2));
+            onPress={async () => {
+              console.log('Saving to user history.');
+              await addToHistory(meal.item ? meal.item : meal.description);
+              // Reset client store after modifying user history
+              route.params.client.resetStore();
+              console.log('Sent item to to user history...');
+              // Reset navigation, so user can't 'hardware back press' to this screen
+              navigation.dispatch(
+                CommonActions.reset({
+                  index: 1,
+                  routes: [
+                    { name: 'Home' },
+                  ],
+
+                })
+              );
             }}
           />
         </View>
