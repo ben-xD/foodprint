@@ -108,12 +108,12 @@ const WeeklyDisplay = ({ average, composition }) => {
 
 const styles = StyleSheet.create({
   messageContainer: { height: percentageHeight('4%') },
-  scoreContainer: { flexDirection: 'row' },
+  scoreContainer: { flexDirection: 'row', zIndex: 100 },
   graphContainer: { height: percentageHeight('38%'), justifyContent: 'center', marginVertical: percentageHeight('2%') },
   contentContainer: { justifyContent: 'center', alignItems: 'center', margin: percentageWidth('4%') },
-  score: { fontSize: percentageWidth('6%'), color: 'grey' },
-  comparison: { fontSize: percentageWidth('3%'), marginLeft: percentageWidth('2%') },
-  tooltipContent: { color: 'white', fontSize: percentageWidth('4%') },
+  score: { fontSize: 18, color: 'grey' },
+  comparison: { fontSize: 12, marginLeft: percentageWidth('2%') },
+  tooltipContent: { color: 'white', fontSize: 16 },
 });
 
 export default WeeklyDisplay;
