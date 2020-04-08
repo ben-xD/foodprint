@@ -12,7 +12,13 @@ class CarbonAPI {
     this.store = store
   }
 
-  async insert_in_DB(new_data) { await this.store.carbon.collection.insertOne(new_data); }
+  async insert_in_DB(new_data) { 
+    const res = await this.findCategorisedLabel([new_data]);
+    if (await this.findCategorisedLabel([new_data]) === null) {
+      console.log("yes")
+      await this.store.carbon.collection.insertOne(new_data);
+    } 
+  }
 
   /**
    * Search database for given label and return its carbon footprint

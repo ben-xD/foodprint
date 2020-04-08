@@ -230,9 +230,15 @@ const getCarbonFootprintFromName = async (dataSources, name) => {
       categories: nextResponse.categories, //CHNANGE HERE TO A FUNC WHICH CAN DECIDE ON THE PROPER CATEGORY!!!!
       label: "approximated from product " + nextResponse.item
     };
-    if (await dataSources.carbonAPI.getCfOneItem([save_to_db.item]) !== null) {
+    
+    try {
       await dataSources.carbonAPI.insert_in_DB(save_to_db);
-    }
+      }  catch(e) {
+      switch(e.code){
+          case 11000: console.log("Item ", name, " already in db"); break;
+          default: console.log(e)
+      }
+    };
 
     return {
       item: name,
@@ -281,9 +287,15 @@ const getCarbonFootprintFromNameUsedForRecipe = async (dataSources, name) => {
       categories: nextResponse.categories, //CHNANGE HERE TO A FUNC WHICH CAN DECIDE ON THE PROPER CATEGORY!!!!
       label: "approximated from product " + nextResponse.item
     };
-    if (await dataSources.carbonAPI.getCfOneItem([save_to_db.item]) !== null) {
+
+    try {
       await dataSources.carbonAPI.insert_in_DB(save_to_db);
-    }
+      }  catch(e) {
+      switch(e.code){
+          case 11000: console.log("Item ", name, " already in db"); break;
+          default: console.log(e)
+      }
+    };
 
     return {
       item: name,
