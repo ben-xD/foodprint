@@ -3,6 +3,8 @@ import React from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { CommonActions } from '@react-navigation/native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { heightPercentageToDP as percentageHeight, widthPercentageToDP as percentageWidth } from 'react-native-responsive-screen';
+
 
 const subScreens = [
   {
@@ -13,18 +15,18 @@ const subScreens = [
   },
   {
     title: 'Works with Unpackaged Foods,',
-    description: 'We use computer vision to determine what food you have. Roughly :)',
+    description: 'We use computer vision to determine what food you have.',
     color: '#35605A',
     image: <MaterialCommunityIcons name="food-croissant" color="white" size={80} />,
   },
   {
-    title: 'Products with Barcodes',
-    description: 'We\'ll scan a barcode and tell you its footprint.',
+    title: 'Products with Barcodes,',
+    description: 'We\'ll scan a barcode and tell you its carbon footprint.',
     color: '#008000',
     image: <Ionicons name="ios-barcode" color="white" size={80} />,
   },
   {
-    title: 'and Recipes.',
+    title: '...and Recipes.',
     description: 'Give us a recipe name or link, and we\'ll get you its carbon footprint.',
     color: '#004200',
     image: <MaterialCommunityIcons name="receipt" color="white" size={80} />,
@@ -47,6 +49,9 @@ const Onboarding = ({ navigation }) => {
   return (
     <PaperOnboarding
       data={subScreens}
+      titleStyle={{
+        fontSize: 24,
+      }}
       onCloseButtonPress={handleOnClosePress}
     />
   );
