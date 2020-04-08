@@ -109,6 +109,11 @@ const resolvers = {
     },
 
     postRecipe: async (parent, {name}, context) => {
+      if (!context.user) {
+        // Throw a 403 error because token was invalid or missing in context.js
+        throw new Error('You must be logged in.');
+      }
+
       const { dataSources, user } = context;
       console.log({ dataSources, user, parent });
       console.log(`Received url: ${name}`);
