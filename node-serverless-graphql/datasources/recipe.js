@@ -11,7 +11,7 @@ class RecipeAPI {
         this.content;
     }
 
-    // Get data from API. Have to run this before getName and getIngredients.
+    // Get data from a url using the API. Have to run this before getName and getIngredients.
     // Returns true if reasons that the url is a recipe, false if not a recipe.
     async getDataFromLink(webURL){
         let url = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/extract";
@@ -23,7 +23,6 @@ class RecipeAPI {
 
         // Query the API
         res = await this.query_api(url, params);
-        console.log(res.data.readyInMinutes);
 
         // in case of errors (e.g. exceeded number of requests).
         if(res === undefined){
@@ -38,12 +37,61 @@ class RecipeAPI {
         return true;
     }
 
-    // Method to get the name from the recipe. Have to run getDataFromLink first once.
+    // Get data from a name using the API. Have to run this before getName and getIngredients.
+    // Returns true if the name has recipes associated with it, otherwise returns false.
+    async getDataFromName(name){
+        let url = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/search";
+        let res = undefined;
+        let params = {
+            "query": name
+        };
+
+        // Query the API for a recipe
+        res = await this.query_api(url, params);
+
+        // in case of errors (e.g. exceeded number of requests).
+        if(res === undefined) {
+            return null;
+        }
+
+        // check if API found any recipes for this name. If not, return false
+        if(res.data.results.length === 0){
+            console.log("Could not find a recipe for this name");
+            return false;
+        };
+
+        let recipe_id = res.data.results[0].id;
+        url = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/" + recipe_id + "/information";
+        params = {};
+
+        // Query the API for info on the recipe found
+        res = await this.query_api(url, params);
+
+        // in case of errors (e.g. exceeded number of requests).
+        if(res === undefined) {
+            return null;
+        }
+
+        this.content = res.data;
+        return true;
+    }
+
+    // Method to get the url from the recipe. Have to run getDataFromLink or getDataFromName first once.
+    async getUrl() {
+        return this.content.sourceUrl;
+    }
+
+    // Method to get the name from the recipe. Have to run getDataFromLink or getDataFromName first once.
     async getName() {
         return this.content.title;
     }
 
-    // Method to get ingredients from the recipe. Have to run getDataFromLink first once.
+    // Method to get the url of the main image of the recope. Have to run getDataFromLink or getDataFromName first once.
+    async getImageUrl() {
+        return this.content.image;
+    }
+
+    // Method to get ingredients from the recipe. Have to run getDataFromLink or getDataFromName first once.
     async getIngredients() {
         let full_ingredients = this.content.extendedIngredients;
         let ingredients = [];
@@ -108,12 +156,3 @@ class RecipeAPI {
 };
 
 module.exports = RecipeAPI;
-
-let test = new RecipeAPI();
-
-const example = async () =>{
-    let res = await test.getDataFromLink("https://www.bbc.co.uk/news/in-pictures-52120114");
-    console.log(res);
-}
-
-example();

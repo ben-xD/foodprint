@@ -30,4 +30,20 @@ describe('Real Recipe API', () => {
         expect(actual).toEqual(expected);
     });
 
+    test('return true for a mushroom risotto', async () =>{
+        jest.setTimeout(10000);
+        const name = "mushroom risotto";
+        const actual = await recipeAPI.getDataFromName(name);
+        const expected = true;
+        expect(actual).toEqual(expected);
+    });
+
+    test('return false for a metal', async () =>{
+        jest.setTimeout(10000);
+        const name = "metal";
+        const actual = await recipeAPI.getDataFromName(name);
+        const expected = false;
+        expect(actual).toEqual(expected);
+    });
+
 })

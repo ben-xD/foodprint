@@ -8,16 +8,23 @@ import Snackbar from 'react-native-snackbar';
 import { useNetInfo } from '@react-native-community/netinfo';
 
 const POST_RECIPE_MUTATION = gql`
-mutation($url: String!) {
-  postRecipe(url: $url) {
+mutation($input: String!) {
+  postRecipe(name: $input) {
      name
      carbonFootprintPerKg
+     imageUrl
+     ingredients {
+        ingredient
+        amountKg
+        carbonFootprintPerKg
+     }
+     sourceUrl
   }
 }`;
 
 const Recipe = ({ navigation, route }) => {
   const netInfo = useNetInfo();
-  const [url, setURL] = useState('');
+  const [input, setInput] = useState('');
   const [postRecipe, { loading: recipeLoading, error: recipeError, data: recipeData }] = useMutation(POST_RECIPE_MUTATION);
 
   useEffect(() => {
@@ -37,7 +44,7 @@ const Recipe = ({ navigation, route }) => {
 
   const handleSubmit = async () => {
     try {
-      await postRecipe({ variables: { url } });
+      await postRecipe({ variables: { input } });
     } catch (err) {
       console.warn({ err });
     }
@@ -45,7 +52,7 @@ const Recipe = ({ navigation, route }) => {
 
   useEffect(() => {
     if (route.params && route.params.recipeUrl) {
-      setURL(route.params.recipeUrl);
+      setInput(route.params.recipeUrl);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -75,9 +82,12 @@ const Recipe = ({ navigation, route }) => {
     if (recipeData && recipeData.postRecipe.carbonFootprintPerKg != null) {
       navigation.navigate('Feedback', {
         recipeMeal: {
-          uri: 'http://www.bagherra.eu/wp-content/uploads/2016/11/orionthemes-placeholder-image-1.png',
+          uri: recipeData.postRecipe.imageUrl,
           score: recipeData.postRecipe.carbonFootprintPerKg,
           description: recipeData.postRecipe.name,
+        }, extraInfo: {
+          recipeUrl: recipeData.postRecipe.sourceUrl,
+          ingredients: recipeData.postRecipe.ingredients,
         }, loading: false,
       });
     }
@@ -93,14 +103,13 @@ const Recipe = ({ navigation, route }) => {
         resizeMode="contain"
       />
       <Text style={styles.text}>
-        Want to know the carbon footprint of a meal you want to cook? Paste the URL of the
+        Want to know the carbon footprint of a meal you want to cook? Write the name or paste the URL of the
         recipe in the following field!
        </Text>
       <Input
-        value={url}
+        value={input}
         containerStyle={styles.input}
-        onChangeText={value => setURL(value)}
-        onSubmitEditing={handleSubmit}
+        onChangeText={value => setInput(value)}
       />
       {(recipeLoading) ? (
         <ActivityIndicator style={styles.loading} />

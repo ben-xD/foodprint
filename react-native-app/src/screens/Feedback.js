@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, ActivityIndicator, Image, SafeAreaView } from 'react-native';
+import React, { useEffect, useState, useCallback } from 'react';
+import { View, Text, ActivityIndicator, Image, SafeAreaView, FlatList } from 'react-native';
 import { gql } from 'apollo-boost';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Linking } from 'react-native';
 import { useMutation } from '@apollo/react-hooks';
-import { Rating, Button } from 'react-native-elements';
+import { Rating, Button, Overlay } from 'react-native-elements';
 import { widthPercentageToDP as percentageWidth, heightPercentageToDP as percentageHeight } from 'react-native-responsive-screen';
 import { ScrollView } from 'react-native-gesture-handler';
 import Snackbar from 'react-native-snackbar';
 import { CommonActions } from '@react-navigation/native';
+import { Keyboard } from 'react-native';
 
 // GraphQL schema for picture posting mutation
 const POST_PICTURE_MUTATION = gql`
@@ -37,6 +38,8 @@ const POST_USER_HISTORY_ENTRY = gql`
 const Feedback = ({ route, navigation }) => {
   const [meal, setMeal] = useState(null);
   const [uploading, setUploading] = useState(false);
+  const [overlayInfo, setOverlayInfo] = useState(null);
+  const [isVisible, setVisibility] = useState(false);
   const [uploadPicture, { loading: pictureLoading, data: pictureData, error: pictureError }] = useMutation(POST_PICTURE_MUTATION);
   const [postBarcodeMutation,
     { loading: barcodeLoading,
@@ -46,7 +49,9 @@ const Feedback = ({ route, navigation }) => {
 
   // make relevant request when component is given specific data
   useEffect(() => {
-    const { file, barcode, meal: correctedMeal } = route.params;
+    Keyboard.dismiss();
+
+    const { file, barcode, meal: correctedMeal, recipeMeal, extraInfo } = route.params;
     if (file) {
       console.log({ file });
       console.log(typeof (file));
@@ -56,6 +61,9 @@ const Feedback = ({ route, navigation }) => {
     } else if (correctedMeal) {
       // passed a meal object from correction screen
       setMeal(correctedMeal);
+    } else if (recipeMeal && extraInfo) {
+      setMeal(recipeMeal);
+      setOverlayInfo(extraInfo);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -130,7 +138,7 @@ const Feedback = ({ route, navigation }) => {
     }
   }, [historyData, navigation, route.params.client]);
 
-  const calculateRating = (carbonFootprint) => {
+  const getRatingFromCarbonFootprint = (carbonFootprint) => {
     if (carbonFootprint < 0) {
       return 0;
     } else if (carbonFootprint < 2) {
@@ -158,6 +166,24 @@ const Feedback = ({ route, navigation }) => {
     }
   };
 
+  const getColourFromCarbonFootprint = useCallback((carbonFootprint) => {
+    if (carbonFootprint < 0) {
+      return 'black';
+    } else if (carbonFootprint < 4) {
+      return 'forestgreen';
+    } else if (carbonFootprint < 8) {
+      return 'yellowgreen';
+    } else if (carbonFootprint < 12) {
+      return 'gold';
+    } else if (carbonFootprint < 16) {
+      return 'orange';
+    } else if (carbonFootprint < 20) {
+      return 'red';
+    } else {
+      return 'darkred';
+    }
+  }, []);
+
   return uploading || pictureLoading || barcodeLoading || !meal ?
     <View style={styles.loading}>
       <ActivityIndicator />
@@ -174,11 +200,15 @@ const Feedback = ({ route, navigation }) => {
           <Text style={styles.description}>{meal.description}</Text>
           <Rating
             readonly
-            startingValue={calculateRating(meal.score)}
+            startingValue={getRatingFromCarbonFootprint(meal.score)}
             type="star" // Optionally customisible
             imageSize={percentageWidth('7%')}
           />
-          <Text style={styles.score}>{meal.score} kg of CO2 eq/kg</Text>
+          <Text style={styles.score}>{meal.score} units</Text>
+          {(overlayInfo) ? (
+            <Button title="More information about this number" type="clear" onPress={() => setVisibility(true)} />
+          ) : <></>
+          }
         </View>
         <View style={styles.buttonContainer}>
           <Button
@@ -195,6 +225,27 @@ const Feedback = ({ route, navigation }) => {
           />
         </View>
       </ScrollView>
+      {(overlayInfo) ? (
+        <Overlay isVisible={isVisible} onBackdropPress={() => setVisibility(false)}>
+          <SafeAreaView style={styles.overlayContainer}>
+            <Text style={styles.overlayText}>The carbon footprint of this recipe was obtained from the following ingredients:</Text>
+            <FlatList
+              data={overlayInfo.ingredients}
+              style={styles.overlayList}
+              renderItem={({ item }) => (item.carbonFootprintPerKg && item.amountKg * item.carbonFootprintPerKg >= 0.01) ? (
+                <Text style={styles.overlayText}>- {item.amountKg} kg of {item.ingredient}:
+                  <Text style={{ fontWeight: 'bold', color: getColourFromCarbonFootprint(item.carbonFootprintPerKg) }}> {(item.amountKg * item.carbonFootprintPerKg).toFixed(2)}</Text> units</Text>
+              ) : <></>}
+              keyExtractor={(item, index) => index.toString()}
+            />
+            <Text style={styles.overlayText}>To see the full recipe, click on the following link:{'\n'}</Text>
+            <Text style={styles.overlayHyperlink} onPress={() => Linking.openURL(overlayInfo.recipeUrl)}>{overlayInfo.recipeUrl}</Text>
+            <Text style={styles.overlayFootnote}><Text style={{ fontWeight: 'bold' }}>Note</Text>: Ingredients used in very small quantity, which have a
+                negligeable carbon footprint, or which were unknown to our database are not shown. </Text>
+          </SafeAreaView>
+        </Overlay>
+      ) : <></>
+      }
     </SafeAreaView>;
 };
 
@@ -222,9 +273,29 @@ const styles = StyleSheet.create({
   },
   description: {
     textTransform: 'capitalize',
+    textAlign: 'center',
     fontSize: percentageWidth('8%'),
     marginTop: percentageHeight('1%'),
     marginBottom: percentageHeight('1%'),
+  },
+  overlayContainer: {
+    marginTop: percentageHeight('5%'),
+    marginHorizontal: percentageWidth('3%'),
+  },
+  overlayText: {
+    fontSize: percentageWidth('4%'),
+  },
+  overlayList: {
+    fontSize: percentageWidth('4%'),
+    marginVertical: percentageHeight('4%'),
+  },
+  overlayHyperlink: {
+    fontSize: percentageWidth('4%'),
+    color: 'blue',
+  },
+  overlayFootnote: {
+    fontSize: percentageWidth('3%'),
+    marginTop: percentageHeight('5%'),
   },
   score: { fontSize: percentageWidth('5%'), margin: percentageWidth('2%') },
   buttonContainer: { flex: 1, flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center' },
