@@ -1,13 +1,16 @@
+const admin = require('firebase-admin');
+const { AuthenticationError, ApolloError } = require('apollo-server');
 const { getCarbonFootprintFromImage, getCarbonFootprintFromName } = require('./carbon-footprint/carbon_footprint_calculation');
 const { getCarbonFootprintFromBarcode } = require('./carbon-footprint/barcode');
 const { getCarbonFootprintFromRecipe } = require('./carbon-footprint/calculate_carbon_from_recipe');
+
 
 const resolvers = {
   Query: {
     getUserHistoryReport: async (parent, { timezone, resolutions }, context) => {
       if (!context.user) {
         // Throw a 403 error because token was invalid or missing in context.js
-        throw new Error('You must be logged in.');
+        throw new AuthenticationError('You must be logged in.');
       }
       const { dataSources, user } = context;
       const { uid } = user;
@@ -52,25 +55,33 @@ const resolvers = {
     },
   },
   Mutation: {
-    deleteData: async (parent, payload, context) => {
-      if (!context.user) {
+    deleteData: async (parent, payload, { user, dataSources }) => {
+      if (!user) {
         // Throw a 403 error because token was invalid or missing in context.js
-        throw new Error('You must be logged in.');
+        throw new AuthenticationError('You must be logged in.');
       }
-      const { dataSources, user } = context;
-      const { uid } = user;
+
       try {
-        await dataSources.userHistAPI.deleteUserData(uid);
-        return true;
+        await dataSources.userHistAPI.deleteUserData(user.uid);
       } catch (err) {
         console.error(err);
-        return false;
+        // throw a 500 error to say
+        throw new ApolloError('Unable to deleteUserData', 500);
       }
+
+      try {
+        await admin.auth().deleteUser(user.uid);
+      } catch (err) {
+        console.error(err);
+        throw new ApolloError('Successfully deleted user data, but not user', 500);
+      }
+
+      return true;
     },
     postPicture: async (parent, { file }, context) => {
       if (!context.user) {
         // Throw a 403 error because token was invalid or missing in context.js
-        throw new Error('You must be logged in.');
+        throw new AuthenticationError('You must be logged in.');
       }
 
       const { dataSources, user } = context;
@@ -88,7 +99,7 @@ const resolvers = {
     postBarcode: async (parent, { barcode }, context) => {
       if (!context.user) {
         // Throw a 403 error because token was invalid or missing in context.js
-        throw new Error('You must be logged in.');
+        throw new AuthenticationError('You must be logged in.');
       }
 
       const { dataSources, user } = context;
@@ -105,7 +116,7 @@ const resolvers = {
     postCorrection: async (parent, { name }, context) => {
       if (!context.user) {
         // Throw a 403 error because token was invalid or missing in context.js
-        throw new Error('You must be logged in.');
+        throw new AuthenticationError('You must be logged in.');
       }
 
       const { dataSources, user } = context;
@@ -121,7 +132,7 @@ const resolvers = {
     postUserHistoryEntry: async (parent, { item }, context) => {
       if (!context.user) {
         // Throw a 403 error because token was invalid or missing in context.js
-        throw new Error('You must be logged in.');
+        throw new AuthenticationError('You must be logged in.');
       }
 
       const { dataSources, user } = context;
@@ -138,23 +149,25 @@ const resolvers = {
       }
     },
 
-    postRecipe: async (parent, {name}, context) => {
+    postRecipe: async (parent, { name }, context) => {
       if (!context.user) {
         // Throw a 403 error because token was invalid or missing in context.js
-        throw new Error('You must be logged in.');
+        throw new AuthenticationError('You must be logged in.');
       }
 
       const { dataSources, user } = context;
       console.log({ dataSources, user, parent });
       console.log(`Received url: ${name}`);
-      let { item, carbonFootprintPerKg, imageUrl, ingredients, sourceUrl } = await getCarbonFootprintFromRecipe(dataSources, name);
+      let {
+        item, carbonFootprintPerKg, imageUrl, ingredients, sourceUrl,
+      } = await getCarbonFootprintFromRecipe(dataSources, name);
       if (!item) item = 'unknown';
       const response = {
         name: item,
         carbonFootprintPerKg,
         imageUrl,
         ingredients,
-        sourceUrl
+        sourceUrl,
       };
       console.log({ Returning: response });
       return response;
