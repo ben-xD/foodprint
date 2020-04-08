@@ -65,6 +65,7 @@ const typeDefs = gql`
         postCorrection(name: String!): ProductFootprint
         postUserHistoryEntry(item: String): Boolean
         postRecipe(name: String!): RecipeReport
+        deleteData: Boolean
     }
 `;
 

@@ -1,5 +1,5 @@
 import { ActivityIndicator, Image, StyleSheet, Text, View } from 'react-native';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { widthPercentageToDP as percentageWidth, heightPercentageToDP as percentageHeight } from 'react-native-responsive-screen';
 import { Button, Input } from 'react-native-elements';
 import { gql } from 'apollo-boost';
@@ -33,14 +33,12 @@ const Recipe = ({ navigation, route }) => {
     }
   };
 
-  // TODO in progress: when recipeUrl prop passed from navigation, automatically handleSubmit
-  // useEffect(() => {
-  //   if (route.params && route.params.recipeUrl) {
-  //     setURL(route.params.recipeUrl);
-  //     // Make request
-  //     // handleSubmit()
-  //   }
-  // }, [route.params])
+  useEffect(() => {
+    if (route.params && route.params.recipeUrl) {
+      setURL(route.params.recipeUrl);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (!recipeError) {
@@ -56,7 +54,7 @@ const Recipe = ({ navigation, route }) => {
   useEffect(() => {
     if (recipeData && recipeData.postRecipe.carbonFootprintPerKg === null) {
       Snackbar.show({
-        text: "Oops, we couldn't find a carbon footprint from this URL :(",
+        text: "Oops, we couldn't get the footprint for this recipe",
         duration: Snackbar.LENGTH_SHORT,
       });
     }
@@ -91,6 +89,7 @@ const Recipe = ({ navigation, route }) => {
         recipe in the following field!
        </Text>
       <Input
+        value={Name or URL}
         containerStyle={styles.input}
         onChangeText={value => setInput(value)}
       />
@@ -98,7 +97,7 @@ const Recipe = ({ navigation, route }) => {
         <ActivityIndicator style={styles.loading} />
       ) : (
           <Button
-            title="Submit"
+            title="GO"
             buttonStyle={styles.button}
             containerStyle={styles.buttonContainer}
             titleStyle={styles.buttonTitle}
