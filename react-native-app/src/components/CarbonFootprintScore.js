@@ -55,9 +55,9 @@ const CarbonFootprintScore = ({ loading, error, historyReport }) => {
           <View style={styles.graphContainer}>
             <Image
               source={getSmileyFromCarbonFootprint(historyReport.userAvg)}
-              style={[styles.image]}
+              style={styles.image}
             />
-            <View style={[styles.scoreContainer]}>
+            <View style={styles.scoreContainer}>
               <Text style={styles.score}>{Math.round(historyReport.userAvg)} units</Text>
               {renderTooltip()}
             </View>
