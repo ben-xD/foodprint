@@ -124,13 +124,6 @@ export const createActionCreators = (dispatch) => ({
     dispatch({ type: 'SIGN_IN', token });
   },
   deleteAccount: async () => {
-    try {
-      await auth().signInAnonymously();
-      await auth().currentUser.delete();
-    } catch (e) {
-      // make user login again:
-      console.warn(e);
-    }
     client.clearStore();
     AsyncStorage.clear(); // userIsLoggedIn, historyReport, etc.
     dispatch({ type: 'SIGN_OUT' });
