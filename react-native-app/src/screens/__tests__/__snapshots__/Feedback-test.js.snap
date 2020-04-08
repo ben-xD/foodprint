@@ -1,19 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Feedback matches previous snapshot 1`] = `
-<View
-  style={
+<Feedback
+  route={
     Object {
-      "height": "100%",
-      "justifyContent": "center",
+      "params": Object {
+        "meal": Object {},
+      },
     }
   }
->
-  <ActivityIndicator
-    animating={true}
-    color="#999999"
-    hidesWhenStopped={true}
-    size="small"
-  />
-</View>
+/>
 `;

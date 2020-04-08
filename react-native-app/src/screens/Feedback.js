@@ -122,7 +122,6 @@ const Feedback = ({ route, navigation }) => {
   useEffect(() => {
     if (historyData) {
       // Reset client store after modifying user history
-      route.params.client.resetStore();
       console.log('Saved to user history.');
       // Reset navigation, so user can't 'hardware back press' to this screen
       setUploading(false);
@@ -135,6 +134,7 @@ const Feedback = ({ route, navigation }) => {
 
         })
       );
+      route.params.client.resetStore();
     }
   }, [historyData, navigation, route.params.client]);
 
