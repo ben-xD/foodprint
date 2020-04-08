@@ -33,15 +33,14 @@ const CarbonFootprintScore = ({ loading, error, historyReport }) => {
     return require('../images/crying-smiley.png');
   };
 
-  const TOOLTIP_MESSAGE = 'This score corresponds to the average carbon footprint of ' +
-    'all the items you have added to your history since you have started using Foodprint.';
+  const TOOLTIP_MESSAGE = 'The average carbon footprint of the food you eat, regardless of how much you eat of each.\n\nThis number can give you a rough estimate of the parts of your diet that are unsustainable.';
 
   const renderTooltip = () => (
     <Tooltip popover={<Text style={styles.tooltipContent}>{TOOLTIP_MESSAGE}</Text>}
-      backgroundColor={'green'}
-      height={percentageHeight('20%')}
+      backgroundColor={'#008000'}
+      height={percentageHeight('40%')}
       width={percentageWidth('65%')}>
-      <MaterialCommunityIcons name="help-circle" color={'grey'} size={percentageWidth('4%')} />
+      <MaterialCommunityIcons name="help-circle" color={'grey'} size={24} />
     </Tooltip>
   );
 
@@ -58,7 +57,7 @@ const CarbonFootprintScore = ({ loading, error, historyReport }) => {
               style={styles.image}
             />
             <View style={styles.scoreContainer}>
-              <Text style={styles.score}>{Math.round(historyReport.userAvg)} units</Text>
+              <Text style={styles.score}>{Math.round(historyReport.userAvg)} CO₂/kg</Text>
               {renderTooltip()}
             </View>
             <VictoryPie
@@ -81,8 +80,8 @@ const styles = StyleSheet.create({
   graphContainer: { height: percentageHeight('29%'), alignItems: 'center' },
   tooltipContent: { color: 'white', fontSize: 16 },
   image: { height: percentageHeight('10%'), width: percentageWidth('20%'), position: 'absolute', alignSelf: 'center', marginTop: percentageHeight('12%') },
-  scoreContainer: { zIndex: 100, position: 'absolute', marginTop: percentageHeight('24%'), flexDirection: 'row' },
-  score: { fontSize: 24, color: 'grey', margin: percentageWidth('1%') },
+  scoreContainer: { zIndex: 100, position: 'absolute', marginTop: percentageHeight('24%'), flexDirection: 'row', alignItems: 'center' },
+  score: { fontSize: 24, color: 'grey' },
 });
 
 export default CarbonFootprintScore;

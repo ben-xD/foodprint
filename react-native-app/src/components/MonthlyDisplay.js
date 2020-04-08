@@ -4,13 +4,15 @@ import { VictoryAxis, VictoryBar, VictoryChart, VictoryLegend, VictoryLine, Vict
 import React from 'react';
 import { Tooltip } from 'react-native-elements';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useCallback } from 'react';
 
+const TOOLTIP_CONTENT = 'This bar chart breaks down your monthly diet into the different food categories. ' +
+  'Meat has the highest carbon footprint. The more unsustainable food you eat, the taller the bars get.';
 
 const MonthlyDisplay = ({ average, composition }) => {
 
   // This months's carbon footprint
-  const sum = () => {
-
+  const sum = useCallback(() => {
     let thisMonth = 0;
     let lastMonth = 0;
 
@@ -41,35 +43,30 @@ const MonthlyDisplay = ({ average, composition }) => {
       }
     }
     return [thisMonth, lastMonth];
-  };
+  }, [composition.eggsAndDairy, composition.fish, composition.meat, composition.plantBased]);
 
-  const changeSinceLastMonth = () => {
+  const changeSinceLastMonth = useCallback(() => {
     const value = sum();
     return (((value[0] - value[1]) * 100) / value[0]);
-  };
+  }, [sum]);
 
   const monthSign = ((changeSinceLastMonth() > 0) ? '+' : '');
-
   // Calculate current month for x-axis display
-  const month = new Date().getMonth(); //Current Month
+  const month = new Date().getMonth();
   const monthList = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
   return (
     <View style={styles.contentContainer}>
       <View style={styles.scoreContainer}>
-        <Text style={styles.score}>{Math.round(sum()[0])} units this month</Text>
+        <Text style={styles.score}>{Math.round(sum()[0])} CO₂/kg this month</Text>
         <Text style={styles.comparison}>{monthSign}{Math.round(changeSinceLastMonth())}% compared{'\n'}to last month</Text>
         <Tooltip
-          popover={<Text style={styles.tooltipContent}>These scores correspond to your carbon footprint this
-               month, and how it compares to last month’s.{'\n\n'}The following graph shows your monthly carbon
-               footprint over the last 6 months with respect to each of the following food categories: "Plant" (e.g.
-               cereal, fruits, vegetables), "Eggs & Dairy", "Fish" and "Meat".{'\n\n'}Your personal average monthly
-               carbon footprint is also given by the black line.</Text>}
-          backgroundColor={'green'}
-          height={percentageHeight('40%')}
-          width={percentageWidth('84%')}
+          popover={<Text style={styles.tooltipContent}>{TOOLTIP_CONTENT}</Text>}
+          backgroundColor={'#008000'}
+          height={percentageHeight('30%')}
+          width={percentageWidth('65%')}
         >
-          <MaterialCommunityIcons name="help-circle" color={'grey'} size={percentageWidth('4%')} />
+          <MaterialCommunityIcons name="help-circle" color={'grey'} size={24} />
         </Tooltip>
       </View>
       <View style={styles.graphContainer}>
@@ -112,7 +109,7 @@ const MonthlyDisplay = ({ average, composition }) => {
 
 const styles = StyleSheet.create({
   messageContainer: { height: percentageHeight('4%') },
-  scoreContainer: { flexDirection: 'row' },
+  scoreContainer: { zIndex: 100, flexDirection: 'row' },
   graphContainer: { height: percentageHeight('38%'), justifyContent: 'center', marginVertical: percentageHeight('2%') },
   contentContainer: { justifyContent: 'center', alignItems: 'center', margin: percentageWidth('4%') },
   score: { fontSize: 18, color: 'grey' },
