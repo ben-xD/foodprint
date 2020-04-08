@@ -1,0 +1,93 @@
+{
+    "fruit":
+    [
+        {
+            "carbonpkilo": 1.1,
+            "categories": 1000
+        }
+    ],
+    "vegetable":
+    [
+        {
+            "carbonpkilo": 2.0,
+            "categories": 1000
+        }
+    ],
+    "meat":
+    [
+        {
+            "carbonpkilo": 20.15,
+            "categories": 3000
+        }
+    ],
+    "fish":
+    [
+        {
+            "carbonpkilo": 3.85,
+            "categories": 2000
+        }
+    ],
+    "legume":
+    [
+        {
+            "carbonpkilo": 0.78,
+            "categories": 1000
+        }
+    ],
+    "dairy":
+    [
+        {
+            "carbonpkilo": 3.37,
+            "categories": 4000
+        }
+    ],
+    "grain":
+    [
+        {
+            "carbonpkilo": 0.65,
+            "categories": 1000
+        }
+    ],
+    "additive":
+    [
+        {
+            "carbonpkilo": 0.96,
+            "categories": 0
+        }
+    ],
+    "alcohol":
+    [
+        {
+            "carbonpkilo": 1.65,
+            "categories": 0
+        }
+    ],
+    "spice":
+    [
+        {
+            "carbonpkilo": 0.75,
+            "categories": 1000
+        }
+    ],
+    "soy":
+    [
+        {
+            "carbonpkilo": 0.29,
+            "categories": 1000
+        }
+    ],
+    "snack":
+    [
+        {
+            "carbonpkilo": 2,
+            "categories": 0
+        }
+    ],
+    "added fat":
+    [
+        {
+            "carbonpkilo": 6.5,
+            "categories": 0
+        }
+    ]
+}
