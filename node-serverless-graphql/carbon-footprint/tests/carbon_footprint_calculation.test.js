@@ -23,7 +23,8 @@ const dataSources = {
 const mockDataSources = {
   carbonAPI: {
     getCfOneItem: jest.fn(),
-    getCfMultipleItems: jest.fn()
+    getCfMultipleItems: jest.fn(),
+    findCategorisedLabel:  carbonAPI.findCategorisedLabel // Note that this function is not mocked
   }
 }
 
