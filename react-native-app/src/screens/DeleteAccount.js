@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Button, Text } from 'react-native-elements';
 import { useContext } from 'react';
@@ -17,6 +17,7 @@ const DELETE_ACCOUNT = gql`
 `;
 
 const DeleteAccount = ({ navigation }) => {
+  const [deletingAccount, setDeletingAccount] = useState(false);
   const { deleteAccount } = useContext(AuthContext);
   const [postDeleteAccount, { loading, error, data }] = useMutation(DELETE_ACCOUNT);
 
@@ -32,6 +33,7 @@ const DeleteAccount = ({ navigation }) => {
     }
 
     if (error) {
+      setDeletingAccount(false);
       Snackbar.show({
         text: 'We were unable to delete your data.',
         duration: Snackbar.LENGTH_LONG,
@@ -45,7 +47,7 @@ const DeleteAccount = ({ navigation }) => {
   }, [data, deleteAccount, error, postDeleteAccount]);
 
   return (
-    loading ? (<View style={styles.loadingContainer}>
+    loading || deletingAccount ? (<View style={styles.loadingContainer}>
       <LottieView source={require('../animations/4053-crying-smoothymon.json')} autoPlay loop />
     </View>) : (
         <SafeAreaView style={styles.container}>
@@ -54,7 +56,10 @@ const DeleteAccount = ({ navigation }) => {
             <Text h4 style={styles.subtitle}>This can't be undone.</Text>
           </View>
           <View style={styles.buttonsContainer}>
-            <Button title="Delete" containerStyle={styles.buttonContainer} buttonStyle={styles.confirmDeleteButton} onPress={postDeleteAccount} />
+            <Button title="Delete" containerStyle={styles.buttonContainer} buttonStyle={styles.confirmDeleteButton} onPress={() => {
+              setDeletingAccount(true);
+              postDeleteAccount();
+            }} />
             <Button title="Cancel" containerStyle={styles.buttonContainer} buttonStyle={styles.cancelDeleteButton} onPress={() => navigation.goBack()} />
           </View>
         </SafeAreaView>
