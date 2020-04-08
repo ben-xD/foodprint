@@ -5,6 +5,7 @@ import React from 'react';
 import { Tooltip } from 'react-native-elements';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useCallback } from 'react';
+import { CARBON_FOOTPRINT_UNIT, FOODPRINT_UNIT } from '../string';
 
 const TOOLTIP_CONTENT = 'This bar chart breaks down your weekly diet into the different food categories. ' +
   'Meat has the highest carbon footprint. The more unsustainable food you eat, the taller the bars get. Don\'t aim for that :).';
@@ -55,7 +56,7 @@ const WeeklyDisplay = ({ average, composition }) => {
   return (
     <View style={styles.contentContainer}>
       <View style={styles.scoreContainer}>
-        <Text style={styles.score}>{sum()[0].toFixed(1)} CO₂/kg this week</Text>
+        <Text style={styles.score}>{sum()[0].toFixed(1)} {FOODPRINT_UNIT} this week</Text>
         {(isNaN(changeSinceLastWeek())) ? <></> : (
           <Text style={styles.comparison}>{weekSign}{changeSinceLastWeek().toFixed(0)}% compared{'\n'}to last week</Text>
         )

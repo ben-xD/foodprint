@@ -5,6 +5,7 @@ import LottieView from 'lottie-react-native';
 import { Image, StyleSheet, Text, View } from 'react-native';
 import { Tooltip } from 'react-native-elements';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { FOODPRINT_UNIT, FOODPRINT_UNIT_INFORMATION } from '../string';
 
 const CarbonFootprintScore = ({ loading, error, historyReport }) => {
 
@@ -34,7 +35,7 @@ const CarbonFootprintScore = ({ loading, error, historyReport }) => {
     return require('../images/crying-smiley.png');
   };
 
-  const TOOLTIP_MESSAGE = 'The average carbon footprint of the food you eat, regardless of how much you eat of each.\n\nThis number can give you a rough estimate of the parts of your diet that are unsustainable.';
+  const TOOLTIP_MESSAGE = FOODPRINT_UNIT_INFORMATION + '\nIt goes down when your diet is more sustainable, and doesn\'t take into quantities.';
 
   const renderTooltip = () => (
     <Tooltip popover={<Text style={styles.tooltipContent}>{TOOLTIP_MESSAGE}</Text>}
@@ -59,7 +60,7 @@ const CarbonFootprintScore = ({ loading, error, historyReport }) => {
               resizeMode="contain"
             />
             <View style={styles.scoreContainer}>
-              <Text style={styles.score}>{historyReport.userAvg.toFixed(1)} CO₂/kg</Text>
+              <Text style={styles.score}>{historyReport.userAvg.toFixed(1)} {FOODPRINT_UNIT}</Text>
               {renderTooltip()}
             </View>
             <VictoryPie

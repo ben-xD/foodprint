@@ -3,12 +3,14 @@ import { View, Text, ActivityIndicator, Image, SafeAreaView, FlatList } from 're
 import { gql } from 'apollo-boost';
 import { StyleSheet, Linking } from 'react-native';
 import { useMutation } from '@apollo/react-hooks';
-import { Rating, Button, Overlay } from 'react-native-elements';
+import { Rating, Button, Overlay, Tooltip } from 'react-native-elements';
 import { widthPercentageToDP as percentageWidth, heightPercentageToDP as percentageHeight } from 'react-native-responsive-screen';
 import { ScrollView } from 'react-native-gesture-handler';
 import Snackbar from 'react-native-snackbar';
 import { CommonActions } from '@react-navigation/native';
 import { Keyboard } from 'react-native';
+import { FOODPRINT_UNIT, FOODPRINT_UNIT_INFORMATION } from '../string';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 // GraphQL schema for picture posting mutation
 const POST_PICTURE_MUTATION = gql`
@@ -184,6 +186,15 @@ const Feedback = ({ route, navigation }) => {
     }
   }, []);
 
+  const renderTooltip = () => (
+    <Tooltip popover={<Text style={styles.tooltipContent}>{FOODPRINT_UNIT_INFORMATION}</Text>}
+      backgroundColor={'#008000'}
+      height={percentageHeight('20%')}
+      width={percentageWidth('65%')}>
+      <MaterialCommunityIcons name="help-circle" color={'grey'} size={24} />
+    </Tooltip>
+  );
+
   return uploading || pictureLoading || barcodeLoading || !meal ?
     <View style={styles.loading}>
       <ActivityIndicator />
@@ -204,7 +215,10 @@ const Feedback = ({ route, navigation }) => {
             type="star" // Optionally customisible
             imageSize={percentageWidth('7%')}
           />
-          <Text style={styles.score}>{meal.score} units</Text>
+          <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+            <Text style={styles.score}>{meal.score} {FOODPRINT_UNIT}</Text>
+            {renderTooltip()}
+          </View>
           {(overlayInfo) ? (
             <Button title="More information about this number" type="clear" onPress={() => setVisibility(true)} />
           ) : <></>
@@ -234,7 +248,7 @@ const Feedback = ({ route, navigation }) => {
               style={styles.overlayList}
               renderItem={({ item }) => (item.carbonFootprintPerKg && item.amountKg * item.carbonFootprintPerKg >= 0.01) ? (
                 <Text style={styles.overlayText}>- {item.amountKg} kg of {item.ingredient}:
-                  <Text style={{ fontWeight: 'bold', color: getColourFromCarbonFootprint(item.carbonFootprintPerKg) }}> {(item.amountKg * item.carbonFootprintPerKg).toFixed(2)}</Text> units</Text>
+                  <Text style={{ fontWeight: 'bold', color: getColourFromCarbonFootprint(item.carbonFootprintPerKg) }}> {(item.amountKg * item.carbonFootprintPerKg).toFixed(2)}</Text> {FOODPRINT_UNIT}</Text>
               ) : <></>}
               keyExtractor={(item, index) => index.toString()}
             />
@@ -257,6 +271,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  tooltipContent: { color: 'white', fontSize: 16 },
   body: {
     flex: 4,
     alignItems: 'center',
