@@ -56,6 +56,7 @@ const CarbonFootprintScore = ({ loading, error, historyReport }) => {
             <Image
               source={getSmileyFromCarbonFootprint(historyReport.userAvg)}
               style={styles.image}
+              resizeMode="contain"
             />
             <View style={styles.scoreContainer}>
               <Text style={styles.score}>{historyReport.userAvg.toFixed(1)} CO₂/kg</Text>

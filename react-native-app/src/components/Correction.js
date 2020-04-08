@@ -1,5 +1,5 @@
 import { Image, View, ActivityIndicator } from 'react-native';
-import { Input, Text } from 'react-native-elements';
+import { Input, Text, Button } from 'react-native-elements';
 import React, { useState, useEffect } from 'react';
 
 import { gql } from 'apollo-boost';
@@ -63,7 +63,7 @@ const Correction = ({ navigation }) => {
       <View style={styles.container}>
         <ScrollView>
           <View style={styles.titleContainer}>
-            <Text style={styles.title}>We could not find your item.</Text>
+            <Text style={styles.title}>Sorry, we could not find your item.</Text>
           </View>
           <View style={styles.imageContainer}>
             <Image
@@ -82,6 +82,13 @@ const Correction = ({ navigation }) => {
           <View style={styles.subtitleContainer}>
             <Text style={styles.subtitle}>Let us know what it was, so we can improve our app.</Text>
           </View>
+          <Button
+            title="SUBMIT"
+            onPress={postCorrectionHandler}
+            buttonStyle={styles.button}
+            containerStyle={styles.buttonContainer}
+            titleStyle={styles.buttonTitle}
+          />
         </ScrollView>
       </View >
     );
@@ -100,6 +107,8 @@ const styles = StyleSheet.create({
   subtitleContainer: { flex: 1, justifyContent: 'center' },
   subtitle: { fontSize: percentageWidth('5%'), textAlign: 'center', marginHorizontal: percentageWidth('5%') },
   inputContainer: { flex: 1.5, margin: percentageWidth('5%') },
+  button: { backgroundColor: 'green', width: percentageWidth('30%'), height: 45, marginTop: percentageHeight('2%') },
+  buttonContainer: { marginVertical: percentageHeight('2%'), alignItems: 'center' },
 });
 
 export default Correction;
