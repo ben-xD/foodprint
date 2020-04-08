@@ -58,7 +58,7 @@ const MonthlyDisplay = ({ average, composition }) => {
   return (
     <View style={styles.contentContainer}>
       <View style={styles.scoreContainer}>
-        <Text style={styles.score}>{Math.round(sum()[0])} CO₂/kg this month</Text>
+        <Text style={styles.score}>{sum()[0].toFixed(1)} CO₂/kg this month</Text>
         {(isNaN(changeSinceLastMonth())) ? <></> : (
           <Text style={styles.comparison}>{monthSign}{changeSinceLastMonth().toFixed(0)}% compared{'\n'}to last month</Text>
         )}
