@@ -20,8 +20,7 @@ mutation PostCorrectionMutation($name: String!) {
 }
 `;
 
-const Correction = ({ route, navigation }) => {
-  const { meal, setMeal } = route.params;
+const Correction = ({ navigation }) => {
   const [correctedName, setCorrectedName] = useState('');
   const [postCorrection, { loading: correctionLoading, error: correctionError, data: correctionData }] = useMutation(POST_CORRECTION_MUTATION);
 
@@ -30,7 +29,7 @@ const Correction = ({ route, navigation }) => {
   useEffect(() => {
     if (correctionError) {
       Snackbar.show({
-        text: 'Something went wrong.',
+        text: 'We couldn\'t save that to your history.',
         duration: Snackbar.LENGTH_INDEFINITE,
         action: {
           text: 'RETRY',
@@ -45,14 +44,16 @@ const Correction = ({ route, navigation }) => {
   // Respond to changes in correction data (following correction)
   useEffect(() => {
     if (correctionData && correctionData.postCorrection.carbonFootprintPerKg) {
-      setMeal({
-        ...meal,
-        score: correctionData.postCorrection.carbonFootprintPerKg,
-        description: correctedName,
-        item: correctionData.postCorrection.name // Item returned from back-end
+      navigation.push('Feedback', {
+        meal: {
+          score: correctionData.postCorrection.carbonFootprintPerKg,
+          description: correctedName,
+          item: correctionData.postCorrection.name, // Item returned from back-end
+        },
       });
-      navigation.goBack();
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [correctionData]);
 
   return correctionLoading ?

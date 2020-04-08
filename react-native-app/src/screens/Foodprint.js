@@ -20,6 +20,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import WelcomeScreen from '../components/WelcomeScreen';
 import { FloatingAction } from 'react-native-floating-action';
 import { useFocusEffect, useIsFocused } from '@react-navigation/native';
+import Snackbar from 'react-native-snackbar';
 
 const UNIT_INFORMATION =
   'The carbon footprint displayed in this app, including this page, ' +
@@ -54,6 +55,7 @@ export const GET_USER_HISTORY_REPORT = gql`
 `;
 
 const Foodprint = ({ navigation, route }) => {
+  const [showErrorToUser, setErrorMessage] = useState(false);
   const [introductoryOverlayVisible, setIntroductoryOverlayVisible] = useState(false);
   const [timeSpan, setTimeSpan] = useState('weekly');
   const [historyReport, setHistoryReport] = useState(null);
@@ -134,11 +136,14 @@ const Foodprint = ({ navigation, route }) => {
   });
 
   useEffect(() => {
+    console.log({ historyReportData });
     if (!historyReportLoading && historyReportData && historyReportData.getUserHistoryReport) {
       setHistoryReport(historyReportData.getUserHistoryReport);
       console.log('Successfully received user history report data, caching locally.');
       cacheHistoryReportLocally(historyReportData.getUserHistoryReport);
       setRefreshing(false);
+    } else if (!historyReportLoading && historyReportData && !historyReportData.getUserHistoryReport) {
+      setErrorMessage('You have no history. (Alba bug)');
     }
   }, [historyReportData, historyReportLoading]);
 
@@ -146,12 +151,19 @@ const Foodprint = ({ navigation, route }) => {
     const retrieveHistoryReportDataFromCache = async () => {
       try {
         const retrievedHistoryReport = await AsyncStorage.getItem('historyReport');
+        console.log({ retrievedHistoryReport });
         setHistoryReport(JSON.parse(retrievedHistoryReport));
+        setRefreshing(false);
       } catch (e) {
         console.log('Error retrieving user history report data:' + e);
+        setErrorMessage('The network request failed.');
       }
     };
     if (historyReportError) {
+      Snackbar.show({
+        text: "We couldn't get your data, loading last known data",
+        duration: Snackbar.LENGTH_LONG,
+      });
       retrieveHistoryReportDataFromCache();
     }
   }, [historyReportError]);

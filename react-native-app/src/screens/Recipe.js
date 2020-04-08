@@ -1,10 +1,11 @@
-import { ActivityIndicator, Image, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Image, StyleSheet, Text, View, BackHandler } from 'react-native';
 import React, { useState, useEffect, useCallback } from 'react';
 import { widthPercentageToDP as percentageWidth, heightPercentageToDP as percentageHeight } from 'react-native-responsive-screen';
 import { Button, Input } from 'react-native-elements';
 import { gql } from 'apollo-boost';
 import { useMutation } from '@apollo/react-hooks';
 import Snackbar from 'react-native-snackbar';
+import { useNetInfo } from '@react-native-community/netinfo';
 
 const POST_RECIPE_MUTATION = gql`
 mutation($url: String!) {
@@ -15,8 +16,24 @@ mutation($url: String!) {
 }`;
 
 const Recipe = ({ navigation, route }) => {
+  const netInfo = useNetInfo();
   const [url, setURL] = useState('');
   const [postRecipe, { loading: recipeLoading, error: recipeError, data: recipeData }] = useMutation(POST_RECIPE_MUTATION);
+
+  useEffect(() => {
+    if (netInfo.details !== null && !netInfo.isConnected) {
+      Snackbar.show({
+        text: 'No internet connection, you can\'t do this! 🤣',
+        duration: Snackbar.LENGTH_INDEFINITE,
+      });
+    } else if (netInfo.isConnected) {
+      Snackbar.dismiss();
+    }
+  }, [netInfo]);
+
+  BackHandler.addEventListener('hardwareBackPress', () => {
+    Snackbar.dismiss();
+  });
 
   const handleSubmit = async () => {
     try {

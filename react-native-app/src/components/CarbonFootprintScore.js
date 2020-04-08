@@ -47,7 +47,7 @@ const CarbonFootprintScore = ({ loading, error, historyReport }) => {
 
   return (
     <View>
-      {loading || error || !historyReport ? (
+      {!historyReport ? (
         <View style={styles.loadingContainer}>
           <ActivityIndicator />
         </View>
@@ -61,15 +61,17 @@ const CarbonFootprintScore = ({ loading, error, historyReport }) => {
               <Text style={styles.score}>{Math.round(historyReport.userAvg)} units</Text>
               {renderTooltip()}
             </View>
-            <VictoryPie
-              data={[{ x: ' ', y: historyReport.userAvg }, { x: ' ', y: 26.7 - historyReport.userAvg }]}
-              standalone={true}
-              colorScale={[getColorFromCarbonFootprint(historyReport.userAvg), 'transparent']}
-              startAngle={-90}
-              endAngle={90}
-              innerRadius={percentageHeight('16%')}
-              height={percentageHeight('40%')}
-            />
+            <View style={{ elevation: 1 }}>
+              <VictoryPie
+                data={[{ x: ' ', y: historyReport.userAvg }, { x: ' ', y: 26.7 - historyReport.userAvg }]}
+                standalone={true}
+                colorScale={[getColorFromCarbonFootprint(historyReport.userAvg), 'transparent']}
+                startAngle={-90}
+                endAngle={90}
+                innerRadius={percentageHeight('16%')}
+                height={percentageHeight('40%')}
+              />
+            </View>
           </View>
         )}
     </View>
@@ -81,7 +83,7 @@ const styles = StyleSheet.create({
   graphContainer: { height: percentageHeight('29%'), alignItems: 'center' },
   tooltipContent: { color: 'white', fontSize: percentageWidth('4%') },
   image: { height: percentageHeight('10%'), width: percentageWidth('20%'), position: 'absolute', alignSelf: 'center', marginTop: percentageHeight('12%') },
-  scoreContainer: { position: 'absolute', alignSelf: 'center', marginTop: percentageHeight('24%'), flexDirection: 'row' },
+  scoreContainer: { elevation: 2, position: 'absolute', alignSelf: 'center', marginTop: percentageHeight('24%'), flexDirection: 'row' },
   score: { fontSize: percentageWidth('6%'), color: 'grey', margin: percentageWidth('1%') },
 });
 

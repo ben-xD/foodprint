@@ -36,23 +36,29 @@ const POST_USER_HISTORY_ENTRY = gql`
 
 const Feedback = ({ route, navigation }) => {
   const [meal, setMeal] = useState(null);
+  const [uploading, setUploading] = useState(false);
   const [uploadPicture, { loading: pictureLoading, data: pictureData, error: pictureError }] = useMutation(POST_PICTURE_MUTATION);
-  const [postBarcodeMutation, { loading: barcodeLoading, error: barcodeError, data: barcodeData }] = useMutation(POST_BARCODE_MUTATION);
+  const [postBarcodeMutation,
+    { loading: barcodeLoading,
+      error: barcodeError,
+      data: barcodeData }] = useMutation(POST_BARCODE_MUTATION);
   const [postUserHistoryEntryMutation, { loading: historyLoading, error: historyError, data: historyData }] = useMutation(POST_USER_HISTORY_ENTRY);
 
-  // make relevant request when component is loaded AND provided with either file or barcode
+  // make relevant request when component is given specific data
   useEffect(() => {
-    const { file, barcode, recipeMeal } = route.params;
+    const { file, barcode, meal: correctedMeal } = route.params;
     if (file) {
       console.log({ file });
       console.log(typeof (file));
       uploadPicture({ variables: { file } });
     } else if (barcode) {
       postBarcodeMutation({ variables: { barcode } });
-    } else if (recipeMeal) {
-      setMeal(recipeMeal);
+    } else if (correctedMeal) {
+      // passed a meal object from correction screen
+      setMeal(correctedMeal);
     }
-  }, [postBarcodeMutation, route.params, uploadPicture]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (!pictureError && !barcodeError) {
@@ -78,29 +84,51 @@ const Feedback = ({ route, navigation }) => {
         setMeal({
           uri: route.params.uri,
         });
-        navigation.navigate('Correction', { meal, setMeal });
+        navigation.navigate('Correction');
       }
     }
-  }, [meal, navigation, pictureData, route.params.uri]);
+  }, [navigation, pictureData, route.params.uri]);
 
   useEffect(() => {
     if (barcodeData) {
+      console.log({ barcodeData });
       if (barcodeData.postBarcode.name && barcodeData.postBarcode.carbonFootprintPerKg) {
-        // If unknown name from barcode, go to error correction screen
-        navigation.navigate('Correction', { meal, setMeal });
-      } else {
         setMeal({
           score: barcodeData.postBarcode.carbonFootprintPerKg,
           description: barcodeData.postBarcode.name,
         });
+      } else {
+        // If unknown name from barcode, go to error correction screen
+        navigation.navigate('Correction');
       }
     }
-  }, [barcodeData, meal, navigation]);
+  }, [barcodeData, navigation]);
 
   // Add item to user history
-  const addToHistory = async (item) => {
-    await postUserHistoryEntryMutation({ variables: { item } });
+  const addToHistory = async () => {
+    console.log('Saving to user history.');
+    setUploading(true);
+    await postUserHistoryEntryMutation({ variables: { item: meal.item ? meal.item : meal.description } });
   };
+
+  useEffect(() => {
+    if (historyData) {
+      // Reset client store after modifying user history
+      route.params.client.resetStore();
+      console.log('Saved to user history.');
+      // Reset navigation, so user can't 'hardware back press' to this screen
+      setUploading(false);
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 1,
+          routes: [
+            { name: 'Home' },
+          ],
+
+        })
+      );
+    }
+  }, [historyData, navigation, route.params.client]);
 
   const calculateRating = (carbonFootprint) => {
     if (carbonFootprint < 0) {
@@ -130,7 +158,7 @@ const Feedback = ({ route, navigation }) => {
     }
   };
 
-  return pictureLoading || barcodeLoading || !meal ?
+  return uploading || pictureLoading || barcodeLoading || !meal ?
     <View style={styles.loading}>
       <ActivityIndicator />
     </View > :
@@ -163,23 +191,7 @@ const Feedback = ({ route, navigation }) => {
             buttonStyle={styles.greenButtonStyle}
             titleStyle={styles.buttonText}
             title="Add to history"
-            onPress={async () => {
-              console.log('Saving to user history.');
-              await addToHistory(meal.item ? meal.item : meal.description);
-              // Reset client store after modifying user history
-              route.params.client.resetStore();
-              console.log('Sent item to to user history...');
-              // Reset navigation, so user can't 'hardware back press' to this screen
-              navigation.dispatch(
-                CommonActions.reset({
-                  index: 1,
-                  routes: [
-                    { name: 'Home' },
-                  ],
-
-                })
-              );
-            }}
+            onPress={addToHistory}
           />
         </View>
       </ScrollView>
