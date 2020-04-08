@@ -55,9 +55,9 @@ const CarbonFootprintScore = ({ loading, error, historyReport }) => {
           <View style={styles.graphContainer}>
             <Image
               source={getSmileyFromCarbonFootprint(historyReport.userAvg)}
-              style={styles.image}
+              style={[styles.image]}
             />
-            <View style={styles.scoreContainer}>
+            <View style={[styles.scoreContainer]}>
               <Text style={styles.score}>{Math.round(historyReport.userAvg)} units</Text>
               {renderTooltip()}
             </View>
@@ -79,10 +79,10 @@ const CarbonFootprintScore = ({ loading, error, historyReport }) => {
 const styles = StyleSheet.create({
   loadingContainer: { height: percentageHeight('29%'), alignItems: 'center', justifyContent: 'center' },
   graphContainer: { height: percentageHeight('29%'), alignItems: 'center' },
-  tooltipContent: { color: 'white', fontSize: percentageWidth('4%') },
+  tooltipContent: { color: 'white', fontSize: 16 },
   image: { height: percentageHeight('10%'), width: percentageWidth('20%'), position: 'absolute', alignSelf: 'center', marginTop: percentageHeight('12%') },
-  scoreContainer: { position: 'absolute', alignSelf: 'center', marginTop: percentageHeight('24%'), flexDirection: 'row' },
-  score: { fontSize: percentageWidth('6%'), color: 'grey', margin: percentageWidth('1%') },
+  scoreContainer: { zIndex: 100, position: 'absolute', marginTop: percentageHeight('24%'), flexDirection: 'row' },
+  score: { fontSize: 24, color: 'grey', margin: percentageWidth('1%') },
 });
 
 export default CarbonFootprintScore;
