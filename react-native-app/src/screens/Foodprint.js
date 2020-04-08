@@ -18,7 +18,6 @@ import CarbonFootprintScore from '../components/CarbonFootprintScore';
 import gql from 'graphql-tag';
 import { useQuery } from '@apollo/react-hooks';
 import AsyncStorage from '@react-native-community/async-storage';
-import WelcomeScreen from '../components/WelcomeScreen';
 import { FloatingAction } from 'react-native-floating-action';
 import { useFocusEffect, useIsFocused } from '@react-navigation/native';
 import Snackbar from 'react-native-snackbar';
@@ -54,7 +53,6 @@ export const GET_USER_HISTORY_REPORT = gql`
 `;
 
 const Foodprint = ({ navigation, route }) => {
-  const [showErrorToUser, setErrorMessage] = useState(false);
   const [timeSpan, setTimeSpan] = useState(WEEKLY_TIMESPAN);
   const [historyReport, setHistoryReport] = useState(null);
   const isFocused = useIsFocused();
@@ -141,8 +139,6 @@ const Foodprint = ({ navigation, route }) => {
       console.log('Successfully received user history report data, caching locally.');
       cacheHistoryReportLocally(historyReportData.getUserHistoryReport);
       setRefreshing(false);
-    } else if (!historyReportLoading && historyReportData && !historyReportData.getUserHistoryReport) {
-      setErrorMessage('You have no history. (Alba bug)');
     }
   }, [historyReportData, historyReportLoading]);
 
@@ -155,7 +151,6 @@ const Foodprint = ({ navigation, route }) => {
         setRefreshing(false);
       } catch (e) {
         console.log('Error retrieving user history report data:' + e);
-        setErrorMessage('The network request failed.');
       }
     };
     if (historyReportError) {

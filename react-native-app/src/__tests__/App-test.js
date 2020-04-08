@@ -9,6 +9,19 @@ import { GET_USER_HISTORY_REPORT } from '../screens/Foodprint';
 jest.mock('@react-native-community/google-signin');
 jest.mock('apollo-boost');
 
+// Mocking for react-native-reanimated if needed in the future.
+// jest.mock('react-native-reanimated', () => ({
+//   ...require('react-native-reanimated/mock'),
+//   addWhitelistedNativeProps: () => { },
+// })
+// );
+
+jest.mock('@gorhom/paper-onboarding', () => {
+  const paperOnboarding = () => <div />;
+  return paperOnboarding;
+});
+
+
 const mockedResponses = [
   {
     request: {
@@ -87,12 +100,12 @@ const mockedResponses = [
                 { 'periodNumber': -4, 'avgCarbonFootprint': 14.25 },
                 { 'periodNumber': -5, 'avgCarbonFootprint': 13 },
               ],
-            }
-          ]
-        }
-      }
-    }
-  }
+            },
+          ],
+        },
+      },
+    },
+  },
 ];
 
 
