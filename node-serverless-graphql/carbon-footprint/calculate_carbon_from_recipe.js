@@ -3,7 +3,7 @@ const { getCarbonFootprintFromNameUsedForRecipe } = require('./carbon_footprint_
 const getCarbonFootprintFromRecipe = async (dataSources, name) => {
     let response;
     // if the name is a url, call getDataFromLink, else call getDataFromName
-    if(name.includes("http")){
+    if(name.startsWith("http")){
         response = await dataSources.recipeAPI.getDataFromLink(name);
     } else {
         response = await dataSources.recipeAPI.getDataFromName(name);
@@ -58,7 +58,12 @@ const getCarbonFootprintFromRecipe = async (dataSources, name) => {
 
     try {
         await dataSources.carbonAPI.insert_in_DB(save_to_db);
-    }  catch(e) {console.log("recipe already in db")};
+    }  catch(e) {
+        switch(e.code){
+            case 11000: console.log("recipe already in db"); break;
+            default: console.log(e)
+        }
+    };
 
     // Finally return the caculated co2 and detected food name
     return {
