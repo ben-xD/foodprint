@@ -215,7 +215,7 @@ const Feedback = ({ route, navigation }) => {
             type="star" // Optionally customisible
             imageSize={percentageWidth('7%')}
           />
-          <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+          <View style={styles.scoreContainer}>
             <Text style={styles.score}>{meal.score} {FOODPRINT_UNIT}</Text>
             {renderTooltip()}
           </View>
@@ -312,6 +312,7 @@ const styles = StyleSheet.create({
     fontSize: percentageWidth('3%'),
     marginTop: percentageHeight('5%'),
   },
+  scoreContainer: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center' },
   score: { fontSize: percentageWidth('5%'), margin: percentageWidth('2%') },
   buttonContainer: { flex: 1, flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center' },
   redButtonStyle: { backgroundColor: 'gray', width: percentageWidth('45%') },
