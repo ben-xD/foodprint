@@ -90,6 +90,7 @@ const Recipe = ({ navigation, route }) => {
       <Image
         source={require('../images/full-smiley.png')}
         style={styles.image}
+        resizeMode="contain"
       />
       <Text style={styles.text}>
         Want to know the carbon footprint of a meal you want to cook? Paste the URL of the
@@ -99,6 +100,7 @@ const Recipe = ({ navigation, route }) => {
         value={url}
         containerStyle={styles.input}
         onChangeText={value => setURL(value)}
+        onSubmitEditing={handleSubmit}
       />
       {(recipeLoading) ? (
         <ActivityIndicator style={styles.loading} />
@@ -117,7 +119,7 @@ const Recipe = ({ navigation, route }) => {
 
 const styles = StyleSheet.create({
   container: { flex: 1, justifyContent: 'center', alignItems: 'center', margin: percentageHeight('5%') },
-  image: { height: percentageHeight('25%'), width: percentageWidth('45%'), marginBottom: percentageHeight('5%') },
+  image: { height: percentageHeight('25%'), marginBottom: percentageHeight('5%') },
   text: { fontSize: percentageWidth('4%') },
   input: { marginVertical: percentageHeight('2%') },
   button: { backgroundColor: 'green', width: percentageWidth('30%'), height: 45 },

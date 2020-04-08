@@ -1,7 +1,8 @@
 import { heightPercentageToDP as percentageHeight, widthPercentageToDP as percentageWidth } from 'react-native-responsive-screen';
 import { VictoryPie } from 'victory-native';
 import React from 'react';
-import { ActivityIndicator, Image, StyleSheet, Text, View } from 'react-native';
+import LottieView from 'lottie-react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
 import { Tooltip } from 'react-native-elements';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -48,7 +49,7 @@ const CarbonFootprintScore = ({ loading, error, historyReport }) => {
     <View>
       {!historyReport ? (
         <View style={styles.loadingContainer}>
-          <ActivityIndicator />
+          <LottieView source={require('../animations/18473-flying-avocado.json')} autoPlay loop />
         </View>
       ) : (
           <View style={styles.graphContainer}>
@@ -57,7 +58,7 @@ const CarbonFootprintScore = ({ loading, error, historyReport }) => {
               style={styles.image}
             />
             <View style={styles.scoreContainer}>
-              <Text style={styles.score}>{Math.round(historyReport.userAvg)} CO₂/kg</Text>
+              <Text style={styles.score}>{historyReport.userAvg.toFixed(1)} CO₂/kg</Text>
               {renderTooltip()}
             </View>
             <VictoryPie
@@ -79,7 +80,7 @@ const styles = StyleSheet.create({
   loadingContainer: { height: percentageHeight('29%'), alignItems: 'center', justifyContent: 'center' },
   graphContainer: { height: percentageHeight('29%'), alignItems: 'center' },
   tooltipContent: { color: 'white', fontSize: 16 },
-  image: { height: percentageHeight('10%'), width: percentageWidth('20%'), position: 'absolute', alignSelf: 'center', marginTop: percentageHeight('12%') },
+  image: { height: percentageHeight('10%'), position: 'absolute', alignSelf: 'center', marginTop: percentageHeight('12%') },
   scoreContainer: { zIndex: 100, position: 'absolute', marginTop: percentageHeight('24%'), flexDirection: 'row', alignItems: 'center' },
   score: { fontSize: 24, color: 'grey' },
 });

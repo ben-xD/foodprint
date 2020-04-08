@@ -55,8 +55,11 @@ const WeeklyDisplay = ({ average, composition }) => {
   return (
     <View style={styles.contentContainer}>
       <View style={styles.scoreContainer}>
-        <Text style={styles.score}>{Math.round(sum()[0])} CO₂/kg this week</Text>
-        <Text style={styles.comparison}>{weekSign}{Math.round(changeSinceLastWeek())}% compared{'\n'}to last week</Text>
+        <Text style={styles.score}>{sum()[0].toFixed(1)} CO₂/kg this week</Text>
+        {(isNaN(changeSinceLastWeek())) ? <></> : (
+          <Text style={styles.comparison}>{weekSign}{changeSinceLastWeek().toFixed(0)}% compared{'\n'}to last week</Text>
+        )
+        }
         <Tooltip
           popover={<View>
             <Text style={styles.tooltipContent}>{TOOLTIP_CONTENT}</Text>
@@ -73,8 +76,9 @@ const WeeklyDisplay = ({ average, composition }) => {
           padding={{ top: percentageHeight('8%'), bottom: percentageHeight('18%'), left: percentageWidth('15%'), right: percentageWidth('10%') }}
           domainPadding={percentageWidth('5%')}
           height={percentageHeight('50%')}
+          domain={(average === 0.0 && sum()[0] === 0.0) ? { y: [0, 1] } : {}}
         >
-          <VictoryAxis dependentAxis orientation="left" offsetX={percentageWidth('15%')} label="Carbon footprint" />
+          <VictoryAxis dependentAxis orientation="left" offsetX={percentageWidth('15%')} />
           <VictoryAxis crossAxis={false} label="Week" domain={[-5, 0.01]} tickFormat={(t) => (t === 0) ? 'Now' : ('s' + t)} />
           <VictoryStack colorScale={['olivedrab', 'gold', 'skyblue', 'firebrick']}>
             <VictoryBar data={composition.plantBased} sortKey="periodNumber" x="periodNumber" y="avgCarbonFootprint" />

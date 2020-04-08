@@ -1,13 +1,14 @@
 import React from 'react';
-import { View, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { Button, Text } from 'react-native-elements';
 import { useContext } from 'react';
 import AuthContext from '../context/AuthContext';
 import { gql } from 'apollo-boost';
 import { useMutation } from 'react-apollo';
 import { useEffect } from 'react';
+import LottieView from 'lottie-react-native';
 import Snackbar from 'react-native-snackbar';
-import AsyncStorage from '@react-native-community/async-storage';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const DELETE_ACCOUNT = gql`
   mutation {
@@ -44,22 +45,30 @@ const DeleteAccount = ({ navigation }) => {
   }, [data, deleteAccount, error, postDeleteAccount]);
 
   return (
-    loading ? (<ActivityIndicator />) : (
-      <View style={styles.container}>
-        <View style={styles.titleContainer}>
-          <Text h3>Are you sure you want to delete your account?</Text>
-          <Text h4 style={styles.subtitle}>This can't be undone.</Text>
-        </View>
-        <View style={styles.buttonsContainer}>
-          <Button title="Delete" containerStyle={styles.buttonContainer} buttonStyle={styles.confirmDeleteButton} onPress={postDeleteAccount} />
-          <Button title="Cancel" containerStyle={styles.buttonContainer} buttonStyle={styles.cancelDeleteButton} onPress={() => navigation.goBack()} />
-        </View>
-      </View>
-    )
+    loading ? (<View style={styles.loadingContainer}>
+      <LottieView source={require('../animations/4053-crying-smoothymon.json')} autoPlay loop />
+    </View>) : (
+        <SafeAreaView style={styles.container}>
+          <View style={styles.titleContainer}>
+            <Text h3>Are you sure you want to delete your account?</Text>
+            <Text h4 style={styles.subtitle}>This can't be undone.</Text>
+          </View>
+          <View style={styles.buttonsContainer}>
+            <Button title="Delete" containerStyle={styles.buttonContainer} buttonStyle={styles.confirmDeleteButton} onPress={postDeleteAccount} />
+            <Button title="Cancel" containerStyle={styles.buttonContainer} buttonStyle={styles.cancelDeleteButton} onPress={() => navigation.goBack()} />
+          </View>
+        </SafeAreaView>
+      )
   );
 };
 
 const styles = StyleSheet.create({
+  loadingContainer:
+  {
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   container: {
     height: '100%',
   },

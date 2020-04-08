@@ -4,9 +4,10 @@ import {
   ScrollView,
   StyleSheet,
   SafeAreaView,
-  Text, ActivityIndicator, RefreshControl,
+  Text, RefreshControl,
 } from 'react-native';
-import { Button, ButtonGroup } from 'react-native-elements';
+import LottieView from 'lottie-react-native';
+import { ButtonGroup } from 'react-native-elements';
 import {
   widthPercentageToDP as percentageWidth,
   heightPercentageToDP as percentageHeight,
@@ -179,7 +180,7 @@ const Foodprint = ({ navigation, route }) => {
       return (
         (!historyReport || networkStatus === 4) ? (
           <View style={styles.graphContainer}>
-            <ActivityIndicator />
+            <LottieView source={require('../animations/18252-just-cheese.json')} autoPlay loop />
           </View>
         ) : (
             <WeeklyDisplay average={historyReport.periodAvgs[0]} composition={historyReport.categoryReports[0]} />
@@ -190,7 +191,7 @@ const Foodprint = ({ navigation, route }) => {
       return (
         (!historyReport || networkStatus === 4) ? (
           <View style={styles.graphContainer}>
-            <ActivityIndicator />
+            <LottieView source={require('../animations/18534-flying-hotdog.json')} autoPlay loop />
           </View>
         ) : (
             <MonthlyDisplay average={historyReport.periodAvgs[1]} composition={historyReport.categoryReports[1]} />
@@ -241,6 +242,7 @@ const Foodprint = ({ navigation, route }) => {
           console.log(`selected button: ${name}`);
         }}
       />
+
       <WelcomeScreen setVisibility={setIntroductoryOverlayVisible} isVisible={introductoryOverlayVisible} />
     </SafeAreaView >
   );
