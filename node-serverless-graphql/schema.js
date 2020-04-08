@@ -64,10 +64,6 @@ const typeDefs = gql`
         postBarcode(barcode: String!): ProductFootprint
         postCorrection(name: String!): ProductFootprint
         postUserHistoryEntry(item: String): Boolean
-<<<<<<<<< Temporary merge branch 1
-        postRecipe(url: String!): ProductFootprint
-        deleteData: Boolean
-=========
         postRecipe(name: String!): RecipeReport
         deleteData: Boolean
     }
