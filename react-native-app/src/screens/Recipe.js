@@ -89,7 +89,7 @@ const Recipe = ({ navigation, route }) => {
         recipe in the following field!
        </Text>
       <Input
-        value={Name or URL}
+        value={input}
         containerStyle={styles.input}
         onChangeText={value => setInput(value)}
       />
