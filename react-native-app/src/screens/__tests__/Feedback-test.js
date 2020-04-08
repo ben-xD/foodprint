@@ -17,7 +17,7 @@ test('Feedback matches previous snapshot', () => {
   };
 
   let screen;
-  const tree = renderer.act(() => {
+  renderer.act(() => {
     screen = <Feedback route={mockedRoute} />;
   });
   expect(screen).toMatchSnapshot();
