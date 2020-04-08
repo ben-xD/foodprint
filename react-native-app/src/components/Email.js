@@ -2,10 +2,11 @@ import React from 'react';
 import { Input } from 'react-native-elements';
 import { StyleSheet } from 'react-native';
 
-const Email = ({ setEmail, email, nextFieldRef }) => {
+const Email = (props) => {
+  const { setEmail, email, nextFieldRef, autoFocus } = props;
   return (
     <Input
-      // label={'Your Email Address'}
+      autoFocus={autoFocus}
       autoCorrect={false}
       autoCapitalize={'none'}
       placeholder="Email"

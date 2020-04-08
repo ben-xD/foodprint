@@ -23,7 +23,6 @@ const DeleteAccount = ({ navigation }) => {
 
   useEffect(() => {
     console.log({ data });
-
     if (data) {
       Snackbar.show({
         text: 'Logging you out for the last time.',
@@ -33,6 +32,7 @@ const DeleteAccount = ({ navigation }) => {
     }
 
     if (error) {
+      console.log({ error });
       setDeletingAccount(false);
       Snackbar.show({
         text: 'We were unable to delete your data.',

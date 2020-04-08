@@ -44,9 +44,9 @@ const Login = ({ navigation }) => {
   return (
     <ScrollView contentContainerStyle={styles.containerContent} style={styles.container}>
       <View style={styles.titleContainer}>
-        <Text h1>
-          FoodPrint
-        </Text>
+        <Text style={styles.title}>
+          Foodprint
+          </Text>
       </View>
       <View style={styles.inputContainer}>
         <View>
@@ -74,6 +74,9 @@ const styles = StyleSheet.create({
   container: { width: '100%', height: '100%' },
   containerContent: { alignItems: 'center' },
   titleContainer: { alignItems: 'center', justifyContent: 'center', marginVertical: 50 },
+  title: {
+    fontSize: percentageWidth('15%'),
+  },
   inputContainer: { width: '80%' },
   buttonContainer: { width: '80%' },
   button: { backgroundColor: 'green' },
