@@ -44,14 +44,15 @@ class CarbonAPI {
     // If useCategories = true, search the remaining labels in categorised db
     if (useCategories && (labelList.length > _itemList.length)){
 
-      const found_items = this.getItemsInList(_itemList); 
+      const found_items = await this.getItemsInList(_itemList); 
+      console.log(found_items);
       const not_found_items = labelList.filter(item => !found_items.includes(item));
 
       for (let i = 0; i < not_found_items.length; i += 1) {
         let carbonFootprintResponse = catergorisedCarbonValues[not_found_items[i]];
         if (carbonFootprintResponse) {
           _itemList.push ({
-            item: labels[i],
+            item: not_found_items[i],
             carbonpkilo: carbonFootprintResponse[0].carbonpkilo,
             categories: carbonFootprintResponse[0].categories
           });
