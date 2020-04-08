@@ -22,6 +22,9 @@ mutation($input: String!) {
   }
 }`;
 
+const RECIPE_GUIDANCE_TEXT =
+  'Give us a recipe name or link, and we\'ll figure out the carbon footprint!';
+
 const Recipe = ({ navigation, route }) => {
   const netInfo = useNetInfo();
   const [input, setInput] = useState('');
@@ -102,10 +105,7 @@ const Recipe = ({ navigation, route }) => {
         style={styles.image}
         resizeMode="contain"
       />
-      <Text style={styles.text}>
-        Want to know the carbon footprint of a meal you want to cook? Write the name or paste the URL of the
-        recipe in the following field!
-       </Text>
+      <Text style={styles.text}>{RECIPE_GUIDANCE_TEXT}</Text>
       <Input
         value={input}
         containerStyle={styles.input}
