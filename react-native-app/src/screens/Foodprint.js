@@ -216,9 +216,10 @@ const Foodprint = ({ navigation, route }) => {
             element: () => (<Text>MONTH</Text>),
           }]}
           selectedIndex={timeSpan}
+          textStyle={{ color: 'white' }}
           containerStyle={{ zIndex: 100, marginTop: 16 }}
-          selectedTextStyle={{ color: 'white' }}
-          selectedButtonStyle={{ backgroundColor: 'lightgrey' }}
+          selectedButtonStyle={{ backgroundColor: 'white' }}
+          buttonStyle={{ backgroundColor: 'lightgrey' }}
         />
         <View>
           {renderFootprintChart()}

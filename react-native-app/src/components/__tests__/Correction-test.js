@@ -1,5 +1,5 @@
 import React from 'react';
-import Correction from '../Correction';
+import Correction from '../../screens/Correction';
 import { useMutation } from '@apollo/react-hooks';
 
 import renderer from 'react-test-renderer';

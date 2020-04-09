@@ -1,5 +1,5 @@
 import { ActivityIndicator, Image, StyleSheet, Text, View, BackHandler } from 'react-native';
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { widthPercentageToDP as percentageWidth, heightPercentageToDP as percentageHeight } from 'react-native-responsive-screen';
 import { Button, Input } from 'react-native-elements';
 import { gql } from 'apollo-boost';
@@ -23,7 +23,7 @@ mutation($input: String!) {
 }`;
 
 const RECIPE_GUIDANCE_TEXT =
-  'Give us a recipe name or link, and we\'ll figure out the carbon footprint!';
+  'Give us a recipe name or link, and we\'ll figure out the carbon footprint.';
 
 const Recipe = ({ navigation, route }) => {
   const netInfo = useNetInfo();
@@ -45,7 +45,7 @@ const Recipe = ({ navigation, route }) => {
     Snackbar.dismiss();
   });
 
-  const handleSubmit = async () => {
+  const handleSubmitRecipe = async () => {
     try {
       await postRecipe({ variables: { input } });
     } catch (err) {
@@ -94,8 +94,7 @@ const Recipe = ({ navigation, route }) => {
         }, loading: false,
       });
     }
-  }
-  );
+  }, [navigation, recipeData]);
 
 
   return (
@@ -110,6 +109,7 @@ const Recipe = ({ navigation, route }) => {
         value={input}
         containerStyle={styles.input}
         onChangeText={value => setInput(value)}
+        onSubmitEditing={handleSubmitRecipe}
       />
       {(recipeLoading) ? (
         <ActivityIndicator style={styles.loading} />
@@ -119,7 +119,7 @@ const Recipe = ({ navigation, route }) => {
             buttonStyle={styles.button}
             containerStyle={styles.buttonContainer}
             titleStyle={styles.buttonTitle}
-            onPress={handleSubmit}
+            onPress={handleSubmitRecipe}
           />
         )}
     </View>
