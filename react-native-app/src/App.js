@@ -17,10 +17,11 @@ import DeleteAccount from './screens/DeleteAccount';
 import Snackbar from 'react-native-snackbar';
 import Camera from './screens/Camera';
 import Feedback from './screens/Feedback';
-import Correction from './components/Correction';
+import Correction from './screens/Correction';
 import Foodprint from './screens/Foodprint';
 import Recipe from './screens/Recipe';
 import { Platform, Keyboard } from 'react-native';
+import Onboarding from './screens/Onboarding';
 
 const Stack = createStackNavigator();
 
@@ -79,6 +80,7 @@ const App = (props) => {
         <>
           {recipeUrl ? (<Stack.Screen name="Recipe" component={Recipe} initialParams={{ recipeUrl }} />) : <></>}
           <Stack.Screen name="Home" component={BottomTabBar} />
+          <Stack.Screen name="Onboarding" component={Onboarding} />
           <Stack.Screen name="Your Foodprint" component={Foodprint} />
           <Stack.Screen name="Camera" component={Camera} />
           <Stack.Screen name="Correction" component={Correction} />

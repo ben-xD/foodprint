@@ -4,9 +4,10 @@ import {
   ScrollView,
   StyleSheet,
   SafeAreaView,
-  Text, ActivityIndicator, RefreshControl,
+  Text, RefreshControl,
 } from 'react-native';
-import { Button } from 'react-native-elements';
+import LottieView from 'lottie-react-native';
+import { ButtonGroup } from 'react-native-elements';
 import {
   widthPercentageToDP as percentageWidth,
   heightPercentageToDP as percentageHeight,
@@ -17,14 +18,12 @@ import CarbonFootprintScore from '../components/CarbonFootprintScore';
 import gql from 'graphql-tag';
 import { useQuery } from '@apollo/react-hooks';
 import AsyncStorage from '@react-native-community/async-storage';
-import WelcomeScreen from '../components/WelcomeScreen';
 import { FloatingAction } from 'react-native-floating-action';
 import { useFocusEffect, useIsFocused } from '@react-navigation/native';
+import Snackbar from 'react-native-snackbar';
 
-const UNIT_INFORMATION =
-  'The carbon footprint displayed in this app, including this page, ' +
-  'are given in kilograms of CO2 per kilogram of food. The weight of ' +
-  'any food item is systematically normalised to 1kg to get to this result.';
+const WEEKLY_TIMESPAN = 0;
+const MONTHLY_TIMESPAN = 1;
 
 export const GET_USER_HISTORY_REPORT = gql`
   query GetUserHistoryReport ($timezone: Int!, $resolutions: [ReportResolution!]!) {
@@ -54,8 +53,7 @@ export const GET_USER_HISTORY_REPORT = gql`
 `;
 
 const Foodprint = ({ navigation, route }) => {
-  const [introductoryOverlayVisible, setIntroductoryOverlayVisible] = useState(false);
-  const [timeSpan, setTimeSpan] = useState('weekly');
+  const [timeSpan, setTimeSpan] = useState(WEEKLY_TIMESPAN);
   const [historyReport, setHistoryReport] = useState(null);
   const isFocused = useIsFocused();
   const [refreshing, setRefreshing] = useState(false);
@@ -84,11 +82,12 @@ const Foodprint = ({ navigation, route }) => {
       }
     } catch (e) { } // If value does not exist in storage, an error occurs, keep going.
     AsyncStorage.setItem('introductoryOverlaySeen', JSON.stringify(true));
-    setIntroductoryOverlayVisible(true);
+    navigation.navigate('Onboarding');
   };
 
   useEffect(() => {
     showOverlayIfNewUser();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Occurs everytime the screen if focused
@@ -134,6 +133,7 @@ const Foodprint = ({ navigation, route }) => {
   });
 
   useEffect(() => {
+    console.log({ historyReportData });
     if (!historyReportLoading && historyReportData && historyReportData.getUserHistoryReport) {
       setHistoryReport(historyReportData.getUserHistoryReport);
       console.log('Successfully received user history report data, caching locally.');
@@ -146,12 +146,18 @@ const Foodprint = ({ navigation, route }) => {
     const retrieveHistoryReportDataFromCache = async () => {
       try {
         const retrievedHistoryReport = await AsyncStorage.getItem('historyReport');
+        console.log({ retrievedHistoryReport });
         setHistoryReport(JSON.parse(retrievedHistoryReport));
+        setRefreshing(false);
       } catch (e) {
         console.log('Error retrieving user history report data:' + e);
       }
     };
     if (historyReportError) {
+      Snackbar.show({
+        text: "We couldn't get your data, loading last known data",
+        duration: Snackbar.LENGTH_LONG,
+      });
       retrieveHistoryReportDataFromCache();
     }
   }, [historyReportError]);
@@ -165,22 +171,22 @@ const Foodprint = ({ navigation, route }) => {
   };
 
   const renderFootprintChart = () => {
-    if (timeSpan === 'weekly') {
+    if (timeSpan === WEEKLY_TIMESPAN) {
       return (
         (!historyReport || networkStatus === 4) ? (
           <View style={styles.graphContainer}>
-            <ActivityIndicator />
+            <LottieView source={require('../animations/18252-just-cheese.json')} autoPlay loop />
           </View>
         ) : (
             <WeeklyDisplay average={historyReport.periodAvgs[0]} composition={historyReport.categoryReports[0]} />
           )
       );
     }
-    if (timeSpan === 'monthly') {
+    if (timeSpan === MONTHLY_TIMESPAN) {
       return (
         (!historyReport || networkStatus === 4) ? (
           <View style={styles.graphContainer}>
-            <ActivityIndicator />
+            <LottieView source={require('../animations/18534-flying-hotdog.json')} autoPlay loop />
           </View>
         ) : (
             <MonthlyDisplay average={historyReport.periodAvgs[1]} composition={historyReport.categoryReports[1]} />
@@ -191,29 +197,32 @@ const Foodprint = ({ navigation, route }) => {
 
   return (
     <SafeAreaView>
-      <ScrollView style={{ height: '100%' }} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refetch} />}>
+      <ScrollView style={styles.container} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refetch} />}>
         <CarbonFootprintScore historyReport={historyReport} loading={historyReportLoading} error={historyReportError} />
+        <ButtonGroup onPress={(index) => {
+          switch (index) {
+            case 0:
+              return setTimeSpan(WEEKLY_TIMESPAN);
+            case 1:
+              return setTimeSpan(MONTHLY_TIMESPAN);
+            default:
+              console.warn('Unhandled index in button group');
+          }
+        }}
+          buttons={[{
+            element: () => (<Text>WEEK</Text>),
+          },
+          {
+            element: () => (<Text>MONTH</Text>),
+          }]}
+          selectedIndex={timeSpan}
+          textStyle={{ color: 'white' }}
+          containerStyle={{ zIndex: 100, marginTop: 16 }}
+          selectedButtonStyle={{ backgroundColor: 'white' }}
+          buttonStyle={{ backgroundColor: 'lightgrey' }}
+        />
         <View>
           {renderFootprintChart()}
-        </View>
-        <View style={styles.buttonContainer}>
-          <Button
-            title="Weekly"
-            titleStyle={styles.buttonTitle}
-            buttonStyle={[styles.button, { backgroundColor: ((timeSpan === 'weekly') ? 'green' : 'grey') }]}
-            containerStyle={{ paddingHorizontal: percentageWidth('2%') }}
-            onPress={() => setTimeSpan('weekly')}
-          />
-          <Button
-            title="Monthly"
-            titleStyle={styles.buttonTitle}
-            buttonStyle={[styles.button, { backgroundColor: ((timeSpan === 'monthly') ? 'green' : 'grey') }]}
-            containerStyle={{ paddingHorizontal: percentageWidth('2%') }}
-            onPress={() => setTimeSpan('monthly')}
-          />
-        </View>
-        <View style={styles.footnote}>
-          <Text style={{ fontSize: 12 }}>{UNIT_INFORMATION}</Text>
         </View>
       </ScrollView>
       <FloatingAction
@@ -229,14 +238,15 @@ const Foodprint = ({ navigation, route }) => {
           console.log(`selected button: ${name}`);
         }}
       />
-      <WelcomeScreen setVisibility={setIntroductoryOverlayVisible} isVisible={introductoryOverlayVisible} />
+
+      {/* <WelcomeScreen setVisibility={setIntroductoryOverlayVisible} isVisible={introductoryOverlayVisible} /> */}
     </SafeAreaView >
   );
 };
 
 const styles = StyleSheet.create({
+  container: { height: '100%' },
   score: { fontSize: percentageWidth('6%'), color: 'grey' },
-  footnote: { margin: percentageWidth('5%'), marginTop: percentageHeight('7%'), marginBottom: percentageHeight('15%') },
   buttonContainer: { flexDirection: 'row', justifyContent: 'center', paddingVertical: percentageHeight('2%') },
   buttonTitle: { fontSize: percentageWidth('5%') },
   button: { width: percentageWidth('30%'), height: 45 },

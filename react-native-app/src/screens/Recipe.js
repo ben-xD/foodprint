@@ -1,10 +1,11 @@
-import { ActivityIndicator, Image, StyleSheet, Text, View } from 'react-native';
-import React, { useState, useEffect, useCallback } from 'react';
+import { ActivityIndicator, Image, StyleSheet, Text, View, BackHandler } from 'react-native';
+import React, { useState, useEffect } from 'react';
 import { widthPercentageToDP as percentageWidth, heightPercentageToDP as percentageHeight } from 'react-native-responsive-screen';
 import { Button, Input } from 'react-native-elements';
 import { gql } from 'apollo-boost';
 import { useMutation } from '@apollo/react-hooks';
 import Snackbar from 'react-native-snackbar';
+import { useNetInfo } from '@react-native-community/netinfo';
 
 const POST_RECIPE_MUTATION = gql`
 mutation($input: String!) {
@@ -21,11 +22,30 @@ mutation($input: String!) {
   }
 }`;
 
+const RECIPE_GUIDANCE_TEXT =
+  'Give us a recipe name or link, and we\'ll figure out the carbon footprint.';
+
 const Recipe = ({ navigation, route }) => {
+  const netInfo = useNetInfo();
   const [input, setInput] = useState('');
   const [postRecipe, { loading: recipeLoading, error: recipeError, data: recipeData }] = useMutation(POST_RECIPE_MUTATION);
 
-  const handleSubmit = async () => {
+  useEffect(() => {
+    if (netInfo.details !== null && !netInfo.isConnected) {
+      Snackbar.show({
+        text: 'No internet connection, you can\'t do this! 🤣',
+        duration: Snackbar.LENGTH_INDEFINITE,
+      });
+    } else if (netInfo.isConnected) {
+      Snackbar.dismiss();
+    }
+  }, [netInfo]);
+
+  BackHandler.addEventListener('hardwareBackPress', () => {
+    Snackbar.dismiss();
+  });
+
+  const handleSubmitRecipe = async () => {
     try {
       await postRecipe({ variables: { input } });
     } catch (err) {
@@ -35,7 +55,7 @@ const Recipe = ({ navigation, route }) => {
 
   useEffect(() => {
     if (route.params && route.params.recipeUrl) {
-      setURL(route.params.recipeUrl);
+      setInput(route.params.recipeUrl);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -74,8 +94,7 @@ const Recipe = ({ navigation, route }) => {
         }, loading: false,
       });
     }
-  }
-  );
+  }, [navigation, recipeData]);
 
 
   return (
@@ -83,15 +102,14 @@ const Recipe = ({ navigation, route }) => {
       <Image
         source={require('../images/full-smiley.png')}
         style={styles.image}
+        resizeMode="contain"
       />
-      <Text style={styles.text}>
-        Want to know the carbon footprint of a meal you want to cook? Write the name or paste the URL of the
-        recipe in the following field!
-       </Text>
+      <Text style={styles.text}>{RECIPE_GUIDANCE_TEXT}</Text>
       <Input
         value={input}
         containerStyle={styles.input}
         onChangeText={value => setInput(value)}
+        onSubmitEditing={handleSubmitRecipe}
       />
       {(recipeLoading) ? (
         <ActivityIndicator style={styles.loading} />
@@ -101,7 +119,7 @@ const Recipe = ({ navigation, route }) => {
             buttonStyle={styles.button}
             containerStyle={styles.buttonContainer}
             titleStyle={styles.buttonTitle}
-            onPress={handleSubmit}
+            onPress={handleSubmitRecipe}
           />
         )}
     </View>
@@ -110,7 +128,7 @@ const Recipe = ({ navigation, route }) => {
 
 const styles = StyleSheet.create({
   container: { flex: 1, justifyContent: 'center', alignItems: 'center', margin: percentageHeight('5%') },
-  image: { height: percentageHeight('25%'), width: percentageWidth('45%'), marginBottom: percentageHeight('5%') },
+  image: { height: percentageHeight('25%'), marginBottom: percentageHeight('5%') },
   text: { fontSize: percentageWidth('4%') },
   input: { marginVertical: percentageHeight('2%') },
   button: { backgroundColor: 'green', width: percentageWidth('30%'), height: 45 },

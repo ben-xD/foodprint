@@ -1,5 +1,5 @@
 import { Image, View, ActivityIndicator } from 'react-native';
-import { Input, Text } from 'react-native-elements';
+import { Input, Text, Button } from 'react-native-elements';
 import React, { useState, useEffect } from 'react';
 
 import { gql } from 'apollo-boost';
@@ -20,8 +20,7 @@ mutation PostCorrectionMutation($name: String!) {
 }
 `;
 
-const Correction = ({ route, navigation }) => {
-  const { meal, setMeal } = route.params;
+const Correction = ({ navigation }) => {
   const [correctedName, setCorrectedName] = useState('');
   const [postCorrection, { loading: correctionLoading, error: correctionError, data: correctionData }] = useMutation(POST_CORRECTION_MUTATION);
 
@@ -30,7 +29,7 @@ const Correction = ({ route, navigation }) => {
   useEffect(() => {
     if (correctionError) {
       Snackbar.show({
-        text: 'Something went wrong.',
+        text: 'We couldn\'t save that to your history.',
         duration: Snackbar.LENGTH_INDEFINITE,
         action: {
           text: 'RETRY',
@@ -45,14 +44,16 @@ const Correction = ({ route, navigation }) => {
   // Respond to changes in correction data (following correction)
   useEffect(() => {
     if (correctionData && correctionData.postCorrection.carbonFootprintPerKg) {
-      setMeal({
-        ...meal,
-        score: correctionData.postCorrection.carbonFootprintPerKg,
-        description: correctedName,
-        item: correctionData.postCorrection.name // Item returned from back-end
+      navigation.push('Feedback', {
+        meal: {
+          score: correctionData.postCorrection.carbonFootprintPerKg,
+          description: correctedName,
+          item: correctionData.postCorrection.name, // Item returned from back-end
+        },
       });
-      navigation.goBack();
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [correctionData]);
 
   return correctionLoading ?
@@ -62,7 +63,7 @@ const Correction = ({ route, navigation }) => {
       <View style={styles.container}>
         <ScrollView>
           <View style={styles.titleContainer}>
-            <Text style={styles.title}>We could not find your item.</Text>
+            <Text style={styles.title}>Sorry, we could not find your item.</Text>
           </View>
           <View style={styles.imageContainer}>
             <Image
@@ -81,6 +82,13 @@ const Correction = ({ route, navigation }) => {
           <View style={styles.subtitleContainer}>
             <Text style={styles.subtitle}>Let us know what it was, so we can improve our app.</Text>
           </View>
+          <Button
+            title="SUBMIT"
+            onPress={postCorrectionHandler}
+            buttonStyle={styles.button}
+            containerStyle={styles.buttonContainer}
+            titleStyle={styles.buttonTitle}
+          />
         </ScrollView>
       </View >
     );
@@ -99,6 +107,8 @@ const styles = StyleSheet.create({
   subtitleContainer: { flex: 1, justifyContent: 'center' },
   subtitle: { fontSize: percentageWidth('5%'), textAlign: 'center', marginHorizontal: percentageWidth('5%') },
   inputContainer: { flex: 1.5, margin: percentageWidth('5%') },
+  button: { backgroundColor: 'green', width: percentageWidth('30%'), height: 45, marginTop: percentageHeight('2%') },
+  buttonContainer: { marginVertical: percentageHeight('2%'), alignItems: 'center' },
 });
 
 export default Correction;

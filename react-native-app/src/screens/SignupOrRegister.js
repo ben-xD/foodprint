@@ -70,6 +70,7 @@ const SignupOrRegister = ({ navigation }) => {
           </View>
         </View>
       </View>
+      {/* Commented out to disable 'skip login' functionality */}
       {/* <View style={styles.skipButtonContainer}>
         <Button
           disabled={isPressed}

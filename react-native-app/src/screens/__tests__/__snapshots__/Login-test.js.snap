@@ -26,7 +26,7 @@ exports[`Login matches previous snapshot 1`] = `
     <Text
       style={
         Object {
-          "fontSize": 50,
+          "fontSize": 112.5,
         }
       }
       theme={
@@ -67,7 +67,7 @@ exports[`Login matches previous snapshot 1`] = `
         }
       }
     >
-      FoodPrint
+      Foodprint
     </Text>
   </View>
   <View

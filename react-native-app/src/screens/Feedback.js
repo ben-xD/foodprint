@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import {View, Text, ActivityIndicator, Image, SafeAreaView, FlatList} from 'react-native';
+import React, { useEffect, useState, useCallback } from 'react';
+import { View, Text, ActivityIndicator, Image, SafeAreaView, FlatList } from 'react-native';
 import { gql } from 'apollo-boost';
 import { StyleSheet, Linking } from 'react-native';
 import { useMutation } from '@apollo/react-hooks';
-import {Rating, Button, Overlay} from 'react-native-elements';
+import { Rating, Button, Overlay, Tooltip } from 'react-native-elements';
 import { widthPercentageToDP as percentageWidth, heightPercentageToDP as percentageHeight } from 'react-native-responsive-screen';
 import { ScrollView } from 'react-native-gesture-handler';
 import Snackbar from 'react-native-snackbar';
 import { CommonActions } from '@react-navigation/native';
+import { Keyboard } from 'react-native';
+import { FOODPRINT_UNIT, FOODPRINT_UNIT_INFORMATION } from '../string';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 // GraphQL schema for picture posting mutation
 const POST_PICTURE_MUTATION = gql`
@@ -36,26 +39,36 @@ const POST_USER_HISTORY_ENTRY = gql`
 
 const Feedback = ({ route, navigation }) => {
   const [meal, setMeal] = useState(null);
+  const [uploading, setUploading] = useState(false);
   const [overlayInfo, setOverlayInfo] = useState(null);
   const [isVisible, setVisibility] = useState(false);
   const [uploadPicture, { loading: pictureLoading, data: pictureData, error: pictureError }] = useMutation(POST_PICTURE_MUTATION);
-  const [postBarcodeMutation, { loading: barcodeLoading, error: barcodeError, data: barcodeData }] = useMutation(POST_BARCODE_MUTATION);
+  const [postBarcodeMutation,
+    { loading: barcodeLoading,
+      error: barcodeError,
+      data: barcodeData }] = useMutation(POST_BARCODE_MUTATION);
   const [postUserHistoryEntryMutation, { loading: historyLoading, error: historyError, data: historyData }] = useMutation(POST_USER_HISTORY_ENTRY);
 
-  // make relevant request when component is loaded AND provided with either file or barcode
+  // make relevant request when component is given specific data
   useEffect(() => {
-    const { file, barcode, recipeMeal, extraInfo } = route.params;
+    Keyboard.dismiss();
+
+    const { file, barcode, meal: correctedMeal, recipeMeal, extraInfo } = route.params;
     if (file) {
       console.log({ file });
       console.log(typeof (file));
       uploadPicture({ variables: { file } });
     } else if (barcode) {
       postBarcodeMutation({ variables: { barcode } });
+    } else if (correctedMeal) {
+      // passed a meal object from correction screen
+      setMeal(correctedMeal);
     } else if (recipeMeal && extraInfo) {
       setMeal(recipeMeal);
       setOverlayInfo(extraInfo);
     }
-  }, [postBarcodeMutation, route.params, uploadPicture]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (!pictureError && !barcodeError) {
@@ -81,29 +94,51 @@ const Feedback = ({ route, navigation }) => {
         setMeal({
           uri: route.params.uri,
         });
-        navigation.navigate('Correction', { meal, setMeal });
+        navigation.navigate('Correction');
       }
     }
-  }, [meal, navigation, pictureData, route.params.uri]);
+  }, [navigation, pictureData, route.params.uri]);
 
   useEffect(() => {
     if (barcodeData) {
+      console.log({ barcodeData });
       if (barcodeData.postBarcode.name && barcodeData.postBarcode.carbonFootprintPerKg) {
-        // If unknown name from barcode, go to error correction screen
-        navigation.navigate('Correction', { meal, setMeal });
-      } else {
         setMeal({
           score: barcodeData.postBarcode.carbonFootprintPerKg,
           description: barcodeData.postBarcode.name,
         });
+      } else {
+        // If unknown name from barcode, go to error correction screen
+        navigation.navigate('Correction');
       }
     }
-  }, [barcodeData, meal, navigation]);
+  }, [barcodeData, navigation]);
 
   // Add item to user history
-  const addToHistory = async (item) => {
-    await postUserHistoryEntryMutation({ variables: { item } });
+  const addToHistory = async () => {
+    console.log('Saving to user history.');
+    setUploading(true);
+    await postUserHistoryEntryMutation({ variables: { item: meal.item ? meal.item : meal.description } });
   };
+
+  useEffect(() => {
+    if (historyData) {
+      // Reset client store after modifying user history
+      console.log('Saved to user history.');
+      // Reset navigation, so user can't 'hardware back press' to this screen
+      setUploading(false);
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 1,
+          routes: [
+            { name: 'Home' },
+          ],
+
+        })
+      );
+      route.params.client.resetStore();
+    }
+  }, [historyData, navigation, route.params.client]);
 
   const getRatingFromCarbonFootprint = (carbonFootprint) => {
     if (carbonFootprint < 0) {
@@ -133,7 +168,7 @@ const Feedback = ({ route, navigation }) => {
     }
   };
 
-  const getColourFromCarbonFootprint = (carbonFootprint) => {
+  const getColourFromCarbonFootprint = useCallback((carbonFootprint) => {
     if (carbonFootprint < 0) {
       return 'black';
     } else if (carbonFootprint < 4) {
@@ -149,9 +184,18 @@ const Feedback = ({ route, navigation }) => {
     } else {
       return 'darkred';
     }
-  };
+  }, []);
 
-  return pictureLoading || barcodeLoading || !meal ?
+  const renderTooltip = () => (
+    <Tooltip popover={<Text style={styles.tooltipContent}>{FOODPRINT_UNIT_INFORMATION}</Text>}
+      backgroundColor={'#008000'}
+      height={percentageHeight('20%')}
+      width={percentageWidth('65%')}>
+      <MaterialCommunityIcons name="help-circle" color={'grey'} size={24} />
+    </Tooltip>
+  );
+
+  return uploading || pictureLoading || barcodeLoading || !meal ?
     <View style={styles.loading}>
       <ActivityIndicator />
     </View > :
@@ -171,9 +215,12 @@ const Feedback = ({ route, navigation }) => {
             type="star" // Optionally customisible
             imageSize={percentageWidth('7%')}
           />
-          <Text style={styles.score}>{meal.score} units</Text>
+          <View style={styles.scoreContainer}>
+            <Text style={styles.score}>{meal.score} {FOODPRINT_UNIT}</Text>
+            {renderTooltip()}
+          </View>
           {(overlayInfo) ? (
-              <Button title="More information about this number" type="clear" onPress={() => setVisibility(true)} />
+            <Button title="More information about this number" type="clear" onPress={() => setVisibility(true)} />
           ) : <></>
           }
         </View>
@@ -188,45 +235,29 @@ const Feedback = ({ route, navigation }) => {
             buttonStyle={styles.greenButtonStyle}
             titleStyle={styles.buttonText}
             title="Add to history"
-            onPress={async () => {
-              console.log('Saving to user history.');
-              await addToHistory(meal.item ? meal.item : meal.description);
-              // Reset client store after modifying user history
-              route.params.client.resetStore();
-              console.log('Sent item to to user history...');
-              // Reset navigation, so user can't 'hardware back press' to this screen
-              navigation.dispatch(
-                CommonActions.reset({
-                  index: 1,
-                  routes: [
-                    { name: 'Home' },
-                  ],
-
-                })
-              );
-            }}
+            onPress={addToHistory}
           />
         </View>
       </ScrollView>
       {(overlayInfo) ? (
-          <Overlay isVisible={isVisible} onBackdropPress={() => setVisibility(false)}>
-            <SafeAreaView style={ styles.overlayContainer }>
-              <Text style={ styles.overlayText }>The carbon footprint of this recipe was obtained from the following ingredients:</Text>
-              <FlatList
-                  data={overlayInfo.ingredients}
-                  style={ styles.overlayList }
-                  renderItem={({item}) => (item.carbonFootprintPerKg && item.amountKg*item.carbonFootprintPerKg >= 0.01) ? (
-                      <Text style={ styles.overlayText }>- {item.amountKg} kg of {item.ingredient}:
-                        <Text style={{ fontWeight:'bold', color: getColourFromCarbonFootprint(item.carbonFootprintPerKg) }}> {(item.amountKg * item.carbonFootprintPerKg).toFixed(2)}</Text> units</Text>
-                  ) : <></>}
-                  keyExtractor={(item,index) => index.toString()}
-              />
-              <Text style={ styles.overlayText }>To see the full recipe, click on the following link:{'\n'}</Text>
-              <Text style={ styles.overlayHyperlink } onPress={() => Linking.openURL(overlayInfo.recipeUrl)}>{overlayInfo.recipeUrl}</Text>
-              <Text style={ styles.overlayFootnote }><Text style={{fontWeight:'bold'}}>Note</Text>: Ingredients used in very small quantity, which have a
+        <Overlay isVisible={isVisible} onBackdropPress={() => setVisibility(false)}>
+          <SafeAreaView style={styles.overlayContainer}>
+            <Text style={styles.overlayText}>The carbon footprint of this recipe was obtained from the following ingredients:</Text>
+            <FlatList
+              data={overlayInfo.ingredients}
+              style={styles.overlayList}
+              renderItem={({ item }) => (item.carbonFootprintPerKg && item.amountKg * item.carbonFootprintPerKg >= 0.01) ? (
+                <Text style={styles.overlayText}>- {item.amountKg} kg of {item.ingredient}:
+                  <Text style={{ fontWeight: 'bold', color: getColourFromCarbonFootprint(item.carbonFootprintPerKg) }}> {(item.amountKg * item.carbonFootprintPerKg).toFixed(2)}</Text> {FOODPRINT_UNIT}</Text>
+              ) : <></>}
+              keyExtractor={(item, index) => index.toString()}
+            />
+            <Text style={styles.overlayText}>To see the full recipe, click on the following link:{'\n'}</Text>
+            <Text style={styles.overlayHyperlink} onPress={() => Linking.openURL(overlayInfo.recipeUrl)}>{overlayInfo.recipeUrl}</Text>
+            <Text style={styles.overlayFootnote}><Text style={{ fontWeight: 'bold' }}>Note</Text>: Ingredients used in very small quantity, which have a
                 negligeable carbon footprint, or which were unknown to our database are not shown. </Text>
-            </SafeAreaView>
-          </Overlay>
+          </SafeAreaView>
+        </Overlay>
       ) : <></>
       }
     </SafeAreaView>;
@@ -240,6 +271,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  tooltipContent: { color: 'white', fontSize: 16 },
   body: {
     flex: 4,
     alignItems: 'center',
@@ -270,16 +302,17 @@ const styles = StyleSheet.create({
   },
   overlayList: {
     fontSize: percentageWidth('4%'),
-    marginVertical: percentageHeight('4%')
+    marginVertical: percentageHeight('4%'),
   },
   overlayHyperlink: {
     fontSize: percentageWidth('4%'),
-    color:'blue',
+    color: 'blue',
   },
   overlayFootnote: {
     fontSize: percentageWidth('3%'),
-    marginTop: percentageHeight('5%')
+    marginTop: percentageHeight('5%'),
   },
+  scoreContainer: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center' },
   score: { fontSize: percentageWidth('5%'), margin: percentageWidth('2%') },
   buttonContainer: { flex: 1, flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center' },
   redButtonStyle: { backgroundColor: 'gray', width: percentageWidth('45%') },

@@ -6,6 +6,8 @@ import Email from '../components/Email';
 import { useRef } from 'react';
 import { StyleSheet } from 'react-native';
 import AuthContext from '../context/AuthContext';
+import { widthPercentageToDP as percentageWidth } from 'react-native-responsive-screen';
+
 
 const Signup = () => {
   const [email, setEmail] = useState('');
@@ -46,21 +48,21 @@ const Signup = () => {
     <SafeAreaView>
       <ScrollView contentContainerStyle={styles.containerContent} style={styles.container}>
         <View style={styles.titleContainer}>
-          <Text h1>
+          <Text style={styles.title}>
             Foodprint
           </Text>
         </View>
         <View style={styles.inputContainer}>
           <View>
             {emailError === '' ? <></> : <Text>{emailError}</Text>}
-            <Email nextFieldRef={passwordRef} setEmail={setEmail} email={email} />
+            <Email autoFocus nextFieldRef={passwordRef} setEmail={setEmail} email={email} />
             {passwordError === '' ? <></> : <Text>{passwordError}</Text>}
             <Password ref={passwordRef} submitHandler={signUpHandler} setPassword={setPassword} password={password} />
             <Button
               testID={'joinButton'}
               disabled={isPressed}
               buttonStyle={styles.button}
-              titleStyle={styles.title}
+              titleStyle={styles.buttonTitle}
               title="Join"
               onPress={signUpHandler}
             />
@@ -79,13 +81,16 @@ const styles = StyleSheet.create({
   containerContent: {
     alignItems: 'center',
   },
-  title: {
-    fontSize: 24,
+  buttonTitle: {
+    fontSize: 18,
   },
   titleContainer: {
     alignItems: 'center',
     justifyContent: 'center',
     marginVertical: 16,
+  },
+  title: {
+    fontSize: percentageWidth('15%'),
   },
   inputContainer: {
     width: '80%',

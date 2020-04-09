@@ -68,7 +68,7 @@ exports[`Correction matches previous snapshot 1`] = `
           }
         }
       >
-        We could not find your item.
+        Sorry, we could not find your item.
       </Text>
     </View>
     <View
@@ -205,6 +205,53 @@ exports[`Correction matches previous snapshot 1`] = `
       >
         Let us know what it was, so we can improve our app.
       </Text>
+    </View>
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "borderRadius": 3,
+          "marginVertical": 26.5,
+        }
+      }
+    >
+      <TouchableOpacity
+        activeOpacity={0.3}
+        disabled={false}
+        onPress={[Function]}
+      >
+        <View
+          style={
+            Object {
+              "alignItems": "center",
+              "backgroundColor": "green",
+              "borderColor": "#2089dc",
+              "borderRadius": 3,
+              "borderWidth": 0,
+              "flexDirection": "row",
+              "height": 45,
+              "justifyContent": "center",
+              "marginTop": 26.5,
+              "padding": 8,
+              "width": 225,
+            }
+          }
+        >
+          <Text
+            style={
+              Object {
+                "color": "white",
+                "fontSize": 18,
+                "paddingBottom": 1,
+                "paddingTop": 2,
+                "textAlign": "center",
+              }
+            }
+          >
+            SUBMIT
+          </Text>
+        </View>
+      </TouchableOpacity>
     </View>
   </ScrollView>
 </View>

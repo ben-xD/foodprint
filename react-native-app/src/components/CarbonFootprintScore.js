@@ -1,9 +1,11 @@
 import { heightPercentageToDP as percentageHeight, widthPercentageToDP as percentageWidth } from 'react-native-responsive-screen';
 import { VictoryPie } from 'victory-native';
 import React from 'react';
-import { ActivityIndicator, Image, StyleSheet, Text, View } from 'react-native';
+import LottieView from 'lottie-react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
 import { Tooltip } from 'react-native-elements';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { FOODPRINT_UNIT, FOODPRINT_UNIT_INFORMATION } from '../string';
 
 const CarbonFootprintScore = ({ loading, error, historyReport }) => {
 
@@ -33,32 +35,32 @@ const CarbonFootprintScore = ({ loading, error, historyReport }) => {
     return require('../images/crying-smiley.png');
   };
 
-  const TOOLTIP_MESSAGE = 'This score corresponds to the average carbon footprint of ' +
-    'all the items you have added to your history since you have started using Foodprint.';
+  const TOOLTIP_MESSAGE = FOODPRINT_UNIT_INFORMATION + '\nIt goes down when your diet is more sustainable, and doesn\'t take into quantities.';
 
   const renderTooltip = () => (
     <Tooltip popover={<Text style={styles.tooltipContent}>{TOOLTIP_MESSAGE}</Text>}
-      backgroundColor={'green'}
-      height={percentageHeight('20%')}
+      backgroundColor={'#008000'}
+      height={percentageHeight('40%')}
       width={percentageWidth('65%')}>
-      <MaterialCommunityIcons name="help-circle" color={'grey'} size={percentageWidth('4%')} />
+      <MaterialCommunityIcons name="help-circle" color={'grey'} size={24} />
     </Tooltip>
   );
 
   return (
     <View>
-      {loading || error || !historyReport ? (
+      {!historyReport ? (
         <View style={styles.loadingContainer}>
-          <ActivityIndicator />
+          <LottieView source={require('../animations/18473-flying-avocado.json')} autoPlay loop />
         </View>
       ) : (
           <View style={styles.graphContainer}>
             <Image
               source={getSmileyFromCarbonFootprint(historyReport.userAvg)}
               style={styles.image}
+              resizeMode="contain"
             />
             <View style={styles.scoreContainer}>
-              <Text style={styles.score}>{Math.round(historyReport.userAvg)} units</Text>
+              <Text style={styles.score}>{historyReport.userAvg.toFixed(1)} {FOODPRINT_UNIT}</Text>
               {renderTooltip()}
             </View>
             <VictoryPie
@@ -79,10 +81,10 @@ const CarbonFootprintScore = ({ loading, error, historyReport }) => {
 const styles = StyleSheet.create({
   loadingContainer: { height: percentageHeight('29%'), alignItems: 'center', justifyContent: 'center' },
   graphContainer: { height: percentageHeight('29%'), alignItems: 'center' },
-  tooltipContent: { color: 'white', fontSize: percentageWidth('4%') },
-  image: { height: percentageHeight('10%'), width: percentageWidth('20%'), position: 'absolute', alignSelf: 'center', marginTop: percentageHeight('12%') },
-  scoreContainer: { position: 'absolute', alignSelf: 'center', marginTop: percentageHeight('24%'), flexDirection: 'row' },
-  score: { fontSize: percentageWidth('6%'), color: 'grey', margin: percentageWidth('1%') },
+  tooltipContent: { color: 'white', fontSize: 16 },
+  image: { height: percentageHeight('10%'), position: 'absolute', alignSelf: 'center', marginTop: percentageHeight('12%') },
+  scoreContainer: { zIndex: 100, position: 'absolute', marginTop: percentageHeight('24%'), flexDirection: 'row', alignItems: 'center' },
+  score: { fontSize: 24, color: 'grey' },
 });
 
 export default CarbonFootprintScore;

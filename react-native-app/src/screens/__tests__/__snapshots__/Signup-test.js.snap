@@ -27,7 +27,7 @@ exports[`SignUp renders matches previous snapshot 1`] = `
       <Text
         style={
           Object {
-            "fontSize": 50,
+            "fontSize": 112.5,
           }
         }
         theme={
@@ -107,6 +107,7 @@ exports[`SignUp renders matches previous snapshot 1`] = `
               allowFontScaling={true}
               autoCapitalize="none"
               autoCorrect={false}
+              autoFocus={true}
               editable={true}
               onChangeText={[Function]}
               onSubmitEditing={[Function]}
@@ -210,7 +211,7 @@ exports[`SignUp renders matches previous snapshot 1`] = `
                 style={
                   Object {
                     "color": "white",
-                    "fontSize": 24,
+                    "fontSize": 18,
                     "paddingBottom": 1,
                     "paddingTop": 2,
                     "textAlign": "center",
