@@ -1,4 +1,6 @@
-# CarbonFootprint
+# Foodprint: track the carbon footprint of your diet.
+
+[![google-play](assets/img/play-store.png)](https://play.google.com/store/apps/details?id=uk.orth.foodprint)
 
 Carbon Footprint repo, contains all code related to this software engineering group project. 
 - React Native mobile app: manually deployed to user devices
