@@ -148,8 +148,8 @@ android {
         applicationId "uk.orth.foodprint"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 4
-        versionName "2.2"
+        versionCode 5
+        versionName "2.3"
         missingDimensionStrategy 'react-native-camera', 'general'
         // Enabling multidex support.
         multiDexEnabled true
