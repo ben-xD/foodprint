@@ -1,6 +1,7 @@
 import Config from 'react-native-config';
 import auth from '@react-native-firebase/auth';
 import ApolloClient from 'apollo-boost';
+import Snackbar from 'react-native-snackbar';
 
 const client = new ApolloClient({
   uri: Config.SERVER_URL,

@@ -215,7 +215,7 @@ exports[`Correction matches previous snapshot 1`] = `
         }
       }
     >
-      <TouchableOpacity
+      <
         activeOpacity={0.3}
         disabled={false}
         onPress={[Function]}
@@ -251,7 +251,7 @@ exports[`Correction matches previous snapshot 1`] = `
             SUBMIT
           </Text>
         </View>
-      </TouchableOpacity>
+      </>
     </View>
   </ScrollView>
 </View>
