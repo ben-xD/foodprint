@@ -8,6 +8,7 @@ const Password = React.forwardRef((props, ref) => {
     <Input
       ref={ref}
       // label={'Password'}
+      autoCompleteType={'password'}
       autoCorrect={false}
       autoCapitalize={'none'}
       placeholder="Password"

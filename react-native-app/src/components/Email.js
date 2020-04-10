@@ -7,6 +7,7 @@ const Email = (props) => {
   return (
     <Input
       autoFocus={autoFocus}
+      autoCompleteType={'email'}
       autoCorrect={false}
       autoCapitalize={'none'}
       placeholder="Email"

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, SafeAreaView, StyleSheet } from 'react-native';
+import { View, SafeAreaView, StyleSheet, Image } from 'react-native';
 import { Text, Button } from 'react-native-elements';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import AuthContext from '../context/AuthContext';
@@ -16,59 +16,58 @@ const SignupOrRegister = ({ navigation }) => {
     setIsPressed(false);
   };
 
-  const handleSignInAnonymously = async () => {
-    setIsPressed(true);
-    await signInAnonymously();
-    setIsPressed(false);
-  };
+  // const handleSignInAnonymously = async () => {
+  //   setIsPressed(true);
+  //   await signInAnonymously();
+  //   setIsPressed(false);
+  // };
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.titleContainer}>
-        <Text style={styles.title}>
-          FoodPrint
-        </Text>
+      <View style={styles.logoContainer}>
+        <Image style={styles.logo} source={require('../images/logoGreen.png')} />
       </View>
       <View style={styles.bodyContainer}>
-        <View>
-          <Button
-            disabled={isPressed}
-            iconContainerStyle={styles.googleIconContainer}
-            testID={'googleButton'}
-            icon={
-              <AntDesign
-                style={styles.googleIcon}
-                name="google"
-                size={percentageWidth('5%')}
-                color="black"
-              />
-            }
-            containerStyle={styles.googleContainer}
-            buttonStyle={styles.google}
-            titleStyle={styles.googleText}
-            title="Join using Google"
-            onPress={handleSignInWithGoogle}
-          />
-          <Button
-            disabled={isPressed}
-            containerStyle={styles.signUpContainer}
-            buttonStyle={styles.signUp}
-            titleStyle={styles.signUpText}
-            title="Join using email"
-            onPress={() => navigation.navigate('Signup')}
-          />
-          <View style={styles.loginButtonContainer}>
-            <Text style={styles.loginText}>Existing user?</Text>
-            <Button
-              title="LOGIN"
-              testID="skipButton"
-              disabled={isPressed}
-              titleStyle={styles.loginButton}
-              onPress={() => navigation.navigate('Login')}
-              type="clear"
+        <Button
+          disabled={isPressed}
+          iconContainerStyle={styles.googleIconContainer}
+          testID={'googleButton'}
+          icon={
+            <AntDesign
+              style={styles.googleIcon}
+              name="google"
+              size={percentageWidth('5%')}
+              color="black"
             />
-          </View>
+          }
+          containerStyle={styles.googleContainer}
+          buttonStyle={styles.google}
+          titleStyle={styles.googleText}
+          title="Join using Google"
+          onPress={handleSignInWithGoogle}
+        />
+        <Button
+          disabled={isPressed}
+          containerStyle={styles.signUpContainer}
+          buttonStyle={styles.signUp}
+          titleStyle={styles.signUpText}
+          title="Join using email"
+          onPress={() => navigation.navigate('Signup')}
+        />
+        <View style={styles.loginButtonContainer}>
+          <Text style={styles.loginText}>Existing user?</Text>
+          <Button
+            title="LOGIN"
+            testID="skipButton"
+            disabled={isPressed}
+            titleStyle={styles.loginButton}
+            onPress={() => navigation.navigate('Login')}
+            type="clear"
+          />
         </View>
+      </View>
+      <View style={styles.footerContainer}>
+        <Text style={styles.footerText}>Remember to wash your hands after touching your phone and before touching food.</Text>
       </View>
       {/* Commented out to disable 'skip login' functionality */}
       {/* <View style={styles.skipButtonContainer}>
@@ -85,10 +84,14 @@ const SignupOrRegister = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  container: { justifyContent: 'center', alignItems: 'center', height: '100%' },
-  bodyContainer: { width: percentageWidth('80%') },
+  container: { alignItems: 'center', height: '100%', justifyContent: 'center' },
+  logoContainer: { flex: 1, justifyContent: 'center' },
+  logo: {
+    height: percentageHeight('15%'),
+    resizeMode: 'contain',
+  },
+  bodyContainer: { width: '80%', flex: 1 },
   title: { fontSize: percentageWidth('15%') },
-  titleContainer: { position: 'absolute', top: percentageHeight('5%'), alignItems: 'center', marginTop: percentageHeight('5%') },
   googleContainer: { marginVertical: percentageHeight('1%') },
   google: { backgroundColor: 'white' },
   googleText: { fontSize: percentageWidth('5%'), color: 'black' },
@@ -102,6 +105,8 @@ const styles = StyleSheet.create({
   loginButton: { color: 'green', fontSize: percentageWidth('7%') },
   skipButtonContainer: { position: 'absolute', bottom: percentageHeight('5%') },
   skipButton: { color: 'grey', fontSize: percentageWidth('5%') },
+  footerContainer: { flex: 0.25, justifyContent: 'center', padding: 64 },
+  footerText: { textAlign: 'center' },
 });
 
 export default SignupOrRegister;
