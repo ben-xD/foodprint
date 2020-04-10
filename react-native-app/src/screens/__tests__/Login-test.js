@@ -37,7 +37,7 @@ test('Login button calls signIn function from context if email and password is v
   const famousLecturersPassword = 'b10ckch@1n';
   fireEvent.changeText(passwordInput, famousLecturersPassword);
 
-  const loginButton = utils.getByText('Login');
+  const loginButton = utils.getByText('LOGIN');
   fireEvent.press(loginButton);
   await wait(() => expect(utils.queryByTestId('loginButton')));
   expect(signIn.mock.calls.length).toBe(1);
@@ -54,7 +54,7 @@ test('Login button shows error if email is not valid', async () => {
   const famousLecturersPassword = 'b10ckch@1n';
   fireEvent.changeText(passwordInput, famousLecturersPassword);
 
-  const loginButton = utils.getByText('Login');
+  const loginButton = utils.getByText('LOGIN');
   fireEvent.press(loginButton);
   await wait(() => expect(utils.queryByTestId('loginButton')));
   // TODO add expect error here (look for string)

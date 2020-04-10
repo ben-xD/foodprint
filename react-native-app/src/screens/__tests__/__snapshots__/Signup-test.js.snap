@@ -18,58 +18,24 @@ exports[`SignUp renders matches previous snapshot 1`] = `
     <View
       style={
         Object {
-          "alignItems": "center",
           "justifyContent": "center",
-          "marginVertical": 16,
+          "marginVertical": 66.5,
         }
       }
     >
-      <Text
+      <Image
+        source={
+          Object {
+            "testUri": "../../../src/images/logoGreen.png",
+          }
+        }
         style={
           Object {
-            "fontSize": 112.5,
+            "height": 200,
+            "resizeMode": "contain",
           }
         }
-        theme={
-          Object {
-            "colors": Object {
-              "disabled": "hsl(208, 8%, 90%)",
-              "divider": "#bcbbc1",
-              "error": "#ff190c",
-              "grey0": "#393e42",
-              "grey1": "#43484d",
-              "grey2": "#5e6977",
-              "grey3": "#86939e",
-              "grey4": "#bdc6cf",
-              "grey5": "#e1e8ee",
-              "greyOutline": "#bbb",
-              "platform": Object {
-                "android": Object {
-                  "error": "#f44336",
-                  "primary": "#2196f3",
-                  "secondary": "#9C27B0",
-                  "success": "#4caf50",
-                  "warning": "#ffeb3b",
-                },
-                "ios": Object {
-                  "error": "#ff3b30",
-                  "primary": "#007aff",
-                  "secondary": "#5856d6",
-                  "success": "#4cd964",
-                  "warning": "#ffcc00",
-                },
-              },
-              "primary": "#2089dc",
-              "searchBg": "#303337",
-              "secondary": "#8F0CE8",
-              "success": "#52c41a",
-              "warning": "#faad14",
-            },
-          }
-        }
-      >
-        Foodprint
-      </Text>
+      />
     </View>
     <View
       style={
@@ -106,6 +72,7 @@ exports[`SignUp renders matches previous snapshot 1`] = `
             <TextInput
               allowFontScaling={true}
               autoCapitalize="none"
+              autoCompleteType="email"
               autoCorrect={false}
               autoFocus={true}
               editable={true}
@@ -156,6 +123,7 @@ exports[`SignUp renders matches previous snapshot 1`] = `
             <TextInput
               allowFontScaling={true}
               autoCapitalize="none"
+              autoCompleteType="password"
               autoCorrect={false}
               editable={true}
               onChangeText={[Function]}
