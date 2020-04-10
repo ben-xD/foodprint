@@ -28,6 +28,7 @@ exports[`Email matches previous snapshot 1`] = `
     <TextInput
       allowFontScaling={true}
       autoCapitalize="none"
+      autoCompleteType="email"
       autoCorrect={false}
       editable={true}
       onChangeText={[Function]}

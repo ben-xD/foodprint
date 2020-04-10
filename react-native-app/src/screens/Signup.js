@@ -1,12 +1,12 @@
 import React, { useState, useContext } from 'react';
-import { View, SafeAreaView, ScrollView } from 'react-native';
+import { View, SafeAreaView, ScrollView, Image } from 'react-native';
 import { Button, Text } from 'react-native-elements';
 import Password from '../components/Password';
 import Email from '../components/Email';
 import { useRef } from 'react';
 import { StyleSheet } from 'react-native';
 import AuthContext from '../context/AuthContext';
-import { widthPercentageToDP as percentageWidth } from 'react-native-responsive-screen';
+import { widthPercentageToDP as percentageWidth, heightPercentageToDP as percentageHeight } from 'react-native-responsive-screen';
 
 
 const Signup = () => {
@@ -47,10 +47,8 @@ const Signup = () => {
   return (
     <SafeAreaView>
       <ScrollView contentContainerStyle={styles.containerContent} style={styles.container}>
-        <View style={styles.titleContainer}>
-          <Text style={styles.title}>
-            Foodprint
-          </Text>
+        <View style={styles.logoContainer}>
+          <Image style={styles.logo} source={require('../images/logoGreen.png')} />
         </View>
         <View style={styles.inputContainer}>
           <View>
@@ -84,13 +82,10 @@ const styles = StyleSheet.create({
   buttonTitle: {
     fontSize: 18,
   },
-  titleContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginVertical: 16,
-  },
-  title: {
-    fontSize: percentageWidth('15%'),
+  logoContainer: { justifyContent: 'center', marginVertical: percentageHeight('5%') },
+  logo: {
+    height: percentageHeight('15%'),
+    resizeMode: 'contain',
   },
   inputContainer: {
     width: '80%',

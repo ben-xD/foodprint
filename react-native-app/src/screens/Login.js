@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { View, ScrollView, StyleSheet } from 'react-native';
+import { View, ScrollView, StyleSheet, Image } from 'react-native';
 import { Button, Text } from 'react-native-elements';
 import Password from '../components/Password';
 import Email from '../components/Email';
@@ -43,10 +43,8 @@ const Login = ({ navigation }) => {
 
   return (
     <ScrollView contentContainerStyle={styles.containerContent} style={styles.container}>
-      <View style={styles.titleContainer}>
-        <Text style={styles.title}>
-          Foodprint
-          </Text>
+      <View style={styles.logoContainer}>
+        <Image style={styles.logo} source={require('../images/logoGreen.png')} />
       </View>
       <View style={styles.inputContainer}>
         <View>
@@ -60,9 +58,10 @@ const Login = ({ navigation }) => {
         <Button
           disabled={isPressed}
           buttonStyle={styles.button}
+          containerStyle={styles.loginButtonContainer}
           titleStyle={styles.buttonText}
           testID="loginButton"
-          title="Login"
+          title="LOGIN"
           onPress={loginHandler}
         />
       </View>
@@ -72,13 +71,15 @@ const Login = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: { width: '100%', height: '100%' },
-  containerContent: { alignItems: 'center' },
-  titleContainer: { alignItems: 'center', justifyContent: 'center', marginVertical: 50 },
-  title: {
-    fontSize: percentageWidth('15%'),
+  logoContainer: { justifyContent: 'center', marginVertical: percentageHeight('5%') },
+  logo: {
+    height: percentageHeight('15%'),
+    resizeMode: 'contain',
   },
+  containerContent: { alignItems: 'center' },
   inputContainer: { width: '80%' },
   buttonContainer: { width: '80%' },
+  loginButtonContainer: { marginVertical: 16 },
   button: { backgroundColor: 'green' },
   buttonText: { fontSize: percentageWidth('5%') },
 });
