@@ -20,11 +20,11 @@ const dataSources = {
 
 describe('testing barcode without Tesco API', () => {
 
-  test('get co2 of tiramisu (we have stored the barcode in json file), which should be 0.65', async () => {
+  test('get co2 of lasagna (we have stored the barcode in json file), which should be 3.4', async () => {
     jest.setTimeout(30000);
-    const barcode = "85053274";
+    const barcode = "5057753197223";
     const actual = await getCarbonFootprintFromBarcode(dataSources, barcode, false);
-    const expected = { item: 'tiramisu', carbonFootprintPerKg: 0.65 };
+    const expected = { item: 'lasagna', carbonFootprintPerKg: 3.4 };
     expect(actual).toEqual(expected);
   });
 

@@ -55,11 +55,11 @@ describe('testing resolvers', () => {
         expect(actual).toEqual(expected);
     });
 
-    test('get co2 of tiramisu (we have stored the barcode in json file), which should be 0.65', async () => {
+    test('get co2 of lasagna (we have stored the barcode in json file), which should be 3.4', async () => {
         jest.setTimeout(30000);
-        const barcode = "85053274";
+        const barcode = "5057753197223";
         const actual = await resolvers.Mutation.postBarcode(null, { barcode }, { dataSources, user });
-        const expected = { name: 'tiramisu', carbonFootprintPerKg: 0.65 };
+        const expected = { name: 'lasagna', carbonFootprintPerKg: 3.4 };
         expect(actual).toEqual(expected);
     });
 

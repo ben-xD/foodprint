@@ -96,3 +96,4 @@ describe('getCarbonFootprintFromRecipe (mocked dataSources)', () => {
 afterAll(() => {
     deleteStore();
 });
+
