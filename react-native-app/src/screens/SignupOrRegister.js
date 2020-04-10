@@ -22,10 +22,12 @@ const SignupOrRegister = ({ navigation }) => {
   //   setIsPressed(false);
   // };
 
+  const image = isPressed ? require('../images/logo.png') : require('../images/logoGreen.png');
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.logoContainer}>
-        <Image style={styles.logo} source={require('../images/logoGreen.png')} />
+        <Image style={styles.logo} source={image} />
       </View>
       <View style={styles.bodyContainer}>
         <Button
