@@ -77,7 +77,8 @@ import com.android.build.OutputFile
 
 project.ext.react = [
     entryFile: "index.js",
-    enableHermes: true, // ./gradlew clean && npm run android again if this changes
+    // Hermes does not support android app bundle (AAB).
+    enableHermes: false, // ./gradlew clean && npm run android again if this changes
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
