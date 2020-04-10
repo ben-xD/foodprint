@@ -12,7 +12,7 @@ const Loading = props => {
     <View style={styles.container}>
       <StatusBar barStyle="light-content" />
       <View style={styles.logoContainer}>
-        <Image style={styles.logo} source={require('../images/logoGreen.png')} />
+        <Image style={styles.logo} source={require('../images/logo.png')} />
       </View>
       <ActivityIndicator color={'white'} animating={true} />
     </View>
@@ -24,7 +24,7 @@ export default Loading;
 const styles = StyleSheet.create({
   logo: {},
   container: {
-    backgroundColor: '#999999',
+    backgroundColor: '#ffffff',
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',

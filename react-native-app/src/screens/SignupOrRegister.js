@@ -67,7 +67,7 @@ const SignupOrRegister = ({ navigation }) => {
         </View>
       </View>
       <View style={styles.footerContainer}>
-        <Text style={styles.footerText}>Remember to wash your hands after touching your phone and before touching food.</Text>
+        <Text style={styles.footerText}>Wash your hands after touching your phone and before touching food.</Text>
       </View>
       {/* Commented out to disable 'skip login' functionality */}
       {/* <View style={styles.skipButtonContainer}>
