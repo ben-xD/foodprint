@@ -1,6 +1,6 @@
 {
   "name": "mobile",
-  "version": "2.5.0",
+  "version": "2.6.0",
   "private": true,
   "scripts": {
     "a": "npm run android",
