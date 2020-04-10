@@ -154,7 +154,7 @@ exports[`SignUp renders matches previous snapshot 1`] = `
             }
           }
         >
-          <
+          <TouchableOpacity
             activeOpacity={0.3}
             disabled={false}
             onPress={[Function]}
@@ -189,7 +189,7 @@ exports[`SignUp renders matches previous snapshot 1`] = `
                 Join
               </Text>
             </View>
-          </>
+          </TouchableOpacity>
         </View>
       </View>
     </View>

@@ -5,8 +5,7 @@ import { GoogleSignin } from '@react-native-community/google-signin';
 import SplashScreen from 'react-native-splash-screen';
 import client from '../Client';
 
-import { YellowBox, Linking } from 'react-native';
-import Snackbar from 'react-native-snackbar';
+import { YellowBox } from 'react-native';
 
 // We ignore this warning because we want to pass a camera buffer object
 // This prevents persisting the state (after app restart) of the navigation at the next view
@@ -20,18 +19,6 @@ export const initialState = {
   isLoading: true,
   isSignout: false,
   userIsLoggedIn: false,
-};
-
-const getHelpHandler = () => {
-  Linking.openURL('mailto:ben@fresla.co?subject=Foodprint%20Support').catch(
-    err => {
-      console.warn(err);
-      Snackbar.show({
-        text: 'You need an email app to send an email to support.',
-        duration: Snackbar.LENGTH_LONG,
-      });
-    },
-  );
 };
 
 export const reducer = (prevState, action) => {
@@ -71,33 +58,18 @@ export const createActionCreators = (dispatch) => ({
   },
   signInAnonymously: async () => {
     await auth().signInAnonymously();
-    try {
-      const token = await auth().currentUser.getIdToken();
-      console.log({ token });
-      await AsyncStorage.setItem('userIsLoggedIn', JSON.stringify(true));
-      dispatch({ type: 'SIGN_IN', token });
-    } catch (error) {
-      console.warn(error);
-      Snackbar.show({
-        text: 'Oops, something went wrong.',
-        duration: Snackbar.LENGTH_LONG,
-      });
-    }
+    const token = await auth().currentUser.getIdToken();
+    console.log({ token });
+    await AsyncStorage.setItem('userIsLoggedIn', JSON.stringify(true));
+    dispatch({ type: 'SIGN_IN', token });
   },
   signInWithGoogle: async () => {
     try {
       const { accessToken, idToken } = await GoogleSignin.signIn();
       const credential = firebase.auth.GoogleAuthProvider.credential(idToken, accessToken);
-      try {
-        await firebase.auth().signInWithCredential(credential);
-        await AsyncStorage.setItem('userIsLoggedIn', JSON.stringify(true));
-        dispatch({ type: 'SIGN_IN', accessToken });
-      } catch (err) {
-        Snackbar.show({
-          text: 'Oops, something went wrong.',
-          duration: Snackbar.LENGTH_LONG,
-        });
-      }
+      await firebase.auth().signInWithCredential(credential);
+      await AsyncStorage.setItem('userIsLoggedIn', JSON.stringify(true));
+      dispatch({ type: 'SIGN_IN', accessToken });
     } catch (err) {
       console.warn(err);
     }
@@ -108,40 +80,13 @@ export const createActionCreators = (dispatch) => ({
       console.log({ userCredential });
     } catch (e) {
       if (e.code === 'auth/invalid-email') {
-        return Snackbar.show({
-          text: 'That email is not valid.',
-          duration: Snackbar.LENGTH_LONG,
-        });
+        return console.warn('tell user email invalid');
       } else if (e.code === 'auth/user-disabled') {
-        return Snackbar.show({
-          text: 'Your account is disabled',
-          duration: Snackbar.LENGTH_LONG,
-          action: {
-            text: 'GET HELP',
-            textColor: 'red',
-            onPress: () => {
-              Linking.openURL('mailto:ben@fresla.co?subject=Foodprint%20Support').catch(
-                err => {
-                  console.warn(err);
-                  Snackbar.show({
-                    text: 'You need an email app to send an email to support.',
-                    duration: Snackbar.LENGTH_LONG,
-                  });
-                },
-              );
-            },
-          },
-        });
+        return console.warn('tell user disabled');
       } else if (e.code === 'auth/user-not-found') {
-        return Snackbar.show({
-          text: 'That combination of email & password doesn\'t exist.',
-          duration: Snackbar.LENGTH_LONG,
-        });
+        return console.warn('tell user does not exist');
       } else if (e.code === 'auth/wrong-password') {
-        return Snackbar.show({
-          text: 'That combination of email & password doesn\'t exist.',
-          duration: Snackbar.LENGTH_LONG,
-        });
+        return console.warn('tell user wrong pw');
       }
       else { return console.error(e); }
     }
@@ -162,31 +107,14 @@ export const createActionCreators = (dispatch) => ({
       console.log({ userCredentials });
     } catch (e) {
       if (e.code === 'auth/email-already-in-use') {
-        return Snackbar.show({
-          text: 'That email is already in use.',
-          duration: Snackbar.LENGTH_LONG,
-        });
+        // TODO can this function return an Promise<error> back to Signup.js. Then display it there
+        return console.warn('tell user email is already used');
       } else if (e.code === 'auth/invalid-email') {
-        return Snackbar.show({
-          text: 'That email isn\'t valid.',
-          duration: Snackbar.LENGTH_LONG,
-        });
+        return console.warn('tell user invalid email');
       } else if (e.code === 'auth/operation-not-allowed') {
-        console.error('auth/operation-not-allowed');
-        return Snackbar.show({
-          text: 'There seems to be a server error.',
-          duration: Snackbar.LENGTH_LONG,
-          action: {
-            text: 'GET HELP',
-            textColor: 'red',
-            onPress: getHelpHandler,
-          },
-        });
+        return console.warn('tell user server has problems');
       } else if (e.code === 'auth/weak-password') {
-        return Snackbar.show({
-          text: 'That password is too simple.',
-          duration: Snackbar.LENGTH_LONG,
-        });
+        return console.warn('tell user password too weak');
       }
       else { console.error(e); }
     }

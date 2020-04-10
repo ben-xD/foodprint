@@ -4,47 +4,32 @@ import { Text, Button } from 'react-native-elements';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import AuthContext from '../context/AuthContext';
 import { widthPercentageToDP as percentageWidth, heightPercentageToDP as percentageHeight } from 'react-native-responsive-screen';
-import { useNetInfo } from '@react-native-community/netinfo';
-import { useEffect } from 'react';
-import Snackbar from 'react-native-snackbar';
+
 
 const SignupOrRegister = ({ navigation }) => {
-  const netInfo = useNetInfo();
   const { signInWithGoogle, signInAnonymously } = React.useContext(AuthContext);
-  const [allButtonsDisabled, setAllButtonsDisabled] = useState(false);
-
-  useEffect(() => {
-    if (netInfo.details !== null && !netInfo.isConnected) {
-      setAllButtonsDisabled(true);
-      console.log('Displaying "no internet connection" snack');
-      console.log({ netInfo });
-      Snackbar.show({
-        text: 'No internet connection, you can\'t log in.',
-        duration: Snackbar.LENGTH_INDEFINITE,
-      });
-    }
-    else {
-      Snackbar.dismiss();
-      setAllButtonsDisabled(false);
-    }
-  }, [netInfo]);
+  const [isPressed, setIsPressed] = useState(false);
 
   const handleSignInWithGoogle = async () => {
-    setAllButtonsDisabled(true);
+    setIsPressed(true);
     await signInWithGoogle();
-    setAllButtonsDisabled(false);
+    setIsPressed(false);
   };
 
-  const image = allButtonsDisabled ? require('../images/logo.png') : require('../images/logoGreen.png');
+  // const handleSignInAnonymously = async () => {
+  //   setIsPressed(true);
+  //   await signInAnonymously();
+  //   setIsPressed(false);
+  // };
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.logoContainer}>
-        <Image style={styles.logo} source={image} />
+        <Image style={styles.logo} source={require('../images/logoGreen.png')} />
       </View>
       <View style={styles.bodyContainer}>
         <Button
-          disabled={allButtonsDisabled}
+          disabled={isPressed}
           iconContainerStyle={styles.googleIconContainer}
           testID={'googleButton'}
           icon={
@@ -62,7 +47,7 @@ const SignupOrRegister = ({ navigation }) => {
           onPress={handleSignInWithGoogle}
         />
         <Button
-          disabled={allButtonsDisabled}
+          disabled={isPressed}
           containerStyle={styles.signUpContainer}
           buttonStyle={styles.signUp}
           titleStyle={styles.signUpText}
@@ -74,7 +59,7 @@ const SignupOrRegister = ({ navigation }) => {
           <Button
             title="LOGIN"
             testID="skipButton"
-            disabled={allButtonsDisabled}
+            disabled={isPressed}
             titleStyle={styles.loginButton}
             onPress={() => navigation.navigate('Login')}
             type="clear"
@@ -84,6 +69,16 @@ const SignupOrRegister = ({ navigation }) => {
       <View style={styles.footerContainer}>
         <Text style={styles.footerText}>Wash your hands after touching your phone and before touching food.</Text>
       </View>
+      {/* Commented out to disable 'skip login' functionality */}
+      {/* <View style={styles.skipButtonContainer}>
+        <Button
+          disabled={isPressed}
+          title="Skip login"
+          titleStyle={styles.skipButton}
+          onPress={handleSignInAnonymously}
+          type="clear"
+        />
+      </View> */}
     </SafeAreaView >
   );
 };

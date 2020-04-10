@@ -6,16 +6,6 @@ import { fireEvent, render, wait } from '@testing-library/react-native';
 import AuthContext from '../../context/AuthContext';
 
 jest.mock('@apollo/react-hooks');
-jest.mock('@react-native-community/netinfo', () => ({
-  useNetInfo: () => ({
-    details: {},
-    isConnected: true,
-  }),
-}));
-jest.mock('react-native-snackbar', () => ({
-  show: jest.fn(),
-  dismiss: jest.fn(),
-}));
 
 // Check current component against its snapshot
 test('SignupOrRegister matches previous snapshot', () => {
