@@ -21,11 +21,5 @@ exports[`ErrorMessage renders correctly and is the same as its previous snapshot
       style={Object {}}
     />
   </View>
-  <ActivityIndicator
-    animating={true}
-    color="white"
-    hidesWhenStopped={true}
-    size="small"
-  />
 </View>
 `;
