@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { View, Text, ActivityIndicator, Image, SafeAreaView, FlatList } from 'react-native';
+import { View, Text, Image, SafeAreaView, FlatList } from 'react-native';
 import { gql } from 'apollo-boost';
 import { StyleSheet, Linking } from 'react-native';
 import { useMutation } from '@apollo/react-hooks';
@@ -7,8 +7,9 @@ import { Rating, Button, Overlay, Tooltip } from 'react-native-elements';
 import { widthPercentageToDP as percentageWidth, heightPercentageToDP as percentageHeight } from 'react-native-responsive-screen';
 import { ScrollView } from 'react-native-gesture-handler';
 import Snackbar from 'react-native-snackbar';
-import { CommonActions } from '@react-navigation/native';
+import { CommonActions, useFocusEffect } from '@react-navigation/native';
 import { Keyboard } from 'react-native';
+import LottieView from 'lottie-react-native';
 import { FOODPRINT_UNIT, FOODPRINT_UNIT_INFORMATION } from '../string';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -49,10 +50,12 @@ const Feedback = ({ route, navigation }) => {
       data: barcodeData }] = useMutation(POST_BARCODE_MUTATION);
   const [postUserHistoryEntryMutation, { loading: historyLoading, error: historyError, data: historyData }] = useMutation(POST_USER_HISTORY_ENTRY);
 
+  useFocusEffect(() => {
+    Keyboard.dismiss();
+  });
+
   // make relevant request when component is given specific data
   useEffect(() => {
-    Keyboard.dismiss();
-
     const { file, barcode, meal: correctedMeal, recipeMeal, extraInfo } = route.params;
     if (file) {
       console.log({ file });
@@ -197,7 +200,7 @@ const Feedback = ({ route, navigation }) => {
 
   return uploading || pictureLoading || barcodeLoading || !meal ?
     <View style={styles.loading}>
-      <ActivityIndicator />
+      <LottieView source={require('../animations/18534-flying-hotdog.json')} autoPlay loop />
     </View > :
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>

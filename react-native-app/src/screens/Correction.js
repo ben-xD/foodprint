@@ -1,14 +1,13 @@
-import { Image, View, ActivityIndicator } from 'react-native';
+import { Image, View } from 'react-native';
 import { Input, Text, Button } from 'react-native-elements';
 import React, { useState, useEffect } from 'react';
-
+import LottieView from 'lottie-react-native';
 import { gql } from 'apollo-boost';
 import { useMutation } from '@apollo/react-hooks';
 import { StyleSheet } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { widthPercentageToDP as percentageWidth, heightPercentageToDP as percentageHeight } from 'react-native-responsive-screen';
 import Snackbar from 'react-native-snackbar';
-
 
 // GraphQL schema for correction mutation
 const POST_CORRECTION_MUTATION = gql`
@@ -21,13 +20,18 @@ mutation PostCorrectionMutation($name: String!) {
 `;
 
 const Correction = ({ navigation }) => {
+  const [loading, setLoading] = useState(false);
   const [correctedName, setCorrectedName] = useState('');
   const [postCorrection, { loading: correctionLoading, error: correctionError, data: correctionData }] = useMutation(POST_CORRECTION_MUTATION);
 
-  const postCorrectionHandler = async () => await postCorrection({ variables: { name: correctedName } });
+  const postCorrectionHandler = async () => {
+    setLoading(true);
+    await postCorrection({ variables: { name: correctedName } });
+  };
 
   useEffect(() => {
     if (correctionError) {
+      setLoading(false);
       Snackbar.show({
         text: 'We couldn\'t save that to your history.',
         duration: Snackbar.LENGTH_INDEFINITE,
@@ -52,13 +56,12 @@ const Correction = ({ navigation }) => {
         },
       });
     }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [correctionData]);
 
-  return correctionLoading ?
+  return correctionLoading || loading ?
     <View style={styles.loading}>
-      <ActivityIndicator />
+      <LottieView source={require('../animations/18473-flying-avocado.json')} autoPlay loop />
     </View > : (
       <View style={styles.container}>
         <ScrollView>

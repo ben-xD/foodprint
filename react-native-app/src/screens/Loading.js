@@ -2,7 +2,6 @@ import React from 'react';
 import {
   View,
   StatusBar,
-  ActivityIndicator,
   StyleSheet,
   Image,
 } from 'react-native';
@@ -14,7 +13,6 @@ const Loading = props => {
       <View style={styles.logoContainer}>
         <Image style={styles.logo} source={require('../images/logo.png')} />
       </View>
-      <ActivityIndicator color={'white'} animating={true} />
     </View>
   );
 };

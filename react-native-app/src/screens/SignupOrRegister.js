@@ -8,9 +8,12 @@ import { useNetInfo } from '@react-native-community/netinfo';
 import { useEffect } from 'react';
 import Snackbar from 'react-native-snackbar';
 
+const greenLogo = require('../images/logoGreen.png');
+const logo = require('../images/logo.png');
+
 const SignupOrRegister = ({ navigation }) => {
   const netInfo = useNetInfo();
-  const { signInWithGoogle, signInAnonymously } = React.useContext(AuthContext);
+  const { signInWithGoogle } = React.useContext(AuthContext);
   const [allButtonsDisabled, setAllButtonsDisabled] = useState(false);
 
   useEffect(() => {
@@ -35,12 +38,10 @@ const SignupOrRegister = ({ navigation }) => {
     setAllButtonsDisabled(false);
   };
 
-  const image = allButtonsDisabled ? require('../images/logo.png') : require('../images/logoGreen.png');
-
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.logoContainer}>
-        <Image style={styles.logo} source={image} />
+        <Image style={styles.logo} source={allButtonsDisabled ? logo : greenLogo} />
       </View>
       <View style={styles.bodyContainer}>
         <Button
