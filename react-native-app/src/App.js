@@ -22,6 +22,11 @@ import Foodprint from './screens/Foodprint';
 import Recipe from './screens/Recipe';
 import { Platform, Keyboard } from 'react-native';
 import Onboarding from './screens/Onboarding';
+import { enableScreens } from 'react-native-screens';
+
+// Allows OS to optimize memory usage for screens that are under the view stack
+//  and also simplify the native node hierarchy https://reactnavigation.org/docs/react-native-screens/
+enableScreens();
 
 const Stack = createStackNavigator();
 
