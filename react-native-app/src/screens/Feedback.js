@@ -203,7 +203,7 @@ const Feedback = ({ route, navigation }) => {
       <LottieView source={require('../animations/18534-flying-hotdog.json')} autoPlay loop />
     </View > :
     <SafeAreaView style={styles.container}>
-      <ScrollView style={styles.scrollView}>
+      <ScrollView keyboardShouldPersistTaps={'handled'} style={styles.scrollView}>
         <View style={styles.body}>
           {meal.uri == null ? <></> :
             <Image

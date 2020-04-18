@@ -71,15 +71,6 @@ const App = (props) => {
   React.useMemo(() => authContext.restoreTokenFromLocalStorage(), [authContext]);
 
   const renderScreens = () => {
-    // TODO add welcome flow, with next pages to introduce a new user to the app.
-    // if (state.userIsLoggedIn && firstTimeUser) {
-    //   return (
-    //     <>
-    //       <Stack.Screen name="Introduction" component={WelcomeScreen} ></Stack.Screen>
-    //     </>
-    //   );
-    // }
-
     if (state.userIsLoggedIn) {
       return (
         <>

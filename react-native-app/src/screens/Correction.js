@@ -64,7 +64,7 @@ const Correction = ({ navigation }) => {
       <LottieView source={require('../animations/18473-flying-avocado.json')} autoPlay loop />
     </View > : (
       <View style={styles.container}>
-        <ScrollView>
+        <ScrollView keyboardShouldPersistTaps={'handled'} >
           <View style={styles.titleContainer}>
             <Text style={styles.title}>Sorry, we could not find your item.</Text>
           </View>

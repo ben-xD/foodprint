@@ -42,7 +42,7 @@ const Login = ({ navigation }) => {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.containerContent} style={styles.container}>
+    <ScrollView keyboardShouldPersistTaps={'handled'} contentContainerStyle={styles.containerContent} style={styles.container}>
       <View style={styles.logoContainer}>
         <Image style={styles.logo} source={require('../images/logoGreen.png')} />
       </View>

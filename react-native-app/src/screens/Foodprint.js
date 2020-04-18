@@ -238,8 +238,6 @@ const Foodprint = ({ navigation, route }) => {
           console.log(`selected button: ${name}`);
         }}
       />
-
-      {/* <WelcomeScreen setVisibility={setIntroductoryOverlayVisible} isVisible={introductoryOverlayVisible} /> */}
     </SafeAreaView >
   );
 };
