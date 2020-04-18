@@ -7,6 +7,7 @@ exports[`Login matches previous snapshot 1`] = `
       "alignItems": "center",
     }
   }
+  keyboardShouldPersistTaps="handled"
   style={
     Object {
       "height": "100%",

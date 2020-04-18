@@ -11,6 +11,7 @@ exports[`Correction matches previous snapshot 1`] = `
 >
   <ScrollView
     collapsable={false}
+    keyboardShouldPersistTaps="handled"
     onGestureHandlerEvent={[Function]}
     onGestureHandlerStateChange={[Function]}
   >

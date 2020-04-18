@@ -302,7 +302,7 @@ exports[`SignupOrRegister matches previous snapshot 1`] = `
         }
       }
     >
-      Wash your hands after touching your phone and before touching food.
+      Wash your hands often - Foodprint Team
     </Text>
   </View>
 </SafeAreaView>
