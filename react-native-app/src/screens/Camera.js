@@ -6,7 +6,6 @@ import { StyleSheet } from 'react-native';
 import { useNetInfo } from '@react-native-community/netinfo';
 import { useEffect } from 'react';
 import Snackbar from 'react-native-snackbar';
-import { BackHandler } from 'react-native';
 
 const Camera = ({ navigation }) => {
   const netInfo = useNetInfo();
@@ -24,10 +23,6 @@ const Camera = ({ navigation }) => {
     }
   }, [netInfo]);
 
-  BackHandler.addEventListener('hardwareBackPress', () => {
-    Snackbar.dismiss();
-  });
-
   const takePictureHandler = async (camera) => {
     setCameraIsReady(false);
     const options = { quality: 0.5, base64: true, width: 200 };
@@ -42,6 +37,10 @@ const Camera = ({ navigation }) => {
       navigation.navigate('Feedback', { barcode: data, loading: true });
     }
   };
+
+  if (!isFocused) {
+    return <View />;
+  }
 
   return (
     <View style={styles.container}>

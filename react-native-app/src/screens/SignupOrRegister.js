@@ -8,6 +8,8 @@ import { useNetInfo } from '@react-native-community/netinfo';
 import { useEffect } from 'react';
 import Snackbar from 'react-native-snackbar';
 
+const DAILY_MESSAGE = 'Wash your hands often - Foodprint Team';
+
 const greenLogo = require('../images/logoGreen.png');
 const logo = require('../images/logo.png');
 
@@ -83,7 +85,7 @@ const SignupOrRegister = ({ navigation }) => {
         </View>
       </View>
       <View style={styles.footerContainer}>
-        <Text style={styles.footerText}>Wash your hands after touching your phone and before touching food.</Text>
+        <Text style={styles.footerText}>{DAILY_MESSAGE}</Text>
       </View>
     </SafeAreaView >
   );

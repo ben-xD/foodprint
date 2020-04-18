@@ -5,7 +5,7 @@ import LottieView from 'lottie-react-native';
 import { Image, StyleSheet, Text, View } from 'react-native';
 import { Tooltip } from 'react-native-elements';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { FOODPRINT_UNIT, FOODPRINT_UNIT_INFORMATION } from '../string';
+import { FOODPRINT_UNIT, FOODPRINT_UNIT_INFORMATION } from '../strings';
 
 const CarbonFootprintScore = ({ loading, error, historyReport }) => {
 

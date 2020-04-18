@@ -5,6 +5,7 @@
   "scripts": {
     "a": "npm run android",
     "android": "react-native run-android",
+    "a:codepush": "appcenter codepush release-react -a Ben-xD/Foodprint -d prod",
     "android:local": "ENVFILE=.env.android.local react-native run-android",
     "a:release": "react-native run-android --variant=release",
     "a:bundle": "cd android && ./gradlew bundleRelease",
@@ -45,6 +46,7 @@
     "react-apollo": "^3.1.3",
     "react-native": "0.61.5",
     "react-native-camera": "^3.19.0",
+    "react-native-code-push": "^6.2.0",
     "react-native-config": "^0.12.0",
     "react-native-elements": "^1.2.7",
     "react-native-floating-action": "^1.20.0",
