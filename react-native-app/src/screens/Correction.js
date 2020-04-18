@@ -25,6 +25,12 @@ const Correction = ({ navigation }) => {
   const [postCorrection, { loading: correctionLoading, error: correctionError, data: correctionData }] = useMutation(POST_CORRECTION_MUTATION);
 
   const postCorrectionHandler = async () => {
+    if (correctedName.length === 0) {
+      return Snackbar.show({
+        text: "If you don't know what it is, give your closest match.",
+        duration: Snackbar.LENGTH_SHORT,
+      });
+    }
     setLoading(true);
     await postCorrection({ variables: { name: correctedName } });
   };
@@ -55,6 +61,7 @@ const Correction = ({ navigation }) => {
           item: correctionData.postCorrection.name, // Item returned from back-end
         },
       });
+      setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [correctionData]);

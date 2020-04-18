@@ -2,4 +2,6 @@
     <string name="app_name">Foodprint</string>
     <string name="appCenterCrashes_whenToSendCrashes" moduleConfig="true" translatable="false">DO_NOT_ASK_JAVASCRIPT</string>
     <string name="appCenterAnalytics_whenToEnableAnalytics" moduleConfig="true" translatable="false">ALWAYS_SEND</string>
+    <string name="CodePushDeploymentKey" moduleConfig="true">xCpE9f4_YK2AwaUIM5RrJRsqWsT-grAhRu8y0</string>
+    CodePushDeploymentKey
 </resources>

@@ -10,7 +10,7 @@ import Snackbar from 'react-native-snackbar';
 import { CommonActions, useFocusEffect } from '@react-navigation/native';
 import { Keyboard } from 'react-native';
 import LottieView from 'lottie-react-native';
-import { FOODPRINT_UNIT, FOODPRINT_UNIT_INFORMATION } from '../string';
+import { FOODPRINT_UNIT, FOODPRINT_UNIT_INFORMATION } from '../strings';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 // GraphQL schema for picture posting mutation
@@ -51,6 +51,7 @@ const Feedback = ({ route, navigation }) => {
   const [postUserHistoryEntryMutation, { loading: historyLoading, error: historyError, data: historyData }] = useMutation(POST_USER_HISTORY_ENTRY);
 
   useFocusEffect(() => {
+    setUploading(false);
     Keyboard.dismiss();
   });
 
@@ -77,10 +78,7 @@ const Feedback = ({ route, navigation }) => {
     if (!pictureError && !barcodeError) {
       return;
     }
-    Snackbar.show({
-      text: 'Oops, something went wrong :(',
-      duration: Snackbar.LENGTH_SHORT,
-    });
+
   }, [pictureError, barcodeError]);
 
   useEffect(() => {
@@ -93,10 +91,8 @@ const Feedback = ({ route, navigation }) => {
           description: pictureData.postPicture.name,
         });
       } else {
-        // Otherwise, go to error correction screen
-        setMeal({
-          uri: route.params.uri,
-        });
+        // Previously setMeal here: pointless because we reset the meal
+        // when the correction comes back, AND it causes a navigation glitch
         navigation.navigate('Correction');
       }
     }
@@ -112,6 +108,10 @@ const Feedback = ({ route, navigation }) => {
         });
       } else {
         // If unknown name from barcode, go to error correction screen
+        Snackbar.show({
+          text: 'Our barcode database is currently impacted by the Coronavirus panic buying.',
+          duration: Snackbar.LENGTH_LONG,
+        });
         navigation.navigate('Correction');
       }
     }
@@ -119,7 +119,7 @@ const Feedback = ({ route, navigation }) => {
 
   // Add item to user history
   const addToHistory = async () => {
-    console.log('Saving to user history.');
+    console.log('Making network request: saving to user history database.');
     setUploading(true);
     await postUserHistoryEntryMutation({ variables: { item: meal.item ? meal.item : meal.description } });
   };
@@ -128,8 +128,8 @@ const Feedback = ({ route, navigation }) => {
     if (historyData) {
       // Reset client store after modifying user history
       console.log('Saved to user history.');
+      console.log({ historyData });
       // Reset navigation, so user can't 'hardware back press' to this screen
-      setUploading(false);
       navigation.dispatch(
         CommonActions.reset({
           index: 1,
@@ -215,7 +215,7 @@ const Feedback = ({ route, navigation }) => {
           <Rating
             readonly
             startingValue={getRatingFromCarbonFootprint(meal.score)}
-            type="star" // Optionally customisible
+            type="star"
             imageSize={percentageWidth('7%')}
           />
           <View style={styles.scoreContainer}>

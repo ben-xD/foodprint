@@ -5,7 +5,7 @@ import React from 'react';
 import { Tooltip } from 'react-native-elements';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useCallback } from 'react';
-import { FOODPRINT_UNIT } from '../string';
+import { FOODPRINT_UNIT } from '../strings';
 
 const TOOLTIP_CONTENT = 'This bar chart breaks down your weekly diet into the different food categories. ' +
   'Meat has the highest carbon footprint. The more sustainable food you eat, the shorter the bars get. Aim for that :).';
