@@ -6,7 +6,7 @@ import Email from '../components/Email';
 import { useRef } from 'react';
 import { StyleSheet } from 'react-native';
 import AuthContext from '../context/AuthContext';
-import { widthPercentageToDP as percentageWidth, heightPercentageToDP as percentageHeight } from 'react-native-responsive-screen';
+import { heightPercentageToDP as percentageHeight } from 'react-native-responsive-screen';
 
 
 const Signup = () => {

@@ -1,6 +1,707 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`App renders correctly 1`] = `
+<View
+  style={
+    Object {
+      "flex": 1,
+    }
+  }
+>
+  <RNCSafeAreaView
+    onInsetsChange={[Function]}
+    style={
+      Object {
+        "flex": 1,
+      }
+    }
+  >
+    <View
+      onLayout={[Function]}
+      style={
+        Object {
+          "flex": 1,
+          "overflow": "hidden",
+        }
+      }
+    >
+      <View
+        pointerEvents="box-none"
+        style={
+          Object {
+            "bottom": 0,
+            "left": 0,
+            "position": "absolute",
+            "right": 0,
+            "top": 0,
+          }
+        }
+      >
+        <View
+          accessibilityElementsHidden={true}
+          closing={false}
+          gestureVelocityImpact={0.3}
+          importantForAccessibility="no-hide-descendants"
+          onClose={[Function]}
+          onGestureBegin={[Function]}
+          onGestureCanceled={[Function]}
+          onOpen={[Function]}
+          onTransitionStart={[Function]}
+          pointerEvents="box-none"
+          style={
+            Object {
+              "bottom": 0,
+              "left": 0,
+              "position": "absolute",
+              "right": 0,
+              "top": 0,
+            }
+          }
+          transitionSpec={
+            Object {
+              "close": Object {
+                "animation": "spring",
+                "config": Object {
+                  "damping": 500,
+                  "mass": 3,
+                  "overshootClamping": true,
+                  "restDisplacementThreshold": 0.01,
+                  "restSpeedThreshold": 0.01,
+                  "stiffness": 1000,
+                },
+              },
+              "open": Object {
+                "animation": "spring",
+                "config": Object {
+                  "damping": 500,
+                  "mass": 3,
+                  "overshootClamping": true,
+                  "restDisplacementThreshold": 0.01,
+                  "restSpeedThreshold": 0.01,
+                  "stiffness": 1000,
+                },
+              },
+            }
+          }
+        >
+          <View
+            pointerEvents="box-none"
+            style={
+              Object {
+                "flex": 1,
+              }
+            }
+          >
+            <View
+              collapsable={false}
+              onGestureHandlerEvent={[Function]}
+              onGestureHandlerStateChange={[Function]}
+              style={
+                Object {
+                  "flex": 1,
+                  "transform": Array [
+                    Object {
+                      "translateX": 0,
+                    },
+                    Object {
+                      "translateX": -8.835759014537349,
+                    },
+                  ],
+                }
+              }
+            >
+              <View
+                pointerEvents="none"
+                style={
+                  Object {
+                    "backgroundColor": "#fff",
+                    "bottom": 0,
+                    "left": 0,
+                    "position": "absolute",
+                    "shadowColor": "#000",
+                    "shadowOffset": Object {
+                      "height": 1,
+                      "width": -1,
+                    },
+                    "shadowOpacity": 0.3,
+                    "shadowRadius": 5,
+                    "top": 0,
+                    "width": 3,
+                  }
+                }
+              />
+              <View
+                style={
+                  Array [
+                    Object {
+                      "flex": 1,
+                      "overflow": "hidden",
+                    },
+                    Array [
+                      Object {
+                        "backgroundColor": "rgb(242, 242, 242)",
+                      },
+                      undefined,
+                    ],
+                  ]
+                }
+              >
+                <View
+                  style={
+                    Object {
+                      "flex": 1,
+                      "flexDirection": "column-reverse",
+                    }
+                  }
+                >
+                  <View
+                    style={
+                      Object {
+                        "flex": 1,
+                      }
+                    }
+                  >
+                    <View
+                      style={
+                        Object {
+                          "alignItems": "center",
+                          "backgroundColor": "#ffffff",
+                          "flex": 1,
+                          "justifyContent": "center",
+                        }
+                      }
+                    >
+                      <View>
+                        <Image
+                          source={
+                            Object {
+                              "testUri": "../../../src/images/logo.png",
+                            }
+                          }
+                          style={Object {}}
+                        />
+                      </View>
+                    </View>
+                  </View>
+                </View>
+              </View>
+            </View>
+          </View>
+        </View>
+      </View>
+      <View
+        pointerEvents="box-none"
+        style={
+          Object {
+            "bottom": 0,
+            "left": 0,
+            "position": "absolute",
+            "right": 0,
+            "top": 0,
+          }
+        }
+      >
+        <View
+          accessibilityElementsHidden={false}
+          closing={false}
+          gestureVelocityImpact={0.3}
+          importantForAccessibility="auto"
+          onClose={[Function]}
+          onGestureBegin={[Function]}
+          onGestureCanceled={[Function]}
+          onOpen={[Function]}
+          onTransitionStart={[Function]}
+          pointerEvents="box-none"
+          style={
+            Object {
+              "bottom": 0,
+              "left": 0,
+              "position": "absolute",
+              "right": 0,
+              "top": 0,
+            }
+          }
+          transitionSpec={
+            Object {
+              "close": Object {
+                "animation": "spring",
+                "config": Object {
+                  "damping": 500,
+                  "mass": 3,
+                  "overshootClamping": true,
+                  "restDisplacementThreshold": 0.01,
+                  "restSpeedThreshold": 0.01,
+                  "stiffness": 1000,
+                },
+              },
+              "open": Object {
+                "animation": "spring",
+                "config": Object {
+                  "damping": 500,
+                  "mass": 3,
+                  "overshootClamping": true,
+                  "restDisplacementThreshold": 0.01,
+                  "restSpeedThreshold": 0.01,
+                  "stiffness": 1000,
+                },
+              },
+            }
+          }
+        >
+          <View
+            pointerEvents="box-none"
+            style={
+              Object {
+                "flex": 1,
+              }
+            }
+          >
+            <View
+              collapsable={false}
+              onGestureHandlerEvent={[Function]}
+              onGestureHandlerStateChange={[Function]}
+              style={
+                Object {
+                  "flex": 1,
+                  "transform": Array [
+                    Object {
+                      "translateX": 720.5474699515422,
+                    },
+                    Object {
+                      "translateX": 0,
+                    },
+                  ],
+                }
+              }
+            >
+              <View
+                pointerEvents="none"
+                style={
+                  Object {
+                    "backgroundColor": "#fff",
+                    "bottom": 0,
+                    "left": 0,
+                    "position": "absolute",
+                    "shadowColor": "#000",
+                    "shadowOffset": Object {
+                      "height": 1,
+                      "width": -1,
+                    },
+                    "shadowOpacity": 0.01178101201938313,
+                    "shadowRadius": 5,
+                    "top": 0,
+                    "width": 3,
+                  }
+                }
+              />
+              <View
+                style={
+                  Array [
+                    Object {
+                      "flex": 1,
+                      "overflow": "hidden",
+                    },
+                    Array [
+                      Object {
+                        "backgroundColor": "rgb(242, 242, 242)",
+                      },
+                      undefined,
+                    ],
+                  ]
+                }
+              >
+                <View
+                  style={
+                    Object {
+                      "flex": 1,
+                      "flexDirection": "column-reverse",
+                    }
+                  }
+                >
+                  <View
+                    style={
+                      Object {
+                        "flex": 1,
+                      }
+                    }
+                  >
+                    <SafeAreaView
+                      style={
+                        Object {
+                          "alignItems": "center",
+                          "height": "100%",
+                          "justifyContent": "center",
+                        }
+                      }
+                    >
+                      <View
+                        style={
+                          Object {
+                            "flex": 1,
+                            "justifyContent": "center",
+                          }
+                        }
+                      >
+                        <Image
+                          source={
+                            Object {
+                              "testUri": "../../../src/images/logo.png",
+                            }
+                          }
+                          style={
+                            Object {
+                              "height": 200,
+                              "resizeMode": "contain",
+                            }
+                          }
+                        />
+                      </View>
+                      <View
+                        style={
+                          Object {
+                            "flex": 1,
+                            "justifyContent": "center",
+                            "paddingTop": 32,
+                            "width": "80%",
+                          }
+                        }
+                      >
+                        <View
+                          style={
+                            Object {
+                              "borderRadius": 3,
+                              "marginVertical": 13.5,
+                            }
+                          }
+                        >
+                          <TouchableOpacity
+                            activeOpacity={0.3}
+                            disabled={true}
+                            onPress={[Function]}
+                            testID="googleButton"
+                          >
+                            <View
+                              style={
+                                Object {
+                                  "alignItems": "center",
+                                  "backgroundColor": "hsl(208, 8%, 90%)",
+                                  "borderColor": "#2089dc",
+                                  "borderRadius": 3,
+                                  "borderWidth": 0,
+                                  "flexDirection": "row",
+                                  "justifyContent": "center",
+                                  "padding": 8,
+                                }
+                              }
+                            >
+                              <Text
+                                allowFontScaling={false}
+                                style={
+                                  Array [
+                                    Object {
+                                      "color": "black",
+                                      "fontSize": 37.5,
+                                    },
+                                    Object {
+                                      "paddingRight": 22.5,
+                                    },
+                                    Object {
+                                      "fontFamily": "anticon",
+                                      "fontStyle": "normal",
+                                      "fontWeight": "normal",
+                                    },
+                                    Object {},
+                                  ]
+                                }
+                              >
+                                
+                              </Text>
+                              <Text
+                                style={
+                                  Object {
+                                    "color": Object {
+                                      "color": Array [
+                                        208,
+                                        8,
+                                        63,
+                                      ],
+                                      "model": "hsl",
+                                      "valpha": 1,
+                                    },
+                                    "fontSize": 37.5,
+                                    "paddingBottom": 1,
+                                    "paddingTop": 2,
+                                    "textAlign": "center",
+                                  }
+                                }
+                              >
+                                Join using Google
+                              </Text>
+                            </View>
+                          </TouchableOpacity>
+                        </View>
+                        <View
+                          style={
+                            Object {
+                              "borderRadius": 3,
+                              "marginVertical": 13.5,
+                            }
+                          }
+                        >
+                          <TouchableOpacity
+                            activeOpacity={0.3}
+                            disabled={true}
+                            onPress={[Function]}
+                          >
+                            <View
+                              style={
+                                Object {
+                                  "alignItems": "center",
+                                  "backgroundColor": "hsl(208, 8%, 90%)",
+                                  "borderColor": "#2089dc",
+                                  "borderRadius": 3,
+                                  "borderWidth": 0,
+                                  "flexDirection": "row",
+                                  "justifyContent": "center",
+                                  "padding": 8,
+                                }
+                              }
+                            >
+                              <Text
+                                style={
+                                  Object {
+                                    "color": Object {
+                                      "color": Array [
+                                        208,
+                                        8,
+                                        63,
+                                      ],
+                                      "model": "hsl",
+                                      "valpha": 1,
+                                    },
+                                    "fontSize": 37.5,
+                                    "paddingBottom": 1,
+                                    "paddingTop": 2,
+                                    "textAlign": "center",
+                                  }
+                                }
+                              >
+                                Join using email
+                              </Text>
+                            </View>
+                          </TouchableOpacity>
+                        </View>
+                        <View
+                          style={
+                            Object {
+                              "marginVertical": 40,
+                            }
+                          }
+                        >
+                          <Text
+                            style={
+                              Object {
+                                "color": "grey",
+                                "fontSize": 37.5,
+                                "textAlign": "center",
+                              }
+                            }
+                            theme={
+                              Object {
+                                "colors": Object {
+                                  "disabled": "hsl(208, 8%, 90%)",
+                                  "divider": "#bcbbc1",
+                                  "error": "#ff190c",
+                                  "grey0": "#393e42",
+                                  "grey1": "#43484d",
+                                  "grey2": "#5e6977",
+                                  "grey3": "#86939e",
+                                  "grey4": "#bdc6cf",
+                                  "grey5": "#e1e8ee",
+                                  "greyOutline": "#bbb",
+                                  "platform": Object {
+                                    "android": Object {
+                                      "error": "#f44336",
+                                      "primary": "#2196f3",
+                                      "secondary": "#9C27B0",
+                                      "success": "#4caf50",
+                                      "warning": "#ffeb3b",
+                                    },
+                                    "ios": Object {
+                                      "error": "#ff3b30",
+                                      "primary": "#007aff",
+                                      "secondary": "#5856d6",
+                                      "success": "#4cd964",
+                                      "warning": "#ffcc00",
+                                    },
+                                  },
+                                  "primary": "#2089dc",
+                                  "searchBg": "#303337",
+                                  "secondary": "#8F0CE8",
+                                  "success": "#52c41a",
+                                  "warning": "#faad14",
+                                },
+                              }
+                            }
+                          >
+                            Existing user?
+                          </Text>
+                          <View
+                            style={
+                              Object {
+                                "borderRadius": 3,
+                              }
+                            }
+                          >
+                            <TouchableOpacity
+                              activeOpacity={0.3}
+                              disabled={true}
+                              onPress={[Function]}
+                              testID="skipButton"
+                            >
+                              <View
+                                style={
+                                  Object {
+                                    "alignItems": "center",
+                                    "backgroundColor": "transparent",
+                                    "borderColor": "#2089dc",
+                                    "borderRadius": 3,
+                                    "borderWidth": 0,
+                                    "flexDirection": "row",
+                                    "justifyContent": "center",
+                                    "padding": 8,
+                                  }
+                                }
+                              >
+                                <Text
+                                  style={
+                                    Object {
+                                      "color": Object {
+                                        "color": Array [
+                                          208,
+                                          8,
+                                          63,
+                                        ],
+                                        "model": "hsl",
+                                        "valpha": 1,
+                                      },
+                                      "fontSize": 52.5,
+                                      "paddingBottom": 1,
+                                      "paddingTop": 2,
+                                      "textAlign": "center",
+                                    }
+                                  }
+                                >
+                                  LOGIN
+                                </Text>
+                              </View>
+                            </TouchableOpacity>
+                          </View>
+                        </View>
+                      </View>
+                      <View
+                        style={
+                          Object {
+                            "flex": 1,
+                            "justifyContent": "center",
+                          }
+                        }
+                      >
+                        <Text
+                          style={
+                            Object {
+                              "marginHorizontal": 64,
+                              "textAlign": "center",
+                            }
+                          }
+                          theme={
+                            Object {
+                              "colors": Object {
+                                "disabled": "hsl(208, 8%, 90%)",
+                                "divider": "#bcbbc1",
+                                "error": "#ff190c",
+                                "grey0": "#393e42",
+                                "grey1": "#43484d",
+                                "grey2": "#5e6977",
+                                "grey3": "#86939e",
+                                "grey4": "#bdc6cf",
+                                "grey5": "#e1e8ee",
+                                "greyOutline": "#bbb",
+                                "platform": Object {
+                                  "android": Object {
+                                    "error": "#f44336",
+                                    "primary": "#2196f3",
+                                    "secondary": "#9C27B0",
+                                    "success": "#4caf50",
+                                    "warning": "#ffeb3b",
+                                  },
+                                  "ios": Object {
+                                    "error": "#ff3b30",
+                                    "primary": "#007aff",
+                                    "secondary": "#5856d6",
+                                    "success": "#4cd964",
+                                    "warning": "#ffcc00",
+                                  },
+                                },
+                                "primary": "#2089dc",
+                                "searchBg": "#303337",
+                                "secondary": "#8F0CE8",
+                                "success": "#52c41a",
+                                "warning": "#faad14",
+                              },
+                            }
+                          }
+                        >
+                          Wash your hands often - Foodprint Team
+                        </Text>
+                      </View>
+                    </SafeAreaView>
+                  </View>
+                </View>
+              </View>
+            </View>
+          </View>
+        </View>
+      </View>
+    </View>
+    <View
+      pointerEvents="box-none"
+      style={
+        Object {
+          "left": 0,
+          "position": "absolute",
+          "right": 0,
+          "top": 0,
+        }
+      }
+    >
+      <View
+        accessibilityElementsHidden={true}
+        importantForAccessibility="no-hide-descendants"
+        onLayout={[Function]}
+        pointerEvents="none"
+        style={
+          Object {
+            "left": 0,
+            "position": "absolute",
+            "right": 0,
+            "top": 0,
+          }
+        }
+      />
+      <View
+        accessibilityElementsHidden={false}
+        importantForAccessibility="auto"
+        onLayout={[Function]}
+        pointerEvents="box-none"
+        style={null}
+      />
+    </View>
+  </RNCSafeAreaView>
+</View>
+`;
+
+exports[`App renders from recipe shared from browser 1`] = `
 <ApolloProvider
   client={
     ApolloClient {
@@ -1291,6 +1992,12 @@ exports[`App renders correctly 1`] = `
     }
   }
 >
-  <App />
+  <App
+    props={
+      Object {
+        "android.intent.extra.TEXT": "fakeRecipe",
+      }
+    }
+  />
 </ApolloProvider>
 `;

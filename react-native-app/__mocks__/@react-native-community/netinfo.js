@@ -12,6 +12,4 @@ export default {
   },
 };
 
-module.exports = {
-  useNetInfo: () => jest.fn(),
-};
+export const useNetInfo = () => jest.fn();

@@ -36,7 +36,6 @@ const App = (props) => {
 
   // null if app is started normally, but if android and opened via
   // specific intent-filter, then recipeUrl will be the recipeUrl from the browser
-  // TODO If this recipeUrl is present, then automatically send recipe graphQL request
   const recipeUrl = !props ? null : Platform.select({
     ios: null,
     android: props['android.intent.extra.TEXT'],
