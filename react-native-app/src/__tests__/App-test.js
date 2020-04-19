@@ -1,10 +1,11 @@
-// End to end tests and big integration tests go here.
-// Other tests can be found in their respective folders, alongside the implementations.
 import React from 'react';
+import { render, act, toJSON, wait } from '@testing-library/react-native';
+import ShallowRenderer from 'react-test-renderer/shallow';
 import { MockedProvider } from '@apollo/react-testing';
 import App from '../App';
 import renderer from 'react-test-renderer';
 import { GET_USER_HISTORY_REPORT } from '../screens/Foodprint';
+import * as NetInfo from '@react-native-community/netinfo';
 
 jest.mock('@react-native-community/google-signin');
 jest.mock('apollo-boost');
@@ -13,13 +14,6 @@ jest.mock('@gorhom/paper-onboarding', () => {
   const paperOnboarding = () => <div />;
   return paperOnboarding;
 });
-
-// Mocking for react-native-reanimated if needed in the future.
-// jest.mock('react-native-reanimated', () => ({
-//   ...require('react-native-reanimated/mock'),
-//   addWhitelistedNativeProps: () => { },
-// })
-// );
 
 const mockedResponses = [
   {
@@ -107,12 +101,47 @@ const mockedResponses = [
   },
 ];
 
-
-it('App renders correctly', () => {
+test('App renders correctly', async () => {
+  const shallowRenderer = new ShallowRenderer();
   let app;
-  renderer.act(() => {
-    app = <MockedProvider mocks={mockedResponses} addTypename={false}>
-      <App />
-    </MockedProvider>;
+
+  const mockedUseNetInfo = jest.fn(() => ({
+    details: null,
+    isConnected: false,
+  }));
+  jest.spyOn(NetInfo, 'useNetInfo').mockImplementationOnce(mockedUseNetInfo);
+
+  // Tried to render shallowly (shallowRenderer.render), but coverage was very low.
+  // So now back to using renderer.create to keep coverage is high, opacities and positions
+  // were fractionally different on every render, failing to match previous snapshots
+  await renderer.act(async () => {
+    app = renderer.create(
+      <MockedProvider mocks={mockedResponses} addTypename={false}>
+        <App />
+      </MockedProvider>
+    );
   });
+  wait();
+
+  expect(mockedUseNetInfo).toBeCalledTimes(1);
+  expect(app).toMatchSnapshot();
+});
+
+
+test('App renders from recipe shared from browser', async () => {
+  const shallowRenderer = new ShallowRenderer();
+  let app;
+
+  // Previously was rendering fully (renderer.create), however, opacities and positions
+  // were fractionally different on every render, failing to match previous snapshots
+  // So now use ShallowRenderer https://reactjs.org/docs/shallow-renderer.html
+  await renderer.act(async () => {
+    app = shallowRenderer.render(
+      <MockedProvider mocks={mockedResponses} addTypename={false}>
+        <App props={{ 'android.intent.extra.TEXT': 'fakeRecipe' }} />
+      </MockedProvider>
+    );
+  });
+
+  expect(app).toMatchSnapshot();
 });

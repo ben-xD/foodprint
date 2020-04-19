@@ -4,7 +4,7 @@ import { Button, Text } from 'react-native-elements';
 import Password from '../components/Password';
 import Email from '../components/Email';
 import AuthContext from '../context/AuthContext';
-import { widthPercentageToDP as percentageWidth, heightPercentageToDP as percentageHeight } from 'react-native-responsive-screen';
+import { heightPercentageToDP as percentageHeight } from 'react-native-responsive-screen';
 
 
 const Signup = () => {

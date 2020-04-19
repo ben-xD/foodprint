@@ -35,11 +35,10 @@ test('JOIN button calls signUp function from context if email and password is va
 
   const joinButton = utils.getByText('JOIN');
   fireEvent.press(joinButton);
-  await wait(() => expect(utils.queryByTestId('joinButton')));
+  await wait();
   expect(signUpMock.mock.calls.length).toBe(1);
 });
 
-// TODO implement error messages for user
 test('Prevents badly formatted email', async () => {
   const signUpMock = jest.fn();
 
@@ -59,8 +58,7 @@ test('Prevents badly formatted email', async () => {
 
   const joinButton = utils.getByText('JOIN');
   fireEvent.press(joinButton);
-  // expect error here
-  await wait(() => expect(utils.queryByTestId('joinButton')));
+  expect(signUpMock.mock.calls.length).toBe(0);
 });
 
 
