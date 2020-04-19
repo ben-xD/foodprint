@@ -3,8 +3,6 @@ import React from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { CommonActions } from '@react-navigation/native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { heightPercentageToDP as percentageHeight, widthPercentageToDP as percentageWidth } from 'react-native-responsive-screen';
-
 
 const subScreens = [
   {

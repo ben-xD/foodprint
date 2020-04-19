@@ -1,9 +1,12 @@
 import React from 'react';
-import Foodprint, { GET_USER_HISTORY_REPORT } from '../Foodprint';
+import Foodprint, { GET_USER_HISTORY_REPORT, WEEKLY_TIMESPAN, MONTHLY_TIMESPAN } from '../Foodprint';
 import { MockedProvider } from '@apollo/react-testing';
-// renderer should be imported after react-native (implicitly by Foodprint) 
+// renderer should be imported after react-native (implicitly by Foodprint)
 // according to https://formidable.com/open-source/victory/docs/native/
 import renderer from 'react-test-renderer';
+import ShallowRenderer from 'react-test-renderer/shallow';
+import { useState } from 'react';
+import { when } from 'jest-when';
 
 const mockedResponses = [
   {
@@ -83,19 +86,21 @@ const mockedResponses = [
                 { 'periodNumber': -4, 'avgCarbonFootprint': 14.25 },
                 { 'periodNumber': -5, 'avgCarbonFootprint': 13 },
               ],
-            }
-          ]
-        }
-      }
-    }
-  }
+            },
+          ],
+        },
+      },
+    },
+  },
 ];
 
 // Check current component against its snapshot
-test('foodprint screen with loaded results matches previous snapshot', async () => {
+test('Foodprint with WEEK selected with loaded results matches previous snapshot', async () => {
   const mockedNavigation = {
     setOptions: jest.fn(),
   };
+
+  // when(useState).calledWith(WEEKLY_TIMESPAN).mockReturnValue([WEEKLY_TIMESPAN, jest.fn()]);
 
   let component;
   renderer.act(() => {
@@ -105,6 +110,33 @@ test('foodprint screen with loaded results matches previous snapshot', async () 
   });
 
   expect(component).toMatchSnapshot();
+});
+
+// Check current component against its snapshot
+test('foodprint screen with MONTH selected with loaded results matches previous snapshot', async () => {
+  const mockedNavigation = {
+    setOptions: jest.fn(),
+  };
+
+  // TODO fix this mocking of state
+  // const mockedUseState = jest.mock(useState);
+  // jest.spyOn(React, 'useState').mockImplementation(() => ([MONTHLY_TIMESPAN, jest.fn()]));
+  // when(mockedUseState).calledWith(WEEKLY_TIMESPAN).mockReturnValue([MONTHLY_TIMESPAN, jest.fn()]);
+
+  const shallowRenderer = new ShallowRenderer();
+  const result = shallowRenderer.render(<MockedProvider mocks={mockedResponses} addTypename={false}>
+    <Foodprint navigation={mockedNavigation} />
+  </MockedProvider>);
+  expect(result).toMatchSnapshot();
+
+  // let component;
+  // renderer.act(() => {
+  //   component = <MockedProvider mocks={mockedResponses} addTypename={false}>
+  //     <Foodprint navigation={mockedNavigation} />
+  //   </MockedProvider>;
+  // });
+
+  // expect(component).toMatchSnapshot();
 });
 
 // test('foodprint screen caches all responses', async () => {
@@ -134,3 +166,7 @@ test('foodprint screen with loaded results matches previous snapshot', async () 
 // test('foodprint screen loads from cache when no internet connection', async () => {
 
 // })
+
+test('Foodprint screen shows both WEEK and MONTH view successfully', async () => {
+
+});

@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     height: percentageHeight('15%'),
     resizeMode: 'contain',
   },
-  bodyContainer: { width: '80%', flex: 1 },
+  bodyContainer: { width: '80%', flex: 1, justifyContent: 'center', paddingTop: 32 },
   title: { fontSize: percentageWidth('15%') },
   googleContainer: { marginVertical: percentageHeight('1%') },
   google: { backgroundColor: 'white' },
@@ -113,8 +113,10 @@ const styles = StyleSheet.create({
   loginButton: { color: 'green', fontSize: percentageWidth('7%') },
   skipButtonContainer: { position: 'absolute', bottom: percentageHeight('5%') },
   skipButton: { color: 'grey', fontSize: percentageWidth('5%') },
-  footerContainer: { flex: 0.25, justifyContent: 'center', padding: 64 },
-  footerText: { textAlign: 'center' },
+  footerContainer: {
+    flex: 1, justifyContent: 'center',
+  },
+  footerText: { textAlign: 'center', marginHorizontal: 64 },
 });
 
 export default SignupOrRegister;

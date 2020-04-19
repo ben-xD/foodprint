@@ -22,8 +22,8 @@ import { FloatingAction } from 'react-native-floating-action';
 import { useFocusEffect, useIsFocused } from '@react-navigation/native';
 import Snackbar from 'react-native-snackbar';
 
-const WEEKLY_TIMESPAN = 0;
-const MONTHLY_TIMESPAN = 1;
+export const WEEKLY_TIMESPAN = 0;
+export const MONTHLY_TIMESPAN = 1;
 
 export const GET_USER_HISTORY_REPORT = gql`
   query GetUserHistoryReport ($timezone: Int!, $resolutions: [ReportResolution!]!) {
@@ -243,14 +243,51 @@ const Foodprint = ({ navigation, route }) => {
 };
 
 const styles = StyleSheet.create({
-  container: { height: '100%' },
-  score: { fontSize: percentageWidth('6%'), color: 'grey' },
-  buttonContainer: { flexDirection: 'row', justifyContent: 'center', paddingVertical: percentageHeight('2%') },
-  buttonTitle: { fontSize: percentageWidth('5%') },
-  button: { width: percentageWidth('30%'), height: 45 },
-  camera: { backgroundColor: '#008000', width: 64, height: 64, position: 'absolute', bottom: 100, right: 25, borderRadius: 32, alignItems: 'center', justifyContent: 'center' },
-  graphContainer: { height: percentageHeight('38%'), justifyContent: 'center', marginVertical: percentageHeight('2%') },
-  recipe: { backgroundColor: '#008000', width: 64, height: 64, position: 'absolute', bottom: 25, right: 25, borderRadius: 32, alignItems: 'center', justifyContent: 'center' },
+  container: {
+    height: '100%',
+  },
+  score: {
+    fontSize: percentageWidth('6%'),
+    color: 'grey',
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    paddingVertical: percentageHeight('2%'),
+  },
+  buttonTitle: {
+    fontSize: percentageWidth('5%'),
+  },
+  button: {
+    width: percentageWidth('30%'),
+    height: 45,
+  },
+  camera: {
+    backgroundColor: '#008000',
+    width: 64,
+    height: 64,
+    position: 'absolute',
+    bottom: 100,
+    right: 25,
+    borderRadius: 32,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  graphContainer: {
+    height: percentageHeight('38%'),
+    justifyContent: 'center',
+    marginVertical: percentageHeight('2%'),
+  },
+  recipe: {
+    backgroundColor: '#008000',
+    width: 64,
+    height: 64,
+    position: 'absolute',
+    bottom: 25, right: 25,
+    borderRadius: 32,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 });
 
 export default Foodprint;
