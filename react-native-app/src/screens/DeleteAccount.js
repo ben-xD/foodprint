@@ -10,7 +10,7 @@ import LottieView from 'lottie-react-native';
 import Snackbar from 'react-native-snackbar';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-const DELETE_ACCOUNT = gql`
+export const DELETE_ACCOUNT = gql`
   mutation {
     deleteData
   }

@@ -3,6 +3,7 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import App from '../App';
+import { fireEvent, render, wait } from '@testing-library/react-native';
 import renderer from 'react-test-renderer';
 import { GET_USER_HISTORY_REPORT } from '../screens/Foodprint';
 
@@ -13,13 +14,6 @@ jest.mock('@gorhom/paper-onboarding', () => {
   const paperOnboarding = () => <div />;
   return paperOnboarding;
 });
-
-// Mocking for react-native-reanimated if needed in the future.
-// jest.mock('react-native-reanimated', () => ({
-//   ...require('react-native-reanimated/mock'),
-//   addWhitelistedNativeProps: () => { },
-// })
-// );
 
 const mockedResponses = [
   {
@@ -111,8 +105,12 @@ const mockedResponses = [
 it('App renders correctly', () => {
   let app;
   renderer.act(() => {
-    app = <MockedProvider mocks={mockedResponses} addTypename={false}>
+    app = renderer.create(<MockedProvider mocks={mockedResponses} addTypename={false}>
       <App />
-    </MockedProvider>;
+    </MockedProvider>);
   });
+
+
+  expect(app.toJSON()).toMatchSnapshot();
+  // app.unmount();
 });

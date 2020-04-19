@@ -11,7 +11,7 @@ module.exports = Object.assign(jestPreset, {
   ],
 
   // A list of paths to modules that run some code to configure or set up the testing framework before each test
-  setupFilesAfterEnv: ['./src/teardown.js'],
+  setupFilesAfterEnv: ['./src/teardown.js', './__mocks__/@react-native-community/google-signin'],
 
   // The test environment that will be used for testing
   testEnvironment: 'node',
@@ -35,8 +35,12 @@ module.exports = Object.assign(jestPreset, {
   // We ignore context files because they are implementation details.
   // Refactoring them instantly fails the test. This is recommended by RTL
   // React-testing-library, suggests we check what the user expects the app to do.
+  // We ignore some configuration related files, such as BottomTabBar, because they
+  // just describe the layout of the tab bar. The functionality is handled by
+  // react-navigation library
   coveragePathIgnorePatterns: [
     '<rootDir>/src/context',
     '<rootDir>/src/Client.js',
+    'src/containers/BottomTabBar.js',
   ],
 });
