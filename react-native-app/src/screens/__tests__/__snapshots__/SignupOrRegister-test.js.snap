@@ -36,6 +36,8 @@ exports[`SignupOrRegister matches previous snapshot 1`] = `
     style={
       Object {
         "flex": 1,
+        "justifyContent": "center",
+        "paddingTop": 32,
         "width": "80%",
       }
     }
@@ -252,15 +254,15 @@ exports[`SignupOrRegister matches previous snapshot 1`] = `
   <View
     style={
       Object {
-        "flex": 0.25,
+        "flex": 1,
         "justifyContent": "center",
-        "padding": 64,
       }
     }
   >
     <Text
       style={
         Object {
+          "marginHorizontal": 64,
           "textAlign": "center",
         }
       }

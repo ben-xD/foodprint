@@ -1,6 +1,6 @@
 {
   "name": "mobile",
-  "version": "2.7.0",
+  "version": "2.8.0",
   "private": true,
   "scripts": {
     "a": "npm run android",
@@ -40,6 +40,7 @@
     "appcenter-analytics": "3.0.1",
     "appcenter-crashes": "3.0.1",
     "graphql": "^14.6.0",
+    "jest-when": "^2.7.1",
     "lottie-react-native": "^3.3.2",
     "qs": "^6.9.1",
     "react": "16.9.0",
