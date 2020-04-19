@@ -4,8 +4,7 @@ import { Button, Text } from 'react-native-elements';
 import Password from '../components/Password';
 import Email from '../components/Email';
 import AuthContext from '../context/AuthContext';
-import { heightPercentageToDP as percentageHeight } from 'react-native-responsive-screen';
-
+import { widthPercentageToDP as percentageWidth, heightPercentageToDP as percentageHeight } from 'react-native-responsive-screen';
 
 const Signup = () => {
   const [email, setEmail] = useState('');
@@ -43,31 +42,31 @@ const Signup = () => {
   };
 
   return (
-      <KeyboardAvoidingView
-          behavior="padding"
-          style={styles.container}
-      >
-        <View style={styles.logoContainer}>
-          <Image style={styles.logo} source={require('../images/logoGreen.png')} />
+    <KeyboardAvoidingView
+      behavior="padding"
+      style={styles.container}
+    >
+      <View style={styles.logoContainer}>
+        <Image style={styles.logo} source={require('../images/logoGreen.png')} />
+      </View>
+      <View style={styles.inputContainer}>
+        <View>
+          {emailError === '' ? <></> : <Text>{emailError}</Text>}
+          <Email nextFieldRef={passwordRef} setEmail={setEmail} email={email} />
+          {passwordError === '' ? <></> : <Text>{passwordError}</Text>}
+          <Password ref={passwordRef} submitHandler={signUpHandler} setPassword={setPassword} password={password} />
+          <Button
+            testID={'joinButton'}
+            disabled={isPressed}
+            buttonStyle={styles.button}
+            containerStyle={styles.buttonContainer}
+            titleStyle={styles.buttonText}
+            title="JOIN"
+            onPress={signUpHandler}
+          />
         </View>
-        <View style={styles.inputContainer}>
-          <View>
-            {emailError === '' ? <></> : <Text>{emailError}</Text>}
-            <Email nextFieldRef={passwordRef} setEmail={setEmail} email={email} />
-            {passwordError === '' ? <></> : <Text>{passwordError}</Text>}
-            <Password ref={passwordRef} submitHandler={signUpHandler} setPassword={setPassword} password={password} />
-            <Button
-              testID={'joinButton'}
-              disabled={isPressed}
-              buttonStyle={styles.button}
-              containerStyle={styles.buttonContainer}
-              titleStyle={styles.buttonText}
-              title="JOIN"
-              onPress={signUpHandler}
-            />
-          </View>
-        </View>
-      </KeyboardAvoidingView>
+      </View>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -78,14 +77,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  logoContainer: { height:percentageHeight('40%'), justifyContent: 'center' },
+  logoContainer: { height: percentageHeight('40%'), justifyContent: 'center' },
   logo: {
     height: percentageHeight('15%'),
     resizeMode: 'contain',
   },
   inputContainer: { width: percentageWidth('80%') },
   button: { backgroundColor: 'green', marginVertical: percentageHeight('2%') },
-  buttonContainer: { marginBottom:percentageHeight('7%') },
+  buttonContainer: { marginBottom: percentageHeight('7%') },
   buttonText: { fontSize: percentageWidth('5%') },
 });
 
