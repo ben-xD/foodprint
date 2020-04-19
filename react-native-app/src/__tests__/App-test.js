@@ -9,6 +9,10 @@ import { GET_USER_HISTORY_REPORT } from '../screens/Foodprint';
 jest.mock('@react-native-community/google-signin');
 jest.mock('apollo-boost');
 jest.mock('react-native-screens');
+jest.mock('@gorhom/paper-onboarding', () => {
+  const paperOnboarding = () => <div />;
+  return paperOnboarding;
+});
 
 // Mocking for react-native-reanimated if needed in the future.
 // jest.mock('react-native-reanimated', () => ({
@@ -16,12 +20,6 @@ jest.mock('react-native-screens');
 //   addWhitelistedNativeProps: () => { },
 // })
 // );
-
-jest.mock('@gorhom/paper-onboarding', () => {
-  const paperOnboarding = () => <div />;
-  return paperOnboarding;
-});
-
 
 const mockedResponses = [
   {
