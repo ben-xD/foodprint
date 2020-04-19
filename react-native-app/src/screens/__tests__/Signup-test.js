@@ -16,7 +16,7 @@ test('SignUp renders matches previous snapshot', () => {
   expect(tree).toMatchSnapshot();
 });
 
-test('Join button calls signUp function from context if email and password is valid', async () => {
+test('JOIN button calls signUp function from context if email and password is valid', async () => {
   const signUpMock = jest.fn();
 
   const authentication = {
@@ -33,7 +33,7 @@ test('Join button calls signUp function from context if email and password is va
   const famousLecturersPassword = 'b10ckch@1n';
   fireEvent.changeText(passwordInput, famousLecturersPassword);
 
-  const joinButton = utils.getByText('Join');
+  const joinButton = utils.getByText('JOIN');
   fireEvent.press(joinButton);
   await wait(() => expect(utils.queryByTestId('joinButton')));
   expect(signUpMock.mock.calls.length).toBe(1);
@@ -57,7 +57,7 @@ test('Prevents badly formatted email', async () => {
   const password = 'b10ckch@1n';
   fireEvent.changeText(passwordInput, password);
 
-  const joinButton = utils.getByText('Join');
+  const joinButton = utils.getByText('JOIN');
   fireEvent.press(joinButton);
   // expect error here
   await wait(() => expect(utils.queryByTestId('joinButton')));

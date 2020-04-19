@@ -1,199 +1,199 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`SignUp renders matches previous snapshot 1`] = `
-<SafeAreaView>
-  <ScrollView
-    contentContainerStyle={
+<View
+  onLayout={[Function]}
+  style={
+    Array [
       Object {
         "alignItems": "center",
-      }
-    }
-    keyboardShouldPersistTaps="handled"
+        "height": 1067,
+        "justifyContent": "center",
+        "width": 750,
+      },
+      Object {
+        "paddingBottom": 0,
+      },
+    ]
+  }
+>
+  <View
     style={
       Object {
-        "height": "100%",
-        "width": "100%",
+        "height": 533.5,
+        "justifyContent": "center",
       }
     }
   >
-    <View
-      style={
+    <Image
+      source={
         Object {
-          "justifyContent": "center",
-          "marginVertical": 66.5,
+          "testUri": "../../../src/images/logoGreen.png",
         }
       }
-    >
-      <Image
-        source={
-          Object {
-            "testUri": "../../../src/images/logoGreen.png",
-          }
+      style={
+        Object {
+          "height": 200,
+          "resizeMode": "contain",
         }
+      }
+    />
+  </View>
+  <View
+    style={
+      Object {
+        "width": 600,
+      }
+    }
+  >
+    <View>
+      <View
         style={
           Object {
-            "height": 200,
-            "resizeMode": "contain",
+            "marginBottom": 15,
+            "paddingHorizontal": 10,
+            "width": "100%",
           }
         }
-      />
-    </View>
-    <View
-      style={
-        Object {
-          "width": "80%",
-        }
-      }
-    >
-      <View>
+      >
         <View
           style={
             Object {
-              "marginBottom": 15,
-              "paddingHorizontal": 10,
-              "width": "100%",
+              "alignItems": "center",
+              "borderBottomWidth": 1,
+              "borderColor": "#86939e",
+              "flexDirection": "row",
+              "transform": Array [
+                Object {
+                  "translateX": 0,
+                },
+              ],
             }
           }
+        >
+          <TextInput
+            allowFontScaling={true}
+            autoCapitalize="none"
+            autoCompleteType="email"
+            autoCorrect={false}
+            editable={true}
+            onChangeText={[Function]}
+            onSubmitEditing={[Function]}
+            placeholder="Email"
+            rejectResponderTermination={true}
+            returnKeyType="next"
+            style={
+              Object {
+                "alignSelf": "center",
+                "color": "black",
+                "flex": 1,
+                "fontSize": 18,
+                "minHeight": 40,
+              }
+            }
+            testID="RNE__Input__text-input"
+            underlineColorAndroid="transparent"
+            value=""
+          />
+        </View>
+      </View>
+      <View
+        style={
+          Object {
+            "marginBottom": 15,
+            "paddingHorizontal": 10,
+            "width": "100%",
+          }
+        }
+      >
+        <View
+          style={
+            Object {
+              "alignItems": "center",
+              "borderBottomWidth": 1,
+              "borderColor": "#86939e",
+              "flexDirection": "row",
+              "transform": Array [
+                Object {
+                  "translateX": 0,
+                },
+              ],
+            }
+          }
+        >
+          <TextInput
+            allowFontScaling={true}
+            autoCapitalize="none"
+            autoCompleteType="password"
+            autoCorrect={false}
+            editable={true}
+            onChangeText={[Function]}
+            onSubmitEditing={[Function]}
+            placeholder="Password"
+            rejectResponderTermination={true}
+            returnKeyType="join"
+            secureTextEntry={true}
+            style={
+              Object {
+                "alignSelf": "center",
+                "color": "black",
+                "flex": 1,
+                "fontSize": 18,
+                "minHeight": 40,
+              }
+            }
+            testID="RNE__Input__text-input"
+            underlineColorAndroid="transparent"
+            value=""
+          />
+        </View>
+      </View>
+      <View
+        style={
+          Object {
+            "borderRadius": 3,
+            "marginBottom": 93.5,
+          }
+        }
+      >
+        <TouchableOpacity
+          activeOpacity={0.3}
+          disabled={false}
+          onPress={[Function]}
+          testID="joinButton"
         >
           <View
             style={
               Object {
                 "alignItems": "center",
-                "borderBottomWidth": 1,
-                "borderColor": "#86939e",
+                "backgroundColor": "green",
+                "borderColor": "#2089dc",
+                "borderRadius": 3,
+                "borderWidth": 0,
                 "flexDirection": "row",
-                "transform": Array [
-                  Object {
-                    "translateX": 0,
-                  },
-                ],
+                "justifyContent": "center",
+                "marginVertical": 26.5,
+                "padding": 8,
               }
             }
           >
-            <TextInput
-              allowFontScaling={true}
-              autoCapitalize="none"
-              autoCompleteType="email"
-              autoCorrect={false}
-              autoFocus={true}
-              editable={true}
-              onChangeText={[Function]}
-              onSubmitEditing={[Function]}
-              placeholder="Email"
-              rejectResponderTermination={true}
-              returnKeyType="next"
+            <Text
               style={
                 Object {
-                  "alignSelf": "center",
-                  "color": "black",
-                  "flex": 1,
-                  "fontSize": 18,
-                  "minHeight": 40,
-                }
-              }
-              testID="RNE__Input__text-input"
-              underlineColorAndroid="transparent"
-              value=""
-            />
-          </View>
-        </View>
-        <View
-          style={
-            Object {
-              "marginBottom": 15,
-              "paddingHorizontal": 10,
-              "width": "100%",
-            }
-          }
-        >
-          <View
-            style={
-              Object {
-                "alignItems": "center",
-                "borderBottomWidth": 1,
-                "borderColor": "#86939e",
-                "flexDirection": "row",
-                "transform": Array [
-                  Object {
-                    "translateX": 0,
-                  },
-                ],
-              }
-            }
-          >
-            <TextInput
-              allowFontScaling={true}
-              autoCapitalize="none"
-              autoCompleteType="password"
-              autoCorrect={false}
-              editable={true}
-              onChangeText={[Function]}
-              onSubmitEditing={[Function]}
-              placeholder="Password"
-              rejectResponderTermination={true}
-              returnKeyType="join"
-              secureTextEntry={true}
-              style={
-                Object {
-                  "alignSelf": "center",
-                  "color": "black",
-                  "flex": 1,
-                  "fontSize": 18,
-                  "minHeight": 40,
-                }
-              }
-              testID="RNE__Input__text-input"
-              underlineColorAndroid="transparent"
-              value=""
-            />
-          </View>
-        </View>
-        <View
-          style={
-            Object {
-              "borderRadius": 3,
-            }
-          }
-        >
-          <TouchableOpacity
-            activeOpacity={0.3}
-            disabled={false}
-            onPress={[Function]}
-            testID="joinButton"
-          >
-            <View
-              style={
-                Object {
-                  "alignItems": "center",
-                  "backgroundColor": "green",
-                  "borderColor": "#2089dc",
-                  "borderRadius": 3,
-                  "borderWidth": 0,
-                  "flexDirection": "row",
-                  "justifyContent": "center",
-                  "marginVertical": 16,
-                  "padding": 8,
+                  "color": "white",
+                  "fontSize": 37.5,
+                  "paddingBottom": 1,
+                  "paddingTop": 2,
+                  "textAlign": "center",
                 }
               }
             >
-              <Text
-                style={
-                  Object {
-                    "color": "white",
-                    "fontSize": 18,
-                    "paddingBottom": 1,
-                    "paddingTop": 2,
-                    "textAlign": "center",
-                  }
-                }
-              >
-                Join
-              </Text>
-            </View>
-          </TouchableOpacity>
-        </View>
+              JOIN
+            </Text>
+          </View>
+        </TouchableOpacity>
       </View>
     </View>
-  </ScrollView>
-</SafeAreaView>
+  </View>
+</View>
 `;
