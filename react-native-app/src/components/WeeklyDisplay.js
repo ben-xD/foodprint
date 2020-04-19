@@ -1,11 +1,20 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { heightPercentageToDP as percentageHeight, widthPercentageToDP as percentageWidth } from 'react-native-responsive-screen';
-import { VictoryAxis, VictoryBar, VictoryChart, VictoryLegend, VictoryLine, VictoryStack } from 'victory-native';
+import {
+  VictoryAxis,
+  VictoryBar,
+  VictoryChart,
+  VictoryLabel,
+  VictoryLegend,
+  VictoryLine,
+  VictoryStack,
+} from 'victory-native';
 import React from 'react';
 import { Tooltip } from 'react-native-elements';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useCallback } from 'react';
 import { FOODPRINT_UNIT } from '../strings';
+import moment from 'moment';
 
 const TOOLTIP_CONTENT = 'This bar chart breaks down your weekly diet into the different food categories. ' +
   'Meat has the highest carbon footprint. The more sustainable food you eat, the shorter the bars get. Aim for that :).';
@@ -80,7 +89,13 @@ const WeeklyDisplay = ({ average, composition }) => {
           domain={(average === 0.0 && sum()[0] === 0.0) ? { y: [0, 1] } : {}}
         >
           <VictoryAxis dependentAxis orientation="left" offsetX={percentageWidth('15%')} />
-          <VictoryAxis crossAxis={false} label="Week" domain={[-5, 0.01]} tickFormat={(t) => (t === 0) ? 'Now' : ('s' + t)} />
+          <VictoryAxis
+              crossAxis={false}
+              label="Week"
+              domain={[-5, 0.01]}
+              tickFormat={(t) => moment().subtract(-t * 7, 'days').startOf('isoWeek').format('D MMM')}
+              axisLabelComponent = {<VictoryLabel dy={10}/>}
+          />
           <VictoryStack colorScale={['olivedrab', 'gold', 'skyblue', 'firebrick']}>
             <VictoryBar data={composition.plantBased} sortKey="periodNumber" x="periodNumber" y="avgCarbonFootprint" />
             <VictoryBar data={composition.eggsAndDairy} sortKey="periodNumber" x="periodNumber" y="avgCarbonFootprint" />
@@ -112,7 +127,7 @@ const WeeklyDisplay = ({ average, composition }) => {
 
 const styles = StyleSheet.create({
   scoreContainer: { flexDirection: 'row', zIndex: 100 },
-  graphContainer: { height: percentageHeight('38%'), justifyContent: 'center', marginVertical: 16 },
+  graphContainer: { height: percentageHeight('38%'), justifyContent: 'center', marginVertical: percentageHeight('2%') },
   contentContainer: { justifyContent: 'center', alignItems: 'center', margin: percentageWidth('4%') },
   score: { fontSize: 18, color: 'grey' },
   comparison: { fontSize: 12, marginLeft: percentageWidth('2%') },
