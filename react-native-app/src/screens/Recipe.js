@@ -1,4 +1,4 @@
-import { ActivityIndicator, Image, StyleSheet, Text, View, BackHandler } from 'react-native';
+import { ActivityIndicator, Image, StyleSheet, Text, BackHandler, KeyboardAvoidingView } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { widthPercentageToDP as percentageWidth, heightPercentageToDP as percentageHeight } from 'react-native-responsive-screen';
 import { Button, Input } from 'react-native-elements';
@@ -98,19 +98,24 @@ const Recipe = ({ navigation, route }) => {
 
 
   return (
-    <View style={styles.container}>
+      <KeyboardAvoidingView
+          behavior="padding"
+          style={styles.container}
+      >
+    {/*<View style={styles.container}>*/}
       <Image
         source={require('../images/full-smiley.png')}
         style={styles.image}
         resizeMode="contain"
       />
       <Text style={styles.text}>{RECIPE_GUIDANCE_TEXT}</Text>
-      <Input
-        value={input}
-        containerStyle={styles.input}
-        onChangeText={value => setInput(value)}
-        onSubmitEditing={handleSubmitRecipe}
-      />
+        <Input
+            value={input}
+            containerStyle={styles.input}
+            onChangeText={value => setInput(value)}
+            onSubmitEditing={handleSubmitRecipe}
+        />
+
       {(recipeLoading) ? (
         <ActivityIndicator style={styles.loading} />
       ) : (
@@ -122,7 +127,8 @@ const Recipe = ({ navigation, route }) => {
             onPress={handleSubmitRecipe}
           />
         )}
-    </View>
+    {/*</View>*/}
+    </KeyboardAvoidingView>
   );
 };
 
@@ -132,7 +138,7 @@ const styles = StyleSheet.create({
   text: { fontSize: percentageWidth('4%') },
   input: { marginVertical: percentageHeight('2%') },
   button: { backgroundColor: 'green', width: percentageWidth('30%'), height: 45 },
-  buttonContainer: { marginVertical: percentageHeight('2%') },
+  buttonContainer: { marginTop: percentageHeight('2%'), marginBottom: percentageHeight('9%') },
   buttonTitle: { fontSize: percentageWidth('5%') },
   loading: { height: 45, marginVertical: percentageHeight('2%') },
 });

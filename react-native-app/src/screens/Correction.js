@@ -1,11 +1,10 @@
-import { Image, View } from 'react-native';
+import {Image, KeyboardAvoidingView, View} from 'react-native';
 import { Input, Text, Button } from 'react-native-elements';
 import React, { useState, useEffect } from 'react';
 import LottieView from 'lottie-react-native';
 import { gql } from 'apollo-boost';
 import { useMutation } from '@apollo/react-hooks';
 import { StyleSheet } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
 import { widthPercentageToDP as percentageWidth, heightPercentageToDP as percentageHeight } from 'react-native-responsive-screen';
 import Snackbar from 'react-native-snackbar';
 
@@ -70,8 +69,7 @@ const Correction = ({ navigation }) => {
     <View style={styles.loading}>
       <LottieView source={require('../animations/18473-flying-avocado.json')} autoPlay loop />
     </View > : (
-      <View style={styles.container}>
-        <ScrollView keyboardShouldPersistTaps={'handled'} >
+      <KeyboardAvoidingView behavior="padding" style={styles.container}>
           <View style={styles.titleContainer}>
             <Text style={styles.title}>Sorry, we could not find your item.</Text>
           </View>
@@ -84,7 +82,6 @@ const Correction = ({ navigation }) => {
           <View style={styles.inputContainer}>
             <Input
               placeholder="Cucumber"
-              autoFocus
               onChangeText={value => setCorrectedName(value.toLowerCase())}
               onSubmitEditing={postCorrectionHandler}
             />
@@ -99,8 +96,7 @@ const Correction = ({ navigation }) => {
             containerStyle={styles.buttonContainer}
             titleStyle={styles.buttonTitle}
           />
-        </ScrollView>
-      </View >
+      </KeyboardAvoidingView >
     );
 };
 
@@ -109,16 +105,16 @@ const styles = StyleSheet.create({
     height: '100%',
     justifyContent: 'center',
   },
-  container: { flex: 1, justifyContent: 'center' },
-  titleContainer: { flex: 2, justifyContent: 'center', marginTop: percentageHeight('10%') },
+  container: { flex:1, marginHorizontal:percentageWidth('5%'), justifyContent: 'center', alignSelf:'center' },
+  titleContainer: { height:percentageHeight('10%'), justifyContent: 'center', alignItems:'center' },
   title: { textAlign: 'center', fontSize: percentageWidth('7%') },
-  imageContainer: { flex: 2.5, alignItems: 'center', justifyContent: 'center', marginTop: percentageHeight('5%') },
-  image: { height: percentageWidth('30%'), width: percentageWidth('30%') },
-  subtitleContainer: { flex: 1, justifyContent: 'center' },
-  subtitle: { fontSize: percentageWidth('5%'), textAlign: 'center', marginHorizontal: percentageWidth('5%') },
-  inputContainer: { flex: 1.5, margin: percentageWidth('5%') },
-  button: { backgroundColor: 'green', width: percentageWidth('30%'), height: 45, marginTop: percentageHeight('2%') },
-  buttonContainer: { marginVertical: percentageHeight('2%'), alignItems: 'center' },
+  imageContainer: { height:percentageHeight('30%'), alignItems: 'center', justifyContent: 'center' },
+  image: { height: percentageWidth('50%'), width: percentageWidth('50%') },
+  subtitleContainer: { height:percentageHeight('7%'), justifyContent: 'center' },
+  subtitle: { fontSize: percentageWidth('5%'), textAlign: 'center' },
+  inputContainer: { height:percentageHeight('10%'), alignItems:'center', justifyContent:'center' },
+  button: { backgroundColor: 'green', width: percentageWidth('30%'), height: 45 },
+  buttonContainer: { height:percentageHeight('10%'), alignItems: 'center', marginTop:percentageHeight('2%'), paddingBottom:percentageHeight('20%') },
 });
 
 export default Correction;
