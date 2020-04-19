@@ -8,3 +8,7 @@ venv
 # Vscode
 .vscode
 node_modules
+
+# OSX
+#
+**/.DS_Store
