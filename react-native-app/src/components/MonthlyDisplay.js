@@ -73,7 +73,7 @@ const MonthlyDisplay = ({ average, composition }) => {
           popover={<Text style={styles.tooltipContent}>{TOOLTIP_CONTENT}</Text>}
           backgroundColor={'#008000'}
           height={percentageHeight('30%')}
-          width={percentageWidth('65%')}
+          width={percentageWidth('80%')}
         >
           <MaterialCommunityIcons name="help-circle" color={'grey'} size={24} />
         </Tooltip>
@@ -105,7 +105,7 @@ const MonthlyDisplay = ({ average, composition }) => {
             itemsPerRow={2}
             gutter={percentageWidth('15%')}
             x={percentageWidth('15%')}
-            y={percentageHeight('40%')}
+            y={percentageHeight('41%')}
           />
           <VictoryLine data={[
             { x: 0, y: average },

@@ -76,7 +76,7 @@ const WeeklyDisplay = ({ average, composition }) => {
           </View>}
           backgroundColor={'#008000'}
           height={percentageHeight('30%')}
-          width={percentageWidth('65%')}
+          width={percentageWidth('80%')}
         >
           <MaterialCommunityIcons name="help-circle" color={'grey'} size={24} />
         </Tooltip>
@@ -109,7 +109,7 @@ const WeeklyDisplay = ({ average, composition }) => {
             itemsPerRow={2}
             gutter={percentageWidth('15%')}
             x={percentageWidth('15%')}
-            y={percentageHeight('40%')}
+            y={percentageHeight('41%')}
           />
           <VictoryLine data={[
             { x: 0, y: average },

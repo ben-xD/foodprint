@@ -193,7 +193,7 @@ const Feedback = ({ route, navigation }) => {
     <Tooltip popover={<Text style={styles.tooltipContent}>{FOODPRINT_UNIT_INFORMATION}</Text>}
       backgroundColor={'#008000'}
       height={percentageHeight('20%')}
-      width={percentageWidth('65%')}>
+      width={percentageWidth('85%')}>
       <MaterialCommunityIcons name="help-circle" color={'grey'} size={24} />
     </Tooltip>
   );
@@ -244,7 +244,7 @@ const Feedback = ({ route, navigation }) => {
       </ScrollView>
       {(overlayInfo) ? (
         <Overlay isVisible={isVisible} onBackdropPress={() => setVisibility(false)}>
-          <SafeAreaView style={styles.overlayContainer}>
+          <ScrollView style={styles.overlayContainer}>
             <Text style={styles.overlayText}>The carbon footprint of this recipe was obtained from the following ingredients:</Text>
             <FlatList
               data={overlayInfo.ingredients}
@@ -259,7 +259,7 @@ const Feedback = ({ route, navigation }) => {
             <Text style={styles.overlayHyperlink} onPress={() => Linking.openURL(overlayInfo.recipeUrl)}>{overlayInfo.recipeUrl}</Text>
             <Text style={styles.overlayFootnote}><Text style={{ fontWeight: 'bold' }}>Note</Text>: Ingredients used in very small quantity, which have a
                 negligeable carbon footprint, or which were unknown to our database are not shown. </Text>
-          </SafeAreaView>
+          </ScrollView>
         </Overlay>
       ) : <></>
       }
@@ -297,7 +297,7 @@ const styles = StyleSheet.create({
     marginBottom: percentageHeight('1%'),
   },
   overlayContainer: {
-    marginTop: percentageHeight('5%'),
+    marginVertical: percentageHeight('3%'),
     marginHorizontal: percentageWidth('3%'),
   },
   overlayText: {

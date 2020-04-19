@@ -41,7 +41,7 @@ const CarbonFootprintScore = ({ loading, error, historyReport }) => {
     <Tooltip popover={<Text style={styles.tooltipContent}>{TOOLTIP_MESSAGE}</Text>}
       backgroundColor={'#008000'}
       height={percentageHeight('40%')}
-      width={percentageWidth('65%')}>
+      width={percentageWidth('80%')}>
       <MaterialCommunityIcons name="help-circle" color={'grey'} size={24} />
     </Tooltip>
   );
