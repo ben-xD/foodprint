@@ -1,7 +1,6 @@
-// For a detailed explanation regarding each configuration property, visit:
-// https://jestjs.io/docs/en/configuration.html
+// https://jestjs.io/docs/en/configuration.html for more configs & descriptions
 
-// We use it as a preset, but also load it to allow
+// Use it as a preset, but also load it to allow
 const jestPreset = require('@testing-library/react-native/jest-preset');
 
 module.exports = Object.assign(jestPreset, {
@@ -11,10 +10,13 @@ module.exports = Object.assign(jestPreset, {
   ],
 
   // A list of paths to modules that run some code to configure or set up the testing framework before each test
-  setupFilesAfterEnv: ['./src/teardown.js', './__mocks__/@react-native-community/google-signin'],
+  setupFilesAfterEnv: [
+    './src/teardown.js',
+    './__mocks__/@react-native-community/google-signin',
+  ],
 
   // The test environment that will be used for testing
-  testEnvironment: 'node',
+  testEnvironment: 'jsdom',
 
   // The directory where Jest should output its coverage files
   coverageDirectory: 'coverage',
@@ -42,5 +44,6 @@ module.exports = Object.assign(jestPreset, {
     '<rootDir>/src/context',
     '<rootDir>/src/Client.js',
     'src/containers/BottomTabBar.js',
+    'src/strings.js',
   ],
 });

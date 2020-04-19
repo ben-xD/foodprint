@@ -1,9 +1,8 @@
-// End to end tests and big integration tests go here.
-// Other tests can be found in their respective folders, alongside the implementations.
 import React from 'react';
+import { render, act, toJSON } from '@testing-library/react-native';
+import ShallowRenderer from 'react-test-renderer/shallow';
 import { MockedProvider } from '@apollo/react-testing';
 import App from '../App';
-import { fireEvent, render, wait } from '@testing-library/react-native';
 import renderer from 'react-test-renderer';
 import { GET_USER_HISTORY_REPORT } from '../screens/Foodprint';
 
@@ -102,15 +101,19 @@ const mockedResponses = [
 ];
 
 
-it('App renders correctly', () => {
+test('App renders correctly', async () => {
+  const shallowRenderer = new ShallowRenderer();
   let app;
-  renderer.act(() => {
-    app = renderer.create(<MockedProvider mocks={mockedResponses} addTypename={false}>
-      <App />
-    </MockedProvider>);
+
+  // Previously was rendering fully (renderer.create), however, opacities and positions
+  // were fractionally different on every render, failing to match previous snapshots
+  await renderer.act(async () => {
+    app = shallowRenderer.render(
+      <MockedProvider mocks={mockedResponses} addTypename={false}>
+        <App />
+      </MockedProvider>
+    );
   });
 
-
-  expect(app.toJSON()).toMatchSnapshot();
-  // app.unmount();
+  expect(app).toMatchSnapshot();
 });

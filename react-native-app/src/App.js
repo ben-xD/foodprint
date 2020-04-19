@@ -49,16 +49,12 @@ const App = (props) => {
       webClientId: Config.WEB_CLIENT_ID,
     });
 
-    console.log({ props });
-
     Keyboard.dismiss();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     if (netInfo.details !== null && !netInfo.isConnected) {
-      console.log('Displaying "no internet connection" snack');
-      console.log({ netInfo });
       Snackbar.show({
         text: 'No internet connection, using offline data.',
         duration: Snackbar.LENGTH_LONG,

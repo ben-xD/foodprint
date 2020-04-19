@@ -21,8 +21,6 @@ const SignupOrRegister = ({ navigation }) => {
   useEffect(() => {
     if (netInfo.details !== null && !netInfo.isConnected) {
       setAllButtonsDisabled(true);
-      console.log('Displaying "no internet connection" snack');
-      console.log({ netInfo });
       Snackbar.show({
         text: 'No internet connection, you can\'t log in.',
         duration: Snackbar.LENGTH_INDEFINITE,

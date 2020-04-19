@@ -7,7 +7,7 @@ import { useMutation } from '@apollo/react-hooks';
 import Snackbar from 'react-native-snackbar';
 import { useNetInfo } from '@react-native-community/netinfo';
 
-const POST_RECIPE_MUTATION = gql`
+export const POST_RECIPE_MUTATION = gql`
 mutation($input: String!) {
   postRecipe(name: $input) {
      name

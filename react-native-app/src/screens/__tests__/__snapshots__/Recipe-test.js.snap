@@ -1,0 +1,255 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`matches snapshot when carbon footprint fails 1`] = `
+<View
+  style={
+    Object {
+      "alignItems": "center",
+      "flex": 1,
+      "justifyContent": "center",
+      "margin": 66.5,
+    }
+  }
+>
+  <Image
+    resizeMode="contain"
+    source={
+      Object {
+        "testUri": "../../../src/images/full-smiley.png",
+      }
+    }
+    style={
+      Object {
+        "height": 333.5,
+        "marginBottom": 66.5,
+      }
+    }
+  />
+  <Text
+    style={
+      Object {
+        "fontSize": 30,
+      }
+    }
+  >
+    Give us a recipe name or link, and we'll figure out the carbon footprint.
+  </Text>
+  <View
+    style={
+      Object {
+        "marginVertical": 26.5,
+        "paddingHorizontal": 10,
+        "width": "100%",
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "borderBottomWidth": 1,
+          "borderColor": "#86939e",
+          "flexDirection": "row",
+          "transform": Array [
+            Object {
+              "translateX": 0,
+            },
+          ],
+        }
+      }
+    >
+      <TextInput
+        allowFontScaling={true}
+        editable={true}
+        onChangeText={[Function]}
+        onSubmitEditing={[Function]}
+        rejectResponderTermination={true}
+        style={
+          Object {
+            "alignSelf": "center",
+            "color": "black",
+            "flex": 1,
+            "fontSize": 18,
+            "minHeight": 40,
+          }
+        }
+        testID="RNE__Input__text-input"
+        underlineColorAndroid="transparent"
+        value=""
+      />
+    </View>
+  </View>
+  <View
+    style={
+      Object {
+        "borderRadius": 3,
+        "marginVertical": 26.5,
+      }
+    }
+  >
+    <TouchableOpacity
+      activeOpacity={0.3}
+      disabled={false}
+      onPress={[Function]}
+    >
+      <View
+        style={
+          Object {
+            "alignItems": "center",
+            "backgroundColor": "green",
+            "borderColor": "#2089dc",
+            "borderRadius": 3,
+            "borderWidth": 0,
+            "flexDirection": "row",
+            "height": 45,
+            "justifyContent": "center",
+            "padding": 8,
+            "width": 225,
+          }
+        }
+      >
+        <Text
+          style={
+            Object {
+              "color": "white",
+              "fontSize": 37.5,
+              "paddingBottom": 1,
+              "paddingTop": 2,
+              "textAlign": "center",
+            }
+          }
+        >
+          GO
+        </Text>
+      </View>
+    </TouchableOpacity>
+  </View>
+</View>
+`;
+
+exports[`matches snapshot when carbon footprint success 1`] = `
+<View
+  style={
+    Object {
+      "alignItems": "center",
+      "flex": 1,
+      "justifyContent": "center",
+      "margin": 66.5,
+    }
+  }
+>
+  <Image
+    resizeMode="contain"
+    source={
+      Object {
+        "testUri": "../../../src/images/full-smiley.png",
+      }
+    }
+    style={
+      Object {
+        "height": 333.5,
+        "marginBottom": 66.5,
+      }
+    }
+  />
+  <Text
+    style={
+      Object {
+        "fontSize": 30,
+      }
+    }
+  >
+    Give us a recipe name or link, and we'll figure out the carbon footprint.
+  </Text>
+  <View
+    style={
+      Object {
+        "marginVertical": 26.5,
+        "paddingHorizontal": 10,
+        "width": "100%",
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "borderBottomWidth": 1,
+          "borderColor": "#86939e",
+          "flexDirection": "row",
+          "transform": Array [
+            Object {
+              "translateX": 0,
+            },
+          ],
+        }
+      }
+    >
+      <TextInput
+        allowFontScaling={true}
+        editable={true}
+        onChangeText={[Function]}
+        onSubmitEditing={[Function]}
+        rejectResponderTermination={true}
+        style={
+          Object {
+            "alignSelf": "center",
+            "color": "black",
+            "flex": 1,
+            "fontSize": 18,
+            "minHeight": 40,
+          }
+        }
+        testID="RNE__Input__text-input"
+        underlineColorAndroid="transparent"
+        value=""
+      />
+    </View>
+  </View>
+  <View
+    style={
+      Object {
+        "borderRadius": 3,
+        "marginVertical": 26.5,
+      }
+    }
+  >
+    <TouchableOpacity
+      activeOpacity={0.3}
+      disabled={false}
+      onPress={[Function]}
+    >
+      <View
+        style={
+          Object {
+            "alignItems": "center",
+            "backgroundColor": "green",
+            "borderColor": "#2089dc",
+            "borderRadius": 3,
+            "borderWidth": 0,
+            "flexDirection": "row",
+            "height": 45,
+            "justifyContent": "center",
+            "padding": 8,
+            "width": 225,
+          }
+        }
+      >
+        <Text
+          style={
+            Object {
+              "color": "white",
+              "fontSize": 37.5,
+              "paddingBottom": 1,
+              "paddingTop": 2,
+              "textAlign": "center",
+            }
+          }
+        >
+          GO
+        </Text>
+      </View>
+    </TouchableOpacity>
+  </View>
+</View>
+`;
