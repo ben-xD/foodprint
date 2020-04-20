@@ -2,13 +2,19 @@
 
 exports[`matches snapshot when carbon footprint fails 1`] = `
 <View
+  onLayout={[Function]}
   style={
-    Object {
-      "alignItems": "center",
-      "flex": 1,
-      "justifyContent": "center",
-      "margin": 66.5,
-    }
+    Array [
+      Object {
+        "alignItems": "center",
+        "flex": 1,
+        "justifyContent": "center",
+        "margin": 66.5,
+      },
+      Object {
+        "paddingBottom": 0,
+      },
+    ]
   }
 >
   <Image
@@ -83,7 +89,8 @@ exports[`matches snapshot when carbon footprint fails 1`] = `
     style={
       Object {
         "borderRadius": 3,
-        "marginVertical": 26.5,
+        "marginBottom": 120,
+        "marginTop": 26.5,
       }
     }
   >
@@ -129,13 +136,19 @@ exports[`matches snapshot when carbon footprint fails 1`] = `
 
 exports[`matches snapshot when carbon footprint success 1`] = `
 <View
+  onLayout={[Function]}
   style={
-    Object {
-      "alignItems": "center",
-      "flex": 1,
-      "justifyContent": "center",
-      "margin": 66.5,
-    }
+    Array [
+      Object {
+        "alignItems": "center",
+        "flex": 1,
+        "justifyContent": "center",
+        "margin": 66.5,
+      },
+      Object {
+        "paddingBottom": 0,
+      },
+    ]
   }
 >
   <Image
@@ -210,7 +223,8 @@ exports[`matches snapshot when carbon footprint success 1`] = `
     style={
       Object {
         "borderRadius": 3,
-        "marginVertical": 26.5,
+        "marginBottom": 120,
+        "marginTop": 26.5,
       }
     }
   >

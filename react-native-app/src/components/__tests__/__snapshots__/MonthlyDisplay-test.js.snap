@@ -221,10 +221,10 @@ exports[`match snapshot 1`] = `
     >
       <RNSVGSvgView
         align="xMidYMid"
-        bbHeight={667}
+        bbHeight={680.5}
         bbWidth={750}
         focusable={false}
-        height={667}
+        height={680.5}
         meetOrSlice={0}
         minX={0}
         minY={0}
@@ -244,12 +244,12 @@ exports[`match snapshot 1`] = `
             },
             Object {
               "flex": 0,
-              "height": 667,
+              "height": 680,
               "width": 750,
             },
           ]
         }
-        vbHeight={667}
+        vbHeight={680.5}
         vbWidth={750}
         width={750}
       >
@@ -4425,10 +4425,10 @@ A 0 0 0 0 1, 654.6819097085752, 427
       >
         <RNSVGSvgView
           align="xMidYMid"
-          bbHeight={667}
+          bbHeight={680.5}
           bbWidth={750}
           focusable={false}
-          height={667}
+          height={680.5}
           meetOrSlice={0}
           minX={0}
           minY={0}
@@ -4448,12 +4448,12 @@ A 0 0 0 0 1, 654.6819097085752, 427
               },
               Object {
                 "flex": 0,
-                "height": 667,
+                "height": 680,
                 "width": 750,
               },
             ]
           }
-          vbHeight={667}
+          vbHeight={680.5}
           vbWidth={750}
           width={750}
         >

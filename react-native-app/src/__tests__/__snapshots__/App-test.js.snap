@@ -47,7 +47,7 @@ exports[`App renders correctly 1`] = `
           onGestureCanceled={[Function]}
           onOpen={[Function]}
           onTransitionStart={[Function]}
-          pointerEvents="box-none"
+          pointerEvents="none"
           style={
             Object {
               "bottom": 0,
@@ -104,7 +104,7 @@ exports[`App renders correctly 1`] = `
                       "translateX": 0,
                     },
                     Object {
-                      "translateX": -8.835759014537349,
+                      "translateX": -64.32933841852577,
                     },
                   ],
                 }
@@ -265,7 +265,7 @@ exports[`App renders correctly 1`] = `
                   "flex": 1,
                   "transform": Array [
                     Object {
-                      "translateX": 720.5474699515422,
+                      "translateX": 535.5688719382474,
                     },
                     Object {
                       "translateX": 0,
@@ -287,7 +287,7 @@ exports[`App renders correctly 1`] = `
                       "height": 1,
                       "width": -1,
                     },
-                    "shadowOpacity": 0.01178101201938313,
+                    "shadowOpacity": 0.08577245122470102,
                     "shadowRadius": 5,
                     "top": 0,
                     "width": 3,
@@ -337,7 +337,7 @@ exports[`App renders correctly 1`] = `
                       <View
                         style={
                           Object {
-                            "flex": 1,
+                            "height": 533.5,
                             "justifyContent": "center",
                           }
                         }
@@ -359,7 +359,7 @@ exports[`App renders correctly 1`] = `
                       <View
                         style={
                           Object {
-                            "flex": 1,
+                            "height": 533.5,
                             "justifyContent": "center",
                             "paddingTop": 32,
                             "width": "80%",
@@ -602,7 +602,7 @@ exports[`App renders correctly 1`] = `
                       <View
                         style={
                           Object {
-                            "flex": 1,
+                            "height": 267,
                             "justifyContent": "center",
                           }
                         }
