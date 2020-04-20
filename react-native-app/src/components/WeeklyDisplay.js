@@ -83,9 +83,9 @@ const WeeklyDisplay = ({ average, composition }) => {
       </View>
       <View style={styles.graphContainer}>
         <VictoryChart
-          padding={{ top: percentageHeight('8%'), bottom: percentageHeight('18%'), left: percentageWidth('15%'), right: percentageWidth('10%') }}
+          padding={{ top: percentageHeight('8%'), bottom: percentageHeight('19%'), left: percentageWidth('15%'), right: percentageWidth('10%') }}
           domainPadding={percentageWidth('5%')}
-          height={percentageHeight('50%')}
+          height={percentageHeight('51%')}
           domain={(average === 0.0 && sum()[0] === 0.0) ? { y: [0, 1] } : {}}
         >
           <VictoryAxis dependentAxis orientation="left" offsetX={percentageWidth('15%')} />
@@ -93,7 +93,7 @@ const WeeklyDisplay = ({ average, composition }) => {
               crossAxis={false}
               label="Week"
               domain={[-5, 0.01]}
-              tickFormat={(t) => moment().subtract(-t * 7, 'days').startOf('isoWeek').format('D MMM')}
+              tickFormat={(t) => moment().subtract(-t * 7, 'days').startOf('isoWeek').format('D/MM')}
               axisLabelComponent = {<VictoryLabel dy={10}/>}
           />
           <VictoryStack colorScale={['olivedrab', 'gold', 'skyblue', 'firebrick']}>
