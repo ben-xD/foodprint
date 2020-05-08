@@ -1283,7 +1283,7 @@ exports[`match snapshot 1`] = `
                 }
               >
                 <RNSVGTSpan
-                  content="Nov"
+                  content="Dec"
                   dx={
                     Array [
                       0,
@@ -1437,7 +1437,7 @@ exports[`match snapshot 1`] = `
                 }
               >
                 <RNSVGTSpan
-                  content="Dec"
+                  content="Jan"
                   dx={
                     Array [
                       0,
@@ -1591,7 +1591,7 @@ exports[`match snapshot 1`] = `
                 }
               >
                 <RNSVGTSpan
-                  content="Jan"
+                  content="Feb"
                   dx={
                     Array [
                       0,
@@ -1745,7 +1745,7 @@ exports[`match snapshot 1`] = `
                 }
               >
                 <RNSVGTSpan
-                  content="Feb"
+                  content="Mar"
                   dx={
                     Array [
                       0,
@@ -1899,7 +1899,7 @@ exports[`match snapshot 1`] = `
                 }
               >
                 <RNSVGTSpan
-                  content="Mar"
+                  content="Apr"
                   dx={
                     Array [
                       0,
@@ -2053,7 +2053,7 @@ exports[`match snapshot 1`] = `
                 }
               >
                 <RNSVGTSpan
-                  content="Apr"
+                  content="May"
                   dx={
                     Array [
                       0,
