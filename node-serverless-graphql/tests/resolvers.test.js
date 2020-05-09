@@ -156,7 +156,7 @@ describe('testing resolvers', () => {
 
         const name = "https://www.bbcgoodfood.com/recipes/roasted-chickpea-wraps";
         let actual = await resolvers.Mutation.postRecipe(null, { name }, { dataSources, user });
-        let expected = { "carbonFootprintPerKg": 0.02, 
+        let expected = { "carbonFootprintPerKg": 1.63,
                         "imageUrl": "https://mock_url",
                         "name": "Roasted chickpea wraps", 
                         "sourceUrl": "https://www.bbcgoodfood.com/recipes/roasted-chickpea-wraps",
@@ -201,7 +201,7 @@ describe('testing resolvers', () => {
 
         const name = "mushroom risotto";
         let actual = await resolvers.Mutation.postRecipe(null, { name }, { dataSources, user });
-        let expected = { "carbonFootprintPerKg": 7.53, 
+        let expected = { "carbonFootprintPerKg": 3.73,
                         "imageUrl": "https://mock_url",
                         "name": "Mushroom Risotto",
                         "sourceUrl": "https://www.simplyrecipes.com/recipes/mushroom_risotto/",

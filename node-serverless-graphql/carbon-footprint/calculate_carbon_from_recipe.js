@@ -80,12 +80,14 @@ const getCarbonFootprintFromRecipe = async (dataSources, name) => {
 const calculate_total_carbon = async (dataSources, ingredients, ingredients_cf) => {
     let total_carbon = 0;
     let categories = "0000";
+    let total_recipe_weight = 0;
     for(let i = 0; i < ingredients.length; i++){
         let carbonResponse = await getCarbonFootprintFromNameUsedForRecipe(dataSources, ingredients[i].name);
         let carbon = carbonResponse.carbonFootprintPerKg;
         let new_categories = carbonResponse.categories;
         if(carbon !== null) {
             total_carbon += carbon * ingredients[i].amount;
+            total_recipe_weight += ingredients[i].amount;
             categories = await update_categories(categories, new_categories);
         }
         ingredients_cf.push({
@@ -96,7 +98,7 @@ const calculate_total_carbon = async (dataSources, ingredients, ingredients_cf) 
     }
 
     return {
-        carbonFootprintPerKg: +(total_carbon.toFixed(2)),
+        carbonFootprintPerKg: +((total_carbon/total_recipe_weight).toFixed(2)),
         categories: categories
     };
 
