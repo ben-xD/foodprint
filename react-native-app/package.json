@@ -42,6 +42,7 @@
     "graphql": "^14.6.0",
     "jest-when": "^2.7.1",
     "lottie-react-native": "^3.3.2",
+    "moment": "^2.24.0",
     "qs": "^6.9.1",
     "react": "16.9.0",
     "react-apollo": "^3.1.3",

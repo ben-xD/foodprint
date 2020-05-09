@@ -221,7 +221,7 @@ const Foodprint = ({ navigation, route }) => {
           selectedButtonStyle={{ backgroundColor: 'white' }}
           buttonStyle={{ backgroundColor: 'lightgrey' }}
         />
-        <View>
+        <View style={{marginBottom:percentageHeight('15%')}}>
           {renderFootprintChart()}
         </View>
       </ScrollView>

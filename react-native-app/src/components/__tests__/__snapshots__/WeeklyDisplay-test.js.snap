@@ -168,7 +168,7 @@ exports[`Empty history matches snapshot 1`] = `
                   "padding": 10,
                   "position": "absolute",
                   "top": 10,
-                  "width": 487.5,
+                  "width": 600,
                 }
               }
               testID="tooltipPopoverContainer"
@@ -196,7 +196,7 @@ exports[`Empty history matches snapshot 1`] = `
       Object {
         "height": 507,
         "justifyContent": "center",
-        "marginVertical": 16,
+        "marginVertical": 26.5,
       }
     }
   >
@@ -223,10 +223,10 @@ exports[`Empty history matches snapshot 1`] = `
     >
       <RNSVGSvgView
         align="xMidYMid"
-        bbHeight={667}
+        bbHeight={680.5}
         bbWidth={750}
         focusable={false}
-        height={667}
+        height={680.5}
         meetOrSlice={0}
         minX={0}
         minY={0}
@@ -246,12 +246,12 @@ exports[`Empty history matches snapshot 1`] = `
             },
             Object {
               "flex": 0,
-              "height": 667,
+              "height": 680,
               "width": 750,
             },
           ]
         }
-        vbHeight={667}
+        vbHeight={680.5}
         vbWidth={750}
         width={750}
       >
@@ -929,7 +929,7 @@ exports[`Empty history matches snapshot 1`] = `
               }
               dy={
                 Array [
-                  11.969999999999999,
+                  21.97,
                 ]
               }
               fill={4278190080}
@@ -1131,7 +1131,7 @@ exports[`Empty history matches snapshot 1`] = `
                 }
               >
                 <RNSVGTSpan
-                  content="s-5"
+                  content="30/03"
                   dx={
                     Array [
                       0,
@@ -1285,7 +1285,7 @@ exports[`Empty history matches snapshot 1`] = `
                 }
               >
                 <RNSVGTSpan
-                  content="s-4"
+                  content="6/04"
                   dx={
                     Array [
                       0,
@@ -1439,7 +1439,7 @@ exports[`Empty history matches snapshot 1`] = `
                 }
               >
                 <RNSVGTSpan
-                  content="s-3"
+                  content="13/04"
                   dx={
                     Array [
                       0,
@@ -1593,7 +1593,7 @@ exports[`Empty history matches snapshot 1`] = `
                 }
               >
                 <RNSVGTSpan
-                  content="s-2"
+                  content="20/04"
                   dx={
                     Array [
                       0,
@@ -1747,7 +1747,7 @@ exports[`Empty history matches snapshot 1`] = `
                 }
               >
                 <RNSVGTSpan
-                  content="s-1"
+                  content="27/04"
                   dx={
                     Array [
                       0,
@@ -1901,7 +1901,7 @@ exports[`Empty history matches snapshot 1`] = `
                 }
               >
                 <RNSVGTSpan
-                  content="Now"
+                  content="4/05"
                   dx={
                     Array [
                       0,
@@ -3422,10 +3422,10 @@ A 0 0 0 0 1, 654.6819097085752, 427
               vectorEffect={1}
               width={384.64534412955464}
               x={112.5}
-              y={533.5}
+              y={547}
             />
             <RNSVGPath
-              d="M 126.5, 547.5
+              d="M 126.5, 561
       m -5.6, 0
       a 5.6, 5.6 0 1,0 11.2,0
       a 5.6, 5.6 0 1,0 -11.2,0"
@@ -3468,7 +3468,7 @@ A 0 0 0 0 1, 654.6819097085752, 427
               y={0}
             />
             <RNSVGPath
-              d="M 294.0251012145749, 547.5
+              d="M 294.0251012145749, 561
       m -5.6, 0
       a 5.6, 5.6 0 1,0 11.2,0
       a 5.6, 5.6 0 1,0 -11.2,0"
@@ -3511,7 +3511,7 @@ A 0 0 0 0 1, 654.6819097085752, 427
               y={0}
             />
             <RNSVGPath
-              d="M 126.5, 578.405
+              d="M 126.5, 591.905
       m -5.6, 0
       a 5.6, 5.6 0 1,0 11.2,0
       a 5.6, 5.6 0 1,0 -11.2,0"
@@ -3554,7 +3554,7 @@ A 0 0 0 0 1, 654.6819097085752, 427
               y={0}
             />
             <RNSVGPath
-              d="M 294.0251012145749, 578.405
+              d="M 294.0251012145749, 591.905
       m -5.6, 0
       a 5.6, 5.6 0 1,0 11.2,0
       a 5.6, 5.6 0 1,0 -11.2,0"
@@ -3649,7 +3649,7 @@ A 0 0 0 0 1, 654.6819097085752, 427
               }
               y={
                 Array [
-                  547.5,
+                  561,
                 ]
               }
             >
@@ -3766,7 +3766,7 @@ A 0 0 0 0 1, 654.6819097085752, 427
               }
               y={
                 Array [
-                  547.5,
+                  561,
                 ]
               }
             >
@@ -3883,7 +3883,7 @@ A 0 0 0 0 1, 654.6819097085752, 427
               }
               y={
                 Array [
-                  578.405,
+                  591.905,
                 ]
               }
             >
@@ -4000,7 +4000,7 @@ A 0 0 0 0 1, 654.6819097085752, 427
               }
               y={
                 Array [
-                  578.405,
+                  591.905,
                 ]
               }
             >
@@ -4273,10 +4273,10 @@ A 0 0 0 0 1, 654.6819097085752, 427
       >
         <RNSVGSvgView
           align="xMidYMid"
-          bbHeight={667}
+          bbHeight={680.5}
           bbWidth={750}
           focusable={false}
-          height={667}
+          height={680.5}
           meetOrSlice={0}
           minX={0}
           minY={0}
@@ -4296,12 +4296,12 @@ A 0 0 0 0 1, 654.6819097085752, 427
               },
               Object {
                 "flex": 0,
-                "height": 667,
+                "height": 680,
                 "width": 750,
               },
             ]
           }
-          vbHeight={667}
+          vbHeight={680.5}
           vbWidth={750}
           width={750}
         >
@@ -4516,7 +4516,7 @@ exports[`match snapshot 1`] = `
                   "padding": 10,
                   "position": "absolute",
                   "top": 10,
-                  "width": 487.5,
+                  "width": 600,
                 }
               }
               testID="tooltipPopoverContainer"
@@ -4544,7 +4544,7 @@ exports[`match snapshot 1`] = `
       Object {
         "height": 507,
         "justifyContent": "center",
-        "marginVertical": 16,
+        "marginVertical": 26.5,
       }
     }
   >
@@ -4571,10 +4571,10 @@ exports[`match snapshot 1`] = `
     >
       <RNSVGSvgView
         align="xMidYMid"
-        bbHeight={667}
+        bbHeight={680.5}
         bbWidth={750}
         focusable={false}
-        height={667}
+        height={680.5}
         meetOrSlice={0}
         minX={0}
         minY={0}
@@ -4594,12 +4594,12 @@ exports[`match snapshot 1`] = `
             },
             Object {
               "flex": 0,
-              "height": 667,
+              "height": 680,
               "width": 750,
             },
           ]
         }
-        vbHeight={667}
+        vbHeight={680.5}
         vbWidth={750}
         width={750}
       >
@@ -5277,7 +5277,7 @@ exports[`match snapshot 1`] = `
               }
               dy={
                 Array [
-                  11.969999999999999,
+                  21.97,
                 ]
               }
               fill={4278190080}
@@ -5479,7 +5479,7 @@ exports[`match snapshot 1`] = `
                 }
               >
                 <RNSVGTSpan
-                  content="s-5"
+                  content="30/03"
                   dx={
                     Array [
                       0,
@@ -5633,7 +5633,7 @@ exports[`match snapshot 1`] = `
                 }
               >
                 <RNSVGTSpan
-                  content="s-4"
+                  content="6/04"
                   dx={
                     Array [
                       0,
@@ -5787,7 +5787,7 @@ exports[`match snapshot 1`] = `
                 }
               >
                 <RNSVGTSpan
-                  content="s-3"
+                  content="13/04"
                   dx={
                     Array [
                       0,
@@ -5941,7 +5941,7 @@ exports[`match snapshot 1`] = `
                 }
               >
                 <RNSVGTSpan
-                  content="s-2"
+                  content="20/04"
                   dx={
                     Array [
                       0,
@@ -6095,7 +6095,7 @@ exports[`match snapshot 1`] = `
                 }
               >
                 <RNSVGTSpan
-                  content="s-1"
+                  content="27/04"
                   dx={
                     Array [
                       0,
@@ -6249,7 +6249,7 @@ exports[`match snapshot 1`] = `
                 }
               >
                 <RNSVGTSpan
-                  content="Now"
+                  content="4/05"
                   dx={
                     Array [
                       0,
@@ -7770,10 +7770,10 @@ A 0 0 0 0 1, 654.6819097085752, 427
               vectorEffect={1}
               width={384.64534412955464}
               x={112.5}
-              y={533.5}
+              y={547}
             />
             <RNSVGPath
-              d="M 126.5, 547.5
+              d="M 126.5, 561
       m -5.6, 0
       a 5.6, 5.6 0 1,0 11.2,0
       a 5.6, 5.6 0 1,0 -11.2,0"
@@ -7816,7 +7816,7 @@ A 0 0 0 0 1, 654.6819097085752, 427
               y={0}
             />
             <RNSVGPath
-              d="M 294.0251012145749, 547.5
+              d="M 294.0251012145749, 561
       m -5.6, 0
       a 5.6, 5.6 0 1,0 11.2,0
       a 5.6, 5.6 0 1,0 -11.2,0"
@@ -7859,7 +7859,7 @@ A 0 0 0 0 1, 654.6819097085752, 427
               y={0}
             />
             <RNSVGPath
-              d="M 126.5, 578.405
+              d="M 126.5, 591.905
       m -5.6, 0
       a 5.6, 5.6 0 1,0 11.2,0
       a 5.6, 5.6 0 1,0 -11.2,0"
@@ -7902,7 +7902,7 @@ A 0 0 0 0 1, 654.6819097085752, 427
               y={0}
             />
             <RNSVGPath
-              d="M 294.0251012145749, 578.405
+              d="M 294.0251012145749, 591.905
       m -5.6, 0
       a 5.6, 5.6 0 1,0 11.2,0
       a 5.6, 5.6 0 1,0 -11.2,0"
@@ -7997,7 +7997,7 @@ A 0 0 0 0 1, 654.6819097085752, 427
               }
               y={
                 Array [
-                  547.5,
+                  561,
                 ]
               }
             >
@@ -8114,7 +8114,7 @@ A 0 0 0 0 1, 654.6819097085752, 427
               }
               y={
                 Array [
-                  547.5,
+                  561,
                 ]
               }
             >
@@ -8231,7 +8231,7 @@ A 0 0 0 0 1, 654.6819097085752, 427
               }
               y={
                 Array [
-                  578.405,
+                  591.905,
                 ]
               }
             >
@@ -8348,7 +8348,7 @@ A 0 0 0 0 1, 654.6819097085752, 427
               }
               y={
                 Array [
-                  578.405,
+                  591.905,
                 ]
               }
             >
@@ -8621,10 +8621,10 @@ A 0 0 0 0 1, 654.6819097085752, 427
       >
         <RNSVGSvgView
           align="xMidYMid"
-          bbHeight={667}
+          bbHeight={680.5}
           bbWidth={750}
           focusable={false}
-          height={667}
+          height={680.5}
           meetOrSlice={0}
           minX={0}
           minY={0}
@@ -8644,12 +8644,12 @@ A 0 0 0 0 1, 654.6819097085752, 427
               },
               Object {
                 "flex": 0,
-                "height": 667,
+                "height": 680,
                 "width": 750,
               },
             ]
           }
-          vbHeight={667}
+          vbHeight={680.5}
           vbWidth={750}
           width={750}
         >

@@ -91,12 +91,12 @@ const SignupOrRegister = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: { alignItems: 'center', height: '100%', justifyContent: 'center' },
-  logoContainer: { flex: 1, justifyContent: 'center' },
+  logoContainer: { height:percentageHeight('40%'), justifyContent: 'center' },
   logo: {
     height: percentageHeight('15%'),
     resizeMode: 'contain',
   },
-  bodyContainer: { width: '80%', flex: 1, justifyContent: 'center', paddingTop: 32 },
+  bodyContainer: { height: percentageHeight('40%'), width: '80%', justifyContent: 'center', paddingTop: 32 },
   title: { fontSize: percentageWidth('15%') },
   googleContainer: { marginVertical: percentageHeight('1%') },
   google: { backgroundColor: 'white' },
@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
   skipButtonContainer: { position: 'absolute', bottom: percentageHeight('5%') },
   skipButton: { color: 'grey', fontSize: percentageWidth('5%') },
   footerContainer: {
-    flex: 1, justifyContent: 'center',
+    height: percentageHeight('20%'), justifyContent: 'center',
   },
   footerText: { textAlign: 'center', marginHorizontal: 64 },
 });

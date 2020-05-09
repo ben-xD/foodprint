@@ -1,5 +1,5 @@
-import React, { useState, useRef } from 'react';
-import { View, ScrollView, StyleSheet, Image } from 'react-native';
+import React, { useState, useRef, useContext } from 'react';
+import { View, StyleSheet, Image, KeyboardAvoidingView } from 'react-native';
 import { Button, Text } from 'react-native-elements';
 import Password from '../components/Password';
 import Email from '../components/Email';
@@ -14,7 +14,7 @@ const Login = ({ navigation }) => {
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
 
-  const { signIn } = React.useContext(AuthContext);
+  const { signIn } = useContext(AuthContext);
 
   const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -42,7 +42,10 @@ const Login = ({ navigation }) => {
   };
 
   return (
-    <ScrollView keyboardShouldPersistTaps={'handled'} contentContainerStyle={styles.containerContent} style={styles.container}>
+      <KeyboardAvoidingView
+          behavior="padding"
+          style={styles.container}
+      >
       <View style={styles.logoContainer}>
         <Image style={styles.logo} source={require('../images/logoGreen.png')} />
       </View>
@@ -52,35 +55,36 @@ const Login = ({ navigation }) => {
           <Email nextFieldRef={passwordRef} setEmail={setEmail} email={email} />
           {passwordError === '' ? <></> : <Text>{passwordError}</Text>}
           <Password ref={passwordRef} submitHandler={loginHandler} setPassword={setPassword} password={password} />
+          <Button
+            testID="loginButton"
+            disabled={isPressed}
+            buttonStyle={styles.button}
+            containerStyle={styles.buttonContainer}
+            titleStyle={styles.buttonText}
+            title="LOGIN"
+            onPress={loginHandler}
+          />
         </View>
       </View>
-      <View style={styles.buttonContainer}>
-        <Button
-          disabled={isPressed}
-          buttonStyle={styles.button}
-          containerStyle={styles.loginButtonContainer}
-          titleStyle={styles.buttonText}
-          testID="loginButton"
-          title="LOGIN"
-          onPress={loginHandler}
-        />
-      </View>
-    </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: { width: '100%', height: '100%' },
-  logoContainer: { justifyContent: 'center', marginVertical: percentageHeight('5%') },
+  container: {
+    width: percentageWidth('100%'),
+    height: percentageHeight('80%'),
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  logoContainer: { height:percentageHeight('40%'), justifyContent: 'center' },
   logo: {
     height: percentageHeight('15%'),
     resizeMode: 'contain',
   },
-  containerContent: { alignItems: 'center' },
-  inputContainer: { width: '80%' },
-  buttonContainer: { width: '80%' },
-  loginButtonContainer: { marginVertical: 16 },
-  button: { backgroundColor: 'green' },
+  inputContainer: { width: percentageWidth('80%') },
+  button: { backgroundColor: 'green', marginVertical: percentageHeight('2%') },
+  buttonContainer: { marginBottom:percentageHeight('7%') },
   buttonText: { fontSize: percentageWidth('5%') },
 });
 

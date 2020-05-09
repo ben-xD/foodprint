@@ -1,11 +1,20 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { heightPercentageToDP as percentageHeight, widthPercentageToDP as percentageWidth } from 'react-native-responsive-screen';
-import { VictoryAxis, VictoryBar, VictoryChart, VictoryLegend, VictoryLine, VictoryStack } from 'victory-native';
+import {
+  VictoryAxis,
+  VictoryBar,
+  VictoryChart,
+  VictoryLabel,
+  VictoryLegend,
+  VictoryLine,
+  VictoryStack,
+} from 'victory-native';
 import React from 'react';
 import { Tooltip } from 'react-native-elements';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useCallback } from 'react';
 import { FOODPRINT_UNIT } from '../strings';
+import moment from 'moment';
 
 const TOOLTIP_CONTENT = 'This bar chart breaks down your weekly diet into the different food categories. ' +
   'Meat has the highest carbon footprint. The more sustainable food you eat, the shorter the bars get. Aim for that :).';
@@ -67,20 +76,26 @@ const WeeklyDisplay = ({ average, composition }) => {
           </View>}
           backgroundColor={'#008000'}
           height={percentageHeight('30%')}
-          width={percentageWidth('65%')}
+          width={percentageWidth('80%')}
         >
           <MaterialCommunityIcons name="help-circle" color={'grey'} size={24} />
         </Tooltip>
       </View>
       <View style={styles.graphContainer}>
         <VictoryChart
-          padding={{ top: percentageHeight('8%'), bottom: percentageHeight('18%'), left: percentageWidth('15%'), right: percentageWidth('10%') }}
+          padding={{ top: percentageHeight('8%'), bottom: percentageHeight('19%'), left: percentageWidth('15%'), right: percentageWidth('10%') }}
           domainPadding={percentageWidth('5%')}
-          height={percentageHeight('50%')}
+          height={percentageHeight('51%')}
           domain={(average === 0.0 && sum()[0] === 0.0) ? { y: [0, 1] } : {}}
         >
           <VictoryAxis dependentAxis orientation="left" offsetX={percentageWidth('15%')} />
-          <VictoryAxis crossAxis={false} label="Week" domain={[-5, 0.01]} tickFormat={(t) => (t === 0) ? 'Now' : ('s' + t)} />
+          <VictoryAxis
+              crossAxis={false}
+              label="Week"
+              domain={[-5, 0.01]}
+              tickFormat={(t) => moment().subtract(-t * 7, 'days').startOf('isoWeek').format('D/MM')}
+              axisLabelComponent = {<VictoryLabel dy={10}/>}
+          />
           <VictoryStack colorScale={['olivedrab', 'gold', 'skyblue', 'firebrick']}>
             <VictoryBar data={composition.plantBased} sortKey="periodNumber" x="periodNumber" y="avgCarbonFootprint" />
             <VictoryBar data={composition.eggsAndDairy} sortKey="periodNumber" x="periodNumber" y="avgCarbonFootprint" />
@@ -94,7 +109,7 @@ const WeeklyDisplay = ({ average, composition }) => {
             itemsPerRow={2}
             gutter={percentageWidth('15%')}
             x={percentageWidth('15%')}
-            y={percentageHeight('40%')}
+            y={percentageHeight('41%')}
           />
           <VictoryLine data={[
             { x: 0, y: average },
@@ -112,7 +127,7 @@ const WeeklyDisplay = ({ average, composition }) => {
 
 const styles = StyleSheet.create({
   scoreContainer: { flexDirection: 'row', zIndex: 100 },
-  graphContainer: { height: percentageHeight('38%'), justifyContent: 'center', marginVertical: 16 },
+  graphContainer: { height: percentageHeight('38%'), justifyContent: 'center', marginVertical: percentageHeight('2%') },
   contentContainer: { justifyContent: 'center', alignItems: 'center', margin: percentageWidth('4%') },
   score: { fontSize: 18, color: 'grey' },
   comparison: { fontSize: 12, marginLeft: percentageWidth('2%') },

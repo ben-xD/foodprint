@@ -1,11 +1,20 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { heightPercentageToDP as percentageHeight, widthPercentageToDP as percentageWidth } from 'react-native-responsive-screen';
-import { VictoryAxis, VictoryBar, VictoryChart, VictoryLegend, VictoryLine, VictoryStack } from 'victory-native';
+import {
+  VictoryAxis,
+  VictoryBar,
+  VictoryChart,
+  VictoryLabel,
+  VictoryLegend,
+  VictoryLine,
+  VictoryStack,
+} from 'victory-native';
 import React from 'react';
 import { Tooltip } from 'react-native-elements';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useCallback } from 'react';
 import { FOODPRINT_UNIT } from '../strings';
+import moment from 'moment';
 
 const TOOLTIP_CONTENT = 'This bar chart breaks down your monthly diet into the different food categories. ' +
   'Meat has the highest carbon footprint. The more sustainable food you eat, the shorter the bars get. Aim for that :)';
@@ -52,9 +61,6 @@ const MonthlyDisplay = ({ average, composition }) => {
   }, [sum]);
 
   const monthSign = ((changeSinceLastMonth() > 0) ? '+' : '');
-  // Calculate current month for x-axis display
-  const month = new Date().getMonth();
-  const monthList = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
   return (
     <View style={styles.contentContainer}>
@@ -67,20 +73,25 @@ const MonthlyDisplay = ({ average, composition }) => {
           popover={<Text style={styles.tooltipContent}>{TOOLTIP_CONTENT}</Text>}
           backgroundColor={'#008000'}
           height={percentageHeight('30%')}
-          width={percentageWidth('65%')}
+          width={percentageWidth('80%')}
         >
           <MaterialCommunityIcons name="help-circle" color={'grey'} size={24} />
         </Tooltip>
       </View>
       <View style={styles.graphContainer}>
         <VictoryChart
-          padding={{ top: percentageHeight('8%'), bottom: percentageHeight('18%'), left: percentageWidth('15%'), right: percentageWidth('10%') }}
+          padding={{ top: percentageHeight('8%'), bottom: percentageHeight('19%'), left: percentageWidth('15%'), right: percentageWidth('10%') }}
           domainPadding={percentageWidth('5%')}
-          height={percentageHeight('50%')}
+          height={percentageHeight('51%')}
           domain={(average === 0.0 && sum()[0] === 0.0) ? { y: [0, 1] } : {}}
         >
           <VictoryAxis dependentAxis orientation="left" offsetX={percentageWidth('15%')} />
-          <VictoryAxis crossAxis={false} label="Month" domain={[-5, 0.01]} tickFormat={(t) => ((month + t) >= 0) ? monthList[month + t] : monthList[month + t + 12]} />
+          <VictoryAxis
+              crossAxis={false}
+              label="Month" domain={[-5, 0.01]}
+              tickFormat={(t) => moment().subtract(-t, 'months').format('MMM')}
+              axisLabelComponent = {<VictoryLabel dy={10}/>}
+          />
           <VictoryStack colorScale={['olivedrab', 'gold', 'skyblue', 'firebrick']}>
             <VictoryBar data={composition.plantBased} sortKey="periodNumber" x="periodNumber" y="avgCarbonFootprint" />
             <VictoryBar data={composition.eggsAndDairy} sortKey="periodNumber" x="periodNumber" y="avgCarbonFootprint" />
@@ -94,7 +105,7 @@ const MonthlyDisplay = ({ average, composition }) => {
             itemsPerRow={2}
             gutter={percentageWidth('15%')}
             x={percentageWidth('15%')}
-            y={percentageHeight('40%')}
+            y={percentageHeight('41%')}
           />
           <VictoryLine data={[
             { x: 0, y: average },
@@ -112,7 +123,6 @@ const MonthlyDisplay = ({ average, composition }) => {
 
 
 const styles = StyleSheet.create({
-  messageContainer: { height: percentageHeight('4%') },
   scoreContainer: { zIndex: 100, flexDirection: 'row' },
   graphContainer: { height: percentageHeight('38%'), justifyContent: 'center', marginVertical: percentageHeight('2%') },
   contentContainer: { justifyContent: 'center', alignItems: 'center', margin: percentageWidth('4%') },

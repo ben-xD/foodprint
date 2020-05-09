@@ -1,13 +1,10 @@
-import React, { useState, useContext } from 'react';
-import { View, SafeAreaView, ScrollView, Image } from 'react-native';
+import React, { useState, useRef, useContext } from 'react';
+import { View, Image, KeyboardAvoidingView, StyleSheet } from 'react-native';
 import { Button, Text } from 'react-native-elements';
 import Password from '../components/Password';
 import Email from '../components/Email';
-import { useRef } from 'react';
-import { StyleSheet } from 'react-native';
 import AuthContext from '../context/AuthContext';
-import { heightPercentageToDP as percentageHeight } from 'react-native-responsive-screen';
-
+import { widthPercentageToDP as percentageWidth, heightPercentageToDP as percentageHeight } from 'react-native-responsive-screen';
 
 const Signup = () => {
   const [email, setEmail] = useState('');
@@ -25,7 +22,7 @@ const Signup = () => {
     setIsPressed(true);
 
     if (!EMAIL_REGEX.test(email)) {
-      setEmailError('That\s not a valid email.');
+      setEmailError('That is not a valid email.');
       setIsPressed(false);
       return;
     } else {
@@ -45,52 +42,50 @@ const Signup = () => {
   };
 
   return (
-    <SafeAreaView>
-      <ScrollView keyboardShouldPersistTaps={'handled'} contentContainerStyle={styles.containerContent} style={styles.container}>
-        <View style={styles.logoContainer}>
-          <Image style={styles.logo} source={require('../images/logoGreen.png')} />
+    <KeyboardAvoidingView
+      behavior="padding"
+      style={styles.container}
+    >
+      <View style={styles.logoContainer}>
+        <Image style={styles.logo} source={require('../images/logoGreen.png')} />
+      </View>
+      <View style={styles.inputContainer}>
+        <View>
+          {emailError === '' ? <></> : <Text>{emailError}</Text>}
+          <Email nextFieldRef={passwordRef} setEmail={setEmail} email={email} />
+          {passwordError === '' ? <></> : <Text>{passwordError}</Text>}
+          <Password ref={passwordRef} submitHandler={signUpHandler} setPassword={setPassword} password={password} />
+          <Button
+            testID={'joinButton'}
+            disabled={isPressed}
+            buttonStyle={styles.button}
+            containerStyle={styles.buttonContainer}
+            titleStyle={styles.buttonText}
+            title="JOIN"
+            onPress={signUpHandler}
+          />
         </View>
-        <View style={styles.inputContainer}>
-          <View>
-            {emailError === '' ? <></> : <Text>{emailError}</Text>}
-            <Email autoFocus nextFieldRef={passwordRef} setEmail={setEmail} email={email} />
-            {passwordError === '' ? <></> : <Text>{passwordError}</Text>}
-            <Password ref={passwordRef} submitHandler={signUpHandler} setPassword={setPassword} password={password} />
-            <Button
-              testID={'joinButton'}
-              disabled={isPressed}
-              buttonStyle={styles.button}
-              titleStyle={styles.buttonTitle}
-              title="Join"
-              onPress={signUpHandler}
-            />
-          </View>
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+      </View>
+    </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%',
-    height: '100%',
-  },
-  containerContent: {
+    width: percentageWidth('100%'),
+    height: percentageHeight('80%'),
+    justifyContent: 'center',
     alignItems: 'center',
   },
-  buttonTitle: {
-    fontSize: 18,
-  },
-  logoContainer: { justifyContent: 'center', marginVertical: percentageHeight('5%') },
+  logoContainer: { height: percentageHeight('40%'), justifyContent: 'center' },
   logo: {
     height: percentageHeight('15%'),
     resizeMode: 'contain',
   },
-  inputContainer: {
-    width: '80%',
-  },
-  button: { backgroundColor: 'green', marginVertical: 16 },
+  inputContainer: { width: percentageWidth('80%') },
+  button: { backgroundColor: 'green', marginVertical: percentageHeight('2%') },
+  buttonContainer: { marginBottom: percentageHeight('7%') },
+  buttonText: { fontSize: percentageWidth('5%') },
 });
 
 export default Signup;
