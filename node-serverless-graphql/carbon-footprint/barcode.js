@@ -53,7 +53,7 @@ const getCarbonFootprintFromBarcode_with_Tesco = async (dataSources, barcode) =>
     let product_name = cleanName(data.products[0].description);
 
 
-    //run getCarbonFootprintFromName (that might be very costly no?). if it returns a value that means the product
+    //run getCarbonFootprintFromName. if it returns a value that means the product
     //is in the db and thus return the value.
     let fromNameResult = await getCarbonFootprintFromName(dataSources, product_name);
     if (fromNameResult.carbonFootprintPerKg !== null)
@@ -207,26 +207,6 @@ const update_categories = async (categories, new_categories) => {
 
     return categories;
 };
-
-// //Sample barcodes of foods
-// let pickle = '61051936';
-// let paella = '84597752';
-// let orange = '50501316';
-// let orange_gtin = '02130270000000';
-// let tiramisu = '85053274';
-// let soap = '066947017';
-// let not_a_barcode = '000000';
-// let buckwheat = '60955456';
-// //let res = getCarbonFootprintFromBarcode(orange_gtin);
-
-// const getCarbonFootprintFromBarcode = async () => {
-
-//     let res = await getCarbonFootprintFromBarcodeAux(tiramisu);
-//     console.log(res);
-//     return res;
-
-// };
-
 
 module.exports = {
     getCarbonFootprintFromBarcode
