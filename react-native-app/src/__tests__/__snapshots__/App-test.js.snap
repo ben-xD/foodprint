@@ -104,7 +104,7 @@ exports[`App renders correctly 1`] = `
                       "translateX": 0,
                     },
                     Object {
-                      "translateX": -82.20822659127678,
+                      "translateX": -53.758212005842665,
                     },
                   ],
                 }
@@ -265,7 +265,7 @@ exports[`App renders correctly 1`] = `
                   "flex": 1,
                   "transform": Array [
                     Object {
-                      "translateX": 475.9725780290774,
+                      "translateX": 570.8059599805244,
                     },
                     Object {
                       "translateX": 0,
@@ -287,7 +287,7 @@ exports[`App renders correctly 1`] = `
                       "height": 1,
                       "width": -1,
                     },
-                    "shadowOpacity": 0.10961096878836904,
+                    "shadowOpacity": 0.07167761600779023,
                     "shadowRadius": 5,
                     "top": 0,
                     "width": 3,
