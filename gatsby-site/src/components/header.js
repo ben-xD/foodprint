@@ -9,9 +9,9 @@ const Header = ({ siteTitle }) => (
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav ml-auto">
-        <a class="nav-item nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
+        <a class="nav-item nav-link active" href="/">Home <span class="sr-only">(current)</span></a>
         <a class="nav-item nav-link" href="/team">Team</a>
-        <a class="nav-item nav-link" href="privacy-policy">Privacy Policy</a>
+        <a class="nav-item nav-link" href="/privacy-policy">Privacy Policy</a>
       </div>
     </div>
   </nav>
