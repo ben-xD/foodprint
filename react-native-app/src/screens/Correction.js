@@ -18,7 +18,7 @@ mutation PostCorrectionMutation($name: String!) {
 }
 `;
 
-const Correction = ({ navigation }) => {
+const Correction = ({ route, navigation }) => {
   const [loading, setLoading] = useState(false);
   const [correctedName, setCorrectedName] = useState('');
   const [postCorrection, { loading: correctionLoading, error: correctionError, data: correctionData }] = useMutation(POST_CORRECTION_MUTATION);
@@ -55,6 +55,7 @@ const Correction = ({ navigation }) => {
     if (correctionData && correctionData.postCorrection.carbonFootprintPerKg) {
       navigation.push('Feedback', {
         meal: {
+          uri: route.params.uri,
           score: correctionData.postCorrection.carbonFootprintPerKg,
           description: correctedName,
           item: correctionData.postCorrection.name, // Item returned from back-end

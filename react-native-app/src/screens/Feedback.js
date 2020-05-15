@@ -93,7 +93,7 @@ const Feedback = ({ route, navigation }) => {
       } else {
         // Previously setMeal here: pointless because we reset the meal
         // when the correction comes back, AND it causes a navigation glitch
-        navigation.navigate('Correction');
+        navigation.navigate('Correction', { uri: route.params.uri });
       }
     }
   }, [navigation, pictureData, route.params.uri]);
@@ -112,7 +112,7 @@ const Feedback = ({ route, navigation }) => {
           text: 'Our barcode database is currently impacted by the Coronavirus panic buying.',
           duration: Snackbar.LENGTH_LONG,
         });
-        navigation.navigate('Correction');
+        navigation.navigate('Correction', { uri: route.params.uri });
       }
     }
   }, [barcodeData, navigation]);

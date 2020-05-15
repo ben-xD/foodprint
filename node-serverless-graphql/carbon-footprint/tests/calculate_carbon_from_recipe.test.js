@@ -21,7 +21,7 @@ const dataSources = {
 
 describe('getCarbonFootprintFromRecipe (mocked dataSources)', () => {
 
-    test('Roasted chickpea wraps has co2 2.49', async () => {
+    test('Roasted chickpea wraps has co2/kg 10', async () => {
         jest.setTimeout(10000);
         // Mock up functions that call recipeAPI
         jest.spyOn(dataSources.recipeAPI, 'getDataFromLink').mockReturnValueOnce(true);
@@ -38,7 +38,7 @@ describe('getCarbonFootprintFromRecipe (mocked dataSources)', () => {
 
         const url = "https://www.bbcgoodfood.com/recipes/roasted-chickpea-wraps";
         let actual = await getCarbonFootprintFromRecipe(dataSources, url);
-        let expected = { "carbonFootprintPerKg": 0.1,   
+        let expected = { "carbonFootprintPerKg": 10,
                         "imageUrl": "https://mock.image.URL",
                         "ingredients": [{"amountKg": 0, "carbonFootprintPerKg": 10,"ingredient": "chickpeas"},
                                         {"amountKg": 0.01, "carbonFootprintPerKg": 10, "ingredient": "olive oil"},
@@ -58,7 +58,7 @@ describe('getCarbonFootprintFromRecipe (mocked dataSources)', () => {
         expect(actual).toEqual(expected);
     });
 
-    test('Muhsroom risotto has co2 7.53', async () => {
+    test('Muhsroom risotto has co2/kg 10', async () => {
         jest.setTimeout(10000);
         // Mock up functions that call recipeAPI
         jest.spyOn(dataSources.recipeAPI, 'getDataFromName').mockReturnValueOnce(true);
@@ -73,7 +73,7 @@ describe('getCarbonFootprintFromRecipe (mocked dataSources)', () => {
         jest.spyOn(dataSources.carbonAPI, 'getCfMultipleItems').mockReturnValue([{item: "mock", carbonpkilo: 10, categories: "1000"}]);
         const name = "mushroom risotto";
         let actual = await getCarbonFootprintFromRecipe(dataSources, name);
-        let expected = { "carbonFootprintPerKg": 2,   
+        let expected = { "carbonFootprintPerKg": 10,
                         "imageUrl": "https://another.mock.image.URL",
                         "ingredients": [{"amountKg": 0.03, "carbonFootprintPerKg": 10,"ingredient": "butter"},
                                         {"amountKg": 0.17, "carbonFootprintPerKg": 10, "ingredient": "oyster mushrooms"}],
