@@ -1,9 +1,9 @@
 {
-  "name": "gatsby-starter-default",
+  "name": "foodprint-gatsby-site",
   "private": true,
-  "description": "A simple starter to get up and developing quickly with Gatsby",
-  "version": "0.1.0",
-  "author": "Kyle Mathews <mathews.kyle@gmail.com>",
+  "description": "Website to show off Foodprint.",
+  "version": "1.0.0",
+  "author": "Foodprint",
   "dependencies": {
     "bootstrap": "^4.5.0",
     "gatsby": "^2.21.22",
