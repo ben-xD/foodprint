@@ -10,6 +10,10 @@ const Team = (props: PageProps) => (
     <SEO title="Team" />
     <h1>Team</h1>
     <p>👋 Hey there!</p>
+    <p>
+      <a href="mailto:support@orth.uk?subject=Foodprint%20Support">Email us</a>{" "}
+      with your questions or concerns.
+    </p>
   </Layout>
 )
 
