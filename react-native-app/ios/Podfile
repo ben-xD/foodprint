@@ -1,8 +1,8 @@
 platform :ios, '9.0'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
-target 'mobile' do
-  # Pods for mobile
+target 'Foodprint' do
+
   pod 'FBLazyVector', :path => "../node_modules/react-native/Libraries/FBLazyVector"
   pod 'FBReactNativeSpec', :path => "../node_modules/react-native/Libraries/FBReactNativeSpec"
   pod 'RCTRequired', :path => "../node_modules/react-native/Libraries/RCTRequired"
@@ -41,20 +41,17 @@ target 'mobile' do
   
 
 
-  target 'mobileTests' do
+  target 'FoodprintTests' do
     inherit! :search_paths
-    # Pods for testing
   end
 
   use_native_modules!
 end
 
-target 'mobile-tvOS' do
-  # Pods for mobile-tvOS
+target 'Foodprint-tvOS' do
 
-  target 'mobile-tvOSTests' do
+  target 'Foodprint-tvOSTests' do
     inherit! :search_paths
-    # Pods for testing
   end
 
 end

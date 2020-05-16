@@ -12,21 +12,46 @@ const IndexPage = ({ data }) => (
       Calculate the carbon footprint of the food you eat, and see how your diet
       affects the planet.
     </p>
-    <a href="https://play.google.com/store/apps/details?id=uk.orth.foodprint">
-      <Img
-        fixed={data.file.childImageSharp.fixed}
-        alt="Available on Google Play store button"
-      />
-    </a>
+    <div
+      className=""
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "flex-start",
+      }}
+    >
+      <a
+        style={{ lineHeight: 0, margin: 8 }}
+        href="https://play.google.com/store/apps/details?id=uk.orth.foodprint"
+      >
+        <Img
+          fixed={data.playStoreImage.childImageSharp.fixed}
+          alt="Available on Google Play Store button"
+        />
+      </a>
+      <a href="#" style={{ lineHeight: 0, margin: 8 }}>
+        <Img
+          fixed={data.iosStoreImage.childImageSharp.fixed}
+          alt="Available on iOS Store button"
+        />
+      </a>
+    </div>
     <div style={{ maxWidth: `300px`, marginBottom: `1.45rem` }}></div>
   </Layout>
 )
 
 export const query = graphql`
   query {
-    file(relativePath: { eq: "play-store.png" }) {
+    playStoreImage: file(relativePath: { eq: "play-store.png" }) {
       childImageSharp {
-        fixed {
+        fixed(quality: 100) {
+          ...GatsbyImageSharpFixed
+        }
+      }
+    }
+    iosStoreImage: file(relativePath: { eq: "ios-store.png" }) {
+      childImageSharp {
+        fixed(quality: 100) {
           ...GatsbyImageSharpFixed
         }
       }

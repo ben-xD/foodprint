@@ -5,12 +5,12 @@ import { PageProps, Link } from "gatsby"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 
-const SecondPage = (props: PageProps) => (
+const Team = (props: PageProps) => (
   <Layout>
-    <SEO title="Page two" />
+    <SEO title="Team" />
     <h1>Team</h1>
     <p>👋 Hey there!</p>
   </Layout>
 )
 
-export default SecondPage
+export default Team

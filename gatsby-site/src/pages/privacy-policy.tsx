@@ -4,9 +4,9 @@ import { PageProps } from "gatsby"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 
-const SecondPage = (props: PageProps) => (
+const PrivacyPolicy = (props: PageProps) => (
   <Layout>
-    <SEO title="Page two" />
+    <SEO title="Privacy Policy" />
     <h1>Privacy Policy</h1>
     <body>
       <p>
@@ -173,4 +173,4 @@ const SecondPage = (props: PageProps) => (
   </Layout>
 )
 
-export default SecondPage
+export default PrivacyPolicy
