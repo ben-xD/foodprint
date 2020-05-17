@@ -1,4 +1,4 @@
-import {Image, KeyboardAvoidingView, View} from 'react-native';
+import { Image, KeyboardAvoidingView, View } from 'react-native';
 import { Input, Text, Button } from 'react-native-elements';
 import React, { useState, useEffect } from 'react';
 import LottieView from 'lottie-react-native';
@@ -7,6 +7,8 @@ import { useMutation } from '@apollo/react-hooks';
 import { StyleSheet } from 'react-native';
 import { widthPercentageToDP as percentageWidth, heightPercentageToDP as percentageHeight } from 'react-native-responsive-screen';
 import Snackbar from 'react-native-snackbar';
+import { BackHandler } from 'react-native';
+import { CommonActions } from '@react-navigation/native';
 
 // GraphQL schema for correction mutation
 const POST_CORRECTION_MUTATION = gql`
@@ -35,6 +37,26 @@ const Correction = ({ route, navigation }) => {
   };
 
   useEffect(() => {
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 1,
+          routes: [
+            { name: 'Home' },
+            {
+              name: 'Camera',
+            },
+          ],
+        })
+      );
+
+      return true;
+    });
+
+    () => backHandler.remove();
+  }, [navigation]);
+
+  useEffect(() => {
     if (correctionError) {
       setLoading(false);
       Snackbar.show({
@@ -52,7 +74,8 @@ const Correction = ({ route, navigation }) => {
 
   // Respond to changes in correction data (following correction)
   useEffect(() => {
-    if (correctionData && correctionData.postCorrection.carbonFootprintPerKg) {
+
+    if (correctionData && correctionData.postCorrection.name && correctionData.postCorrection.carbonFootprintPerKg) {
       navigation.push('Feedback', {
         meal: {
           uri: route.params.uri,
@@ -62,6 +85,13 @@ const Correction = ({ route, navigation }) => {
         },
       });
       setLoading(false);
+    } else if (correctionData) {
+      setLoading(false);
+      Snackbar.show({
+        text: 'We couldn\'t find that product in our database.',
+        duration: Snackbar.LENGTH_SHORT,
+      }
+      );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [correctionData]);
@@ -71,32 +101,32 @@ const Correction = ({ route, navigation }) => {
       <LottieView source={require('../animations/18473-flying-avocado.json')} autoPlay loop />
     </View > : (
       <KeyboardAvoidingView behavior="padding" style={styles.container}>
-          <View style={styles.titleContainer}>
-            <Text style={styles.title}>Sorry, we could not find your item.</Text>
-          </View>
-          <View style={styles.imageContainer}>
-            <Image
-              style={styles.image}
-              source={{ uri: 'https://mir-s3-cdn-cf.behance.net/project_modules/disp/fc4a1059120725.5a15c9fa08f78.gif' }}
-            />
-          </View>
-          <View style={styles.inputContainer}>
-            <Input
-              placeholder="Cucumber"
-              onChangeText={value => setCorrectedName(value.toLowerCase())}
-              onSubmitEditing={postCorrectionHandler}
-            />
-          </View>
-          <View style={styles.subtitleContainer}>
-            <Text style={styles.subtitle}>Let us know what it was, so we can improve our app.</Text>
-          </View>
-          <Button
-            title="SUBMIT"
-            onPress={postCorrectionHandler}
-            buttonStyle={styles.button}
-            containerStyle={styles.buttonContainer}
-            titleStyle={styles.buttonTitle}
+        <View style={styles.titleContainer}>
+          <Text style={styles.title}>Sorry, we could not find your item.</Text>
+        </View>
+        <View style={styles.imageContainer}>
+          <Image
+            style={styles.image}
+            source={{ uri: 'https://mir-s3-cdn-cf.behance.net/project_modules/disp/fc4a1059120725.5a15c9fa08f78.gif' }}
           />
+        </View>
+        <View style={styles.inputContainer}>
+          <Input
+            placeholder="Cucumber"
+            onChangeText={value => setCorrectedName(value.toLowerCase())}
+            onSubmitEditing={postCorrectionHandler}
+          />
+        </View>
+        <View style={styles.subtitleContainer}>
+          <Text style={styles.subtitle}>Let us know what it was, so we can improve our app.</Text>
+        </View>
+        <Button
+          title="SUBMIT"
+          onPress={postCorrectionHandler}
+          buttonStyle={styles.button}
+          containerStyle={styles.buttonContainer}
+          titleStyle={styles.buttonTitle}
+        />
       </KeyboardAvoidingView >
     );
 };
@@ -106,16 +136,16 @@ const styles = StyleSheet.create({
     height: '100%',
     justifyContent: 'center',
   },
-  container: { flex:1, marginHorizontal:percentageWidth('5%'), justifyContent: 'center', alignSelf:'center' },
-  titleContainer: { height:percentageHeight('10%'), justifyContent: 'center', alignItems:'center' },
+  container: { flex: 1, marginHorizontal: percentageWidth('5%'), justifyContent: 'center', alignSelf: 'center' },
+  titleContainer: { height: percentageHeight('10%'), justifyContent: 'center', alignItems: 'center' },
   title: { textAlign: 'center', fontSize: percentageWidth('7%') },
-  imageContainer: { height:percentageHeight('30%'), alignItems: 'center', justifyContent: 'center' },
+  imageContainer: { height: percentageHeight('30%'), alignItems: 'center', justifyContent: 'center' },
   image: { height: percentageWidth('50%'), width: percentageWidth('50%') },
-  subtitleContainer: { height:percentageHeight('7%'), justifyContent: 'center' },
+  subtitleContainer: { height: percentageHeight('7%'), justifyContent: 'center' },
   subtitle: { fontSize: percentageWidth('5%'), textAlign: 'center' },
-  inputContainer: { height:percentageHeight('10%'), alignItems:'center', justifyContent:'center' },
+  inputContainer: { height: percentageHeight('10%'), alignItems: 'center', justifyContent: 'center' },
   button: { backgroundColor: 'green', width: percentageWidth('30%'), height: 45 },
-  buttonContainer: { height:percentageHeight('10%'), alignItems: 'center', marginTop:percentageHeight('2%'), paddingBottom:percentageHeight('20%') },
+  buttonContainer: { height: percentageHeight('10%'), alignItems: 'center', marginTop: percentageHeight('2%'), paddingBottom: percentageHeight('20%') },
 });
 
 export default Correction;

@@ -83,6 +83,7 @@ const Feedback = ({ route, navigation }) => {
 
   useEffect(() => {
     if (pictureData) {
+      console.log({ pictureData });
       if (pictureData.postPicture.name && pictureData.postPicture.carbonFootprintPerKg) {
         // If a name was found for the picture, display it
         setMeal({
@@ -109,13 +110,13 @@ const Feedback = ({ route, navigation }) => {
       } else {
         // If unknown name from barcode, go to error correction screen
         Snackbar.show({
-          text: 'Our barcode database is currently impacted by the Coronavirus panic buying.',
+          text: 'Oops, the barcode feature uses 3rd party services affected by the coronavirus.',
           duration: Snackbar.LENGTH_LONG,
         });
         navigation.navigate('Correction', { uri: route.params.uri });
       }
     }
-  }, [barcodeData, navigation]);
+  }, [barcodeData, navigation, route.params.uri]);
 
   // Add item to user history
   const addToHistory = async () => {

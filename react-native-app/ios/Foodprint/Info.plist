@@ -47,29 +47,19 @@
 	<true/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
-		<key>Allows Local Networking - Local Networking Exception Usage</key>
-		<dict/>
 		<key>NSAllowsArbitraryLoads</key>
 		<false/>
-		<key>NSExceptionDomains</key>
-		<dict>
-			<key>localhost</key>
-			<dict>
-				<key>NSExceptionAllowsInsecureHTTPLoads</key>
-				<true/>
-			</dict>
-		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>Your camera is needed to get the carbon footprint of food photos.</string>
+	<string>Your camera is needed to get the carbon footprint of food from pictures you take.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Your location to provide location dependent food sources.</string>
+	<string>Your location is needed to provide location dependent food sources.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Your location to provide location dependent food sources.</string>
+	<string>Your location is needed to provide location dependent food sources.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Your location to provide location dependent food sources.</string>
+	<string>Your location is needed to provide location dependent food sources.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Your location to provide location dependent food sources.</string>
+	<string>Your photo gallery is used to get the carbon footprint of food photos.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Your photo gallery is used to get the carbon footprint of food photos.</string>
 	<key>UIAppFonts</key>
