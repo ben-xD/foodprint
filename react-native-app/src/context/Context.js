@@ -7,6 +7,11 @@ import client from '../Client';
 
 import { YellowBox, Linking } from 'react-native';
 import Snackbar from 'react-native-snackbar';
+import appleAuth, {
+  AppleAuthRequestOperation,
+  AppleAuthRequestScope,
+  AppleAuthCredentialState,
+} from '@invertase/react-native-apple-authentication';
 
 // We ignore this warning because we want to pass a camera buffer object
 // This prevents persisting the state (after app restart) of the navigation at the next view
@@ -58,7 +63,7 @@ export const reducer = (prevState, action) => {
 };
 
 export const createActionCreators = (dispatch) => ({
-  restoreTokenFromLocalStorage: async () => {
+  restoreUserLoginStateFromLocalStorage: async () => {
     // Fetch the token from storage
     let userIsLoggedIn;
     try {
@@ -75,7 +80,7 @@ export const createActionCreators = (dispatch) => ({
       const token = await auth().currentUser.getIdToken();
       console.log({ token });
       await AsyncStorage.setItem('userIsLoggedIn', JSON.stringify(true));
-      dispatch({ type: 'SIGN_IN', token });
+      dispatch({ type: 'SIGN_IN' });
     } catch (error) {
       console.warn(error);
       Snackbar.show({
@@ -91,7 +96,7 @@ export const createActionCreators = (dispatch) => ({
       try {
         await firebase.auth().signInWithCredential(credential);
         await AsyncStorage.setItem('userIsLoggedIn', JSON.stringify(true));
-        dispatch({ type: 'SIGN_IN', accessToken });
+        dispatch({ type: 'SIGN_IN' });
       } catch (err) {
         Snackbar.show({
           text: 'Oops, something went wrong.',
@@ -100,6 +105,26 @@ export const createActionCreators = (dispatch) => ({
       }
     } catch (err) {
       console.warn(err);
+    }
+  },
+  signInWithApple: async () => {
+    const appleAuthRequestResponse = await appleAuth.performRequest({
+      requestedOperation: AppleAuthRequestOperation.LOGIN,
+      requestedScopes: [AppleAuthRequestScope.EMAIL, AppleAuthRequestScope.FULL_NAME],
+    });
+
+    const { identityToken, nonce } = appleAuthRequestResponse;
+
+    if (identityToken) {
+      const appleCredential = firebase.auth.AppleAuthProvider.credential(identityToken, nonce);
+      await firebase.auth().signInWithCredential(appleCredential);
+      await AsyncStorage.setItem('userIsLoggedIn', JSON.stringify(true));
+      dispatch({ type: 'SIGN_IN' });
+    } else {
+      Snackbar.show({
+        text: 'Oops, something went wrong.',
+        duration: Snackbar.LENGTH_LONG,
+      });
     }
   },
   signIn: async ({ email, password }) => {

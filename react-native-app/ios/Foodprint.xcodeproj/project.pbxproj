@@ -79,6 +79,7 @@
 		B53BC253246FDF6B0046E285 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Foodprint/Info.plist; sourceTree = "<group>"; };
 		B53BC259246FE0DC0046E285 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Foodprint/Images.xcassets; sourceTree = "<group>"; };
 		B53BC25C246FE6610046E285 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = "Launch Screen.storyboard"; path = "Foodprint/Launch Screen.storyboard"; sourceTree = "<group>"; };
+		B5602D7E24712B9200DCCC4F /* Foodprint.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Foodprint.entitlements; path = Foodprint/Foodprint.entitlements; sourceTree = "<group>"; };
 		B5726B1E246FDE0E007D7938 /* foodprint-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "foodprint-Bridging-Header.h"; sourceTree = "<group>"; };
 		B58BB833243E4EC20053CCC0 /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
 		B5C9325723E74ACC00A27A00 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -153,6 +154,7 @@
 		13B07FAE1A68108700A75B9A /* Foodprint */ = {
 			isa = PBXGroup;
 			children = (
+				B5602D7E24712B9200DCCC4F /* Foodprint.entitlements */,
 				B53BC259246FE0DC0046E285 /* Images.xcassets */,
 				B53BC24B246FDF400046E285 /* AppDelegate.h */,
 				B53BC24C246FDF400046E285 /* AppDelegate.m */,
@@ -749,7 +751,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 1.1;
+				CODE_SIGN_ENTITLEMENTS = Foodprint/Foodprint.entitlements;
+				CURRENT_PROJECT_VERSION = 1.2;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = DXY3Q8PYGP;
 				INFOPLIST_FILE = Foodprint/Info.plist;
@@ -775,7 +778,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 1.1;
+				CODE_SIGN_ENTITLEMENTS = Foodprint/Foodprint.entitlements;
+				CURRENT_PROJECT_VERSION = 1.2;
 				DEVELOPMENT_TEAM = DXY3Q8PYGP;
 				INFOPLIST_FILE = Foodprint/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

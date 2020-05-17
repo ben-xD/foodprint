@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, SafeAreaView, StyleSheet, Image } from 'react-native';
+import { View, SafeAreaView, StyleSheet, Image, Platform } from 'react-native';
 import { Text, Button } from 'react-native-elements';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import AuthContext from '../context/AuthContext';
@@ -7,15 +7,17 @@ import { widthPercentageToDP as percentageWidth, heightPercentageToDP as percent
 import { useNetInfo } from '@react-native-community/netinfo';
 import { useEffect } from 'react';
 import Snackbar from 'react-native-snackbar';
+import SignInWithAppleButton from '../components/SignInWithAppleButton';
+import appleAuth from '@invertase/react-native-apple-authentication';
 
-const DAILY_MESSAGE = 'Wash your hands often - Foodprint Team';
+const DAILY_MESSAGE = 'Wash your hands before eating - Foodprint';
 
 const greenLogo = require('../images/logoGreen.png');
 const logo = require('../images/logo.png');
 
 const SignupOrRegister = ({ navigation }) => {
   const netInfo = useNetInfo();
-  const { signInWithGoogle } = React.useContext(AuthContext);
+  const { signInWithGoogle, signInWithApple } = React.useContext(AuthContext);
   const [allButtonsDisabled, setAllButtonsDisabled] = useState(false);
 
   useEffect(() => {
@@ -34,8 +36,23 @@ const SignupOrRegister = ({ navigation }) => {
 
   const handleSignInWithGoogle = async () => {
     setAllButtonsDisabled(true);
-    await signInWithGoogle();
-    setAllButtonsDisabled(false);
+    setAllButtonsDisabled(true);
+    try {
+      await signInWithGoogle();
+    }
+    finally {
+      setAllButtonsDisabled(false);
+    }
+  };
+
+  const handleSignInWithApple = async () => {
+    setAllButtonsDisabled(true);
+    try {
+      await signInWithApple();
+    }
+    finally {
+      setAllButtonsDisabled(false);
+    }
   };
 
   return (
@@ -44,6 +61,7 @@ const SignupOrRegister = ({ navigation }) => {
         <Image style={styles.logo} source={allButtonsDisabled ? logo : greenLogo} />
       </View>
       <View style={styles.bodyContainer}>
+        {appleAuth.isSupported ? <SignInWithAppleButton disabled={allButtonsDisabled} handleSignInWithApple={handleSignInWithApple} /> : null}
         <Button
           disabled={allButtonsDisabled}
           iconContainerStyle={styles.googleIconContainer}
@@ -91,7 +109,7 @@ const SignupOrRegister = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: { alignItems: 'center', height: '100%', justifyContent: 'center' },
-  logoContainer: { height:percentageHeight('40%'), justifyContent: 'center' },
+  logoContainer: { height: percentageHeight('40%'), justifyContent: 'center' },
   logo: {
     height: percentageHeight('15%'),
     resizeMode: 'contain',

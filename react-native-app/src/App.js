@@ -22,6 +22,7 @@ import Foodprint from './screens/Foodprint';
 import Recipe from './screens/Recipe';
 import { Platform, Keyboard } from 'react-native';
 import Onboarding from './screens/Onboarding';
+import appleAuth from '@invertase/react-native-apple-authentication';
 import { enableScreens } from 'react-native-screens';
 
 // Allows OS to optimize memory usage for screens that are under the view stack
@@ -49,7 +50,6 @@ const App = (props) => {
     });
 
     Keyboard.dismiss();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -63,7 +63,15 @@ const App = (props) => {
 
   const [state, dispatch] = React.useReducer(reducer, initialState);
   const authContext = React.useMemo(() => createActionCreators(dispatch), []);
-  React.useMemo(() => authContext.restoreTokenFromLocalStorage(), [authContext]);
+  React.useMemo(() => {
+    authContext.restoreUserLoginStateFromLocalStorage();
+    // onCredentialRevoked returns a function that will remove the event listener. useEffect will call this function when the component unmounts
+    if (appleAuth.isSupported) {
+      appleAuth.onCredentialRevoked(async () => {
+        authContext.signOut();
+      });
+    }
+  }, [authContext]);
 
   const renderScreens = () => {
     if (state.userIsLoggedIn) {

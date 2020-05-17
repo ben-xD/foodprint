@@ -47,6 +47,8 @@
 	<true/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
+		<key>Allows Local Networking - Local Networking Exception Usage</key>
+		<dict/>
 		<key>NSAllowsArbitraryLoads</key>
 		<false/>
 		<key>NSExceptionDomains</key>
@@ -54,24 +56,22 @@
 			<key>localhost</key>
 			<dict>
 				<key>NSExceptionAllowsInsecureHTTPLoads</key>
-				<false/>
+				<true/>
 			</dict>
 		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>$(PRODUCT_NAME) would like to use your camera</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>$(PRODUCT_NAME) needs your location to provide location dependent food sources.</string>
+	<string>Your camera is needed to get the carbon footprint of food photos.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>$(PRODUCT_NAME) needs your location to provide location dependent food sources.</string>
+	<string>Your location to provide location dependent food sources.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>$(PRODUCT_NAME) needs your location to provide location dependent food sources.</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>$(PRODUCT_NAME) would like to use your microphone (for videos)</string>
+	<string>Your location to provide location dependent food sources.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Your location to provide location dependent food sources.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>$(PRODUCT_NAME) would like to save photos to your photo gallery</string>
+	<string>Your location to provide location dependent food sources.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>$(PRODUCT_NAME) would like access to your photo gallery</string>
+	<string>Your photo gallery is used to get the carbon footprint of food photos.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>
@@ -102,6 +102,8 @@
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
