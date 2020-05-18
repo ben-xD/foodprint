@@ -1,7 +1,7 @@
 import React from "react"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
-import { graphql } from "gatsby"
+import { graphql, Link } from "gatsby"
 import Img from "gatsby-image"
 import "./index.css"
 import Flow from "../components/home_page/flow"
@@ -21,14 +21,14 @@ const IndexPage = ({ data }) => (
         </a>
       </h1>
       <h1>
-        <a
-          href="https://www.youtube.com/watch?v=B0_mkVJN1HE&feature=youtu.be"
+        <Link
+          to="/video"
           type="button"
-          className="btn btn-primary btn-lg"
+          className="btn btn-primary btn-lg disabled"
           role="button"
         >
-          Watch the video
-        </a>
+          Watch the video (coming soon)
+        </Link>
       </h1>
     </div>
     <Features />
