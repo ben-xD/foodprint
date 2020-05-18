@@ -1,20 +1,46 @@
 import PropTypes from "prop-types"
 import React from "react"
+import Img from "gatsby-image"
+import { StaticQuery, graphql, Link } from "gatsby"
 
-const Header = ({ siteTitle }) => (
-  <nav class="navbar navbar-expand-md navbar-light bg-light mb-3">
-    <a class="navbar-brand" href="/">{siteTitle}</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav ml-auto">
-        <a class="nav-item nav-link active" href="/">Home <span class="sr-only">(current)</span></a>
-        <a class="nav-item nav-link" href="/privacy-policy">Privacy Policy</a>
+const Header = ({ siteTitle, data }) => {
+  console.log({ data })
+
+  const getLogo = () => (
+    <StaticQuery
+      query={graphql`
+        query {
+          logo: file(relativePath: { eq: "favicon.png" }) {
+            childImageSharp {
+              fluid(quality: 100, maxWidth: 250) {
+                ...GatsbyImageSharpFluid
+              }
+            }
+          }
+        }
+      `}
+      render={data => (
+        <Img fadeIn={true} style={{ margin: "0 12px 0 0", paddingBottom: 0, width: 40, display: "flex" }} fluid={data.logo.childImageSharp.fluid} alt="Foodprint Logo" />
+      )}
+    />
+  )
+
+  return (
+    <nav class="navbar navbar-expand-md navbar-light bg-light mb-3">
+      <Link style={{ display: 'flex', padding: 0, alignItems: "center" }} class="navbar-brand" activeClassName="navbar-brand" to="/">{getLogo()}{siteTitle}</Link>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav ml-auto">
+          {/* <Link partiallyActive class="nav-item nav-link" activeClassName="nav-item nav-link active" to={"/team"}>Team</Link> */}
+          <a class="nav-item nav-link disabled" href="https://github.com/ben-xD/foodprint/">GitHub (coming soon)</a>
+          <Link partiallyActive class="nav-item nav-link" activeClassName="nav-item nav-link active" to={"/privacy-policy"}>Privacy Policy</Link>
+        </div>
       </div>
-    </div>
-  </nav>
-)
+    </nav>
+  )
+}
 
 Header.propTypes = {
   siteTitle: PropTypes.string,
@@ -23,5 +49,6 @@ Header.propTypes = {
 Header.defaultProps = {
   siteTitle: ``,
 }
+
 
 export default Header
