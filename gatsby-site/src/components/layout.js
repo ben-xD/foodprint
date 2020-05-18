@@ -42,7 +42,7 @@ const Layout = ({ children }) => {
         {children}
       </main>
       <footer class="mb-3" style={{ textAlign: "center" }}>
-        © {new Date().getFullYear()} Foodprint
+        © {new Date().getFullYear()} Foodprint.
         </footer>
     </ div>
   )

@@ -4,52 +4,45 @@ import SEO from "../components/seo"
 import { graphql } from "gatsby"
 import Img from "gatsby-image"
 import "./index.css"
+import Flow from "../components/home_page/flow"
+import Features from "../components/home_page/features"
 
 const IndexPage = ({ data }) => (
   <Layout>
     <SEO title="Home" />
-    <h1>Foodprint: eat responsibly to save the planet 🌍</h1>
-    <p>
-      <i>
+    <div className="text-center my-5">
+      <h1 className="display-3 text-center mx-auto" style={{ maxWidth: 600 }}>
+        Eat responsibly. Save the 🌍.
+      </h1>
+      <h1 className="lead text-center mx-auto" style={{ maxWidth: 400 }}>
         Food production is responsible for{" "}
         <a href="https://ourworldindata.org/food-ghg-emissions">
-          {" "}
-          26% of global greenhouse gas emissions.{" "}
+          26% of global greenhouse gas emissions.
         </a>
-      </i>
-    </p>
-    <div id="foodprint-description">
-      <p>
-        You have the power to decide how much CO<sub>2</sub> gets produced by
-        the food industry. Choose your food responsibly, save the planet.
-        Foodprint is here to help you in that mission ✅
-      </p>
-      <p>
-        <ul>
-          <li>
-            Simply take a picture of raw food or scan a barcode of processed
-            food to see its carbon footprint{" "}
-          </li>
-          <li>
-            Analyse your food consumption habits and identify ways to reduce
-            your CO<sub>2</sub> emissions
-          </li>
-          <li>
-            View the CO<sub>2</sub> impact of your new recipes even before you
-            decide to cook them
-          </li>
-        </ul>
-      </p>
-      <p>Join us on the mission! 🚀</p>
+      </h1>
+      <h1>
+        <a
+          href="https://www.youtube.com/watch?v=B0_mkVJN1HE&feature=youtu.be"
+          type="button"
+          className="btn btn-primary btn-lg"
+          role="button"
+        >
+          Watch the video
+        </a>
+      </h1>
     </div>
+    <Features />
+    <Flow />
     <div
-      className=""
+      className="text-center my-5"
       style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "flex-start",
+        backgroundSize: "100%",
       }}
     >
+      <p className="display-4">
+        <strong>Join us</strong> on the mission.
+      </p>
+
       <a
         style={{ lineHeight: 0, margin: 8 }}
         href="https://play.google.com/store/apps/details?id=uk.orth.foodprint"
@@ -69,9 +62,9 @@ const IndexPage = ({ data }) => (
         />
       </a>
     </div>
-    <div id="developers">
+    <div className="text-center mx-auto" style={{ maxWidth: 600 }}>
       <p>
-        Developed by{" "}
+        <strong>Built by</strong>{" "}
         <a
           href="https://www.linkedin.com/in/alba-garc%C3%ADa-rey-0596bb109/"
           target="_blank"
@@ -104,8 +97,12 @@ const IndexPage = ({ data }) => (
         <a href="https://www.linkedin.com/in/sandercoates/" target="_blank">
           Sander Coates
         </a>
+        , <strong>for the environment.</strong>
       </p>
-      <p>Supervised by Dr Anandha Gopalan @ Imperial College London</p>
+      <p>
+        <strong>Supervised by</strong> Dr Anandha Gopalan @ Imperial College
+        London
+      </p>
     </div>
     <div style={{ maxWidth: `300px`, marginBottom: `1.45rem` }}></div>
   </Layout>
