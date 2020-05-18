@@ -86,7 +86,14 @@ const IndexPage = ({ data }) => (
         <a href="https://www.linkedin.com/in/daniel-hausner/" target="_blank">
           Daniel Hausner
         </a>
-        , Laura Caune,{" "}
+        ,{" "}
+        <a
+          href="https://www.linkedin.com/in/laura-caune-4a143a1aa/"
+          target="_blank"
+        >
+          Laura Caune
+        </a>
+        ,{" "}
         <a
           href="https://www.linkedin.com/in/sandrine-chausson/"
           target="_blank"
