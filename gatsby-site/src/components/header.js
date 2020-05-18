@@ -27,7 +27,7 @@ const Header = ({ siteTitle, data }) => {
 
   return (
     <nav class="navbar navbar-expand-md navbar-light bg-light mb-3">
-      <a style={{ display: 'flex', padding: 0, alignItems: "center" }} class="navbar-brand" href="/">{getLogo()}{siteTitle}</a>
+      <Link style={{ display: 'flex', padding: 0, alignItems: "center" }} class="navbar-brand" activeClassName="navbar-brand" to="/">{getLogo()}{siteTitle}</Link>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
