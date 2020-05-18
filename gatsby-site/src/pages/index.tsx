@@ -10,7 +10,7 @@ const IndexPage = ({ data }) => (
   <Layout>
     <SEO title="Home" />
     <div className="text-center my-5">
-      <h1 className="display-3 text-center mx-auto" style={{ maxWidth: 600 }}>
+      <h1 className="display-4 text-center mx-auto" style={{ maxWidth: 500 }}>
         Eat responsibly. Save the 🌍.
       </h1>
       <h1 className="lead text-center mx-auto" style={{ maxWidth: 400 }}>
