@@ -71,7 +71,7 @@ const IndexPage = ({ data }) => (
     </div>
     <div id="developers">
       <p>
-        Developed by:{" "}
+        Developed by{" "}
         <a
           href="https://www.linkedin.com/in/alba-garc%C3%ADa-rey-0596bb109/"
           target="_blank"
