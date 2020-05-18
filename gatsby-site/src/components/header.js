@@ -33,8 +33,6 @@ const Header = ({ siteTitle, data }) => {
       </button>
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav ml-auto">
-          {/* <a class="nav-item nav-link active" href="/">Home <span class="sr-only">(current)</span></a> */}
-          <Link class="nav-item nav-link" activeClassName="nav-item nav-link active" to={"/"}>Home</Link>
           <Link class="nav-item nav-link" activeClassName="nav-item nav-link active" to={"/team"}>Team</Link>
           <Link class="nav-item nav-link" activeClassName="nav-item nav-link active" to={"/privacy-policy"}>Privacy Policy</Link>
         </div>
