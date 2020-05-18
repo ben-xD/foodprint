@@ -34,6 +34,7 @@ const Header = ({ siteTitle, data }) => {
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav ml-auto">
           <Link partiallyActive class="nav-item nav-link" activeClassName="nav-item nav-link active" to={"/team"}>Team</Link>
+          <a class="nav-item nav-link disabled" href="https://github.com/ben-xD/foodprint/">GitHub (coming soon)</a>
           <Link partiallyActive class="nav-item nav-link" activeClassName="nav-item nav-link active" to={"/privacy-policy"}>Privacy Policy</Link>
         </div>
       </div>
