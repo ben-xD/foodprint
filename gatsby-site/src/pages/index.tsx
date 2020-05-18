@@ -29,7 +29,10 @@ const IndexPage = ({ data }) => (
           alt="Available on Google Play Store button"
         />
       </a>
-      <a href="#" style={{ lineHeight: 0, margin: 8 }}>
+      <a
+        href="https://apps.apple.com/us/app/foodprint/id1510153419?ls=1"
+        style={{ lineHeight: 0, margin: 8 }}
+      >
         <Img
           fixed={data.iosStoreImage.childImageSharp.fixed}
           alt="Available on iOS Store button"
