@@ -1,7 +1,7 @@
 module.exports = {
   siteMetadata: {
     title: `Foodprint`,
-    description: `Calculate your carbon footprint of the food you eat, and see how your diet affects the planet.`,
+    description: `Calculate the carbon footprint of your diet. Save the planet.`,
     author: `@orth.uk`,
   },
   plugins: [
