@@ -57,7 +57,7 @@ const Flow = (props: Props) => {
               <strong>Unpackaged food photos</strong>
               <p>
                 Take a photo of any food your eye spies. Remember to take a
-                photo before you eat it.
+                photo <strong>before</strong> you eat it.
               </p>
             </div>
             <div
@@ -77,8 +77,8 @@ const Flow = (props: Props) => {
               />
               <strong>Barcodes</strong>
               <p>
-                The camera doubles as a barcode scanner so you can scan those
-                Oreos you had last night.
+                The camera doubles as a barcode scanner so you can scan the
+                packet of Oreos you had last night.
               </p>
             </div>
             <div
@@ -98,8 +98,8 @@ const Flow = (props: Props) => {
               />
               <strong>Recipes</strong>
               <p>
-                Know the CO<sub>2</sub> impact of recipes before you decide to
-                cook them
+                Recognise the CO<sub>2</sub> impact of recipes before you decide
+                to cook them.
               </p>
             </div>
           </div>
