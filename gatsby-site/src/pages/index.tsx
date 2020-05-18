@@ -3,7 +3,6 @@ import Layout from "../components/layout"
 import SEO from "../components/seo"
 import { graphql, Link } from "gatsby"
 import Img from "gatsby-image"
-import "./index.css"
 import Flow from "../components/home_page/flow"
 import Features from "../components/home_page/features"
 
@@ -43,24 +42,28 @@ const IndexPage = ({ data }) => (
         <strong>Join us</strong> on the mission.
       </p>
 
-      <a
-        style={{ lineHeight: 0, margin: 8 }}
-        href="https://play.google.com/store/apps/details?id=uk.orth.foodprint"
-      >
-        <Img
-          fixed={data.playStoreImage.childImageSharp.fixed}
-          alt="Available on Google Play Store button"
-        />
-      </a>
-      <a
-        href="https://apps.apple.com/us/app/foodprint/id1510153419?ls=1"
-        style={{ lineHeight: 0, margin: 8 }}
-      >
-        <Img
-          fixed={data.iosStoreImage.childImageSharp.fixed}
-          alt="Available on iOS Store button"
-        />
-      </a>
+      <div className="bob">
+        <a
+          style={{ lineHeight: 0, margin: 8 }}
+          href="https://play.google.com/store/apps/details?id=uk.orth.foodprint"
+        >
+          <Img
+            fixed={data.playStoreImage.childImageSharp.fixed}
+            style={{ height: "66px" }}
+            alt="Available on Google Play Store button"
+          />
+        </a>
+        <a
+          href="https://apps.apple.com/us/app/foodprint/id1510153419?ls=1"
+          style={{ lineHeight: 0, margin: 8 }}
+        >
+          <Img
+            fixed={data.iosStoreImage.childImageSharp.fixed}
+            style={{ height: "66px" }}
+            alt="Available on iOS Store button"
+          />
+        </a>
+      </div>
     </div>
     <div className="text-center mx-auto" style={{ maxWidth: 600 }}>
       <p>
