@@ -3,6 +3,7 @@ module.exports = {
     title: `Foodprint`,
     description: `Calculate the carbon footprint of your diet. Save the planet.`,
     author: `@orth.uk`,
+    siteImage: '/preview.png'
   },
   plugins: [
     `gatsby-plugin-react-helmet`,
