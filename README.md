@@ -1,6 +1,6 @@
-<p  align="center">
+<p style="text-align: center; ">
 <img src="assets/img/header.png" alt="Foodprint logo">
-<div style="align-items: centerl; text-align: center; ">
+<div style="align-items: center; text-align: center; ">
 <a href="https://play.google.com/store/apps/details?id=uk.orth.foodprint"><img src="assets/img/play-store.png" alt="A link to google play"></a>
 <a href="https://play.google.com/store/apps/details?id=uk.orth.foodprint"><img src="assets/img/ios-store.png" alt="A link to ios app store"></a>
 </div>
