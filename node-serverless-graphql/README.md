@@ -1,3 +1,5 @@
+**Note:** the guide here will not work for you and was written for developers in the team. Credentials referenced here have either been wiped from the git repository history or invalidated, or both. 
+
 ##GraphQL Server on Google Cloud Functions (GCF)
 
 - [GraphQL with GCF Setup](https://github.com/apollographql/apollo-server/tree/master/packages/apollo-server-cloud-functions)
