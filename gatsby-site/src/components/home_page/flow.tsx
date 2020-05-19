@@ -34,7 +34,9 @@ const Flow = (props: Props) => {
       `}
       render={data => (
         <div className="text-center my-5">
-          <p className="display-4">Foodprint knows 3 things.</p>
+          <p className="display-4">
+            Foodprint knows <strong>3 things.</strong>
+          </p>
           <div className="row">
             <div
               className="d-flex flex-column col-sm justify-content-center"
