@@ -8,7 +8,7 @@
 <h1><a href="https://foodprint.orth.uk">Foodprint:</a> track the carbon footprint of your diet.</h1>
 
 Carbon Footprint repo, contains all code related to this software engineering group project. 
-- `react-native-app`: application released on iOS App Store & Play Store.
+- `/react-native-app`: application released on iOS App Store & Play Store.
 - `/node-serverless-graphql`: NodeJS backend application running in google cloud functions
 - `/browser-test-bench`: Convenient prototype application to test backend features
 - `/gatsby-site`: Foodprint website. Hosted by Netlify, written in Gatsby and React
