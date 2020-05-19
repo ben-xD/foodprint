@@ -9,7 +9,6 @@ const typeDefs = require('../schema.js');
 const resolvers = require('../resolvers.js');
 
 const VisionAPI = require('../datasources/vision');
-const visionCredentials = require('../credentials/carbon-7fbf76411514.json');
 const CarbonAPI = require('../datasources/carbon');
 const ConceptAPI = require('../datasources/concept');
 const { createStore, deleteStore } = require('../utils');
@@ -20,7 +19,7 @@ const store = createStore();
 const carbonAPI = new CarbonAPI(store);
 
 const dataSources = () => ({
-  visionAPI: new VisionAPI(visionCredentials),
+  visionAPI: new VisionAPI(),
   carbonAPI,
   conceptAPI: new ConceptAPI(),
 });

@@ -1,28 +1,28 @@
 const { getCarbonFootprintFromBarcode } = require('../barcode');
 
 const VisionAPI = require('../../datasources/vision');
-const visionCredentials = require('../../credentials/carbon-7fbf76411514.json');
 const { createStore, deleteStore } = require('../../utils');
+
 const store = createStore();
 
 const CarbonAPI = require('../../datasources/carbon');
+
 const carbonAPI = new CarbonAPI(store);
 const ConceptAPI = require('../../datasources/concept');
 const userHistAPI = require('../../datasources/user_history');
 
 
 const dataSources = {
-  visionAPI: new VisionAPI(visionCredentials),
+  visionAPI: new VisionAPI(),
   carbonAPI,
   conceptAPI: new ConceptAPI(),
   userHistAPI: new userHistAPI(store),
 };
 
 describe('testing barcode without Tesco API', () => {
-
   test('get co2 of lasagna (we have stored the barcode in json file), which should be 3.4', async () => {
     jest.setTimeout(30000);
-    const barcode = "5057753197223";
+    const barcode = '5057753197223';
     const actual = await getCarbonFootprintFromBarcode(dataSources, barcode, false);
     const expected = { item: 'lasagna', carbonFootprintPerKg: 3.4 };
     expect(actual).toEqual(expected);
@@ -30,7 +30,7 @@ describe('testing barcode without Tesco API', () => {
 
   test('get co2 of nonexistent barcode (we have not stored the barcode in json file)', async () => {
     jest.setTimeout(30000);
-    const barcode = "0000000";
+    const barcode = '0000000';
     const actual = await getCarbonFootprintFromBarcode(dataSources, barcode, false);
     const expected = { item: null, carbonFootprintPerKg: null };
     expect(actual).toEqual(expected);

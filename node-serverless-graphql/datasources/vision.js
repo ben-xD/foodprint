@@ -1,16 +1,12 @@
 const vision = require('@google-cloud/vision');
-const credentials = require('../credentials/carbon-7fbf76411514.json');
 
 class VisionAPI {
-
-  constructor(credentials) {
-
+  constructor() {
     this.getImageLabels = this.getImageLabels.bind(this);
 
     // Setup Google Vision ImageAnnotatorClient
     try {
-      // Using Alba's credentials here
-      this.client = new vision.ImageAnnotatorClient({credentials});
+      this.client = new vision.ImageAnnotatorClient();
       console.log('VisionAPI: connected to Google Vision.')
     } catch (err) {
       console.error('Failed to set up Google Vision ImageAnnotatorClient.');
@@ -36,7 +32,7 @@ class VisionAPI {
     }
 
     // Get labelAnnotations from Google result
-    const {labelAnnotations} = googleResult[0];
+    const { labelAnnotations } = googleResult[0];
 
     // Store lower case label descriptions in array
     let labels = [];
@@ -52,6 +48,6 @@ class VisionAPI {
 
 }
 
-const VisionAPIInstance = new VisionAPI(credentials);
+const VisionAPIInstance = new VisionAPI();
 
 module.exports = VisionAPI;
