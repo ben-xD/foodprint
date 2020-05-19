@@ -26,7 +26,7 @@ const IndexPage = ({ data }) => (
           className="btn btn-primary btn-lg disabled"
           role="button"
         >
-          Watch the video (coming soon)
+          Watch the video
         </Link>
       </h1>
     </div>
