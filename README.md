@@ -1,9 +1,11 @@
-[![Foodprint](assets/img/header.png)](https://foodprint.orth.uk)
-# [Foodprint](https://foodprint.orth.uk): track the carbon footprint of your diet.
-
-[![google-play](assets/img/play-store.png)](https://play.google.com/store/apps/details?id=uk.orth.foodprint)
-
-[![app-store](assets/img/ios-store.png)](https://apps.apple.com/us/app/foodprint/id1510153419?ls=1)
+<p style="text-align: center; ">
+<img src="assets/img/header.png" alt="Foodprint logo">
+<div style="align-items: centerl; text-align: center; ">
+<a href="https://play.google.com/store/apps/details?id=uk.orth.foodprint"><img src="assets/img/play-store.png" alt="A link to google play"></a>
+<a href="https://play.google.com/store/apps/details?id=uk.orth.foodprint"><img src="assets/img/ios-store.png" alt="A link to ios app store"></a>
+</div>
+</p>
+<h1><a href="https://foodprint.orth.uk">Foodprint:</a> track the carbon footprint of your diet.</h1>
 
 Carbon Footprint repo, contains all code related to this software engineering group project. 
 - `react-native-app`: application released on iOS App Store & Play Store.
