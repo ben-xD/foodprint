@@ -23,7 +23,7 @@ const IndexPage = ({ data }) => (
         <Link
           to="/video"
           type="button"
-          className="btn btn-primary btn-lg disabled"
+          className="btn btn-primary btn-lg"
           role="button"
         >
           Watch the video
