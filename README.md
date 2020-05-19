@@ -7,7 +7,7 @@
 </p>
 <h1><a href="https://foodprint.orth.uk">Foodprint:</a> track the carbon footprint of your diet.</h1>
 
-Carbon Footprint repo, contains all code related to this software engineering group project. 
+This is a monorepo, containing all code related to this software engineering group project done at Imperial as part of [MSc Computing](https://www.imperial.ac.uk/computing/prospective-students/courses/pg/msc-computing/). 
 - `/react-native-app`: application released on iOS App Store & Play Store.
 - `/node-serverless-graphql`: NodeJS backend application running in google cloud functions
 - `/browser-test-bench`: Convenient prototype application to test backend features
