@@ -8,81 +8,104 @@
 import React from "react"
 import PropTypes from "prop-types"
 import { Helmet } from "react-helmet"
-import { useStaticQuery, graphql } from "gatsby"
+import { withPrefix } from 'gatsby';
+import { graphql, useStaticQuery } from "gatsby"
 
-function SEO({ description, lang, meta, title }) {
-  const { site } = useStaticQuery(
-    graphql`
-      query {
-        site {
-          siteMetadata {
-            title
-            description
-            author
-            siteImage
-          }
+function SEO({ title }) {
+  const { site } = useStaticQuery(graphql`
+    query {
+      site {
+        siteMetadata {
+          title
+          description
+          author
+          siteHeadline
+          siteUrl
+          siteDescription
+          siteLanguage
+          siteImage
         }
       }
-    `
-  )
+    }
+  `)
 
-  const metaDescription = description || site.siteMetadata.description
-  const siteImage = site.siteMetadata.siteImage
+  const {
+    title: siteTitle,
+    siteUrl,
+    siteDescription: description,
+    siteLanguage,
+    siteImage: defaultImage,
+    author,
+  } = site;
+
+  const seo = {
+    title: title,
+    description: description,
+    image: `${siteUrl}${defaultImage}`,
+    url: siteUrl,
+  };
 
   return (
     <Helmet
-      htmlAttributes={{
-        lang,
-      }}
       title={title}
-      titleTemplate={`%s | ${site.siteMetadata.title}`}
-      meta={[
-        {
-          name: "image",
-          content: siteImage,
-        },
-        {
-          name: "og:image",
-          content: siteImage,
-        },
-        {
-          name: "twitter:image",
-          content: siteImage,
-        },
-        {
-          name: `description`,
-          content: metaDescription,
-        },
-        {
-          property: `og:title`,
-          content: title,
-        },
-        {
-          property: `og:description`,
-          content: metaDescription,
-        },
-        {
-          property: `og:type`,
-          content: `website`,
-        },
-        {
-          name: `twitter:card`,
-          content: `summary`,
-        },
-        {
-          name: `twitter:creator`,
-          content: site.siteMetadata.author,
-        },
-        {
-          name: `twitter:title`,
-          content: title,
-        },
-        {
-          name: `twitter:description`,
-          content: metaDescription,
-        },
-      ].concat(meta)}
-    />
+      titleTemplate={`%s | ${siteTitle}`}
+    >
+      <html lang={siteLanguage} />
+      <meta name='description' content={description} />
+      <meta name='image' content={seo.image} />
+      <meta
+        prefix='og: http://ogp.me/ns#'
+        property='og:title'
+        content={seo.title}
+      />
+      <meta
+        prefix='og: http://ogp.me/ns#'
+        property='og:url'
+        content={seo.url}
+      />
+      <meta property='og:description' content={description} />
+      <meta
+        prefix='og: http://ogp.me/ns#'
+        property='og:image'
+        content={seo.image}
+      />
+      <meta
+        prefix='og: http://ogp.me/ns#'
+        property='og:type'
+        content='website'
+      />
+      <meta property='og:image:alt' content={description} />
+      <meta name='twitter:card' content='summary_large_image' />
+      <meta name='twitter:title' content={seo.title} />
+      <meta name='twitter:url' content={siteUrl} />
+      <meta name='twitter:description' content={seo.description} />
+      <meta name='twitter:image' content={seo.image} />
+      <meta name='twitter:image:alt' content={seo.description} />
+      <meta name='twitter:creator' content={author} />
+      <meta name='gatsby-theme' content='@lekoarts/gatsby-theme-minimal-blog' />
+      <link
+        rel='icon'
+        type='image/png'
+        sizes='32x32'
+        href={withPrefix(`/favicon-32x32.png`)}
+      />
+      <link
+        rel='icon'
+        type='image/png'
+        sizes='16x16'
+        href={withPrefix(`/favicon-16x16.png`)}
+      />
+      <link
+        rel='apple-touch-icon'
+        sizes='180x180'
+        href={withPrefix(`/apple-touch-icon.png`)}
+      />
+      <link
+        rel='apple-touch-icon'
+        sizes='180x180'
+        href={withPrefix(`/apple-touch-icon-precomposed.png`)}
+      />
+    </Helmet>
   )
 }
 
