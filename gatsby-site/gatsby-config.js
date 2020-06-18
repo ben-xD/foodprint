@@ -5,7 +5,7 @@ module.exports = {
     author: `@orth.uk`,
     siteHeadline: `Foodprint - track the carbon footprint of your diet.`,
     siteUrl: `https://foodprint.orth.uk`,
-    siteDescription: `Foodprint - a mobile app to track the carbon footprint of your diet.`,
+    siteDescription: `Foodprint - a mobile app to track the carbon footprint of your diet. Built using React Native, NodeJS and GraphQL.`,
     siteLanguage: `en`,
     siteImage: '/preview.png'
   },

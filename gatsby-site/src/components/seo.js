@@ -36,7 +36,7 @@ function SEO({ title }) {
     siteLanguage,
     siteImage: defaultImage,
     author,
-  } = site;
+  } = site.siteMetadata;
 
   const seo = {
     title: title,
@@ -82,7 +82,6 @@ function SEO({ title }) {
       <meta name='twitter:image' content={seo.image} />
       <meta name='twitter:image:alt' content={seo.description} />
       <meta name='twitter:creator' content={author} />
-      <meta name='gatsby-theme' content='@lekoarts/gatsby-theme-minimal-blog' />
       <link
         rel='icon'
         type='image/png'
