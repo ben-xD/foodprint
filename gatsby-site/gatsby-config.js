@@ -3,6 +3,10 @@ module.exports = {
     title: `Foodprint`,
     description: `Calculate the carbon footprint of your diet. Save the planet.`,
     author: `@orth.uk`,
+    siteHeadline: `Foodprint - track the carbon footprint of your diet.`,
+    siteUrl: `https://foodprint.orth.uk`,
+    siteDescription: `Foodprint - a mobile app to track the carbon footprint of your diet.`,
+    siteLanguage: `en`,
     siteImage: '/preview.png'
   },
   plugins: [
