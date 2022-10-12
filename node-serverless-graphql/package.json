@@ -12,7 +12,7 @@
   "dependencies": {
     "@google-cloud/functions-framework": "^1.4.0",
     "@google-cloud/vision": "^1.8.0",
-    "apollo-server": "^2.9.16",
+    "apollo-server": "^2.25.4",
     "apollo-server-cloud-functions": "^2.9.16",
     "axios": "^0.19.2",
     "compromise": "^13.1.0",
